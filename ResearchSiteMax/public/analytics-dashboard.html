@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h - Analytics Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --primary-dark: #0a58ca;
+            --primary-light: #cfe2ff;
+            --success: #198754;
+            --info: #0dcaf0;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --secondary: #6c757d;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-card .card-body {
+            padding: 1.5rem;
+        }
+        
+        .stats-card .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stats-card .stats-label {
+            color: var(--secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stats-card .stats-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .stats-trend {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .stats-trend.positive {
+            color: var(--success);
+        }
+        
+        .stats-trend.negative {
+            color: var(--danger);
+        }
+        
+        .chart-card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .chart-card .card-header {
+            background-color: transparent;
+            border-bottom: none;
+            padding: 1.25rem 1.25rem 0;
+        }
+        
+        .chart-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .chart-card .card-body {
+            padding: 1rem 1.25rem 1.25rem;
+        }
+        
+        .date-range-selector {
+            border-radius: 50px;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid #dee2e6;
+            background-color: transparent;
+        }
+        
+        .date-range-selector:hover {
+            border-color: var(--primary);
+        }
+        
+        .top-performer-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+        
+        .top-performer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .top-performer-card .card-header {
+            background-color: transparent;
+            border-bottom: none;
+            padding: 1.25rem 1.25rem 0;
+        }
+        
+        .top-performer-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .top-performer-card .card-body {
+            padding: 1rem;
+        }
+        
+        .performer-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .performer-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        
+        .performer-item:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        .performer-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .performer-rank {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+        
+        .performer-info {
+            flex-grow: 1;
+        }
+        
+        .performer-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .performer-metric {
+            font-size: 0.875rem;
+            color: var(--secondary);
+        }
+        
+        .performer-value {
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .activity-card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+        
+        .activity-card .card-header {
+            background-color: transparent;
+            border-bottom: none;
+            padding: 1.25rem 1.25rem 0;
+        }
+        
+        .activity-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .activity-item {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f1f1;
+            position: relative;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-content {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        
+        .activity-icon.rfq {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: var(--primary);
+        }
+        
+        .activity-icon.bid {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: var(--success);
+        }
+        
+        .activity-icon.user {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: var(--secondary);
+        }
+        
+        .activity-icon.contract {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .activity-text {
+            flex-grow: 1;
+            font-size: 0.875rem;
+        }
+        
+        .activity-text strong {
+            font-weight: 600;
+        }
+        
+        .border-primary {
+            border-color: var(--primary) !important;
+        }
+        
+        .border-success {
+            border-color: var(--success) !important;
+        }
+        
+        .border-info {
+            border-color: var(--info) !important;
+        }
+        
+        .border-warning {
+            border-color: var(--warning) !important;
+        }
+        
+        .bg-light-primary {
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+        
+        .bg-light-success {
+            background-color: rgba(25, 135, 84, 0.1);
+        }
+        
+        .bg-light-info {
+            background-color: rgba(13, 202, 240, 0.1);
+        }
+        
+        .bg-light-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+        
+        .text-primary {
+            color: var(--primary) !important;
+        }
+        
+        .text-success {
+            color: var(--success) !important;
+        }
+        
+        .text-info {
+            color: var(--info) !important;
+        }
+        
+        .text-warning {
+            color: var(--warning) !important;
+        }
+        
+        .insights-card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+        
+        .insights-card .card-header {
+            background-color: transparent;
+            border-bottom: none;
+            padding: 1.25rem 1.25rem 0;
+        }
+        
+        .insights-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .insights-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .insight-item {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .insight-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .insight-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .insight-content {
+            flex-grow: 1;
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .insight-description {
+            font-size: 0.875rem;
+            color: var(--secondary);
+            margin-bottom: 0;
+        }
+        
+        .map-card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .map-card .card-header {
+            background-color: transparent;
+            border-bottom: none;
+            padding: 1.25rem 1.25rem 0;
+        }
+        
+        .map-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .map-container {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        .map-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .map-placeholder {
+            color: white;
+            text-align: center;
+            max-width: 200px;
+        }
+        
+        .profile-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--danger);
+            color: white;
+            font-size: 0.625rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* RFQ performance gauge styles */
+        .gauge-container {
+            width: 100%;
+            max-width: 250px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .gauge {
+            width: 100%;
+            height: auto;
+        }
+        
+        .gauge-value {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .gauge-label {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--secondary);
+        }
+        
+        .gauge-ticks {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-top: 0.5rem;
+        }
+        
+        .gauge-tick {
+            text-align: center;
+            flex: 1;
+            font-size: 0.75rem;
+            color: var(--secondary);
+        }
+        
+        /* Categories distribution styles */
+        .category-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .category-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .category-name {
+            flex-grow: 1;
+            font-size: 0.875rem;
+        }
+        
+        .category-value {
+            font-weight: 600;
+            min-width: 60px;
+            text-align: right;
+        }
+        
+        .category-bar {
+            height: 6px;
+            border-radius: 3px;
+            width: 100%;
+            background-color: #f1f1f1;
+            margin-top: 0.25rem;
+            overflow: hidden;
+        }
+        
+        .category-progress {
+            height: 100%;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 767.98px) {
+            .stats-card .stats-value {
+                font-size: 1.5rem;
+            }
+            
+            .stats-card .stats-icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-bell-fill me-2 text-primary"></i>
+                <span class="fw-bold">Bell24h</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="rfq-dashboard.html">RFQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="suppliers.html">Suppliers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="product-showcase.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="analytics-dashboard.html">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blockchain-verification.html">Blockchain</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="messages.html">Messages</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-3">
+                        <a class="text-dark position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell fs-5"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="notificationsDropdown" style="width: 300px;">
+                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item py-2" href="#">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <div class="activity-icon rfq">
+                                                <i class="bi bi-file-earmark-text"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <p class="mb-0 fs-7">New bid on your RFQ <strong>Solar Panels Supply</strong></p>
+                                            <small class="text-muted">10 minutes ago</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item py-2" href="#">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <div class="activity-icon user">
+                                                <i class="bi bi-person"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <p class="mb-0 fs-7"><strong>John Smith</strong> sent you a message</p>
+                                            <small class="text-muted">1 hour ago</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item py-2" href="#">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <div class="activity-icon contract">
+                                                <i class="bi bi-file-earmark-check"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <p class="mb-0 fs-7">Contract <strong>#34928</strong> has been signed</p>
+                                            <small class="text-muted">Yesterday</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center" href="#">View all notifications</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown">
+                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=0D6EFD&color=fff" alt="User" class="profile-image">
+                            <span class="ms-2 d-none d-lg-inline-block">John Doe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h1 class="h3 mb-1 fw-bold">Analytics Dashboard</h1>
+                <p class="text-muted">Insights and performance metrics for your business</p>
+            </div>
+            <div class="col-md-6 d-flex justify-content-md-end align-items-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary active" id="overviewTab">Overview</button>
+                    <button type="button" class="btn btn-outline-primary" id="rfqTab">RFQ Analysis</button>
+                    <button type="button" class="btn btn-outline-primary" id="productsTab">Products</button>
+                    <button type="button" class="btn btn-outline-primary" id="marketTab">Market</button>
+                </div>
+                <select class="form-select date-range-selector ms-3" id="dateRange">
+                    <option value="7">Last 7 days</option>
+                    <option value="30" selected>Last 30 days</option>
+                    <option value="90">Last 90 days</option>
+                    <option value="365">Last year</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                <div class="card stats-card border-start border-primary border-4">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="stats-icon bg-light-primary text-primary">
+                            <i class="bi bi-file-earmark-text fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="stats-value text-primary" id="rfqsCount">24</div>
+                            <div class="stats-label">Active RFQs</div>
+                            <div class="stats-trend positive">
+                                <i class="bi bi-arrow-up-short"></i> 12% from last month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                <div class="card stats-card border-start border-success border-4">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="stats-icon bg-light-success text-success">
+                            <i class="bi bi-graph-up-arrow fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="stats-value text-success" id="bidsCount">118</div>
+                            <div class="stats-label">Total Bids</div>
+                            <div class="stats-trend positive">
+                                <i class="bi bi-arrow-up-short"></i> 8% from last month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                <div class="card stats-card border-start border-info border-4">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="stats-icon bg-light-info text-info">
+                            <i class="bi bi-currency-dollar fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="stats-value text-info" id="contractsValue">$265,890</div>
+                            <div class="stats-label">Contract Value</div>
+                            <div class="stats-trend positive">
+                                <i class="bi bi-arrow-up-short"></i> 15% from last month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                <div class="card stats-card border-start border-warning border-4">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="stats-icon bg-light-warning text-warning">
+                            <i class="bi bi-people fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="stats-value text-warning" id="suppliersCount">42</div>
+                            <div class="stats-label">Active Suppliers</div>
+                            <div class="stats-trend positive">
+                                <i class="bi bi-arrow-up-short"></i> 5% from last month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Overview Section -->
+        <div id="overviewSection">
+            <div class="row mb-4">
+                <!-- RFQ Performance Chart -->
+                <div class="col-md-8 mb-4">
+                    <div class="chart-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">RFQ & Bid Performance</h5>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary active">RFQs</button>
+                                <button type="button" class="btn btn-outline-secondary">Bids</button>
+                                <button type="button" class="btn btn-outline-secondary">Contracts</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="rfqPerformanceChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="col-md-4 mb-4">
+                    <div class="activity-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Recent Activity</h5>
+                            <a href="#" class="text-decoration-none small">View All</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="activity-list">
+                                <li class="activity-item">
+                                    <div class="activity-time">Today, 10:30 AM</div>
+                                    <div class="activity-content">
+                                        <div class="activity-icon rfq">
+                                            <i class="bi bi-file-earmark-text"></i>
+                                        </div>
+                                        <div class="activity-text">
+                                            <strong>RFQ #1234</strong> received a new bid from <strong>Eco Solar Solutions</strong>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-time">Yesterday, 3:45 PM</div>
+                                    <div class="activity-content">
+                                        <div class="activity-icon bid">
+                                            <i class="bi bi-check2-circle"></i>
+                                        </div>
+                                        <div class="activity-text">
+                                            You accepted a bid from <strong>Global Tech Manufacturing</strong>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-time">Yesterday, 11:20 AM</div>
+                                    <div class="activity-content">
+                                        <div class="activity-icon user">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                        <div class="activity-text">
+                                            <strong>Vishnu Sharma</strong> sent you a message regarding your RFQ
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-time">Feb 02, 2:15 PM</div>
+                                    <div class="activity-content">
+                                        <div class="activity-icon contract">
+                                            <i class="bi bi-file-earmark-check"></i>
+                                        </div>
+                                        <div class="activity-text">
+                                            Contract <strong>#34928</strong> with <strong>Sunrise Imports</strong> has been signed
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-time">Feb 01, 9:30 AM</div>
+                                    <div class="activity-content">
+                                        <div class="activity-icon rfq">
+                                            <i class="bi bi-file-earmark-plus"></i>
+                                        </div>
+                                        <div class="activity-text">
+                                            You created a new RFQ: <strong>Industrial Machinery Parts</strong>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <!-- Top Performers -->
+                <div class="col-md-4 mb-4">
+                    <div class="top-performer-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Top Suppliers</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="performerFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    By Performance
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="performerFilterDropdown">
+                                    <li><a class="dropdown-item active" href="#">By Performance</a></li>
+                                    <li><a class="dropdown-item" href="#">By Bid Count</a></li>
+                                    <li><a class="dropdown-item" href="#">By Contract Value</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="performer-list">
+                                <li class="performer-item">
+                                    <div class="performer-rank">1</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Gulf Tech Innovations</div>
+                                        <div class="performer-metric">Performance Score</div>
+                                    </div>
+                                    <div class="performer-value">98%</div>
+                                </li>
+                                <li class="performer-item">
+                                    <div class="performer-rank">2</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Eco Solar Solutions</div>
+                                        <div class="performer-metric">Performance Score</div>
+                                    </div>
+                                    <div class="performer-value">95%</div>
+                                </li>
+                                <li class="performer-item">
+                                    <div class="performer-rank">3</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Global Tech Manufacturing</div>
+                                        <div class="performer-metric">Performance Score</div>
+                                    </div>
+                                    <div class="performer-value">92%</div>
+                                </li>
+                                <li class="performer-item">
+                                    <div class="performer-rank">4</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Sunrise Imports</div>
+                                        <div class="performer-metric">Performance Score</div>
+                                    </div>
+                                    <div class="performer-value">89%</div>
+                                </li>
+                                <li class="performer-item">
+                                    <div class="performer-rank">5</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Maharashtra Electronics</div>
+                                        <div class="performer-metric">Performance Score</div>
+                                    </div>
+                                    <div class="performer-value">86%</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Geographical Distribution -->
+                <div class="col-md-4 mb-4">
+                    <div class="map-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Geographical Distribution</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="geoFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Suppliers
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="geoFilterDropdown">
+                                    <li><a class="dropdown-item active" href="#">Suppliers</a></li>
+                                    <li><a class="dropdown-item" href="#">Buyers</a></li>
+                                    <li><a class="dropdown-item" href="#">Contracts</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="map-container">
+                                <img src="https://via.placeholder.com/800x600?text=Geographic+Map" alt="Geographic distribution">
+                                <div class="map-overlay">
+                                    <div class="map-placeholder">
+                                        <h6 class="mb-2">Interactive Map</h6>
+                                        <p class="mb-0 small">Showing distribution of suppliers across regions</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="row g-3">
+                                    <div class="col-6 col-lg-3">
+                                        <div class="text-center">
+                                            <div class="fw-bold text-primary mb-1">42%</div>
+                                            <div class="small text-muted">India</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <div class="text-center">
+                                            <div class="fw-bold text-success mb-1">23%</div>
+                                            <div class="small text-muted">UAE</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <div class="text-center">
+                                            <div class="fw-bold text-warning mb-1">18%</div>
+                                            <div class="small text-muted">Saudi Arabia</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-lg-3">
+                                        <div class="text-center">
+                                            <div class="fw-bold text-info mb-1">17%</div>
+                                            <div class="small text-muted">Other</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI-Generated Insights -->
+                <div class="col-md-4 mb-4">
+                    <div class="insights-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">AI Insights</h5>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-arrow-clockwise"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <ul class="insights-list">
+                                <li class="insight-item">
+                                    <div class="insight-icon bg-light-primary text-primary">
+                                        <i class="bi bi-graph-up-arrow"></i>
+                                    </div>
+                                    <div class="insight-content">
+                                        <div class="insight-title">Bid Activity Increase</div>
+                                        <div class="insight-description">Your RFQs are receiving 15% more bids compared to last month, showing increased supplier interest.</div>
+                                    </div>
+                                </li>
+                                <li class="insight-item">
+                                    <div class="insight-icon bg-light-warning text-warning">
+                                        <i class="bi bi-lightning-charge"></i>
+                                    </div>
+                                    <div class="insight-content">
+                                        <div class="insight-title">Trending Category</div>
+                                        <div class="insight-description">Solar panel products are trending in your region with 28% increase in RFQ volume.</div>
+                                    </div>
+                                </li>
+                                <li class="insight-item">
+                                    <div class="insight-icon bg-light-success text-success">
+                                        <i class="bi bi-cash-coin"></i>
+                                    </div>
+                                    <div class="insight-content">
+                                        <div class="insight-title">Cost Saving Opportunity</div>
+                                        <div class="insight-description">Consider bundling your purchases in Electronics category to achieve up to 12% savings.</div>
+                                    </div>
+                                </li>
+                                <li class="insight-item">
+                                    <div class="insight-icon bg-light-info text-info">
+                                        <i class="bi bi-calendar-check"></i>
+                                    </div>
+                                    <div class="insight-content">
+                                        <div class="insight-title">Optimal RFQ Timing</div>
+                                        <div class="insight-description">RFQs posted on Tuesday mornings receive 23% more responses within 24 hours.</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RFQ Analysis Section -->
+        <div id="rfqSection" class="d-none">
+            <div class="row mb-4">
+                <!-- RFQ Performance Gauge -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">RFQ Performance</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="gauge-container">
+                                <svg class="gauge" viewBox="0 0 200 100">
+                                    <path d="M20,90 A70,70 0 0,1 180,90" fill="none" stroke="#f1f1f1" stroke-width="20" stroke-linecap="round" />
+                                    <path d="M20,90 A70,70 0 0,1 140,30" fill="none" stroke="#0d6efd" stroke-width="20" stroke-linecap="round" />
+                                </svg>
+                                <div class="gauge-value">76%</div>
+                            </div>
+                            <div class="gauge-label">Overall RFQ Performance Score</div>
+                            <div class="gauge-ticks">
+                                <div class="gauge-tick">Poor</div>
+                                <div class="gauge-tick">Average</div>
+                                <div class="gauge-tick">Good</div>
+                                <div class="gauge-tick">Excellent</div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Bid Rate</span>
+                                    <span class="fw-bold">82%</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 6px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 82%"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Avg. Bids per RFQ</span>
+                                    <span class="fw-bold">4.8</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 6px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Award Rate</span>
+                                    <span class="fw-bold">68%</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 6px;">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 68%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RFQ Categories Distribution -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">RFQ Categories</h5>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option value="count">By Count</option>
+                                <option value="value">By Value</option>
+                            </select>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <canvas id="rfqCategoriesChart" height="220"></canvas>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <div class="category-item">
+                                    <div class="category-color" style="background-color: #0d6efd;"></div>
+                                    <div class="category-name">Electronics</div>
+                                    <div class="category-value">32%</div>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-progress" style="width: 32%; background-color: #0d6efd;"></div>
+                                </div>
+                                
+                                <div class="category-item">
+                                    <div class="category-color" style="background-color: #198754;"></div>
+                                    <div class="category-name">Machinery</div>
+                                    <div class="category-value">25%</div>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-progress" style="width: 25%; background-color: #198754;"></div>
+                                </div>
+                                
+                                <div class="category-item">
+                                    <div class="category-color" style="background-color: #ffc107;"></div>
+                                    <div class="category-name">Textiles</div>
+                                    <div class="category-value">18%</div>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-progress" style="width: 18%; background-color: #ffc107;"></div>
+                                </div>
+                                
+                                <div class="category-item">
+                                    <div class="category-color" style="background-color: #dc3545;"></div>
+                                    <div class="category-name">Chemicals</div>
+                                    <div class="category-value">15%</div>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-progress" style="width: 15%; background-color: #dc3545;"></div>
+                                </div>
+                                
+                                <div class="category-item">
+                                    <div class="category-color" style="background-color: #6c757d;"></div>
+                                    <div class="category-name">Others</div>
+                                    <div class="category-value">10%</div>
+                                </div>
+                                <div class="category-bar">
+                                    <div class="category-progress" style="width: 10%; background-color: #6c757d;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RFQ Response Times -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">Response Times</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="responseTimesChart" height="220"></canvas>
+                            
+                            <div class="mt-4">
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="border rounded p-3 text-center h-100">
+                                            <div class="text-muted mb-1 small">Avg. First Response</div>
+                                            <div class="fw-bold text-primary">8.5 hours</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-3 text-center h-100">
+                                            <div class="text-muted mb-1 small">Fastest Response</div>
+                                            <div class="fw-bold text-success">45 mins</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-3 text-center h-100">
+                                            <div class="text-muted mb-1 small">Responses in 24h</div>
+                                            <div class="fw-bold text-info">76%</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-3 text-center h-100">
+                                            <div class="text-muted mb-1 small">No Response Rate</div>
+                                            <div class="fw-bold text-danger">5%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <!-- RFQ Status Overview -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">RFQ Status Overview</h5>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary active">Count</button>
+                                <button type="button" class="btn btn-outline-secondary">Percentage</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="rfqStatusChart" height="260"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RFQ Performance by Type -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">Performance by RFQ Type</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">RFQ Type</th>
+                                            <th scope="col" class="text-center">Count</th>
+                                            <th scope="col" class="text-center">Avg. Bids</th>
+                                            <th scope="col" class="text-center">Award Rate</th>
+                                            <th scope="col" class="text-center">Avg. Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><i class="bi bi-file-text me-2 text-primary"></i> Text RFQs</td>
+                                            <td class="text-center">36</td>
+                                            <td class="text-center">3.8</td>
+                                            <td class="text-center">65%</td>
+                                            <td class="text-center">$15,400</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i class="bi bi-mic me-2 text-success"></i> Voice RFQs</td>
+                                            <td class="text-center">12</td>
+                                            <td class="text-center">4.2</td>
+                                            <td class="text-center">75%</td>
+                                            <td class="text-center">$18,200</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i class="bi bi-camera-video me-2 text-danger"></i> Video RFQs</td>
+                                            <td class="text-center">8</td>
+                                            <td class="text-center">5.6</td>
+                                            <td class="text-center">85%</td>
+                                            <td class="text-center">$22,500</td>
+                                        </tr>
+                                        <tr>
+                                            <td><i class="bi bi-link me-2 text-info"></i> Blockchain Verified</td>
+                                            <td class="text-center">18</td>
+                                            <td class="text-center">6.2</td>
+                                            <td class="text-center">88%</td>
+                                            <td class="text-center">$26,800</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="alert alert-info mt-3 mb-0">
+                                <div class="d-flex">
+                                    <i class="bi bi-info-circle fs-4 me-2"></i>
+                                    <div>
+                                        <strong>Performance Insight:</strong> Blockchain verified RFQs receive 63% more bids on average and achieve 35% higher award rates compared to standard RFQs.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Section -->
+        <div id="productsSection" class="d-none">
+            <div class="row mb-4">
+                <!-- Product Performance Chart -->
+                <div class="col-md-8 mb-4">
+                    <div class="chart-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Product Performance</h5>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary active">Views</button>
+                                <button type="button" class="btn btn-outline-secondary">RFQ Mentions</button>
+                                <button type="button" class="btn btn-outline-secondary">Conversion</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="productPerformanceChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Top Products -->
+                <div class="col-md-4 mb-4">
+                    <div class="top-performer-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Top Products</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="productFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    By Views
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="productFilterDropdown">
+                                    <li><a class="dropdown-item active" href="#">By Views</a></li>
+                                    <li><a class="dropdown-item" href="#">By RFQ Mentions</a></li>
+                                    <li><a class="dropdown-item" href="#">By Conversions</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="performer-list">
+                                <li class="performer-item">
+                                    <div class="performer-rank">1</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Solar Panel - 450W</div>
+                                        <div class="performer-metric">Total Views</div>
+                                    </div>
+                                    <div class="performer-value">1,248</div>
+                                </li>
+                                <li class="performer-item">
+                                    <div class="performer-rank">2</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Lithium Battery Pack</div>
+                                        <div class="performer-metric">Total Views</div>
+                                    </div>
+                                    <div class="performer-value">965</div>
+                                </li>
+                                <li class="performer-item">
+                                    <div class="performer-rank">3</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Cotton Fabric - Premium</div>
+                                        <div class="performer-metric">Total Views</div>
+                                    </div>
+                                    <div class="performer-value">842</div>
+                                </li>
+                                <li class="performer-item">
+                                    <div class="performer-rank">4</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Industrial Motor - 50HP</div>
+                                        <div class="performer-metric">Total Views</div>
+                                    </div>
+                                    <div class="performer-value">756</div>
+                                </li>
+                                <li class="performer-item">
+                                    <div class="performer-rank">5</div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Semiconductor Chips</div>
+                                        <div class="performer-metric">Total Views</div>
+                                    </div>
+                                    <div class="performer-value">614</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <!-- Product Categories Distribution -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Product Categories</h5>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option value="count">By Count</option>
+                                <option value="views">By Views</option>
+                                <option value="mentions">By RFQ Mentions</option>
+                            </select>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <canvas id="productCategoriesChart" height="220"></canvas>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mt-3">
+                                        <div class="category-item">
+                                            <div class="category-color" style="background-color: #0d6efd;"></div>
+                                            <div class="category-name">Electronics</div>
+                                            <div class="category-value">38%</div>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" style="width: 38%; background-color: #0d6efd;"></div>
+                                        </div>
+                                        
+                                        <div class="category-item">
+                                            <div class="category-color" style="background-color: #198754;"></div>
+                                            <div class="category-name">Machinery</div>
+                                            <div class="category-value">22%</div>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" style="width: 22%; background-color: #198754;"></div>
+                                        </div>
+                                        
+                                        <div class="category-item">
+                                            <div class="category-color" style="background-color: #ffc107;"></div>
+                                            <div class="category-name">Textiles</div>
+                                            <div class="category-value">16%</div>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" style="width: 16%; background-color: #ffc107;"></div>
+                                        </div>
+                                        
+                                        <div class="category-item">
+                                            <div class="category-color" style="background-color: #dc3545;"></div>
+                                            <div class="category-name">Chemicals</div>
+                                            <div class="category-value">14%</div>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" style="width: 14%; background-color: #dc3545;"></div>
+                                        </div>
+                                        
+                                        <div class="category-item">
+                                            <div class="category-color" style="background-color: #6c757d;"></div>
+                                            <div class="category-name">Others</div>
+                                            <div class="category-value">10%</div>
+                                        </div>
+                                        <div class="category-bar">
+                                            <div class="category-progress" style="width: 10%; background-color: #6c757d;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success mt-3 mb-0">
+                                <div class="d-flex">
+                                    <i class="bi bi-graph-up fs-4 me-2"></i>
+                                    <div>
+                                        <strong>Growth Trend:</strong> Electronics category has grown by 18% in the last 30 days, with solar products showing the highest growth rate at 24%.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Performance Metrics -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">Product Performance Metrics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Metric</th>
+                                            <th scope="col" class="text-center">Value</th>
+                                            <th scope="col" class="text-center">Change</th>
+                                            <th scope="col" class="text-center">Trend</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Total Products</td>
+                                            <td class="text-center">142</td>
+                                            <td class="text-center text-success">+12%</td>
+                                            <td class="text-center">
+                                                <span class="small text-success">
+                                                    <i class="bi bi-graph-up"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Average Views Per Product</td>
+                                            <td class="text-center">86</td>
+                                            <td class="text-center text-success">+8%</td>
+                                            <td class="text-center">
+                                                <span class="small text-success">
+                                                    <i class="bi bi-graph-up"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Product to RFQ Conversion</td>
+                                            <td class="text-center">4.2%</td>
+                                            <td class="text-center text-success">+1.5%</td>
+                                            <td class="text-center">
+                                                <span class="small text-success">
+                                                    <i class="bi bi-graph-up"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Avg. Time on Product Page</td>
+                                            <td class="text-center">2:18</td>
+                                            <td class="text-center text-success">+15%</td>
+                                            <td class="text-center">
+                                                <span class="small text-success">
+                                                    <i class="bi bi-graph-up"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>RFQ Mentions Rate</td>
+                                            <td class="text-center">8.6%</td>
+                                            <td class="text-center text-danger">-2.1%</td>
+                                            <td class="text-center">
+                                                <span class="small text-danger">
+                                                    <i class="bi bi-graph-down"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Products with No Views</td>
+                                            <td class="text-center">12</td>
+                                            <td class="text-center text-danger">+4</td>
+                                            <td class="text-center">
+                                                <span class="small text-danger">
+                                                    <i class="bi bi-graph-down"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="alert alert-warning mt-3 mb-0">
+                                <div class="d-flex">
+                                    <i class="bi bi-lightbulb fs-4 me-2"></i>
+                                    <div>
+                                        <strong>Optimization Tip:</strong> 12 products haven't received any views. Consider updating their titles, descriptions, and categories to improve visibility.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Market Analysis Section -->
+        <div id="marketSection" class="d-none">
+            <div class="row mb-4">
+                <!-- Market Trends Chart -->
+                <div class="col-md-8 mb-4">
+                    <div class="chart-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Market Price Trends</h5>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary active">Electronics</button>
+                                <button type="button" class="btn btn-outline-secondary">Textiles</button>
+                                <button type="button" class="btn btn-outline-secondary">Machinery</button>
+                                <button type="button" class="btn btn-outline-secondary">Metals</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="marketTrendsChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Market Insights -->
+                <div class="col-md-4 mb-4">
+                    <div class="insights-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Market Insights</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="marketInsightsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Electronics
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="marketInsightsDropdown">
+                                    <li><a class="dropdown-item active" href="#">Electronics</a></li>
+                                    <li><a class="dropdown-item" href="#">Textiles</a></li>
+                                    <li><a class="dropdown-item" href="#">Machinery</a></li>
+                                    <li><a class="dropdown-item" href="#">Metals</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-primary mb-3">
+                                <div class="d-flex">
+                                    <i class="bi bi-info-circle fs-4 me-2"></i>
+                                    <div>
+                                        <strong>Market Overview:</strong> The electronics market shows an upward trend with 8.2% growth in Q1 2025, driven primarily by renewable energy components.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h6 class="mb-3">Key Indicators</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-6">
+                                    <div class="border rounded p-3 text-center">
+                                        <div class="text-muted mb-1 small">Price Trend</div>
+                                        <div class="fw-bold text-success">+4.8% <i class="bi bi-arrow-up-short"></i></div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-3 text-center">
+                                        <div class="text-muted mb-1 small">Demand</div>
+                                        <div class="fw-bold text-success">High <i class="bi bi-arrow-up-short"></i></div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-3 text-center">
+                                        <div class="text-muted mb-1 small">Supply</div>
+                                        <div class="fw-bold text-warning">Medium <i class="bi bi-dash"></i></div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="border rounded p-3 text-center">
+                                        <div class="text-muted mb-1 small">Volatility</div>
+                                        <div class="fw-bold text-danger">High <i class="bi bi-arrow-up-short"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h6 class="mb-3">Predictions</h6>
+                            <ul class="list-group list-group-flush mb-3">
+                                <li class="list-group-item px-0">
+                                    <i class="bi bi-calendar-event me-2 text-primary"></i>
+                                    <span>Short-term (1-3 months):</span>
+                                    <span class="d-block ms-4 mt-1 text-muted small">Expect 5-7% price increases due to high demand and supply chain constraints.</span>
+                                </li>
+                                <li class="list-group-item px-0">
+                                    <i class="bi bi-calendar3 me-2 text-primary"></i>
+                                    <span>Mid-term (3-6 months):</span>
+                                    <span class="d-block ms-4 mt-1 text-muted small">Stabilization expected as new manufacturing capacity comes online.</span>
+                                </li>
+                                <li class="list-group-item px-0">
+                                    <i class="bi bi-calendar4-week me-2 text-primary"></i>
+                                    <span>Long-term (6-12 months):</span>
+                                    <span class="d-block ms-4 mt-1 text-muted small">Projected growth of 12-15% as renewable energy initiatives expand globally.</span>
+                                </li>
+                            </ul>
+                            
+                            <a href="#" class="btn btn-sm btn-outline-primary w-100">
+                                <i class="bi bi-file-earmark-bar-graph me-1"></i>
+                                View Detailed Market Report
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <!-- Regional Market Comparison -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">Regional Comparison</h5>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="marketComparisonDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Solar Components
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="marketComparisonDropdown">
+                                    <li><a class="dropdown-item active" href="#">Solar Components</a></li>
+                                    <li><a class="dropdown-item" href="#">Semiconductors</a></li>
+                                    <li><a class="dropdown-item" href="#">Batteries</a></li>
+                                    <li><a class="dropdown-item" href="#">Displays</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="regionalComparisonChart" height="260"></canvas>
+                            
+                            <div class="mt-3">
+                                <div class="alert alert-info mb-0">
+                                    <div class="d-flex">
+                                        <i class="bi bi-geo-alt fs-4 me-2"></i>
+                                        <div>
+                                            <strong>Regional Insight:</strong> India offers 12% lower prices for solar components compared to global averages, while maintaining quality standards.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Supply Chain Risks -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">Supply Chain Risk Assessment</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <canvas id="supplyChainRiskChart" height="200"></canvas>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Risk Factor</th>
+                                            <th>Impact</th>
+                                            <th>Probability</th>
+                                            <th>Risk Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Raw Material Shortage</td>
+                                            <td>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-danger" style="width: 80%;"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-warning" style="width: 60%;"></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-danger">High</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Shipping Delays</td>
+                                            <td>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-warning" style="width: 60%;"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-warning" style="width: 50%;"></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-warning">Medium</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Price Volatility</td>
+                                            <td>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-danger" style="width: 75%;"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-danger" style="width: 70%;"></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-danger">High</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Regulatory Changes</td>
+                                            <td>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-warning" style="width: 65%;"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="height: 8px;">
+                                                    <div class="progress-bar bg-success" style="width: 30%;"></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-warning">Medium</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="alert alert-warning mt-3 mb-0">
+                                <div class="d-flex">
+                                    <i class="bi bi-exclamation-triangle fs-4 me-2"></i>
+                                    <div>
+                                        <strong>Risk Mitigation:</strong> Consider diversifying your supplier base for critical components and negotiating longer-term contracts to mitigate price volatility.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 Bell24h B2B Marketplace. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-decoration-none text-muted me-3">Terms</a>
+                    <a href="#" class="text-decoration-none text-muted me-3">Privacy</a>
+                    <a href="#" class="text-decoration-none text-muted">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const overviewTab = document.getElementById('overviewTab');
+            const rfqTab = document.getElementById('rfqTab');
+            const productsTab = document.getElementById('productsTab');
+            const marketTab = document.getElementById('marketTab');
+            
+            const overviewSection = document.getElementById('overviewSection');
+            const rfqSection = document.getElementById('rfqSection');
+            const productsSection = document.getElementById('productsSection');
+            const marketSection = document.getElementById('marketSection');
+            
+            overviewTab.addEventListener('click', function() {
+                overviewTab.classList.add('active');
+                rfqTab.classList.remove('active');
+                productsTab.classList.remove('active');
+                marketTab.classList.remove('active');
+                
+                overviewSection.classList.remove('d-none');
+                rfqSection.classList.add('d-none');
+                productsSection.classList.add('d-none');
+                marketSection.classList.add('d-none');
+                
+                // Refresh charts if needed
+                refreshOverviewCharts();
+            });
+            
+            rfqTab.addEventListener('click', function() {
+                overviewTab.classList.remove('active');
+                rfqTab.classList.add('active');
+                productsTab.classList.remove('active');
+                marketTab.classList.remove('active');
+                
+                overviewSection.classList.add('d-none');
+                rfqSection.classList.remove('d-none');
+                productsSection.classList.add('d-none');
+                marketSection.classList.add('d-none');
+                
+                // Refresh charts if needed
+                refreshRfqCharts();
+            });
+            
+            productsTab.addEventListener('click', function() {
+                overviewTab.classList.remove('active');
+                rfqTab.classList.remove('active');
+                productsTab.classList.add('active');
+                marketTab.classList.remove('active');
+                
+                overviewSection.classList.add('d-none');
+                rfqSection.classList.add('d-none');
+                productsSection.classList.remove('d-none');
+                marketSection.classList.add('d-none');
+                
+                // Refresh charts if needed
+                refreshProductCharts();
+            });
+            
+            marketTab.addEventListener('click', function() {
+                overviewTab.classList.remove('active');
+                rfqTab.classList.remove('active');
+                productsTab.classList.remove('active');
+                marketTab.classList.add('active');
+                
+                overviewSection.classList.add('d-none');
+                rfqSection.classList.add('d-none');
+                productsSection.classList.add('d-none');
+                marketSection.classList.remove('d-none');
+                
+                // Refresh charts if needed
+                refreshMarketCharts();
+            });
+            
+            // Initialize charts
+            initOverviewCharts();
+            
+            // Fetch analytics data
+            fetchAnalyticsData();
+            
+            // Date range change
+            document.getElementById('dateRange').addEventListener('change', function() {
+                // Update charts based on new date range
+                updateChartsForDateRange(this.value);
+            });
+            
+            // Logout functionality
+            document.getElementById('logout').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                })
+                .then(() => {
+                    window.location.href = 'login.html';
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                });
+            });
+            
+            // Load user data
+            loadUserData();
+        });
+        
+        // User data loading
+        function loadUserData() {
+            fetch('/api/auth/user')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('User not authenticated');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    // Update profile image and name
+                    document.getElementById('userDropdown').innerHTML = `
+                        <img src="${user.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.firstName || '')}+${encodeURIComponent(user.lastName || '')}&background=0D6EFD&color=fff`}" alt="User" class="profile-image">
+                        <span class="ms-2 d-none d-lg-inline-block">${user.firstName || user.username}</span>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error loading user data:', error);
+                    // Redirect to login if not authenticated
+                    window.location.href = 'login.html';
+                });
+        }
+        
+        // Fetch analytics data
+        function fetchAnalyticsData() {
+            // Simulate API calls with setTimeout
+            setTimeout(() => {
+                // Update stats cards
+                updateStatsCards();
+            }, 1000);
+        }
+        
+        // Update stats cards
+        function updateStatsCards() {
+            // This would fetch real data from API in production
+            // For now, we're using simulated data
+            document.getElementById('rfqsCount').textContent = '24';
+            document.getElementById('bidsCount').textContent = '118';
+            document.getElementById('contractsValue').textContent = '$265,890';
+            document.getElementById('suppliersCount').textContent = '42';
+        }
+        
+        // Initialize overview charts
+        function initOverviewCharts() {
+            // RFQ Performance Chart
+            const rfqPerformanceCtx = document.getElementById('rfqPerformanceChart').getContext('2d');
+            const rfqPerformanceChart = new Chart(rfqPerformanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'RFQs Created',
+                        data: [12, 15, 18, 14, 22, 24, 28, 30, 27, 32, 36, 24],
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }, {
+                        label: 'Bids Received',
+                        data: [36, 42, 54, 48, 68, 72, 84, 92, 86, 102, 118, 78],
+                        borderColor: '#198754',
+                        backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Refresh overview charts
+        function refreshOverviewCharts() {
+            // Implement if needed
+        }
+        
+        // Refresh RFQ charts
+        function refreshRfqCharts() {
+            if (!document.getElementById('rfqCategoriesChart').chart) {
+                // RFQ Categories Chart
+                const rfqCategoriesCtx = document.getElementById('rfqCategoriesChart').getContext('2d');
+                const rfqCategoriesChart = new Chart(rfqCategoriesCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Electronics', 'Machinery', 'Textiles', 'Chemicals', 'Others'],
+                        datasets: [{
+                            data: [32, 25, 18, 15, 10],
+                            backgroundColor: [
+                                '#0d6efd',
+                                '#198754',
+                                '#ffc107',
+                                '#dc3545',
+                                '#6c757d'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        cutout: '70%',
+                    }
+                });
+                
+                document.getElementById('rfqCategoriesChart').chart = rfqCategoriesChart;
+                
+                // Response Times Chart
+                const responseTimesCtx = document.getElementById('responseTimesChart').getContext('2d');
+                const responseTimesChart = new Chart(responseTimesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['<4h', '4-12h', '12-24h', '24-48h', '>48h'],
+                        datasets: [{
+                            label: 'Response Time Distribution',
+                            data: [15, 32, 28, 18, 7],
+                            backgroundColor: [
+                                '#0d6efd',
+                                '#20c997',
+                                '#ffc107',
+                                '#fd7e14',
+                                '#dc3545'
+                            ],
+                            borderWidth: 0,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawBorder: false
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                document.getElementById('responseTimesChart').chart = responseTimesChart;
+                
+                // RFQ Status Chart
+                const rfqStatusCtx = document.getElementById('rfqStatusChart').getContext('2d');
+                const rfqStatusChart = new Chart(rfqStatusCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Open', 'In Progress', 'Awarded', 'Completed', 'Expired', 'Cancelled'],
+                        datasets: [{
+                            label: 'Count',
+                            data: [24, 18, 12, 32, 6, 4],
+                            backgroundColor: [
+                                '#0d6efd',
+                                '#ffc107',
+                                '#198754',
+                                '#20c997',
+                                '#6c757d',
+                                '#dc3545'
+                            ],
+                            borderWidth: 0,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawBorder: false
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                document.getElementById('rfqStatusChart').chart = rfqStatusChart;
+            }
+        }
+        
+        // Refresh product charts
+        function refreshProductCharts() {
+            if (!document.getElementById('productPerformanceChart').chart) {
+                // Product Performance Chart
+                const productPerformanceCtx = document.getElementById('productPerformanceChart').getContext('2d');
+                const productPerformanceChart = new Chart(productPerformanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Product Views',
+                            data: [450, 530, 620, 580, 700, 780, 820, 900, 880, 950, 1050, 1200],
+                            borderColor: '#0d6efd',
+                            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawBorder: false
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                document.getElementById('productPerformanceChart').chart = productPerformanceChart;
+                
+                // Product Categories Chart
+                const productCategoriesCtx = document.getElementById('productCategoriesChart').getContext('2d');
+                const productCategoriesChart = new Chart(productCategoriesCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Electronics', 'Machinery', 'Textiles', 'Chemicals', 'Others'],
+                        datasets: [{
+                            data: [38, 22, 16, 14, 10],
+                            backgroundColor: [
+                                '#0d6efd',
+                                '#198754',
+                                '#ffc107',
+                                '#dc3545',
+                                '#6c757d'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        cutout: '70%',
+                    }
+                });
+                
+                document.getElementById('productCategoriesChart').chart = productCategoriesChart;
+            }
+        }
+        
+        // Refresh market charts
+        function refreshMarketCharts() {
+            if (!document.getElementById('marketTrendsChart').chart) {
+                // Market Trends Chart
+                const marketTrendsCtx = document.getElementById('marketTrendsChart').getContext('2d');
+                const marketTrendsChart = new Chart(marketTrendsCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Solar Panels (per watt)',
+                            data: [0.42, 0.45, 0.43, 0.44, 0.46, 0.48, 0.47, 0.49, 0.51, 0.53, 0.54, 0.55],
+                            borderColor: '#0d6efd',
+                            backgroundColor: 'rgba(13, 110, 253, 0)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        }, {
+                            label: 'Batteries (per kWh)',
+                            data: [120, 118, 115, 110, 105, 102, 98, 96, 94, 92, 90, 88],
+                            borderColor: '#198754',
+                            backgroundColor: 'rgba(25, 135, 84, 0)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        }, {
+                            label: 'Semiconductors (index)',
+                            data: [100, 102, 105, 107, 110, 113, 118, 122, 125, 128, 132, 135],
+                            borderColor: '#dc3545',
+                            backgroundColor: 'rgba(220, 53, 69, 0)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                grid: {
+                                    drawBorder: false
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                document.getElementById('marketTrendsChart').chart = marketTrendsChart;
+                
+                // Regional Comparison Chart
+                const regionalComparisonCtx = document.getElementById('regionalComparisonChart').getContext('2d');
+                const regionalComparisonChart = new Chart(regionalComparisonCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['India', 'UAE', 'China', 'USA', 'EU', 'Global Avg'],
+                        datasets: [{
+                            label: 'Price Index (Lower is Better)',
+                            data: [88, 95, 90, 110, 105, 100],
+                            backgroundColor: [
+                                '#0d6efd',
+                                '#20c997',
+                                '#ffc107',
+                                '#dc3545',
+                                '#6c757d',
+                                '#6610f2'
+                            ],
+                            borderWidth: 0,
+                            borderRadius: 4
+                        }, {
+                            label: 'Quality Index (Higher is Better)',
+                            data: [95, 98, 92, 100, 99, 96],
+                            backgroundColor: [
+                                'rgba(13, 110, 253, 0.5)',
+                                'rgba(32, 201, 151, 0.5)',
+                                'rgba(255, 193, 7, 0.5)',
+                                'rgba(220, 53, 69, 0.5)',
+                                'rgba(108, 117, 125, 0.5)',
+                                'rgba(102, 16, 242, 0.5)'
+                            ],
+                            borderWidth: 0,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawBorder: false
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                document.getElementById('regionalComparisonChart').chart = regionalComparisonChart;
+                
+                // Supply Chain Risk Chart
+                const supplyChainRiskCtx = document.getElementById('supplyChainRiskChart').getContext('2d');
+                const supplyChainRiskChart = new Chart(supplyChainRiskCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Raw Materials', 'Manufacturing', 'Shipping', 'Warehousing', 'Distribution', 'Regulatory'],
+                        datasets: [{
+                            label: 'Risk Level',
+                            data: [80, 65, 75, 40, 55, 60],
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(255, 99, 132)'
+                        }, {
+                            label: 'Industry Average',
+                            data: [65, 60, 70, 45, 50, 55],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            pointBackgroundColor: 'rgb(54, 162, 235)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(54, 162, 235)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        elements: {
+                            line: {
+                                borderWidth: 3
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    display: true
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        }
+                    }
+                });
+                
+                document.getElementById('supplyChainRiskChart').chart = supplyChainRiskChart;
+            }
+        }
+        
+        // Update charts for date range
+        function updateChartsForDateRange(range) {
+            // This would make API calls with the new date range
+            console.log('Updating charts for date range:', range);
+            // For now, we'll just show a console message
+        }
+    </script>
+</body>
+</html>

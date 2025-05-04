@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h WebSocket Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #message-container {
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .message {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .server {
+            color: #004085;
+            background-color: #cce5ff;
+        }
+        .client {
+            color: #155724;
+            background-color: #d4edda;
+        }
+        .error {
+            color: #721c24;
+            background-color: #f8d7da;
+        }
+        input {
+            padding: 5px;
+            width: 70%;
+        }
+        button {
+            padding: 5px 10px;
+            margin-left: 5px;
+        }
+        .notification-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+        .notification-indicator.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bell24h WebSocket Test</h1>
+    <div id="connection-status">Status: Disconnected</div>
+    <button id="connect-btn">Connect</button>
+    <button id="disconnect-btn" disabled>Disconnect</button>
+    
+    <h2>Messages</h2>
+    <div id="message-container"></div>
+    
+    <div>
+        <input type="text" id="message-input" placeholder="Type a message...">
+        <button id="send-btn" disabled>Send</button>
+    </div>
+    
+    <div id="notification-indicator" class="notification-indicator"></div>
+    
+    <!-- Audio for notification sound -->
+    <audio id="notification-sound" preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_8a30a97b67.mp3?filename=notification-sound-7062.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // DOM elements
+        const connectBtn = document.getElementById('connect-btn');
+        const disconnectBtn = document.getElementById('disconnect-btn');
+        const connectionStatus = document.getElementById('connection-status');
+        const messageContainer = document.getElementById('message-container');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const notificationIndicator = document.getElementById('notification-indicator');
+        const notificationSound = document.getElementById('notification-sound');
+        
+        // WebSocket
+        let socket = null;
+        
+        // Connect to WebSocket server
+        function connect() {
+            try {
+                // Determine WebSocket URL
+                const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const host = window.location.hostname || 'localhost';
+                const port = 5000; // WebSocket server port
+                const wsUrl = `${protocol}//${host}:${port}`;
+                
+                // Create WebSocket connection
+                socket = new WebSocket(wsUrl);
+                
+                // Connection opened
+                socket.addEventListener('open', (event) => {
+                    connectionStatus.textContent = 'Status: Connected';
+                    connectBtn.disabled = true;
+                    disconnectBtn.disabled = false;
+                    sendBtn.disabled = false;
+                    
+                    addMessage('Connected to WebSocket server', 'server');
+                });
+                
+                // Connection closed
+                socket.addEventListener('close', (event) => {
+                    connectionStatus.textContent = 'Status: Disconnected';
+                    connectBtn.disabled = false;
+                    disconnectBtn.disabled = true;
+                    sendBtn.disabled = true;
+                    
+                    if (event.wasClean) {
+                        addMessage(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`, 'server');
+                    } else {
+                        addMessage('Connection died', 'error');
+                    }
+                    
+                    socket = null;
+                });
+                
+                // Connection error
+                socket.addEventListener('error', (error) => {
+                    connectionStatus.textContent = 'Status: Error';
+                    addMessage('WebSocket error', 'error');
+                    console.error('WebSocket error:', error);
+                });
+                
+                // Listen for messages
+                socket.addEventListener('message', (event) => {
+                    try {
+                        // Parse JSON message
+                        const data = JSON.parse(event.data);
+                        
+                        // Handle different message types
+                        if (data.type === 'notification') {
+                            handleNotification(data);
+                        } else if (data.type === 'system') {
+                            addMessage(data.message, 'server');
+                        } else if (data.type === 'echo') {
+                            addMessage(`Echo: ${data.message}`, 'server');
+                        } else {
+                            addMessage(`Received: ${event.data}`, 'server');
+                        }
+                    } catch (e) {
+                        // Not JSON, just display as text
+                        addMessage(`Received: ${event.data}`, 'server');
+                    }
+                });
+                
+            } catch (error) {
+                connectionStatus.textContent = 'Status: Error';
+                addMessage(`Connection error: ${error.message}`, 'error');
+                console.error('Connection error:', error);
+            }
+        }
+        
+        // Disconnect from WebSocket server
+        function disconnect() {
+            if (socket) {
+                socket.close();
+                socket = null;
+                
+                connectionStatus.textContent = 'Status: Disconnected';
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                sendBtn.disabled = true;
+                
+                addMessage('Disconnected from WebSocket server', 'server');
+            }
+        }
+        
+        // Send message to WebSocket server
+        function sendMessage() {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const message = messageInput.value.trim();
+                
+                if (message) {
+                    socket.send(message);
+                    addMessage(`Sent: ${message}`, 'client');
+                    messageInput.value = '';
+                }
+            }
+        }
+        
+        // Add message to container
+        function addMessage(message, type) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', type);
+            messageElement.textContent = message;
+            
+            messageContainer.appendChild(messageElement);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+        
+        // Handle notification message
+        function handleNotification(data) {
+            // Add message to container
+            addMessage(`Notification: ${data.title} - ${data.message}`, 'server');
+            
+            // Show notification indicator
+            showNotificationIndicator(data.title);
+            
+            // Play notification sound
+            playNotificationSound();
+        }
+        
+        // Show notification indicator
+        function showNotificationIndicator(message) {
+            notificationIndicator.textContent = message;
+            notificationIndicator.classList.add('show');
+            
+            setTimeout(() => {
+                notificationIndicator.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Play notification sound
+        function playNotificationSound() {
+            notificationSound.currentTime = 0;
+            notificationSound.play().catch(err => {
+                console.error("Error playing notification sound:", err);
+            });
+        }
+        
+        // Event listeners
+        connectBtn.addEventListener('click', connect);
+        disconnectBtn.addEventListener('click', disconnect);
+        sendBtn.addEventListener('click', sendMessage);
+        
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Auto-connect on page load
+        window.addEventListener('load', () => {
+            addMessage('Welcome to the Bell24h WebSocket test page', 'server');
+            addMessage('Click "Connect" to establish a WebSocket connection', 'server');
+        });
+    </script>
+</body>
+</html>

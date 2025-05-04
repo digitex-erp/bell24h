@@ -1,0 +1,450 @@
+const { createServer } = require('http');
+const externalApisRouter = require('./routes/api/external-apis');
+const { storage } = require('./storage');
+const { insertRfqSchema, insertQuoteSchema, insertUserSchema } = require('../shared/schema');
+
+/**
+ * Register all routes for the application
+ * 
+ * @param {Express} app - Express application
+ * @returns {Server} HTTP server
+ */
+async function registerRoutes(app) {
+  // Health check endpoint
+  app.get("/api/health", (req, res) => {
+    res.json({
+      status: "success",
+      message: "Bell24h API is operational",
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  // Register external API routes
+  app.use('/api/external', externalApisRouter);
+
+  // ===== USERS =====
+  
+  // Get user by ID
+  app.get("/api/users/:id", async (req, res) => {
+    const userId = parseInt(req.params.id);
+    
+    if (isNaN(userId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid user ID"
+      });
+    }
+    
+    try {
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({
+          status: "error",
+          message: "User not found"
+        });
+      }
+      
+      // Don't return the password
+      const { password, ...userWithoutPassword } = user;
+      
+      return res.json({
+        status: "success",
+        data: userWithoutPassword
+      });
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to fetch user"
+      });
+    }
+  });
+  
+  // Create new user
+  app.post("/api/users", async (req, res) => {
+    try {
+      const validation = insertUserSchema.safeParse(req.body);
+      
+      if (!validation.success) {
+        return res.status(400).json({
+          status: "error",
+          message: "Invalid user data",
+          errors: validation.error.errors
+        });
+      }
+      
+      // Check if username or email already exists
+      const existingByUsername = await storage.getUserByUsername(req.body.username);
+      const existingByEmail = await storage.getUserByEmail(req.body.email);
+      
+      if (existingByUsername) {
+        return res.status(409).json({
+          status: "error",
+          message: "Username already taken"
+        });
+      }
+      
+      if (existingByEmail) {
+        return res.status(409).json({
+          status: "error",
+          message: "Email already registered"
+        });
+      }
+      
+      const newUser = await storage.createUser(req.body);
+      
+      // Don't return the password
+      const { password, ...userWithoutPassword } = newUser;
+      
+      return res.status(201).json({
+        status: "success",
+        message: "User created successfully",
+        data: userWithoutPassword
+      });
+    } catch (error) {
+      console.error("Error creating user:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to create user"
+      });
+    }
+  });
+  
+  // ===== RFQs =====
+  
+  // Get all published RFQs
+  app.get("/api/rfqs", async (req, res) => {
+    try {
+      const rfqs = await storage.getPublishedRfqs();
+      
+      return res.json({
+        status: "success",
+        data: rfqs
+      });
+    } catch (error) {
+      console.error("Error fetching RFQs:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to fetch RFQs"
+      });
+    }
+  });
+  
+  // Get RFQ by ID
+  app.get("/api/rfqs/:id", async (req, res) => {
+    const rfqId = parseInt(req.params.id);
+    
+    if (isNaN(rfqId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid RFQ ID"
+      });
+    }
+    
+    try {
+      const rfq = await storage.getRfq(rfqId);
+      
+      if (!rfq) {
+        return res.status(404).json({
+          status: "error",
+          message: "RFQ not found"
+        });
+      }
+      
+      return res.json({
+        status: "success",
+        data: rfq
+      });
+    } catch (error) {
+      console.error("Error fetching RFQ:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to fetch RFQ"
+      });
+    }
+  });
+  
+  // Create new RFQ
+  app.post("/api/rfqs", async (req, res) => {
+    try {
+      const validation = insertRfqSchema.safeParse(req.body);
+      
+      if (!validation.success) {
+        return res.status(400).json({
+          status: "error",
+          message: "Invalid RFQ data",
+          errors: validation.error.errors
+        });
+      }
+      
+      const newRfq = await storage.createRfq(req.body);
+      
+      return res.status(201).json({
+        status: "success",
+        message: "RFQ created successfully",
+        data: newRfq
+      });
+    } catch (error) {
+      console.error("Error creating RFQ:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to create RFQ"
+      });
+    }
+  });
+  
+  // Update RFQ
+  app.patch("/api/rfqs/:id", async (req, res) => {
+    const rfqId = parseInt(req.params.id);
+    
+    if (isNaN(rfqId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid RFQ ID"
+      });
+    }
+    
+    try {
+      const rfq = await storage.getRfq(rfqId);
+      
+      if (!rfq) {
+        return res.status(404).json({
+          status: "error",
+          message: "RFQ not found"
+        });
+      }
+      
+      const updatedRfq = await storage.updateRfq(rfqId, req.body);
+      
+      return res.json({
+        status: "success",
+        message: "RFQ updated successfully",
+        data: updatedRfq
+      });
+    } catch (error) {
+      console.error("Error updating RFQ:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to update RFQ"
+      });
+    }
+  });
+  
+  // ===== Quotes =====
+  
+  // Get quotes for an RFQ
+  app.get("/api/rfqs/:id/quotes", async (req, res) => {
+    const rfqId = parseInt(req.params.id);
+    
+    if (isNaN(rfqId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid RFQ ID"
+      });
+    }
+    
+    try {
+      const rfq = await storage.getRfq(rfqId);
+      
+      if (!rfq) {
+        return res.status(404).json({
+          status: "error",
+          message: "RFQ not found"
+        });
+      }
+      
+      const quotes = await storage.getQuotesByRfq(rfqId);
+      
+      return res.json({
+        status: "success",
+        data: quotes
+      });
+    } catch (error) {
+      console.error("Error fetching quotes:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to fetch quotes"
+      });
+    }
+  });
+  
+  // Submit quote for an RFQ
+  app.post("/api/rfqs/:id/quotes", async (req, res) => {
+    const rfqId = parseInt(req.params.id);
+    
+    if (isNaN(rfqId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid RFQ ID"
+      });
+    }
+    
+    try {
+      const rfq = await storage.getRfq(rfqId);
+      
+      if (!rfq) {
+        return res.status(404).json({
+          status: "error",
+          message: "RFQ not found"
+        });
+      }
+      
+      // Validate the quote data
+      const quoteData = { ...req.body, rfqId };
+      const validation = insertQuoteSchema.safeParse(quoteData);
+      
+      if (!validation.success) {
+        return res.status(400).json({
+          status: "error",
+          message: "Invalid quote data",
+          errors: validation.error.errors
+        });
+      }
+      
+      const newQuote = await storage.createQuote(quoteData);
+      
+      return res.status(201).json({
+        status: "success",
+        message: "Quote submitted successfully",
+        data: newQuote
+      });
+    } catch (error) {
+      console.error("Error submitting quote:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to submit quote"
+      });
+    }
+  });
+  
+  // ===== Industries and Categories =====
+  
+  // Get all industries
+  app.get("/api/industries", async (req, res) => {
+    try {
+      const industries = await storage.getIndustries();
+      
+      return res.json({
+        status: "success",
+        data: industries
+      });
+    } catch (error) {
+      console.error("Error fetching industries:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to fetch industries"
+      });
+    }
+  });
+  
+  // Get categories (optionally filtered by industry)
+  app.get("/api/categories", async (req, res) => {
+    const industryId = req.query.industryId ? parseInt(req.query.industryId) : undefined;
+    
+    try {
+      const categories = await storage.getCategories(industryId);
+      
+      return res.json({
+        status: "success",
+        data: categories
+      });
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to fetch categories"
+      });
+    }
+  });
+  
+  // ===== Supplier Metrics =====
+  
+  // Get metrics for a supplier
+  app.get("/api/suppliers/:id/metrics", async (req, res) => {
+    const supplierId = parseInt(req.params.id);
+    
+    if (isNaN(supplierId)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid supplier ID"
+      });
+    }
+    
+    try {
+      const metrics = await storage.getSupplierMetrics(supplierId);
+      
+      if (!metrics) {
+        return res.status(404).json({
+          status: "error",
+          message: "Supplier metrics not found"
+        });
+      }
+      
+      return res.json({
+        status: "success",
+        data: metrics
+      });
+    } catch (error) {
+      console.error("Error fetching supplier metrics:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to fetch supplier metrics"
+      });
+    }
+  });
+
+  // Setup wizard support endpoints
+  
+  // API endpoint for project setup status
+  app.get("/api/setup/status", (req, res) => {
+    res.json({
+      status: "success",
+      message: "Setup API is operational",
+      steps: [
+        { id: 1, name: "Create Project", status: "completed" },
+        { id: 2, name: "Upload ZIP", status: "completed" },
+        { id: 3, name: "GitHub Integration", status: "completed" },
+        { id: 4, name: "Environment Variables", status: "completed" },
+        { id: 5, name: "Install Dependencies", status: "completed" },
+        { id: 6, name: "Run Application", status: "completed" }
+      ]
+    });
+  });
+  
+  // API endpoint for simulating file upload (doesn't actually upload anything)
+  app.post("/api/setup/upload", (req, res) => {
+    const { fileName, fileSize } = req.body;
+    
+    if (!fileName || !fileSize) {
+      return res.status(400).json({
+        status: "error",
+        message: "Missing file details"
+      });
+    }
+    
+    // Simulate processing time
+    setTimeout(() => {
+      res.json({
+        status: "success",
+        message: "File upload simulated successfully",
+        fileName,
+        fileSize
+      });
+    }, 1500);
+  });
+  
+  // API endpoint for generating .replit file content
+  app.get("/api/setup/replit-config", (req, res) => {
+    res.json({
+      status: "success",
+      content: "run = \"npm install && npm run dev\""
+    });
+  });
+
+  const httpServer = createServer(app);
+
+  return httpServer;
+}
+
+module.exports = { registerRoutes };
