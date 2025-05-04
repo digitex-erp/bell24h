@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h - Modern WebSocket Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .card {
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status-disconnected { background-color: #e74c3c; }
+        .status-connecting { background-color: #f39c12; }
+        .status-connected { background-color: #2ecc71; }
+        
+        .control-panel {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex-grow: 1;
+        }
+        
+        .messages-container {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+        }
+        .message {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            max-width: 80%;
+            word-break: break-word;
+        }
+        .message.received {
+            background-color: #e8f4f8;
+            margin-right: auto;
+        }
+        .message.sent {
+            background-color: #dcf8c6;
+            margin-left: auto;
+        }
+        .message.system {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            margin-left: auto;
+            margin-right: auto;
+            font-style: italic;
+        }
+        .message-time {
+            font-size: 0.7em;
+            color: #7f8c8d;
+            text-align: right;
+            margin-top: 2px;
+        }
+        
+        .notification {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #d6eaf8;
+            border-left: 4px solid #3498db;
+        }
+        .notification-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .debug-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .tab.active {
+            border-bottom: 2px solid #3498db;
+            color: #3498db;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bell24h - Modern WebSocket Test</h1>
+    
+    <div class="tabs">
+        <div class="tab active" data-tab="websocket">WebSocket</div>
+        <div class="tab" data-tab="sse">Server-Sent Events</div>
+        <div class="tab" data-tab="polling">HTTP Polling</div>
+    </div>
+    
+    <div class="tab-content active" id="websocket-tab">
+        <div class="card">
+            <div class="status">
+                <div class="status-indicator status-disconnected" id="ws-status-indicator"></div>
+                <span id="ws-status-text">Disconnected</span>
+            </div>
+            
+            <div class="control-panel">
+                <input type="text" id="ws-url" placeholder="WebSocket URL">
+                <button id="ws-connect">Connect</button>
+                <button id="ws-disconnect" disabled>Disconnect</button>
+                <button id="ws-test-notification">Test Notification</button>
+            </div>
+            
+            <div class="messages-container" id="ws-messages"></div>
+            
+            <div class="control-panel">
+                <input type="text" id="ws-message" placeholder="Type a message...">
+                <button id="ws-send" disabled>Send</button>
+            </div>
+            
+            <div class="debug-info" id="ws-debug-info"></div>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="sse-tab">
+        <div class="card">
+            <div class="status">
+                <div class="status-indicator status-disconnected" id="sse-status-indicator"></div>
+                <span id="sse-status-text">Disconnected</span>
+            </div>
+            
+            <div class="control-panel">
+                <input type="text" id="sse-url" placeholder="SSE URL">
+                <button id="sse-connect">Connect</button>
+                <button id="sse-disconnect" disabled>Disconnect</button>
+                <button id="sse-test-notification">Test Notification</button>
+            </div>
+            
+            <div class="messages-container" id="sse-messages"></div>
+            
+            <div class="debug-info" id="sse-debug-info"></div>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="polling-tab">
+        <div class="card">
+            <div class="status">
+                <div class="status-indicator status-disconnected" id="poll-status-indicator"></div>
+                <span id="poll-status-text">Stopped</span>
+            </div>
+            
+            <div class="control-panel">
+                <input type="text" id="poll-url" placeholder="Polling URL">
+                <button id="poll-start">Start Polling</button>
+                <button id="poll-stop" disabled>Stop Polling</button>
+                <button id="poll-test-notification">Test Notification</button>
+            </div>
+            
+            <div class="messages-container" id="poll-messages"></div>
+            
+            <div class="control-panel">
+                <label for="poll-interval">Polling Interval (ms): </label>
+                <input type="number" id="poll-interval" value="3000" min="1000" step="500">
+            </div>
+            
+            <div class="debug-info" id="poll-debug-info"></div>
+        </div>
+    </div>
+    
+    <script>
+        // ======== Tab switching ========
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+            });
+        });
+        
+        // ======== WebSocket Implementation ========
+        const wsStatusIndicator = document.getElementById('ws-status-indicator');
+        const wsStatusText = document.getElementById('ws-status-text');
+        const wsUrlInput = document.getElementById('ws-url');
+        const wsConnectBtn = document.getElementById('ws-connect');
+        const wsDisconnectBtn = document.getElementById('ws-disconnect');
+        const wsTestNotificationBtn = document.getElementById('ws-test-notification');
+        const wsMessagesContainer = document.getElementById('ws-messages');
+        const wsMessageInput = document.getElementById('ws-message');
+        const wsSendBtn = document.getElementById('ws-send');
+        const wsDebugInfo = document.getElementById('ws-debug-info');
+        
+        let wsSocket = null;
+        
+        // Set the WebSocket URL dynamically based on the current host
+        document.addEventListener('DOMContentLoaded', () => {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const host = window.location.hostname;
+            const port = '5000'; // WebSocket server port
+            wsUrlInput.value = `${protocol}//${host}:${port}`;
+            
+            // Debug info
+            updateWebSocketDebugInfo();
+        });
+        
+        function updateWebSocketStatus(status, statusText) {
+            wsStatusIndicator.className = 'status-indicator';
+            wsStatusIndicator.classList.add(`status-${status}`);
+            wsStatusText.textContent = statusText;
+        }
+        
+        function updateWebSocketDebugInfo() {
+            wsDebugInfo.innerHTML = `
+                <h4>Debug Information</h4>
+                <p><strong>Window Location:</strong> ${window.location.href}</p>
+                <p><strong>Protocol:</strong> ${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}</p>
+                <p><strong>Host:</strong> ${window.location.hostname}</p>
+                <p><strong>WebSocket URL:</strong> ${wsUrlInput.value}</p>
+                <p><strong>WebSocket State:</strong> ${wsSocket ? WebSocket.readyStateToString(wsSocket.readyState) : 'No Connection'}</p>
+            `;
+        }
+        
+        WebSocket.readyStateToString = function(readyState) {
+            switch (readyState) {
+                case WebSocket.CONNECTING: return 'CONNECTING (0)';
+                case WebSocket.OPEN: return 'OPEN (1)';
+                case WebSocket.CLOSING: return 'CLOSING (2)';
+                case WebSocket.CLOSED: return 'CLOSED (3)';
+                default: return 'UNKNOWN';
+            }
+        };
+        
+        function addWebSocketMessage(message, type = 'system') {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${type}`;
+            messageElement.textContent = message;
+            
+            const timeElement = document.createElement('div');
+            timeElement.className = 'message-time';
+            timeElement.textContent = new Date().toLocaleTimeString();
+            
+            messageElement.appendChild(timeElement);
+            wsMessagesContainer.appendChild(messageElement);
+            wsMessagesContainer.scrollTop = wsMessagesContainer.scrollHeight;
+        }
+        
+        wsConnectBtn.addEventListener('click', () => {
+            try {
+                const url = wsUrlInput.value;
+                wsSocket = new WebSocket(url);
+                
+                updateWebSocketStatus('connecting', 'Connecting...');
+                
+                wsSocket.onopen = () => {
+                    updateWebSocketStatus('connected', 'Connected');
+                    wsConnectBtn.disabled = true;
+                    wsDisconnectBtn.disabled = false;
+                    wsSendBtn.disabled = false;
+                    addWebSocketMessage(`Connected to ${url}`, 'system');
+                    updateWebSocketDebugInfo();
+                };
+                
+                wsSocket.onmessage = (event) => {
+                    try {
+                        // Try to parse as JSON
+                        const data = JSON.parse(event.data);
+                        if (data.type === 'notification') {
+                            // Handle notification
+                            addNotification(data.title, data.message, wsMessagesContainer);
+                        } else {
+                            // Handle other messages
+                            addWebSocketMessage(JSON.stringify(data, null, 2), 'received');
+                        }
+                    } catch (error) {
+                        // If not JSON, treat as plain text
+                        addWebSocketMessage(event.data, 'received');
+                    }
+                    updateWebSocketDebugInfo();
+                };
+                
+                wsSocket.onclose = () => {
+                    updateWebSocketStatus('disconnected', 'Disconnected');
+                    wsConnectBtn.disabled = false;
+                    wsDisconnectBtn.disabled = true;
+                    wsSendBtn.disabled = true;
+                    addWebSocketMessage('Connection closed', 'system');
+                    wsSocket = null;
+                    updateWebSocketDebugInfo();
+                };
+                
+                wsSocket.onerror = (error) => {
+                    addWebSocketMessage(`Error: ${error}`, 'system');
+                    updateWebSocketDebugInfo();
+                };
+            } catch (error) {
+                addWebSocketMessage(`Error: ${error.message}`, 'system');
+                updateWebSocketDebugInfo();
+            }
+        });
+        
+        wsDisconnectBtn.addEventListener('click', () => {
+            if (wsSocket) {
+                wsSocket.close();
+            }
+        });
+        
+        wsSendBtn.addEventListener('click', () => {
+            if (wsSocket && wsSocket.readyState === WebSocket.OPEN) {
+                const message = wsMessageInput.value;
+                if (message) {
+                    wsSocket.send(message);
+                    addWebSocketMessage(message, 'sent');
+                    wsMessageInput.value = '';
+                    updateWebSocketDebugInfo();
+                }
+            }
+        });
+        
+        wsTestNotificationBtn.addEventListener('click', () => {
+            // Get the base URL from the WebSocket URL
+            const wsUrl = wsUrlInput.value;
+            let baseUrl = '';
+            
+            if (wsUrl.startsWith('ws://')) {
+                baseUrl = 'http://' + wsUrl.substring(5);
+            } else if (wsUrl.startsWith('wss://')) {
+                baseUrl = 'https://' + wsUrl.substring(6);
+            }
+            
+            // Extract hostname and port
+            const urlParts = baseUrl.split('/');
+            const hostPort = urlParts[2]; // hostname:port
+            
+            // Construct the notification URL - assuming the HTTP server is on port 5002
+            const httpPort = 5002;
+            const hostParts = hostPort.split(':');
+            const notificationUrl = `http://${hostParts[0]}:${httpPort}/api/notification/create`;
+            
+            // Debug info
+            addWebSocketMessage(`Sending test notification request to: ${notificationUrl}`, 'system');
+            
+            // Send request
+            fetch(notificationUrl)
+                .then(response => response.json())
+                .then(data => {
+                    addWebSocketMessage(`Created test notification: ${JSON.stringify(data)}`, 'system');
+                })
+                .catch(error => {
+                    addWebSocketMessage(`Error creating notification: ${error}`, 'system');
+                });
+        });
+        
+        wsMessageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                wsSendBtn.click();
+            }
+        });
+        
+        // Helper function to add a notification
+        function addNotification(title, message, container) {
+            const notificationElement = document.createElement('div');
+            notificationElement.className = 'notification';
+            
+            const titleElement = document.createElement('div');
+            titleElement.className = 'notification-title';
+            titleElement.textContent = title;
+            
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            
+            const timeElement = document.createElement('div');
+            timeElement.className = 'message-time';
+            timeElement.textContent = new Date().toLocaleTimeString();
+            
+            notificationElement.appendChild(titleElement);
+            notificationElement.appendChild(messageElement);
+            notificationElement.appendChild(timeElement);
+            
+            container.appendChild(notificationElement);
+            container.scrollTop = container.scrollHeight;
+            
+            // Play notification sound
+            playNotificationSound(title);
+        }
+        
+        // Play a notification sound based on notification type
+        function playNotificationSound(notificationType) {
+            // You can implement different sounds for different notification types
+            console.log(`Would play sound for: ${notificationType}`);
+            // For demo purposes, we'll just use a simple beep
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4 note
+                
+                const gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (error) {
+                console.error('Error playing notification sound:', error);
+            }
+        }
+        
+        // ======== Server-Sent Events Implementation ========
+        // (Simplified implementation - would be expanded in the full app)
+        const sseStatusIndicator = document.getElementById('sse-status-indicator');
+        const sseStatusText = document.getElementById('sse-status-text');
+        const sseUrlInput = document.getElementById('sse-url');
+        const sseConnectBtn = document.getElementById('sse-connect');
+        const sseDisconnectBtn = document.getElementById('sse-disconnect');
+        const sseTestNotificationBtn = document.getElementById('sse-test-notification');
+        const sseMessagesContainer = document.getElementById('sse-messages');
+        const sseDebugInfo = document.getElementById('sse-debug-info');
+        
+        let sseSource = null;
+        
+        // Set the SSE URL dynamically based on the current host
+        document.addEventListener('DOMContentLoaded', () => {
+            const host = window.location.hostname;
+            const port = '5004'; // SSE server port
+            sseUrlInput.value = `http://${host}:${port}/events`;
+            
+            // Debug info
+            updateSSEDebugInfo();
+        });
+        
+        function updateSSEStatus(status, statusText) {
+            sseStatusIndicator.className = 'status-indicator';
+            sseStatusIndicator.classList.add(`status-${status}`);
+            sseStatusText.textContent = statusText;
+        }
+        
+        function updateSSEDebugInfo() {
+            sseDebugInfo.innerHTML = `
+                <h4>Debug Information</h4>
+                <p><strong>Window Location:</strong> ${window.location.href}</p>
+                <p><strong>Host:</strong> ${window.location.hostname}</p>
+                <p><strong>SSE URL:</strong> ${sseUrlInput.value}</p>
+                <p><strong>SSE State:</strong> ${sseSource ? 'Connected' : 'Disconnected'}</p>
+            `;
+        }
+        
+        function addSSEMessage(message, type = 'system') {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${type}`;
+            messageElement.textContent = message;
+            
+            const timeElement = document.createElement('div');
+            timeElement.className = 'message-time';
+            timeElement.textContent = new Date().toLocaleTimeString();
+            
+            messageElement.appendChild(timeElement);
+            sseMessagesContainer.appendChild(messageElement);
+            sseMessagesContainer.scrollTop = sseMessagesContainer.scrollHeight;
+        }
+        
+        sseConnectBtn.addEventListener('click', () => {
+            try {
+                const url = sseUrlInput.value;
+                
+                updateSSEStatus('connecting', 'Connecting...');
+                
+                // Close existing connection if any
+                if (sseSource) {
+                    sseSource.close();
+                }
+                
+                // Create a new EventSource
+                sseSource = new EventSource(url);
+                
+                sseSource.onopen = () => {
+                    updateSSEStatus('connected', 'Connected');
+                    sseConnectBtn.disabled = true;
+                    sseDisconnectBtn.disabled = false;
+                    addSSEMessage(`Connected to ${url}`, 'system');
+                    updateSSEDebugInfo();
+                };
+                
+                sseSource.onmessage = (event) => {
+                    try {
+                        // Try to parse as JSON
+                        const data = JSON.parse(event.data);
+                        if (data.type === 'notification') {
+                            // Handle notification
+                            addNotification(data.title, data.message, sseMessagesContainer);
+                        } else {
+                            // Handle other messages
+                            addSSEMessage(JSON.stringify(data, null, 2), 'received');
+                        }
+                    } catch (error) {
+                        // If not JSON, treat as plain text
+                        addSSEMessage(event.data, 'received');
+                    }
+                    updateSSEDebugInfo();
+                };
+                
+                sseSource.onerror = (error) => {
+                    if (sseSource.readyState === EventSource.CLOSED) {
+                        updateSSEStatus('disconnected', 'Disconnected');
+                        sseConnectBtn.disabled = false;
+                        sseDisconnectBtn.disabled = true;
+                        addSSEMessage('Connection closed', 'system');
+                        sseSource = null;
+                    } else {
+                        addSSEMessage(`Error: ${error}`, 'system');
+                    }
+                    updateSSEDebugInfo();
+                };
+            } catch (error) {
+                addSSEMessage(`Error: ${error.message}`, 'system');
+                updateSSEDebugInfo();
+            }
+        });
+        
+        sseDisconnectBtn.addEventListener('click', () => {
+            if (sseSource) {
+                sseSource.close();
+                sseSource = null;
+                updateSSEStatus('disconnected', 'Disconnected');
+                sseConnectBtn.disabled = false;
+                sseDisconnectBtn.disabled = true;
+                addSSEMessage('Connection closed', 'system');
+                updateSSEDebugInfo();
+            }
+        });
+        
+        sseTestNotificationBtn.addEventListener('click', () => {
+            // Construct the notification URL
+            const sseUrl = sseUrlInput.value;
+            const baseUrl = sseUrl.substring(0, sseUrl.lastIndexOf('/'));
+            const notificationUrl = `${baseUrl}/api/notification/create`;
+            
+            // Debug info
+            addSSEMessage(`Sending test notification request to: ${notificationUrl}`, 'system');
+            
+            // Send request
+            fetch(notificationUrl)
+                .then(response => response.json())
+                .then(data => {
+                    addSSEMessage(`Created test notification: ${JSON.stringify(data)}`, 'system');
+                })
+                .catch(error => {
+                    addSSEMessage(`Error creating notification: ${error}`, 'system');
+                });
+        });
+        
+        // ======== HTTP Polling Implementation ========
+        // (Simplified implementation - would be expanded in the full app)
+        const pollStatusIndicator = document.getElementById('poll-status-indicator');
+        const pollStatusText = document.getElementById('poll-status-text');
+        const pollUrlInput = document.getElementById('poll-url');
+        const pollStartBtn = document.getElementById('poll-start');
+        const pollStopBtn = document.getElementById('poll-stop');
+        const pollTestNotificationBtn = document.getElementById('poll-test-notification');
+        const pollMessagesContainer = document.getElementById('poll-messages');
+        const pollIntervalInput = document.getElementById('poll-interval');
+        const pollDebugInfo = document.getElementById('poll-debug-info');
+        
+        let pollInterval = null;
+        let lastPollTime = 0;
+        let lastNotificationId = null;
+        
+        // Set the polling URL dynamically based on the current host
+        document.addEventListener('DOMContentLoaded', () => {
+            const host = window.location.hostname;
+            const port = '5003'; // WebSocket proxy server port (which also serves HTTP polling)
+            pollUrlInput.value = `http://${host}:${port}/api/notifications`;
+            
+            // Debug info
+            updatePollingDebugInfo();
+        });
+        
+        function updatePollingStatus(status, statusText) {
+            pollStatusIndicator.className = 'status-indicator';
+            pollStatusIndicator.classList.add(`status-${status}`);
+            pollStatusText.textContent = statusText;
+        }
+        
+        function updatePollingDebugInfo() {
+            pollDebugInfo.innerHTML = `
+                <h4>Debug Information</h4>
+                <p><strong>Window Location:</strong> ${window.location.href}</p>
+                <p><strong>Host:</strong> ${window.location.hostname}</p>
+                <p><strong>Polling URL:</strong> ${pollUrlInput.value}</p>
+                <p><strong>Polling Interval:</strong> ${pollIntervalInput.value}ms</p>
+                <p><strong>Last Poll Time:</strong> ${lastPollTime ? new Date(lastPollTime).toLocaleTimeString() : 'Never'}</p>
+                <p><strong>Polling State:</strong> ${pollInterval ? 'Running' : 'Stopped'}</p>
+            `;
+        }
+        
+        function addPollingMessage(message, type = 'system') {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${type}`;
+            messageElement.textContent = message;
+            
+            const timeElement = document.createElement('div');
+            timeElement.className = 'message-time';
+            timeElement.textContent = new Date().toLocaleTimeString();
+            
+            messageElement.appendChild(timeElement);
+            pollMessagesContainer.appendChild(messageElement);
+            pollMessagesContainer.scrollTop = pollMessagesContainer.scrollHeight;
+        }
+        
+        function pollForNotifications() {
+            const url = pollUrlInput.value;
+            lastPollTime = Date.now();
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.notifications && data.notifications.length > 0) {
+                        // Check for new notifications
+                        const latestNotification = data.notifications[0];
+                        
+                        if (!lastNotificationId || lastNotificationId !== latestNotification.id) {
+                            // We have a new notification
+                            lastNotificationId = latestNotification.id;
+                            
+                            if (latestNotification.type === 'notification') {
+                                // Handle notification
+                                addNotification(latestNotification.title, latestNotification.message, pollMessagesContainer);
+                            } else {
+                                // Handle other messages
+                                addPollingMessage(JSON.stringify(latestNotification, null, 2), 'received');
+                            }
+                        }
+                    }
+                    updatePollingDebugInfo();
+                })
+                .catch(error => {
+                    addPollingMessage(`Error polling: ${error}`, 'system');
+                    updatePollingDebugInfo();
+                });
+        }
+        
+        pollStartBtn.addEventListener('click', () => {
+            try {
+                const url = pollUrlInput.value;
+                const intervalMs = parseInt(pollIntervalInput.value);
+                
+                if (intervalMs < 1000) {
+                    addPollingMessage('Warning: Polling interval less than 1000ms may cause high server load', 'system');
+                }
+                
+                // Stop existing poll if any
+                if (pollInterval) {
+                    clearInterval(pollInterval);
+                }
+                
+                updatePollingStatus('connected', 'Polling');
+                pollStartBtn.disabled = true;
+                pollStopBtn.disabled = false;
+                addPollingMessage(`Started polling ${url} every ${intervalMs}ms`, 'system');
+                
+                // Start initial poll
+                pollForNotifications();
+                
+                // Set up interval
+                pollInterval = setInterval(pollForNotifications, intervalMs);
+                
+                updatePollingDebugInfo();
+            } catch (error) {
+                addPollingMessage(`Error: ${error.message}`, 'system');
+                updatePollingDebugInfo();
+            }
+        });
+        
+        pollStopBtn.addEventListener('click', () => {
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+                updatePollingStatus('disconnected', 'Stopped');
+                pollStartBtn.disabled = false;
+                pollStopBtn.disabled = true;
+                addPollingMessage('Polling stopped', 'system');
+                updatePollingDebugInfo();
+            }
+        });
+        
+        pollTestNotificationBtn.addEventListener('click', () => {
+            // Construct the notification URL
+            const pollUrl = pollUrlInput.value;
+            const baseUrl = pollUrl.substring(0, pollUrl.lastIndexOf('/'));
+            const notificationUrl = `${baseUrl}/notification/create`;
+            
+            // Debug info
+            addPollingMessage(`Sending test notification request to: ${notificationUrl}`, 'system');
+            
+            // Send request
+            fetch(notificationUrl)
+                .then(response => response.json())
+                .then(data => {
+                    addPollingMessage(`Created test notification: ${JSON.stringify(data)}`, 'system');
+                })
+                .catch(error => {
+                    addPollingMessage(`Error creating notification: ${error}`, 'system');
+                });
+        });
+        
+        pollIntervalInput.addEventListener('change', () => {
+            // If polling is active, restart with new interval
+            if (pollInterval) {
+                pollStopBtn.click();
+                pollStartBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>

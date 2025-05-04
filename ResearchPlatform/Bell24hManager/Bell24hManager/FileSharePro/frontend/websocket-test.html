@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bell24h WebSocket Test</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    
+    h1 {
+      color: #2563eb;
+      margin-top: 0;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 10px;
+    }
+    
+    .control-panel {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f1f5f9;
+      border-radius: 6px;
+    }
+    
+    .status-panel {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px 15px;
+      background-color: #f1f5f9;
+      border-radius: 6px;
+    }
+    
+    .status {
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    
+    .status-success {
+      background-color: #dcfce7;
+      color: #16a34a;
+    }
+    
+    .status-error {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+    
+    .status-warning {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+    
+    .status-label {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    
+    button:disabled {
+      background-color: #93c5fd;
+      cursor: not-allowed;
+    }
+    
+    #disconnect-button {
+      background-color: #ef4444;
+    }
+    
+    #disconnect-button:hover {
+      background-color: #dc2626;
+    }
+    
+    #disconnect-button:disabled {
+      background-color: #fca5a5;
+    }
+    
+    input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      flex-grow: 1;
+    }
+    
+    .message-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+    }
+    
+    .message-item {
+      padding: 10px 15px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .message-item:last-child {
+      border-bottom: none;
+    }
+    
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .message-type {
+      font-weight: bold;
+      color: #2563eb;
+    }
+    
+    .message-time {
+      color: #6b7280;
+      font-size: 0.875em;
+    }
+    
+    .message-data {
+      margin: 0;
+      padding: 8px;
+      background-color: #f8fafc;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 0.875em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Bell24h WebSocket Test</h1>
+    
+    <div class="status-panel">
+      <span class="status-label">Status:</span>
+      <span id="ws-status" class="status status-warning">Not Connected</span>
+    </div>
+    
+    <div class="control-panel">
+      <button id="connect-button">Connect</button>
+      <button id="disconnect-button" disabled>Disconnect</button>
+    </div>
+    
+    <div class="control-panel">
+      <input type="text" id="message-input" placeholder="Type a message to send..." disabled>
+      <button id="send-button" disabled>Send</button>
+    </div>
+    
+    <h2>Messages</h2>
+    <ul id="messages-list" class="message-list">
+      <li class="message-item">
+        <div class="message-header">
+          <span class="message-type">system</span>
+          <span class="message-time">-</span>
+        </div>
+        <pre class="message-data">WebSocket test page loaded. Connect to begin receiving messages.</pre>
+      </li>
+    </ul>
+  </div>
+  
+  <script src="/websocket.js"></script>
+</body>
+</html>

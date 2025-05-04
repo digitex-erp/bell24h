@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h Notification Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .notification-badge {
+            @apply absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full;
+        }
+    </style>
+    <!-- Sound notifications preload -->
+    <audio id="notification-sound" preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_8a30a97b67.mp3?filename=notification-sound-7062.mp3" type="audio/mpeg">
+    </audio>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-center mb-4">
+                <span class="text-blue-600">Bell</span>24h Notification Demo
+            </h1>
+            <p class="text-center text-gray-600 mb-8">
+                AI-Powered RFQ Marketplace
+            </p>
+        </header>
+
+        <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-semibold">Notification System Demo</h2>
+                    
+                    <!-- Notification Bell -->
+                    <div class="relative">
+                        <button id="notification-btn" class="relative p-1 text-gray-400 hover:text-gray-600 focus:outline-none">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0018 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                            <span id="notification-count" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">0</span>
+                        </button>
+                        
+                        <!-- Notification Dropdown -->
+                        <div id="notification-dropdown" class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden">
+                            <div class="py-2 px-3 bg-gray-100 border-b border-gray-200 flex justify-between items-center">
+                                <span class="font-semibold text-gray-800">Notifications</span>
+                                <div>
+                                    <button id="notification-sound-toggle" class="text-sm text-blue-600 hover:text-blue-800 mr-2">
+                                        <span id="sound-on-icon"><i class="fas fa-volume-up"></i></span>
+                                        <span id="sound-off-icon" class="hidden"><i class="fas fa-volume-mute"></i></span>
+                                    </button>
+                                    <button id="mark-all-read" class="text-sm text-blue-600 hover:text-blue-800">
+                                        Mark all as read
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="notification-list" class="max-h-80 overflow-y-auto">
+                                <!-- Notification items will be added here -->
+                            </div>
+                            <div class="py-2 text-center border-t border-gray-200">
+                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-4">Test Notification System</h3>
+                    <p class="text-gray-600 mb-4">
+                        This demo shows the notification system with sound alerts. Click the button below to create a test notification.
+                    </p>
+                    <button id="create-notification-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                        Create Test Notification
+                    </button>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-4">Features</h3>
+                    <ul class="list-disc pl-5 text-gray-600 space-y-2">
+                        <li>Sound notifications when new messages arrive</li>
+                        <li>Toggle sound notifications on/off</li>
+                        <li>HTTP polling for real-time updates</li>
+                        <li>Mark notifications as read</li>
+                        <li>Notification history with timestamps</li>
+                    </ul>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4">
+                    <h3 class="text-lg font-semibold mb-4">Backend Status</h3>
+                    <div id="backend-status" class="px-4 py-2 bg-gray-100 rounded">
+                        Checking connection...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const notificationBtn = document.getElementById('notification-btn');
+            const notificationDropdown = document.getElementById('notification-dropdown');
+            const notificationCount = document.getElementById('notification-count');
+            const notificationList = document.getElementById('notification-list');
+            const markAllReadBtn = document.getElementById('mark-all-read');
+            const notificationSound = document.getElementById('notification-sound');
+            const notificationSoundToggle = document.getElementById('notification-sound-toggle');
+            const soundOnIcon = document.getElementById('sound-on-icon');
+            const soundOffIcon = document.getElementById('sound-off-icon');
+            const createNotificationBtn = document.getElementById('create-notification-btn');
+            const backendStatus = document.getElementById('backend-status');
+            
+            // Sound notification settings
+            let soundEnabled = true; // Default sound is enabled
+            
+            // Toggle notification dropdown
+            notificationBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                notificationDropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                    notificationDropdown.classList.add('hidden');
+                }
+            });
+            
+            // Toggle sound notifications
+            notificationSoundToggle.addEventListener('click', function() {
+                soundEnabled = !soundEnabled;
+                if (soundEnabled) {
+                    soundOnIcon.classList.remove('hidden');
+                    soundOffIcon.classList.add('hidden');
+                } else {
+                    soundOnIcon.classList.add('hidden');
+                    soundOffIcon.classList.remove('hidden');
+                }
+                
+                // Save preference to localStorage
+                localStorage.setItem('bell24h_notification_sound', soundEnabled);
+            });
+            
+            // Mark all notifications as read
+            markAllReadBtn.addEventListener('click', function() {
+                const unreadNotifications = notificationList.querySelectorAll('.bg-blue-50');
+                unreadNotifications.forEach(notification => {
+                    notification.classList.remove('bg-blue-50', 'border-blue-500');
+                    notification.classList.add('border-transparent');
+                });
+                
+                // Update notification count
+                updateNotificationCount(0);
+            });
+            
+            // Load saved sound preference
+            function loadSoundPreference() {
+                const savedPreference = localStorage.getItem('bell24h_notification_sound');
+                if (savedPreference !== null) {
+                    soundEnabled = savedPreference === 'true';
+                    if (!soundEnabled) {
+                        soundOnIcon.classList.add('hidden');
+                        soundOffIcon.classList.remove('hidden');
+                    }
+                }
+            }
+            
+            // Create a notification in the UI
+            function addNotification(notification) {
+                // Create notification element
+                const notificationElement = document.createElement('div');
+                notificationElement.className = 'py-2 px-4 bg-blue-50 hover:bg-blue-100 border-l-4 border-blue-500';
+                
+                const timeAgo = getTimeAgo(new Date(notification.timestamp));
+                
+                notificationElement.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">${notification.title}</p>
+                            <p class="text-xs text-gray-600 mt-1">${notification.message}</p>
+                        </div>
+                        <span class="text-xs text-gray-500">${timeAgo}</span>
+                    </div>
+                `;
+                
+                // Add to notification list (at the top)
+                notificationList.insertBefore(notificationElement, notificationList.firstChild);
+                
+                // Update notification count
+                const currentCount = parseInt(notificationCount.textContent);
+                updateNotificationCount(currentCount + 1);
+                
+                // Play sound if enabled
+                if (soundEnabled) {
+                    notificationSound.play().catch(err => {
+                        console.error("Error playing notification sound:", err);
+                    });
+                }
+            }
+            
+            // Helper function to format timestamps
+            function getTimeAgo(date) {
+                const now = new Date();
+                const seconds = Math.floor((now - date) / 1000);
+                
+                if (seconds < 60) return 'Just now';
+                
+                const minutes = Math.floor(seconds / 60);
+                if (minutes < 60) return `${minutes} min ago`;
+                
+                const hours = Math.floor(minutes / 60);
+                if (hours < 24) return `${hours} hours ago`;
+                
+                const days = Math.floor(hours / 24);
+                if (days === 1) return 'Yesterday';
+                
+                return `${days} days ago`;
+            }
+            
+            // Update notification count
+            function updateNotificationCount(count) {
+                notificationCount.textContent = count.toString();
+                if (count === 0) {
+                    notificationCount.classList.add('hidden');
+                } else {
+                    notificationCount.classList.remove('hidden');
+                }
+            }
+            
+            // HTTP polling for notifications
+            let isPolling = false;
+            let pollingInterval = null;
+            let lastNotificationId = null;
+            
+            // Start notification polling
+            function startPolling() {
+                if (isPolling) return;
+                
+                isPolling = true;
+                checkForNewNotifications(); // Check immediately
+                pollingInterval = setInterval(checkForNewNotifications, 5000); // Poll every 5 seconds
+                console.log('Started notification polling');
+            }
+            
+            // Check for new notifications using HTTP polling
+            function checkForNewNotifications() {
+                // Use the Replit URL for the API server
+                fetch(window.location.protocol + '//' + window.location.hostname + ':5000/notifications')
+                    .then(response => {
+                        // Check if the response is OK
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        backendStatus.innerHTML = `<span class="text-green-600">Connected to notification server</span>`;
+                        
+                        // Handle notification messages
+                        if (data.type === 'notification') {
+                            // Check if this is a new notification to avoid duplicates
+                            if (!lastNotificationId || lastNotificationId !== data.id) {
+                                lastNotificationId = data.id;
+                                addNotification({
+                                    title: data.title || 'New notification',
+                                    message: data.message || 'You have a new notification',
+                                    timestamp: data.timestamp || new Date().toISOString()
+                                });
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error polling for notifications:', error);
+                        backendStatus.innerHTML = `<span class="text-red-600">Error connecting to notification server</span>`;
+                    });
+            }
+            
+            // Load initial notification list
+            function loadInitialNotifications() {
+                // Use the Replit URL for the API server
+                fetch(window.location.protocol + '//' + window.location.hostname + ':5000/notifications/recent')
+                    .then(response => {
+                        // Check if the response is OK
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        backendStatus.innerHTML = `<span class="text-green-600">Connected to notification server</span>`;
+                        
+                        if (data.type === 'notification_list' && data.notifications && data.notifications.length) {
+                            // Clear existing notifications in UI
+                            notificationList.innerHTML = '';
+                            
+                            // Store most recent notification ID
+                            if (data.notifications.length > 0) {
+                                lastNotificationId = data.notifications[0].id;
+                            }
+                            
+                            // Add each notification to the list
+                            data.notifications.forEach((notification, index) => {
+                                const isUnread = index === 0; // Mark only the most recent as unread
+                                
+                                const notificationElement = document.createElement('div');
+                                notificationElement.className = isUnread 
+                                    ? 'py-2 px-4 bg-blue-50 hover:bg-blue-100 border-l-4 border-blue-500'
+                                    : 'py-2 px-4 hover:bg-gray-50 border-l-4 border-transparent';
+                                
+                                const timeAgo = getTimeAgo(new Date(notification.timestamp));
+                                
+                                notificationElement.innerHTML = `
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="text-sm font-medium ${isUnread ? 'text-gray-900' : 'text-gray-700'}">${notification.title}</p>
+                                            <p class="text-xs text-gray-600 mt-1">${notification.message}</p>
+                                        </div>
+                                        <span class="text-xs text-gray-500">${timeAgo}</span>
+                                    </div>
+                                `;
+                                
+                                notificationList.appendChild(notificationElement);
+                            });
+                            
+                            // Update notification count (only count unread)
+                            updateNotificationCount(1);
+                        } else {
+                            notificationList.innerHTML = `
+                                <div class="py-4 px-4 text-center text-gray-500">
+                                    No notifications yet
+                                </div>
+                            `;
+                            updateNotificationCount(0);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading initial notifications:', error);
+                        backendStatus.innerHTML = `<span class="text-red-600">Error connecting to notification server</span>`;
+                        notificationList.innerHTML = `
+                            <div class="py-4 px-4 text-center text-gray-500">
+                                Could not load notifications
+                            </div>
+                        `;
+                    });
+            }
+            
+            // Create test notification button
+            createNotificationBtn.addEventListener('click', function() {
+                // Use the Replit URL for the API server
+                fetch(window.location.protocol + '//' + window.location.hostname + ':5000/notifications/create-demo')
+                    .then(response => {
+                        // Check if the response is OK
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Created test notification', data);
+                        
+                        // Add the notification to the UI
+                        addNotification({
+                            title: data.title,
+                            message: data.message,
+                            timestamp: data.timestamp
+                        });
+                        
+                        // Update the last notification ID
+                        lastNotificationId = data.id;
+                    })
+                    .catch(error => {
+                        console.error('Error creating test notification:', error);
+                        backendStatus.innerHTML = `<span class="text-red-600">Error creating test notification</span>`;
+                    });
+            });
+            
+            // Initialize
+            loadSoundPreference();
+            loadInitialNotifications();
+            startPolling();
+        });
+    </script>
+</body>
+</html>

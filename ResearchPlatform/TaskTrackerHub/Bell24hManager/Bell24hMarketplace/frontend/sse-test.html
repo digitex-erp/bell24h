@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h Server-Sent Events Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #444;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .event-container {
+            border: 1px solid #eee;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            font-family: monospace;
+            background-color: #f9f9f9;
+        }
+        .event {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .event.notification {
+            background-color: #e8f5e9;
+        }
+        .event.message {
+            background-color: #e3f2fd;
+        }
+        .event.system {
+            background-color: #fff3e0;
+            font-style: italic;
+        }
+        .event.error {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-connected {
+            background-color: #4CAF50;
+        }
+        .status-connecting {
+            background-color: #ff9800;
+        }
+        .status-disconnected {
+            background-color: #f44336;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .settings {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .sound-control {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">← Back to Home</a> | 
+        <a href="/websocket-demo.html">WebSocket Demos</a>
+    </div>
+    
+    <h1>Bell24h Server-Sent Events Test</h1>
+    <p>This page demonstrates Bell24h's Server-Sent Events (SSE) implementation for real-time notifications.</p>
+    
+    <div class="card">
+        <h2>SSE Connection</h2>
+        <div class="connection-status">
+            Status: <span id="connection-status">Disconnected</span>
+            <span id="status-indicator" class="status-indicator status-disconnected"></span>
+        </div>
+        
+        <div class="connection-controls">
+            <button id="connect-btn">Connect</button>
+            <button id="disconnect-btn" disabled>Disconnect</button>
+        </div>
+        
+        <div class="settings">
+            <div>
+                <label for="server-url">SSE Server URL:</label>
+                <input type="text" id="server-url" value="http://localhost:5004/events" style="width: 250px;">
+            </div>
+            
+            <div class="sound-control">
+                <label>
+                    <input type="checkbox" id="sound-enabled" checked>
+                    Enable notification sounds
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>SSE Events</h2>
+        <div id="event-container" class="event-container"></div>
+        
+        <div>
+            <button id="clear-btn">Clear Events</button>
+            <button id="test-notification-btn">Trigger Test Notification</button>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>About Server-Sent Events in Bell24h</h2>
+        <p>Server-Sent Events (SSE) provide a one-way channel from server to client, perfect for real-time notifications.</p>
+        <p>Key advantages of SSE:</p>
+        <ul>
+            <li>Simpler than WebSockets (standard HTTP)</li>
+            <li>Automatic reconnection built into the protocol</li>
+            <li>Event IDs to track missed messages</li>
+            <li>Better compatibility with proxies and firewalls</li>
+            <li>Lower overhead for one-way communication</li>
+        </ul>
+        <p>In Bell24h, SSE serves as a reliable fallback when WebSockets are unavailable, ensuring users always receive important notifications.</p>
+    </div>
+    
+    <script type="module">
+        import notificationSound from './lib/notificationSounds.js';
+        
+        const connectBtn = document.getElementById('connect-btn');
+        const disconnectBtn = document.getElementById('disconnect-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const serverUrlInput = document.getElementById('server-url');
+        const eventContainer = document.getElementById('event-container');
+        const connectionStatus = document.getElementById('connection-status');
+        const statusIndicator = document.getElementById('status-indicator');
+        const testNotificationBtn = document.getElementById('test-notification-btn');
+        const soundEnabledCheckbox = document.getElementById('sound-enabled');
+        
+        let eventSource = null;
+        let reconnectTimeout = null;
+        let lastEventId = null;
+        
+        // Initialize sound preferences
+        soundEnabledCheckbox.checked = notificationSound.isEnabled();
+        
+        // Sound settings change handler
+        soundEnabledCheckbox.addEventListener('change', () => {
+            notificationSound.setEnabled(soundEnabledCheckbox.checked);
+        });
+        
+        // Connect to SSE server
+        connectBtn.addEventListener('click', connectSSE);
+        
+        // Disconnect from SSE server
+        disconnectBtn.addEventListener('click', () => {
+            disconnectSSE();
+            addEvent('Disconnected from SSE server', 'system');
+        });
+        
+        // Clear events
+        clearBtn.addEventListener('click', () => {
+            eventContainer.innerHTML = '';
+            addEvent('Events cleared', 'system');
+        });
+        
+        // Test notification
+        testNotificationBtn.addEventListener('click', () => {
+            fetch(`${serverUrlInput.value.replace('/events', '')}/create-notification`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    addEvent('Test notification requested', 'system');
+                    return response.json();
+                }
+                throw new Error('Failed to request test notification');
+            })
+            .then(data => {
+                addEvent(`Server response: ${JSON.stringify(data)}`, 'system');
+            })
+            .catch(error => {
+                addEvent(`Error: ${error.message}`, 'error');
+                // Simulate a notification anyway for testing purposes
+                simulateNotification();
+            });
+        });
+        
+        function connectSSE() {
+            // Close existing connection if any
+            disconnectSSE();
+            
+            updateConnectionStatus('Connecting...', 'connecting');
+            addEvent('Connecting to SSE server...', 'system');
+            
+            const url = new URL(serverUrlInput.value);
+            
+            // Add last event ID if available
+            if (lastEventId) {
+                url.searchParams.append('lastEventId', lastEventId);
+            }
+            
+            try {
+                eventSource = new EventSource(url);
+                
+                eventSource.onopen = () => {
+                    updateConnectionStatus('Connected', 'connected');
+                    addEvent('Connected to SSE server', 'system');
+                    
+                    // Enable/disable buttons
+                    connectBtn.disabled = true;
+                    disconnectBtn.disabled = false;
+                };
+                
+                eventSource.addEventListener('notification', (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        addEvent(`Notification: ${JSON.stringify(data)}`, 'notification');
+                        
+                        // Store last event ID for reconnection
+                        if (event.lastEventId) {
+                            lastEventId = event.lastEventId;
+                        }
+                        
+                        // Play notification sound
+                        const soundType = data.type || 'default';
+                        notificationSound.play(soundType)
+                            .catch(error => console.error('Error playing sound:', error));
+                        
+                        // Show visual notification
+                        showNotification(data);
+                    } catch (error) {
+                        addEvent(`Error processing notification: ${error.message}`, 'error');
+                    }
+                });
+                
+                eventSource.addEventListener('message', (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        addEvent(`Message: ${JSON.stringify(data)}`, 'message');
+                        
+                        // Store last event ID for reconnection
+                        if (event.lastEventId) {
+                            lastEventId = event.lastEventId;
+                        }
+                    } catch (error) {
+                        addEvent(`Error processing message: ${error.message}`, 'error');
+                    }
+                });
+                
+                eventSource.onerror = (error) => {
+                    if (eventSource.readyState === EventSource.CLOSED) {
+                        updateConnectionStatus('Disconnected', 'disconnected');
+                        addEvent('Connection closed', 'system');
+                        
+                        // Enable/disable buttons
+                        connectBtn.disabled = false;
+                        disconnectBtn.disabled = true;
+                        
+                        // Try to reconnect after a delay
+                        reconnect();
+                    } else {
+                        addEvent(`SSE Error: ${error.message || 'Unknown error'}`, 'error');
+                    }
+                };
+            } catch (error) {
+                updateConnectionStatus('Connection Failed', 'disconnected');
+                addEvent(`Failed to connect: ${error.message}`, 'error');
+                
+                // Enable/disable buttons
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                
+                // Try to reconnect after a delay
+                reconnect();
+            }
+        }
+        
+        function disconnectSSE() {
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+            }
+            
+            // Clear any pending reconnect
+            if (reconnectTimeout) {
+                clearTimeout(reconnectTimeout);
+                reconnectTimeout = null;
+            }
+            
+            updateConnectionStatus('Disconnected', 'disconnected');
+            
+            // Enable/disable buttons
+            connectBtn.disabled = false;
+            disconnectBtn.disabled = true;
+        }
+        
+        function reconnect() {
+            // Don't schedule multiple reconnects
+            if (reconnectTimeout) {
+                return;
+            }
+            
+            const delay = 3000; // 3 seconds
+            addEvent(`Reconnecting in ${delay/1000} seconds...`, 'system');
+            
+            reconnectTimeout = setTimeout(() => {
+                reconnectTimeout = null;
+                connectSSE();
+            }, delay);
+        }
+        
+        function addEvent(message, type = 'system') {
+            const eventElement = document.createElement('div');
+            eventElement.classList.add('event', type);
+            
+            const timestamp = new Date().toLocaleTimeString();
+            eventElement.textContent = `[${timestamp}] ${message}`;
+            
+            eventContainer.appendChild(eventElement);
+            eventContainer.scrollTop = eventContainer.scrollHeight;
+        }
+        
+        function updateConnectionStatus(status, state) {
+            connectionStatus.textContent = status;
+            statusIndicator.className = `status-indicator status-${state}`;
+        }
+        
+        function showNotification(data) {
+            // Display a visual notification
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = '#d4edda';
+            notification.style.color = '#155724';
+            notification.style.padding = '12px 20px';
+            notification.style.borderRadius = '4px';
+            notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+            notification.style.zIndex = '9999';
+            notification.style.transition = 'opacity 0.3s, transform 0.3s';
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            
+            const title = document.createElement('div');
+            title.style.fontWeight = 'bold';
+            title.textContent = data.title || 'Notification';
+            
+            const message = document.createElement('div');
+            message.textContent = data.message || '';
+            
+            notification.appendChild(title);
+            notification.appendChild(message);
+            document.body.appendChild(notification);
+            
+            // Show the notification
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Remove the notification after 5 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 5000);
+        }
+        
+        function simulateNotification() {
+            // Generate a random notification type
+            const notificationTypes = ['default', 'message', 'rfq', 'bid', 'payment', 'delivery', 'verification'];
+            const randomType = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
+            
+            // Create notification data
+            let title, message;
+            switch (randomType) {
+                case 'message':
+                    title = 'New Message Received';
+                    message = 'You have received a new message from a buyer';
+                    break;
+                case 'rfq':
+                    title = 'New RFQ Posted';
+                    message = 'A new Request for Quote has been posted in your category';
+                    break;
+                case 'bid':
+                    title = 'Bid Status Updated';
+                    message = 'Your bid status has been changed to "Under Review"';
+                    break;
+                case 'payment':
+                    title = 'Payment Processed';
+                    message = 'A payment of ₹15,000 has been processed';
+                    break;
+                case 'delivery':
+                    title = 'Delivery Update';
+                    message = 'Your shipment will arrive in 2 business days';
+                    break;
+                case 'verification':
+                    title = 'Verification Complete';
+                    message = 'Your business verification has been completed';
+                    break;
+                default:
+                    title = 'Notification';
+                    message = 'You have a new notification';
+            }
+            
+            const notificationData = {
+                type: randomType,
+                title: title,
+                message: message,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Play sound
+            notificationSound.play(randomType)
+                .catch(error => console.error('Error playing sound:', error));
+            
+            // Show notification
+            showNotification(notificationData);
+            
+            // Add to event list
+            addEvent(`Simulated ${randomType} notification: ${title}`, 'notification');
+        }
+    </script>
+</body>
+</html>

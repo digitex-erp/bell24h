@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h - Supplier Performance Heatmap</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .heatmap-cell {
+            transition: all 0.3s ease;
+        }
+        
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            max-width: 300px;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .sparkline {
+            display: inline-block;
+            vertical-align: middle;
+            width: 50px;
+            height: 20px;
+        }
+        
+        /* Loading spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Custom color classes for the heatmap */
+        .score-very-low { background-color: #e74c3c; }
+        .score-low { background-color: #e67e22; }
+        .score-medium { background-color: #f1c40f; }
+        .score-high { background-color: #2ecc71; }
+        .score-very-high { background-color: #27ae60; }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .heatmap-table {
+                font-size: 12px;
+            }
+            
+            .heatmap-header {
+                writing-mode: vertical-lr;
+                transform: rotate(180deg);
+                white-space: nowrap;
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Supplier Performance Heatmap</h1>
+            <p class="text-gray-600 mt-2">
+                Visualize and compare supplier performance across multiple dimensions
+            </p>
+        </header>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Filters</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label for="industry-filter" class="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+                    <select id="industry-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        <option value="">All Industries</option>
+                        <!-- Will be populated from API -->
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="region-filter" class="block text-sm font-medium text-gray-700 mb-1">Region</label>
+                    <select id="region-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        <option value="">All Regions</option>
+                        <!-- Will be populated from API -->
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="sort-by" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                    <select id="sort-by" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        <option value="">Default</option>
+                        <!-- Will be populated from API -->
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Metrics to Display</label>
+                <div id="metrics-checkboxes" class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <!-- Will be populated from API -->
+                </div>
+            </div>
+            
+            <div class="flex justify-end">
+                <button id="apply-filters" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Performance Heatmap</h2>
+            
+            <div id="loading" class="text-center py-8">
+                <div class="loader"></div>
+                <p class="mt-4 text-gray-600">Loading supplier performance data...</p>
+            </div>
+            
+            <div id="heatmap-container" class="overflow-x-auto hidden">
+                <table class="heatmap-table min-w-full border-collapse">
+                    <thead>
+                        <tr id="heatmap-header">
+                            <th class="border px-4 py-2 bg-gray-200">Supplier</th>
+                            <!-- Metric headers will be added here -->
+                        </tr>
+                    </thead>
+                    <tbody id="heatmap-body">
+                        <!-- Supplier rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="no-data" class="text-center py-8 hidden">
+                <p class="text-gray-600">No supplier data available for the selected filters.</p>
+            </div>
+        </div>
+        
+        <div id="comparison-container" class="bg-white rounded-lg shadow-md p-6 mb-8 hidden">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Supplier Comparison</h2>
+            <p class="text-gray-600 mb-4">Select suppliers from the heatmap to compare their performance metrics.</p>
+            
+            <div id="selected-suppliers" class="mb-4">
+                <p class="text-sm text-gray-500">No suppliers selected</p>
+            </div>
+            
+            <div id="radar-chart-container" class="h-80 w-full">
+                <!-- Radar chart will be rendered here -->
+            </div>
+        </div>
+        
+        <div id="time-series-container" class="bg-white rounded-lg shadow-md p-6 mb-8 hidden">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Performance Over Time</h2>
+            <p class="text-gray-600 mb-4">Select a supplier and metric to view historical performance.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="time-series-supplier" class="block text-sm font-medium text-gray-700 mb-1">Supplier</label>
+                    <select id="time-series-supplier" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        <option value="">Select a supplier</option>
+                        <!-- Will be populated from API -->
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="time-series-metric" class="block text-sm font-medium text-gray-700 mb-1">Metric</label>
+                    <select id="time-series-metric" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        <option value="">Select a metric</option>
+                        <!-- Will be populated from API -->
+                    </select>
+                </div>
+            </div>
+            
+            <div id="time-series-chart-container" class="h-80 w-full">
+                <!-- Time series chart will be rendered here -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="tooltip" class="tooltip"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix"></script>
+    <script src="js/supplier-performance-utils.js"></script>
+    
+    <script>
+        // State management
+        const state = {
+            metadata: null,
+            heatmapData: null,
+            selectedSuppliers: [],
+            comparisonData: null,
+            timeSeriesData: null,
+            filters: {
+                industry: '',
+                region: '',
+                sortBy: '',
+                metrics: []
+            }
+        };
+        
+        // DOM elements
+        const elements = {
+            industryFilter: document.getElementById('industry-filter'),
+            regionFilter: document.getElementById('region-filter'),
+            sortByFilter: document.getElementById('sort-by'),
+            metricsCheckboxes: document.getElementById('metrics-checkboxes'),
+            applyFiltersBtn: document.getElementById('apply-filters'),
+            
+            loadingIndicator: document.getElementById('loading'),
+            heatmapContainer: document.getElementById('heatmap-container'),
+            noDataMessage: document.getElementById('no-data'),
+            heatmapHeader: document.getElementById('heatmap-header'),
+            heatmapBody: document.getElementById('heatmap-body'),
+            
+            comparisonContainer: document.getElementById('comparison-container'),
+            selectedSuppliersList: document.getElementById('selected-suppliers'),
+            radarChartContainer: document.getElementById('radar-chart-container'),
+            
+            timeSeriesContainer: document.getElementById('time-series-container'),
+            timeSeriesSupplierSelect: document.getElementById('time-series-supplier'),
+            timeSeriesMetricSelect: document.getElementById('time-series-metric'),
+            timeSeriesChartContainer: document.getElementById('time-series-chart-container'),
+            
+            tooltip: document.getElementById('tooltip')
+        };
+        
+        // Chart instances
+        let radarChart = null;
+        let timeSeriesChart = null;
+        
+        // API service
+        const api = {
+            // Base API URL
+            baseUrl: window.location.hostname === 'localhost' 
+                ? 'http://localhost:5005' 
+                : `https://${window.location.hostname.replace('-00-', '-05-')}`,
+            
+            async getMetadata() {
+                try {
+                    const response = await fetch(`${this.baseUrl}/api/supplier-performance/metadata`);
+                    if (!response.ok) throw new Error('Failed to fetch metadata');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching metadata:', error);
+                    return {
+                        metrics: [],
+                        industries: [],
+                        regions: []
+                    };
+                }
+            },
+            
+            async getHeatmapData(filters = {}) {
+                try {
+                    const { industry, region, metrics } = filters;
+                    
+                    let url = `${this.baseUrl}/api/supplier-performance/heatmap?`;
+                    if (industry) url += `industry=${encodeURIComponent(industry)}&`;
+                    if (region) url += `region=${encodeURIComponent(region)}&`;
+                    if (metrics && metrics.length > 0) {
+                        metrics.forEach(metric => {
+                            url += `metrics=${encodeURIComponent(metric)}&`;
+                        });
+                    }
+                    
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('Failed to fetch heatmap data');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching heatmap data:', error);
+                    return null;
+                }
+            },
+            
+            async getComparisonData(supplierIds = [], metrics = []) {
+                try {
+                    if (!supplierIds.length) return null;
+                    
+                    let url = `${this.baseUrl}/api/supplier-performance/comparison?`;
+                    supplierIds.forEach(id => {
+                        url += `supplier_ids=${encodeURIComponent(id)}&`;
+                    });
+                    
+                    if (metrics && metrics.length > 0) {
+                        metrics.forEach(metric => {
+                            url += `metrics=${encodeURIComponent(metric)}&`;
+                        });
+                    }
+                    
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('Failed to fetch comparison data');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching comparison data:', error);
+                    return null;
+                }
+            },
+            
+            async getTimeSeriesData(supplierId, metric) {
+                try {
+                    if (!supplierId || !metric) return null;
+                    
+                    const url = `${this.baseUrl}/api/supplier-performance/time-series?supplier_id=${encodeURIComponent(supplierId)}&metric=${encodeURIComponent(metric)}`;
+                    
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('Failed to fetch time series data');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching time series data:', error);
+                    return null;
+                }
+            }
+        };
+        
+        // UI Rendering
+        const ui = {
+            populateMetadata(metadata) {
+                // Populate industry filter
+                elements.industryFilter.innerHTML = '<option value="">All Industries</option>';
+                metadata.industries.forEach(industry => {
+                    const option = document.createElement('option');
+                    option.value = industry;
+                    option.textContent = industry;
+                    elements.industryFilter.appendChild(option);
+                });
+                
+                // Populate region filter
+                elements.regionFilter.innerHTML = '<option value="">All Regions</option>';
+                metadata.regions.forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region;
+                    option.textContent = region;
+                    elements.regionFilter.appendChild(option);
+                });
+                
+                // Populate sort-by filter
+                elements.sortByFilter.innerHTML = '<option value="">Default</option>';
+                metadata.metrics.forEach(metric => {
+                    const option = document.createElement('option');
+                    option.value = metric;
+                    option.textContent = SupplierPerformanceUtils.getMetricLabel(metric);
+                    elements.sortByFilter.appendChild(option);
+                });
+                
+                // Populate metrics checkboxes
+                elements.metricsCheckboxes.innerHTML = '';
+                metadata.metrics.forEach(metric => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `metric-${metric}`;
+                    checkbox.value = metric;
+                    checkbox.checked = true;
+                    checkbox.className = 'mr-2';
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = `metric-${metric}`;
+                    label.textContent = SupplierPerformanceUtils.getMetricLabel(metric);
+                    label.className = 'text-sm';
+                    
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+                    elements.metricsCheckboxes.appendChild(div);
+                });
+                
+                // Populate time series metric select
+                elements.timeSeriesMetricSelect.innerHTML = '<option value="">Select a metric</option>';
+                metadata.metrics.forEach(metric => {
+                    const option = document.createElement('option');
+                    option.value = metric;
+                    option.textContent = SupplierPerformanceUtils.getMetricLabel(metric);
+                    elements.timeSeriesMetricSelect.appendChild(option);
+                });
+            },
+            
+            renderHeatmap(data, sortBy = null, descending = true) {
+                if (!data || !data.rows || !data.metrics) {
+                    elements.heatmapContainer.classList.add('hidden');
+                    elements.noDataMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                const { rows, metrics } = data;
+                
+                // Show heatmap container
+                elements.heatmapContainer.classList.remove('hidden');
+                elements.noDataMessage.classList.add('hidden');
+                
+                // Create header row
+                let headerHtml = '<th class="border px-4 py-2 bg-gray-200">Supplier</th>';
+                metrics.forEach(metric => {
+                    const metricLabel = SupplierPerformanceUtils.getMetricLabel(metric);
+                    headerHtml += `
+                        <th class="border px-4 py-2 bg-gray-200 heatmap-header" title="${SupplierPerformanceUtils.getMetricDescription(metric)}">
+                            ${metricLabel}
+                        </th>
+                    `;
+                });
+                elements.heatmapHeader.innerHTML = headerHtml;
+                
+                // Create rows for each supplier
+                let bodyHtml = '';
+                rows.forEach(row => {
+                    const isAverage = row.isAverage;
+                    const rowClass = isAverage ? 'bg-gray-100 font-semibold' : '';
+                    
+                    bodyHtml += `
+                        <tr class="${rowClass}" data-supplier-id="${row.id}">
+                            <td class="border px-4 py-2">
+                                <div class="flex flex-col">
+                                    <div class="font-medium">${row.name}</div>
+                                    <div class="text-xs text-gray-500">${row.industry}, ${row.region}</div>
+                                </div>
+                            </td>
+                    `;
+                    
+                    metrics.forEach(metric => {
+                        const score = row[metric];
+                        const formattedScore = SupplierPerformanceUtils.formatScore(score, metric);
+                        const colorClass = getScoreColorClass(score);
+                        
+                        bodyHtml += `
+                            <td class="border text-center heatmap-cell ${colorClass}" 
+                                data-score="${score}" 
+                                data-metric="${metric}" 
+                                data-supplier="${row.name}"
+                                data-tooltip="<strong>${row.name}</strong><br>${SupplierPerformanceUtils.getMetricLabel(metric)}: ${formattedScore}<br>${SupplierPerformanceUtils.getMetricDescription(metric)}">
+                                <div class="text-white font-medium py-2 px-4">
+                                    ${formattedScore}
+                                </div>
+                            </td>
+                        `;
+                    });
+                    
+                    bodyHtml += '</tr>';
+                });
+                
+                elements.heatmapBody.innerHTML = bodyHtml;
+                
+                // Update supplier list for time series
+                updateSupplierSelectList(rows);
+                
+                // Add event listeners to heatmap cells
+                setupHeatmapCellEvents();
+                setupSupplierRowEvents();
+            },
+            
+            renderComparisonChart(data) {
+                if (!data || !data.series || !data.series.length) {
+                    elements.comparisonContainer.classList.add('hidden');
+                    return;
+                }
+                
+                elements.comparisonContainer.classList.remove('hidden');
+                
+                // Clear previous chart if it exists
+                if (radarChart) {
+                    radarChart.destroy();
+                }
+                
+                // Canvas for radar chart
+                const canvas = document.createElement('canvas');
+                canvas.id = 'radar-chart';
+                
+                // Clear container and add canvas
+                elements.radarChartContainer.innerHTML = '';
+                elements.radarChartContainer.appendChild(canvas);
+                
+                // Create the chart
+                const ctx = canvas.getContext('2d');
+                radarChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: data.categories.map(metric => SupplierPerformanceUtils.getMetricLabel(metric)),
+                        datasets: data.series.map((series, index) => ({
+                            label: series.name,
+                            data: series.data,
+                            backgroundColor: getChartColor(index, 0.2),
+                            borderColor: getChartColor(index, 1),
+                            pointBackgroundColor: getChartColor(index, 1),
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: getChartColor(index, 1)
+                        }))
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    display: true
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        }
+                    }
+                });
+                
+                // Update selected suppliers list
+                updateSelectedSuppliersList();
+            },
+            
+            renderTimeSeriesChart(data) {
+                if (!data || !data.series || !data.labels) {
+                    return;
+                }
+                
+                elements.timeSeriesContainer.classList.remove('hidden');
+                
+                // Clear previous chart if it exists
+                if (timeSeriesChart) {
+                    timeSeriesChart.destroy();
+                }
+                
+                // Canvas for line chart
+                const canvas = document.createElement('canvas');
+                canvas.id = 'time-series-chart';
+                
+                // Clear container and add canvas
+                elements.timeSeriesChartContainer.innerHTML = '';
+                elements.timeSeriesChartContainer.appendChild(canvas);
+                
+                // Create the chart
+                const ctx = canvas.getContext('2d');
+                timeSeriesChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: SupplierPerformanceUtils.getMetricLabel(data.metric),
+                            data: data.series.map(point => point.y),
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                suggestedMax: 100,
+                                title: {
+                                    display: true,
+                                    text: 'Score'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Time Period'
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            
+            showLoading() {
+                elements.loadingIndicator.classList.remove('hidden');
+                elements.heatmapContainer.classList.add('hidden');
+                elements.noDataMessage.classList.add('hidden');
+            },
+            
+            hideLoading() {
+                elements.loadingIndicator.classList.add('hidden');
+            }
+        };
+        
+        // Helper Functions
+        function getScoreColorClass(score) {
+            if (score < 30) return 'score-very-low';
+            if (score < 50) return 'score-low';
+            if (score < 70) return 'score-medium';
+            if (score < 90) return 'score-high';
+            return 'score-very-high';
+        }
+        
+        function getChartColor(index, alpha = 1) {
+            const colors = [
+                `rgba(52, 152, 219, ${alpha})`,  // Blue
+                `rgba(46, 204, 113, ${alpha})`,  // Green
+                `rgba(155, 89, 182, ${alpha})`,  // Purple
+                `rgba(230, 126, 34, ${alpha})`,  // Orange
+                `rgba(231, 76, 60, ${alpha})`,   // Red
+                `rgba(52, 73, 94, ${alpha})`,    // Dark blue
+                `rgba(241, 196, 15, ${alpha})`,  // Yellow
+                `rgba(26, 188, 156, ${alpha})`,  // Turquoise
+                `rgba(22, 160, 133, ${alpha})`,  // Green sea
+                `rgba(142, 68, 173, ${alpha})`   // Wisteria
+            ];
+            
+            return colors[index % colors.length];
+        }
+        
+        function setupHeatmapCellEvents() {
+            const cells = document.querySelectorAll('.heatmap-cell');
+            
+            cells.forEach(cell => {
+                cell.addEventListener('mousemove', e => {
+                    const tooltip = elements.tooltip;
+                    const tooltipContent = cell.getAttribute('data-tooltip');
+                    
+                    if (tooltipContent) {
+                        tooltip.innerHTML = tooltipContent;
+                        tooltip.style.opacity = '1';
+                        
+                        // Position the tooltip
+                        const rect = cell.getBoundingClientRect();
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        
+                        let left = e.clientX;
+                        let top = e.clientY - tooltipRect.height - 10;
+                        
+                        // Ensure the tooltip stays within viewport
+                        if (left + tooltipRect.width > window.innerWidth) {
+                            left = window.innerWidth - tooltipRect.width - 10;
+                        }
+                        
+                        if (top < 0) {
+                            top = e.clientY + 10;
+                        }
+                        
+                        tooltip.style.left = `${left}px`;
+                        tooltip.style.top = `${top}px`;
+                    }
+                });
+                
+                cell.addEventListener('mouseleave', () => {
+                    elements.tooltip.style.opacity = '0';
+                });
+            });
+        }
+        
+        function setupSupplierRowEvents() {
+            const rows = document.querySelectorAll('#heatmap-body tr');
+            
+            rows.forEach(row => {
+                // Skip the industry average row for selection
+                if (row.getAttribute('data-supplier-id') === 'avg') return;
+                
+                row.addEventListener('click', () => {
+                    const supplierId = row.getAttribute('data-supplier-id');
+                    
+                    // Toggle selection
+                    if (row.classList.contains('bg-blue-100')) {
+                        // Deselect
+                        row.classList.remove('bg-blue-100');
+                        
+                        // Remove from selected suppliers
+                        const index = state.selectedSuppliers.findIndex(s => s === supplierId);
+                        if (index !== -1) {
+                            state.selectedSuppliers.splice(index, 1);
+                        }
+                    } else {
+                        // Limit selections to 5 suppliers
+                        if (state.selectedSuppliers.length >= 5) {
+                            // Deselect the first supplier
+                            const firstId = state.selectedSuppliers.shift();
+                            const firstRow = document.querySelector(`tr[data-supplier-id="${firstId}"]`);
+                            if (firstRow) firstRow.classList.remove('bg-blue-100');
+                        }
+                        
+                        // Select this supplier
+                        row.classList.add('bg-blue-100');
+                        state.selectedSuppliers.push(supplierId);
+                    }
+                    
+                    // Update comparison if we have selected suppliers
+                    if (state.selectedSuppliers.length > 0) {
+                        fetchComparisonData();
+                    } else {
+                        // Hide comparison if no suppliers selected
+                        elements.comparisonContainer.classList.add('hidden');
+                    }
+                });
+            });
+        }
+        
+        function updateSelectedSuppliersList() {
+            const container = elements.selectedSuppliersList;
+            
+            if (state.selectedSuppliers.length === 0) {
+                container.innerHTML = '<p class="text-sm text-gray-500">No suppliers selected</p>';
+                return;
+            }
+            
+            const suppliers = state.heatmapData.rows
+                .filter(row => state.selectedSuppliers.includes(row.id))
+                .map(row => row.name);
+                
+            let html = '<ul class="text-sm text-gray-700">';
+            suppliers.forEach((name, i) => {
+                html += `<li class="inline-block mr-4">
+                    <span class="inline-block w-3 h-3 rounded-full mr-1" style="background-color: ${getChartColor(i)}"></span>
+                    ${name}
+                </li>`;
+            });
+            html += '</ul>';
+            
+            container.innerHTML = html;
+        }
+        
+        function updateSupplierSelectList(suppliers) {
+            // Skip the average row
+            const filteredSuppliers = suppliers.filter(s => s.id !== 'avg');
+            
+            elements.timeSeriesSupplierSelect.innerHTML = '<option value="">Select a supplier</option>';
+            
+            filteredSuppliers.forEach(supplier => {
+                const option = document.createElement('option');
+                option.value = supplier.id;
+                option.textContent = supplier.name;
+                elements.timeSeriesSupplierSelect.appendChild(option);
+            });
+        }
+        
+        // Data Fetching
+        async function fetchMetadata() {
+            const metadata = await api.getMetadata();
+            if (metadata) {
+                state.metadata = metadata;
+                ui.populateMetadata(metadata);
+            }
+        }
+        
+        async function fetchHeatmapData() {
+            ui.showLoading();
+            
+            const filters = {
+                industry: elements.industryFilter.value,
+                region: elements.regionFilter.value,
+                metrics: Array.from(elements.metricsCheckboxes.querySelectorAll('input:checked'))
+                    .map(checkbox => checkbox.value)
+            };
+            
+            const data = await api.getHeatmapData(filters);
+            
+            if (data) {
+                const transformedData = SupplierPerformanceUtils.transformHeatmapData(
+                    data, 
+                    elements.sortByFilter.value, 
+                    true
+                );
+                
+                state.heatmapData = transformedData;
+                ui.renderHeatmap(transformedData);
+            } else {
+                elements.heatmapContainer.classList.add('hidden');
+                elements.noDataMessage.classList.remove('hidden');
+            }
+            
+            ui.hideLoading();
+            
+            // Reset selected suppliers
+            state.selectedSuppliers = [];
+            elements.comparisonContainer.classList.add('hidden');
+        }
+        
+        async function fetchComparisonData() {
+            if (state.selectedSuppliers.length === 0) return;
+            
+            const metrics = Array.from(elements.metricsCheckboxes.querySelectorAll('input:checked'))
+                .map(checkbox => checkbox.value);
+                
+            const data = await api.getComparisonData(state.selectedSuppliers, metrics);
+            
+            if (data) {
+                const transformedData = SupplierPerformanceUtils.transformComparisonData(data);
+                state.comparisonData = transformedData;
+                ui.renderComparisonChart(transformedData);
+            }
+        }
+        
+        async function fetchTimeSeriesData() {
+            const supplierId = elements.timeSeriesSupplierSelect.value;
+            const metric = elements.timeSeriesMetricSelect.value;
+            
+            if (!supplierId || !metric) return;
+            
+            const data = await api.getTimeSeriesData(supplierId, metric);
+            
+            if (data) {
+                const transformedData = SupplierPerformanceUtils.transformTimeSeriesData(data);
+                state.timeSeriesData = transformedData;
+                ui.renderTimeSeriesChart(transformedData);
+            }
+        }
+        
+        // Event Listeners
+        function setupEventListeners() {
+            // Apply filters button
+            elements.applyFiltersBtn.addEventListener('click', () => {
+                fetchHeatmapData();
+            });
+            
+            // Time series selects
+            elements.timeSeriesSupplierSelect.addEventListener('change', () => {
+                fetchTimeSeriesData();
+            });
+            
+            elements.timeSeriesMetricSelect.addEventListener('change', () => {
+                fetchTimeSeriesData();
+            });
+        }
+        
+        // Initialization
+        async function init() {
+            setupEventListeners();
+            await fetchMetadata();
+            await fetchHeatmapData();
+            
+            // For demo purposes, pre-select some options
+            elements.timeSeriesSupplierSelect.value = state.heatmapData?.rows[0]?.id || '';
+            elements.timeSeriesMetricSelect.value = state.metadata?.metrics[0] || '';
+            if (elements.timeSeriesSupplierSelect.value && elements.timeSeriesMetricSelect.value) {
+                fetchTimeSeriesData();
+            }
+        }
+        
+        // Start the application
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // For testing with mock data (when API is not available)
+        async function useMockData() {
+            // This function would be used during development when the API isn't ready
+            console.log('Using mock data for development');
+            
+            // Mock implementation would go here
+        }
+    </script>
+</body>
+</html>

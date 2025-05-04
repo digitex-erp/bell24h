@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h Notification Sounds Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #444;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .sound-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .settings {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .volume-control label {
+            margin-right: 10px;
+            min-width: 60px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .test-notification {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/">← Back to Home</a> | 
+        <a href="/websocket-demo.html">WebSocket Demos</a>
+    </div>
+    
+    <h1>Bell24h Notification Sounds Test</h1>
+    <p>This page allows you to test different notification sounds used in the Bell24h platform and adjust sound settings.</p>
+    
+    <div class="card">
+        <h2>Test Notification Sounds</h2>
+        <p>Click the buttons below to play different notification sounds:</p>
+        
+        <div class="sound-controls">
+            <button id="test-default">Default Notification</button>
+            <button id="test-message">New Message</button>
+            <button id="test-rfq">New RFQ Posted</button>
+            <button id="test-bid">Bid Update</button>
+            <button id="test-payment">Payment Processed</button>
+            <button id="test-delivery">Delivery Update</button>
+            <button id="test-verification">Verification Complete</button>
+        </div>
+        
+        <button id="test-notification" class="test-notification">Simulate Real Notification</button>
+        
+        <div class="settings">
+            <h2>Sound Settings</h2>
+            
+            <div>
+                <input type="checkbox" id="sound-enabled" checked>
+                <label for="sound-enabled">Enable notification sounds</label>
+            </div>
+            
+            <div class="volume-control">
+                <label for="volume-slider">Volume:</label>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+                <span id="volume-value">50%</span>
+            </div>
+        </div>
+        
+        <div class="status" id="status-message">Ready to play sounds.</div>
+    </div>
+    
+    <div class="card">
+        <h2>How It Works</h2>
+        <p>The notification sound system in Bell24h:</p>
+        <ul>
+            <li>Plays different sounds based on notification type</li>
+            <li>Respects user preferences (enabled/disabled)</li>
+            <li>Allows volume adjustment</li>
+            <li>Saves preferences between sessions</li>
+            <li>Works with all our real-time communication methods</li>
+        </ul>
+        <p>The notification sound module automatically preloads sounds for faster playback and better user experience.</p>
+    </div>
+    
+    <script type="module">
+        import notificationSound from './lib/notificationSounds.js';
+        
+        // DOM elements
+        const soundEnabledCheckbox = document.getElementById('sound-enabled');
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeValue = document.getElementById('volume-value');
+        const statusMessage = document.getElementById('status-message');
+        
+        // Test sound buttons
+        document.getElementById('test-default').addEventListener('click', () => playSound('default'));
+        document.getElementById('test-message').addEventListener('click', () => playSound('message'));
+        document.getElementById('test-rfq').addEventListener('click', () => playSound('rfq'));
+        document.getElementById('test-bid').addEventListener('click', () => playSound('bid'));
+        document.getElementById('test-payment').addEventListener('click', () => playSound('payment'));
+        document.getElementById('test-delivery').addEventListener('click', () => playSound('delivery'));
+        document.getElementById('test-verification').addEventListener('click', () => playSound('verification'));
+        
+        // Simulate real notification
+        document.getElementById('test-notification').addEventListener('click', simulateNotification);
+        
+        // Initialize settings from saved preferences
+        soundEnabledCheckbox.checked = notificationSound.isEnabled();
+        volumeSlider.value = notificationSound.getVolume();
+        updateVolumeDisplay();
+        
+        // Event listeners for settings changes
+        soundEnabledCheckbox.addEventListener('change', () => {
+            notificationSound.setEnabled(soundEnabledCheckbox.checked);
+            updateStatus(`Sound notifications ${soundEnabledCheckbox.checked ? 'enabled' : 'disabled'}.`);
+        });
+        
+        volumeSlider.addEventListener('input', () => {
+            notificationSound.setVolume(parseFloat(volumeSlider.value));
+            updateVolumeDisplay();
+        });
+        
+        // Helper functions
+        function playSound(type) {
+            updateStatus(`Playing ${type} sound...`);
+            
+            notificationSound.play(type)
+                .then(played => {
+                    if (played) {
+                        updateStatus(`${type} sound played successfully.`);
+                    } else {
+                        updateStatus(`Sound not played (disabled in settings).`);
+                    }
+                })
+                .catch(error => {
+                    updateStatus(`Error playing sound: ${error.message}`);
+                });
+        }
+        
+        function updateVolumeDisplay() {
+            const volumePercent = Math.round(notificationSound.getVolume() * 100);
+            volumeValue.textContent = `${volumePercent}%`;
+        }
+        
+        function updateStatus(message) {
+            statusMessage.textContent = message;
+        }
+        
+        function simulateNotification() {
+            // Generate a random notification type
+            const notificationTypes = ['default', 'message', 'rfq', 'bid', 'payment', 'delivery', 'verification'];
+            const randomType = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
+            
+            // Create visual notification
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.backgroundColor = '#d4edda';
+            notification.style.color = '#155724';
+            notification.style.padding = '12px 20px';
+            notification.style.borderRadius = '4px';
+            notification.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+            notification.style.zIndex = '9999';
+            notification.style.transition = 'opacity 0.3s, transform 0.3s';
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            
+            // Set notification content
+            const title = document.createElement('div');
+            title.style.fontWeight = 'bold';
+            title.style.marginBottom = '5px';
+            
+            const messageText = document.createElement('div');
+            
+            // Set notification text based on type
+            switch (randomType) {
+                case 'message':
+                    title.textContent = 'New Message Received';
+                    messageText.textContent = 'You have received a new message from a buyer';
+                    break;
+                case 'rfq':
+                    title.textContent = 'New RFQ Posted';
+                    messageText.textContent = 'A new Request for Quote has been posted in your category';
+                    break;
+                case 'bid':
+                    title.textContent = 'Bid Status Updated';
+                    messageText.textContent = 'Your bid status has been changed to "Under Review"';
+                    break;
+                case 'payment':
+                    title.textContent = 'Payment Processed';
+                    messageText.textContent = 'A payment of ₹15,000 has been processed';
+                    break;
+                case 'delivery':
+                    title.textContent = 'Delivery Update';
+                    messageText.textContent = 'Your shipment will arrive in 2 business days';
+                    break;
+                case 'verification':
+                    title.textContent = 'Verification Complete';
+                    messageText.textContent = 'Your business verification has been completed';
+                    break;
+                default:
+                    title.textContent = 'Notification';
+                    messageText.textContent = 'You have a new notification';
+            }
+            
+            notification.appendChild(title);
+            notification.appendChild(messageText);
+            document.body.appendChild(notification);
+            
+            // Play the sound
+            playSound(randomType);
+            
+            // Show the notification
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Remove the notification after 5 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

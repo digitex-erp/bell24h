@@ -1,0 +1,41 @@
+# TODO.md
+
+## Phase 1: Immediate Priorities (Launch Readiness)
+- [ ] **WebSocket Integration**
+  - Implement WebSocket server for real-time RFQ updates.
+  - Add error handling and connection pooling optimization.
+- [ ] **API Integrations**
+  - Integrate Kotak Securities API for market data.
+  - Set up RazorpayX for payment processing.
+  - Integrate KredX API for invoice discounting (already implemented but needs testing).
+- [ ] **Security Enhancements**
+  - Add CSRF token validation with robust error handling.
+  - Implement KYC/AML verification using Karza or IDfy APIs.
+  - Add business registration verification via Ministry of Corporate Affairs API.
+- [ ] **User Authentication**
+  - Test and refine Google Login, Email Signup, and JWT authentication.
+  - Ensure secure session management with PostgreSQL-backed sessions.
+- [ ] **Database Optimization**
+  - Optimize database queries for supplier matching and RFQ management.
+  - Add indexes for faster lookups.
+- [ ] **Testing & Quality Assurance**
+  - Write unit tests for critical components.
+  - Perform integration testing for API endpoints.
+  - Conduct performance testing with Artillery.
+
+## Phase 2: Post-Launch Enhancements
+- [ ] **Advanced Analytics Dashboard**
+  - Add visualizations for RFQ success rates, supplier performance metrics, and market trends.
+  - Implement SHAP value explanations for supplier recommendations.
+- [ ] **Mobile Responsiveness**
+  - Ensure all pages are fully responsive for mobile devices.
+  - Test and optimize layout for tablets and smaller screens.
+- [ ] **Documentation**
+  - Create API documentation using tools like Swagger.
+  - Write user and developer documentation for the platform.
+- [ ] **Additional Features**
+  - Add a feedback mechanism for users to rate suppliers and RFQ experiences.
+  - Implement multi-language support for regional compliance.
+- [ ] **Alternative Market APIs**
+  - Evaluate and integrate NSE India or BSE India APIs for expanded financial data options.
+  - Consider adding Quandl India APIs for historical analysis.
