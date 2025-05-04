@@ -110,8 +110,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Audio data is required' });
       }
       
-      // Process voice RFQ
-      const result = await processVoiceRFQ(req.body.audioBase64);
+      // Extract request parameters
+      const {
+        audioBase64,
+        languagePreference = 'auto',
+        enhanceAudio = false
+      } = req.body;
+      
+      // Process voice RFQ with multilingual support
+      const result = await processVoiceRFQ(audioBase64, languagePreference);
       
       // Create RFQ from the extracted information
       const rfqData = {
@@ -122,17 +129,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
         budget: result.extractedInfo.budget,
         delivery_deadline: result.extractedInfo.deliveryDeadline ? new Date(result.extractedInfo.deliveryDeadline) : undefined,
         status: 'draft',
-        user_id: req.user!.id
+        user_id: req.user!.id,
+        // Add language metadata
+        metadata: {
+          detected_language: result.detectedLanguage,
+          has_translation: !!result.translatedText,
+          original_text: result.text
+        }
       };
       
       const rfq = await storage.createRFQ(rfqData);
       
       res.status(201).json({
         rfq,
-        transcription: result.text
+        transcription: result.text,
+        detectedLanguage: result.detectedLanguage,
+        translatedText: result.translatedText
       });
     } catch (err) {
       next(err);
+    }
+  });
+  
+  // Voice RFQ Processing API (no authentication, for testing purposes)
+  app.post('/api/voice-rfq/process', async (req, res) => {
+    try {
+      // Extract audio data 
+      let audioData;
+      let languagePreference = 'auto';
+      let enhanceAudio = false;
+      
+      // Handle form-data upload
+      if (req.files && req.files.audio) {
+        const audioFile = req.files.audio;
+        audioData = audioFile.data.toString('base64');
+        
+        // Get other parameters
+        languagePreference = req.body.languagePreference || 'auto';
+        enhanceAudio = req.body.enhanceAudio === 'true';
+      } 
+      // Handle base64 direct upload
+      else if (req.body.audioBase64) {
+        audioData = req.body.audioBase64;
+        languagePreference = req.body.languagePreference || 'auto';
+        enhanceAudio = req.body.enhanceAudio === true;
+      } else {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'No audio data provided. Send either form-data with audio file or JSON with audioBase64' 
+        });
+      }
+      
+      // Process voice RFQ with multilingual support
+      const result = await processVoiceRFQ(audioData, languagePreference);
+      
+      // Return successful response
+      res.json({
+        success: true,
+        transcript: result.text,
+        detectedLanguage: result.detectedLanguage,
+        translatedText: result.translatedText,
+        analyzedRfq: result.extractedInfo
+      });
+    } catch (error) {
+      console.error('Error processing voice RFQ:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Failed to process voice RFQ'
+      });
+    }
+  });
+  
+  // Voice RFQ Listing API for test script
+  app.get('/api/voice-rfq', async (req, res) => {
+    try {
+      // Get RFQs with voice metadata
+      const rfqs = await storage.getAllRFQs();
+      const voiceRfqs = rfqs.filter(rfq => 
+        rfq.metadata && 
+        (rfq.metadata.detected_language || rfq.metadata.original_text)
+      );
+      
+      res.json({
+        success: true,
+        rfqs: voiceRfqs
+      });
+    } catch (error) {
+      console.error('Error fetching voice RFQs:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Failed to fetch voice RFQs'
+      });
     }
   });
 

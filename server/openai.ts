@@ -12,9 +12,10 @@ if (!process.env.OPENAI_API_KEY) {
 /**
  * Processes a voice-based RFQ submission
  * @param audioBase64 Base64-encoded audio data
- * @returns Transcription and extracted RFQ information
+ * @param languagePreference Optional language preference (ISO code, e.g., 'en', 'hi', or 'auto' for auto-detection)
+ * @returns Transcription, language information, and extracted RFQ information
  */
-export async function processVoiceRFQ(audioBase64: string) {
+export async function processVoiceRFQ(audioBase64: string, languagePreference: string = 'auto') {
   try {
     if (!process.env.OPENAI_API_KEY) {
       throw new Error('OpenAI API key is not configured.');
@@ -27,15 +28,31 @@ export async function processVoiceRFQ(audioBase64: string) {
     const tempFilePath = `/tmp/voice-rfq-${Date.now()}.webm`;
     require('fs').writeFileSync(tempFilePath, audioBuffer);
 
+    // Apply audio enhancement if needed (higher quality transcription)
+    const enhancedFilePath = await enhanceAudioQuality(tempFilePath);
+    
     // Transcribe the audio
     const transcription = await openai.audio.transcriptions.create({
-      file: require('fs').createReadStream(tempFilePath),
+      file: require('fs').createReadStream(enhancedFilePath || tempFilePath),
       model: 'whisper-1',
+      language: languagePreference !== 'auto' ? languagePreference : undefined,
     });
 
-    // Clean up temp file
+    // Clean up temp files
     require('fs').unlinkSync(tempFilePath);
+    if (enhancedFilePath && enhancedFilePath !== tempFilePath) {
+      require('fs').unlinkSync(enhancedFilePath);
+    }
 
+    // Detect language
+    const detectedLanguage = await detectLanguage(transcription.text);
+    
+    // Translate if necessary
+    let translatedText: string | null = null;
+    if (detectedLanguage !== 'en') {
+      translatedText = await translateText(transcription.text, detectedLanguage, 'en');
+    }
+    
     // Extract RFQ information from transcription
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o', // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
@@ -55,7 +72,7 @@ export async function processVoiceRFQ(audioBase64: string) {
         },
         {
           role: 'user',
-          content: transcription.text
+          content: translatedText || transcription.text
         }
       ],
       response_format: { type: 'json_object' }
@@ -66,11 +83,117 @@ export async function processVoiceRFQ(audioBase64: string) {
 
     return {
       text: transcription.text,
+      translatedText,
+      detectedLanguage,
       extractedInfo
     };
   } catch (error: any) {
     console.error('Error processing voice RFQ:', error);
     throw new Error(`Failed to process voice RFQ: ${error.message}`);
+  }
+}
+
+/**
+ * Detects the language of a text
+ * @param text The text to detect language for
+ * @returns ISO language code (e.g., 'en', 'hi')
+ */
+async function detectLanguage(text: string): Promise<string> {
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o', // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: 'system',
+          content: `You are a language detection expert. Detect the language of the provided text.
+          Respond with the ISO 639-1 language code only (e.g., 'en' for English, 'hi' for Hindi, etc.).
+          Return only the 2-letter code, nothing else.`
+        },
+        {
+          role: 'user',
+          content: text
+        }
+      ]
+    });
+
+    return completion.choices[0].message.content?.trim().toLowerCase() || 'en';
+  } catch (error) {
+    console.error('Error detecting language:', error);
+    return 'en'; // Default to English on error
+  }
+}
+
+/**
+ * Translates text from one language to another
+ * @param text Text to translate
+ * @param sourceLanguage Source language code
+ * @param targetLanguage Target language code
+ * @returns Translated text
+ */
+async function translateText(text: string, sourceLanguage: string, targetLanguage: string): Promise<string> {
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o', // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: 'system',
+          content: `You are a professional translator. Translate the following text from ${sourceLanguage} to ${targetLanguage}.
+          Maintain the original meaning, tone, and intent as closely as possible.`
+        },
+        {
+          role: 'user',
+          content: text
+        }
+      ]
+    });
+
+    return completion.choices[0].message.content || text;
+  } catch (error) {
+    console.error('Error translating text:', error);
+    return text; // Return original text on error
+  }
+}
+
+/**
+ * Enhances audio quality for better transcription
+ * Note: This is a simplified implementation. For a production environment,
+ * you would integrate with a proper audio processing library or service.
+ * @param audioFilePath Path to the audio file
+ * @returns Path to enhanced audio file
+ */
+async function enhanceAudioQuality(audioFilePath: string): Promise<string | null> {
+  try {
+    const fs = require('fs');
+    const { exec } = require('child_process');
+    const util = require('util');
+    const execAsync = util.promisify(exec);
+    
+    // Check if ffmpeg is available
+    try {
+      await execAsync('which ffmpeg');
+    } catch (error) {
+      console.warn('ffmpeg not found, skipping audio enhancement');
+      return null;
+    }
+    
+    const enhancedFilePath = audioFilePath.replace('.webm', '-enhanced.wav');
+    
+    // Basic audio processing using ffmpeg
+    // - Normalize audio levels
+    // - Apply noise reduction
+    // - Convert to WAV format (better for transcription)
+    await execAsync(
+      `ffmpeg -i ${audioFilePath} -af "highpass=f=200,lowpass=f=3000,afftdn=nf=-20" -ar 16000 ${enhancedFilePath}`
+    );
+    
+    if (fs.existsSync(enhancedFilePath)) {
+      return enhancedFilePath;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Error enhancing audio:', error);
+    return null; // Return null on error, so original file will be used
   }
 }
 
