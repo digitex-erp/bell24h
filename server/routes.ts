@@ -9,6 +9,7 @@ import analyticsRoutes from './routes/analytics';
 import voiceAnalyticsRoutes from './routes/voice-analytics';
 import organizationRoutes from './routes/organizations';
 import permissionRoutes from './routes/permissions';
+import aclRoutes from './routes/acl';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
@@ -25,6 +26,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Set up permission routes
   app.use(permissionRoutes);
+  
+  // Set up ACL routes
+  app.use('/api/acl', aclRoutes);
 
   // ===== RFQ Routes =====
   app.get('/api/rfqs', async (req, res, next) => {

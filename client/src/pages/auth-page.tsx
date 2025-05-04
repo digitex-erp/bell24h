@@ -1,297 +1,291 @@
-import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Redirect } from 'wouter';
-import { insertUserSchema, loginUserSchema, InsertUser, LoginUser } from '@shared/schema';
-import { useAuth } from '@/hooks/use-auth';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2 } from "lucide-react";
 
 export default function AuthPage() {
-  const { user, loginMutation, registerMutation } = useAuth();
-  const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<string>('login');
-
-  // If user is already logged in, redirect to dashboard
-  if (user) {
-    return <Redirect to="/" />;
-  }
-
-  // Login form with zod validation
-  const loginForm = useForm<LoginUser>({
-    resolver: zodResolver(loginUserSchema),
-    defaultValues: {
-      username: '',
-      password: '',
-    },
+  const [activeTab, setActiveTab] = useState("login");
+  const [location, navigate] = useLocation();
+  
+  const { user, isLoading, loginMutation, registerMutation } = useAuth();
+  
+  // Login form state
+  const [loginForm, setLoginForm] = useState({
+    username: "",
+    password: "",
   });
-
-  // Register form with zod validation
-  const registerForm = useForm<InsertUser>({
-    resolver: zodResolver(insertUserSchema),
-    defaultValues: {
-      username: '',
-      email: '',
-      password: '',
-      confirm_password: '',
-      company_name: '',
-      user_type: 'both',
-    },
+  
+  // Register form state
+  const [registerForm, setRegisterForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
-
-  // Login form submission handler
-  const onLoginSubmit = (data: LoginUser) => {
-    loginMutation.mutate(data);
+  
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+  
+  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoginForm({
+      ...loginForm,
+      [e.target.name]: e.target.value,
+    });
   };
-
-  // Register form submission handler
-  const onRegisterSubmit = (data: InsertUser) => {
-    registerMutation.mutate(data);
+  
+  const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegisterForm({
+      ...registerForm,
+      [e.target.name]: e.target.value,
+    });
   };
-
-  return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Auth Form */}
-      <div className="flex flex-col justify-center w-full px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24 lg:w-1/2">
-        <div className="w-full max-w-md mx-auto lg:w-96">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-primary-600">Bell24h</h1>
-            <p className="mt-2 text-gray-600">B2B Marketplace</p>
-          </div>
-
-          <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="login">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Login to your account</CardTitle>
-                  <CardDescription>
-                    Enter your credentials to access the marketplace
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Form {...loginForm}>
-                    <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
-                      <FormField
-                        control={loginForm.control}
-                        name="username"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Username</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter your username" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={loginForm.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input type="password" placeholder="Enter your password" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button 
-                        type="submit" 
-                        className="w-full" 
-                        disabled={loginMutation.isPending}
-                      >
-                        {loginMutation.isPending ? "Logging in..." : "Login"}
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-                <CardFooter className="flex justify-center">
-                  <Button variant="link" onClick={() => setActiveTab('register')}>
-                    Don't have an account? Register
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="register">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Create an account</CardTitle>
-                  <CardDescription>
-                    Join Bell24h B2B marketplace to connect with buyers and suppliers
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Form {...registerForm}>
-                    <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
-                      <FormField
-                        control={registerForm.control}
-                        name="username"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Username</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Choose a username" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={registerForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input type="email" placeholder="Enter your email" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={registerForm.control}
-                        name="company_name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Company Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter your company name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={registerForm.control}
-                        name="user_type"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Account Type</FormLabel>
-                            <FormControl>
-                              <select
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                {...field}
-                              >
-                                <option value="buyer">Buyer</option>
-                                <option value="supplier">Supplier</option>
-                                <option value="both">Both</option>
-                              </select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={registerForm.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input type="password" placeholder="Create a password" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={registerForm.control}
-                        name="confirm_password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Confirm Password</FormLabel>
-                            <FormControl>
-                              <Input type="password" placeholder="Confirm your password" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Button 
-                        type="submit" 
-                        className="w-full" 
-                        disabled={registerMutation.isPending}
-                      >
-                        {registerMutation.isPending ? "Creating account..." : "Register"}
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-                <CardFooter className="flex justify-center">
-                  <Button variant="link" onClick={() => setActiveTab('login')}>
-                    Already have an account? Login
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
+  
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await loginMutation.mutateAsync(loginForm);
+  };
+  
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (registerForm.password !== registerForm.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    
+    const { confirmPassword, ...registerData } = registerForm;
+    await registerMutation.mutateAsync(registerData);
+  };
+  
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
-
-      {/* Hero Section */}
-      <div className="relative hidden w-1/2 lg:block">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-600 to-primary-800">
-          <div className="flex flex-col justify-center h-full px-12 text-white">
-            <h2 className="text-4xl font-bold mb-6">Connect, Trade, Grow</h2>
-            <p className="text-xl mb-8">
-              Bell24h.com is an AI-powered B2B marketplace connecting buyers and suppliers with secure payments and analytics.
-            </p>
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mt-0.5 text-primary-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+    );
+  }
+  
+  return (
+    <div className="flex min-h-screen">
+      {/* Auth forms column */}
+      <div className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-10">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold tracking-tight">Welcome to Bell24h</CardTitle>
+            <CardDescription>
+              The intelligent B2B marketplace connecting businesses worldwide
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="login">Login</TabsTrigger>
+                <TabsTrigger value="register">Register</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="login">
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      name="username"
+                      placeholder="Enter your username"
+                      value={loginForm.username}
+                      onChange={handleLoginChange}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="Enter your password"
+                      value={loginForm.password}
+                      onChange={handleLoginChange}
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={loginMutation.isPending}
+                  >
+                    {loginMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Signing in...
+                      </>
+                    ) : (
+                      "Sign In"
+                    )}
+                  </Button>
+                </form>
+              </TabsContent>
+              
+              <TabsContent value="register">
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="register-username">Username</Label>
+                    <Input
+                      id="register-username"
+                      name="username"
+                      placeholder="Choose a username"
+                      value={registerForm.username}
+                      onChange={handleRegisterChange}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="register-email">Email</Label>
+                    <Input
+                      id="register-email"
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      value={registerForm.email}
+                      onChange={handleRegisterChange}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="register-password">Password</Label>
+                    <Input
+                      id="register-password"
+                      name="password"
+                      type="password"
+                      placeholder="Create a password"
+                      value={registerForm.password}
+                      onChange={handleRegisterChange}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="register-confirm">Confirm Password</Label>
+                    <Input
+                      id="register-confirm"
+                      name="confirmPassword"
+                      type="password"
+                      placeholder="Confirm your password"
+                      value={registerForm.confirmPassword}
+                      onChange={handleRegisterChange}
+                      required
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={registerMutation.isPending}
+                  >
+                    {registerMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Creating account...
+                      </>
+                    ) : (
+                      "Create Account"
+                    )}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-4">
+            <div className="text-sm text-muted-foreground text-center">
+              By continuing, you agree to Bell24h's Terms of Service and Privacy Policy.
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
+      
+      {/* Hero column - hidden on mobile */}
+      <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-primary to-primary-foreground flex-col justify-center items-center p-10 text-white">
+        <div className="max-w-md space-y-6">
+          <h1 className="text-4xl font-bold tracking-tight">Transform Your Procurement with AI</h1>
+          <p className="text-lg">
+            Bell24h.com leverages artificial intelligence to streamline your procurement processes,
+            connecting businesses with the right suppliers through our intelligent RFQ system.
+          </p>
+          <div className="space-y-4">
+            <div className="flex items-start space-x-4">
+              <div className="bg-white/10 p-3 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.743-.95l.337-2.698a.99.99 0 0 0-.515-.941l-5.773-3.046a.996.996 0 0 1-.461-.917L12 3.9c.16-.479-.206-.923-.695-.923-.917 0-1.78.43-2.337 1.163L6.33 7.222a2.996 2.996 0 0 0-.666 1.888c0 .61.174 1.185.476 1.674" />
+                  <path d="M12.5 15.5l2 2a4.95 4.95 0 0 1 1.383 4.277.990.99 0 0 1-.985.726h-8.72a.99.99 0 0 1-.988-.741 4.983 4.983 0 0 1 1.372-4.323l1.267-1.267a1.997 1.997 0 0 1 2.243-.347" />
                 </svg>
-                <p className="text-primary-100">Submit and manage RFQs with ease</p>
               </div>
-              <div className="flex items-start space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mt-0.5 text-primary-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <p className="text-primary-100">Secure transactions with blockchain verification</p>
+              <div>
+                <h3 className="text-xl font-medium">Voice-Based RFQ Submission</h3>
+                <p>Simply speak your requirements and our AI will create detailed RFQs for you.</p>
               </div>
-              <div className="flex items-start space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mt-0.5 text-primary-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            </div>
+            <div className="flex items-start space-x-4">
+              <div className="bg-white/10 p-3 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <rect width="18" height="18" x="3" y="3" rx="2" />
+                  <path d="M21 9H3" />
+                  <path d="M9 21V9" />
                 </svg>
-                <p className="text-primary-100">AI-powered supplier risk scoring and analytics</p>
               </div>
-              <div className="flex items-start space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mt-0.5 text-primary-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              <div>
+                <h3 className="text-xl font-medium">Advanced Analytics</h3>
+                <p>Gain insights into your procurement trends and supplier performance.</p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-4">
+              <div className="bg-white/10 p-3 rounded-full">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-6 w-6"
+                >
+                  <path d="m2 18 8-8 4 4 8-8" />
+                  <path d="M22 6v16H2v-2" />
                 </svg>
-                <p className="text-primary-100">Real-time messaging between buyers and suppliers</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-medium">Secure Transactions</h3>
+                <p>Escrow wallet system with milestone-based payments for worry-free business.</p>
               </div>
             </div>
           </div>
