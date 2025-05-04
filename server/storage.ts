@@ -1,125 +1,114 @@
-import { users, suppliers, rfqs, bids, contracts, messages, transactions } from '@shared/schema';
-import { type User, type InsertUser, type Supplier, type RFQ, type Bid, type Contract, type Message, type InsertMessage, type Transaction } from '@shared/schema';
+import { User, InsertUser, RFQ, InsertRFQ, Bid, InsertBid, Contract, InsertContract, Message, InsertMessage, Transaction, InsertTransaction, Supplier } from '@shared/schema';
+import { users, rfqs, bids, contracts, messages, transactions, suppliers } from '@shared/schema';
 import { db } from './db';
-import { eq, and, or } from 'drizzle-orm';
+import { eq, and, or, desc } from 'drizzle-orm';
 import session from 'express-session';
 import connectPg from 'connect-pg-simple';
+import { pool } from './db';
 
 const PostgresSessionStore = connectPg(session);
 
+// Define a type for creating a supplier
+export interface InsertSupplier {
+  user_id: number;
+  industry: string;
+  product_categories: string[];
+  risk_score?: number;
+  verification_status?: boolean;
+}
+
 export interface IStorage {
-  // Session store
-  sessionStore: session.SessionStore;
-  
-  // User methods
+  // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
-  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  getAllUsers(): Promise<User[]>;
-  updateUserWalletBalance(userId: number, balance: number): Promise<User>;
+  updateUserWalletBalance(id: number, balance: number): Promise<User | undefined>;
   
-  // Supplier methods
-  getSupplier(id: number): Promise<Supplier | undefined>;
+  // Supplier operations
   getSupplierByUserId(userId: number): Promise<Supplier | undefined>;
-  createSupplier(supplier: Omit<Supplier, 'id'>): Promise<Supplier>;
-  updateSupplierRiskScore(id: number, riskScore: number): Promise<Supplier>;
+  createSupplier(supplier: InsertSupplier): Promise<Supplier>;
+  updateSupplierRiskScore(id: number, riskScore: number): Promise<Supplier | undefined>;
   
-  // RFQ methods
-  getRFQ(id: number): Promise<RFQ | undefined>;
+  // RFQ operations
   getAllRFQs(): Promise<RFQ[]>;
-  getUserRFQs(userId: number): Promise<RFQ[]>;
-  createRFQ(rfq: Omit<RFQ, 'id' | 'created_at' | 'updated_at'>): Promise<RFQ>;
-  updateRFQ(id: number, data: Partial<RFQ>): Promise<RFQ>;
+  getRFQ(id: number): Promise<RFQ | undefined>;
+  createRFQ(rfq: InsertRFQ): Promise<RFQ>;
+  updateRFQ(id: number, data: Partial<RFQ>): Promise<RFQ | undefined>;
   
-  // Bid methods
-  getBid(id: number): Promise<Bid | undefined>;
+  // Bid operations
   getBids(rfqId?: number, supplierId?: number): Promise<Bid[]>;
-  getSupplierBids(supplierId: number): Promise<Bid[]>;
-  createBid(bid: Omit<Bid, 'id' | 'created_at' | 'updated_at'>): Promise<Bid>;
-  updateBid(id: number, data: Partial<Bid>): Promise<Bid>;
-  updateBidStatus(id: number, status: string): Promise<Bid>;
+  getBid(id: number): Promise<Bid | undefined>;
+  createBid(bid: InsertBid): Promise<Bid>;
+  updateBidStatus(id: number, status: string): Promise<Bid | undefined>;
   
-  // Contract methods
-  getContract(id: number): Promise<Contract | undefined>;
+  // Contract operations
   getUserContracts(userId: number): Promise<Contract[]>;
-  getSupplierContracts(supplierId: number): Promise<Contract[]>;
-  createContract(contract: Omit<Contract, 'id' | 'created_at' | 'updated_at'>): Promise<Contract>;
-  updateContractStatus(id: number, status: string): Promise<Contract>;
+  getContract(id: number): Promise<Contract | undefined>;
+  createContract(contract: InsertContract): Promise<Contract>;
+  updateContractStatus(id: number, status: string): Promise<Contract | undefined>;
   
-  // Message methods
-  getMessage(id: number): Promise<Message | undefined>;
+  // Message operations
   getUserMessages(userId: number, otherUserId?: number, rfqId?: number, bidId?: number): Promise<Message[]>;
+  getMessage(id: number): Promise<Message | undefined>;
   createMessage(message: InsertMessage): Promise<Message>;
-  updateMessageStatus(id: number, status: string): Promise<Message>;
+  updateMessageStatus(id: number, status: string): Promise<Message | undefined>;
   
-  // Transaction methods
-  getTransaction(id: number): Promise<Transaction | undefined>;
+  // Transaction operations
   getUserTransactions(userId: number): Promise<Transaction[]>;
-  createTransaction(transaction: Omit<Transaction, 'id' | 'created_at'>): Promise<Transaction>;
+  getTransaction(id: number): Promise<Transaction | undefined>;
+  createTransaction(transaction: InsertTransaction): Promise<Transaction>;
+  
+  // Session store
+  sessionStore: session.Store;
 }
 
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
-
+  sessionStore: session.Store;
+  
   constructor() {
-    this.sessionStore = new PostgresSessionStore({
+    this.sessionStore = new PostgresSessionStore({ 
       pool,
-      createTableIfMissing: true,
+      createTableIfMissing: true
     });
   }
-
-  // User methods
+  
+  // User operations
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
-
+  
   async getUserByUsername(username: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.username, username));
     return user;
   }
-
-  async getUserByEmail(email: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.email, email));
-    return user;
+  
+  async createUser(user: InsertUser): Promise<User> {
+    const [newUser] = await db.insert(users).values(user).returning();
+    return newUser;
   }
-
-  async createUser(userData: InsertUser): Promise<User> {
-    const [user] = await db.insert(users).values(userData).returning();
-    return user;
-  }
-
-  async getAllUsers(): Promise<User[]> {
-    return await db.select().from(users);
-  }
-
-  async updateUserWalletBalance(userId: number, balance: number): Promise<User> {
+  
+  async updateUserWalletBalance(id: number, balance: number): Promise<User | undefined> {
     const [updatedUser] = await db
       .update(users)
       .set({ wallet_balance: balance })
-      .where(eq(users.id, userId))
+      .where(eq(users.id, id))
       .returning();
     return updatedUser;
   }
-
-  // Supplier methods
-  async getSupplier(id: number): Promise<Supplier | undefined> {
-    const [supplier] = await db.select().from(suppliers).where(eq(suppliers.id, id));
-    return supplier;
-  }
-
+  
+  // Supplier operations
   async getSupplierByUserId(userId: number): Promise<Supplier | undefined> {
     const [supplier] = await db.select().from(suppliers).where(eq(suppliers.user_id, userId));
     return supplier;
   }
-
-  async createSupplier(supplierData: Omit<Supplier, 'id'>): Promise<Supplier> {
-    const [supplier] = await db.insert(suppliers).values(supplierData).returning();
-    return supplier;
+  
+  async createSupplier(supplier: InsertSupplier): Promise<Supplier> {
+    const [newSupplier] = await db.insert(suppliers).values(supplier).returning();
+    return newSupplier;
   }
-
-  async updateSupplierRiskScore(id: number, riskScore: number): Promise<Supplier> {
+  
+  async updateSupplierRiskScore(id: number, riskScore: number): Promise<Supplier | undefined> {
     const [updatedSupplier] = await db
       .update(suppliers)
       .set({ risk_score: riskScore })
@@ -127,41 +116,32 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return updatedSupplier;
   }
-
-  // RFQ methods
+  
+  // RFQ operations
+  async getAllRFQs(): Promise<RFQ[]> {
+    return await db.select().from(rfqs).orderBy(desc(rfqs.created_at));
+  }
+  
   async getRFQ(id: number): Promise<RFQ | undefined> {
     const [rfq] = await db.select().from(rfqs).where(eq(rfqs.id, id));
     return rfq;
   }
-
-  async getAllRFQs(): Promise<RFQ[]> {
-    return await db.select().from(rfqs);
+  
+  async createRFQ(rfq: InsertRFQ): Promise<RFQ> {
+    const [newRfq] = await db.insert(rfqs).values(rfq).returning();
+    return newRfq;
   }
-
-  async getUserRFQs(userId: number): Promise<RFQ[]> {
-    return await db.select().from(rfqs).where(eq(rfqs.user_id, userId));
-  }
-
-  async createRFQ(rfqData: Omit<RFQ, 'id' | 'created_at' | 'updated_at'>): Promise<RFQ> {
-    const [rfq] = await db.insert(rfqs).values(rfqData).returning();
-    return rfq;
-  }
-
-  async updateRFQ(id: number, data: Partial<RFQ>): Promise<RFQ> {
-    const [updatedRFQ] = await db
+  
+  async updateRFQ(id: number, data: Partial<RFQ>): Promise<RFQ | undefined> {
+    const [updatedRfq] = await db
       .update(rfqs)
-      .set({ ...data, updated_at: new Date() })
+      .set(data)
       .where(eq(rfqs.id, id))
       .returning();
-    return updatedRFQ;
+    return updatedRfq;
   }
-
-  // Bid methods
-  async getBid(id: number): Promise<Bid | undefined> {
-    const [bid] = await db.select().from(bids).where(eq(bids.id, id));
-    return bid;
-  }
-
+  
+  // Bid operations
   async getBids(rfqId?: number, supplierId?: number): Promise<Bid[]> {
     let query = db.select().from(bids);
     
@@ -173,28 +153,20 @@ export class DatabaseStorage implements IStorage {
       query = query.where(eq(bids.supplier_id, supplierId));
     }
     
-    return await query;
+    return await query.orderBy(desc(bids.created_at));
   }
-
-  async getSupplierBids(supplierId: number): Promise<Bid[]> {
-    return await db.select().from(bids).where(eq(bids.supplier_id, supplierId));
-  }
-
-  async createBid(bidData: Omit<Bid, 'id' | 'created_at' | 'updated_at'>): Promise<Bid> {
-    const [bid] = await db.insert(bids).values(bidData).returning();
+  
+  async getBid(id: number): Promise<Bid | undefined> {
+    const [bid] = await db.select().from(bids).where(eq(bids.id, id));
     return bid;
   }
-
-  async updateBid(id: number, data: Partial<Bid>): Promise<Bid> {
-    const [updatedBid] = await db
-      .update(bids)
-      .set({ ...data, updated_at: new Date() })
-      .where(eq(bids.id, id))
-      .returning();
-    return updatedBid;
+  
+  async createBid(bid: InsertBid): Promise<Bid> {
+    const [newBid] = await db.insert(bids).values(bid).returning();
+    return newBid;
   }
-
-  async updateBidStatus(id: number, status: string): Promise<Bid> {
+  
+  async updateBidStatus(id: number, status: string): Promise<Bid | undefined> {
     const [updatedBid] = await db
       .update(bids)
       .set({ status: status as any, updated_at: new Date() })
@@ -202,30 +174,27 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return updatedBid;
   }
-
-  // Contract methods
-  async getContract(id: number): Promise<Contract | undefined> {
-    const [contract] = await db.select().from(contracts).where(eq(contracts.id, id));
-    return contract;
-  }
-
+  
+  // Contract operations
   async getUserContracts(userId: number): Promise<Contract[]> {
     return await db
       .select()
       .from(contracts)
-      .where(or(eq(contracts.buyer_id, userId), eq(contracts.supplier_id, userId)));
+      .where(or(eq(contracts.buyer_id, userId), eq(contracts.supplier_id, userId)))
+      .orderBy(desc(contracts.created_at));
   }
-
-  async getSupplierContracts(supplierId: number): Promise<Contract[]> {
-    return await db.select().from(contracts).where(eq(contracts.supplier_id, supplierId));
-  }
-
-  async createContract(contractData: Omit<Contract, 'id' | 'created_at' | 'updated_at'>): Promise<Contract> {
-    const [contract] = await db.insert(contracts).values(contractData).returning();
+  
+  async getContract(id: number): Promise<Contract | undefined> {
+    const [contract] = await db.select().from(contracts).where(eq(contracts.id, id));
     return contract;
   }
-
-  async updateContractStatus(id: number, status: string): Promise<Contract> {
+  
+  async createContract(contract: InsertContract): Promise<Contract> {
+    const [newContract] = await db.insert(contracts).values(contract).returning();
+    return newContract;
+  }
+  
+  async updateContractStatus(id: number, status: string): Promise<Contract | undefined> {
     const [updatedContract] = await db
       .update(contracts)
       .set({ status: status as any, updated_at: new Date() })
@@ -233,24 +202,27 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return updatedContract;
   }
-
-  // Message methods
-  async getMessage(id: number): Promise<Message | undefined> {
-    const [message] = await db.select().from(messages).where(eq(messages.id, id));
-    return message;
-  }
-
+  
+  // Message operations
   async getUserMessages(userId: number, otherUserId?: number, rfqId?: number, bidId?: number): Promise<Message[]> {
-    let query = db
-      .select()
-      .from(messages)
-      .where(or(eq(messages.sender_id, userId), eq(messages.recipient_id, userId)));
+    let query = db.select().from(messages).where(
+      or(
+        eq(messages.sender_id, userId),
+        eq(messages.recipient_id, userId)
+      )
+    );
     
     if (otherUserId) {
       query = query.where(
         or(
-          and(eq(messages.sender_id, userId), eq(messages.recipient_id, otherUserId)),
-          and(eq(messages.sender_id, otherUserId), eq(messages.recipient_id, userId))
+          and(
+            eq(messages.sender_id, userId),
+            eq(messages.recipient_id, otherUserId)
+          ),
+          and(
+            eq(messages.sender_id, otherUserId),
+            eq(messages.recipient_id, userId)
+          )
         )
       );
     }
@@ -263,15 +235,20 @@ export class DatabaseStorage implements IStorage {
       query = query.where(eq(messages.bid_id, bidId));
     }
     
-    return await query;
+    return await query.orderBy(desc(messages.created_at));
   }
-
-  async createMessage(messageData: InsertMessage): Promise<Message> {
-    const [message] = await db.insert(messages).values(messageData).returning();
+  
+  async getMessage(id: number): Promise<Message | undefined> {
+    const [message] = await db.select().from(messages).where(eq(messages.id, id));
     return message;
   }
-
-  async updateMessageStatus(id: number, status: string): Promise<Message> {
+  
+  async createMessage(message: InsertMessage): Promise<Message> {
+    const [newMessage] = await db.insert(messages).values(message).returning();
+    return newMessage;
+  }
+  
+  async updateMessageStatus(id: number, status: string): Promise<Message | undefined> {
     const [updatedMessage] = await db
       .update(messages)
       .set({ status: status as any })
@@ -279,24 +256,25 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return updatedMessage;
   }
-
-  // Transaction methods
+  
+  // Transaction operations
+  async getUserTransactions(userId: number): Promise<Transaction[]> {
+    return await db
+      .select()
+      .from(transactions)
+      .where(eq(transactions.user_id, userId))
+      .orderBy(desc(transactions.created_at));
+  }
+  
   async getTransaction(id: number): Promise<Transaction | undefined> {
     const [transaction] = await db.select().from(transactions).where(eq(transactions.id, id));
     return transaction;
   }
-
-  async getUserTransactions(userId: number): Promise<Transaction[]> {
-    return await db.select().from(transactions).where(eq(transactions.user_id, userId));
-  }
-
-  async createTransaction(transactionData: Omit<Transaction, 'id' | 'created_at'>): Promise<Transaction> {
-    const [transaction] = await db.insert(transactions).values(transactionData).returning();
-    return transaction;
+  
+  async createTransaction(transaction: InsertTransaction): Promise<Transaction> {
+    const [newTransaction] = await db.insert(transactions).values(transaction).returning();
+    return newTransaction;
   }
 }
-
-// Import pool from db.ts
-import { pool } from './db';
 
 export const storage = new DatabaseStorage();

@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h - Industry Trend Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .trend-up {
+            color: #10B981;
+        }
+        .trend-down {
+            color: #EF4444;
+        }
+        .trend-stable {
+            color: #F59E0B;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <h1 class="text-2xl font-bold gradient-text">Bell24h</h1>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="/" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Home
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            RFQs
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Suppliers
+                        </a>
+                        <a href="/product-management.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Products
+                        </a>
+                        <a href="/seller-profile.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Profile
+                        </a>
+                        <a href="/analytics-dashboard.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Analytics
+                        </a>
+                        <a href="/industry-trends.html" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Industry Trends
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <button type="button" class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <span class="sr-only">View notifications</span>
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="ml-3 relative">
+                        <div>
+                            <button type="button" class="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" id="user-menu-button">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="h-8 w-8 rounded-full" src="https://ui-avatars.com/api/?name=John+Doe&background=4F46E5&color=fff" alt="User profile">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page header -->
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:items-center md:justify-between">
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        Industry Trend Analysis
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Real-time market insights and trade data for informed business decisions
+                    </p>
+                </div>
+                <div class="mt-4 flex md:mt-0 md:ml-4">
+                    <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-download -ml-1 mr-2 h-5 w-5 text-gray-500"></i>
+                        Export Report
+                    </button>
+                    <button type="button" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white gradient-bg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-sync -ml-1 mr-2 h-5 w-5 text-white"></i>
+                        Refresh Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Industry selector and filters -->
+        <div class="mb-6 bg-white shadow overflow-hidden rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-5">
+                    <div class="sm:col-span-2">
+                        <label for="industry" class="block text-sm font-medium text-gray-700">Select Industry</label>
+                        <select id="industry" name="industry" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option value="electronics">Electronics & Components</option>
+                            <option value="textiles">Textiles & Apparel</option>
+                            <option value="machinery">Industrial Machinery</option>
+                            <option value="chemicals">Chemicals & Pharmaceuticals</option>
+                            <option value="automotive">Automotive Parts & Components</option>
+                            <option value="food">Food & Beverages</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="region" class="block text-sm font-medium text-gray-700">Region</label>
+                        <select id="region" name="region" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option value="global">Global</option>
+                            <option value="asia_pacific">Asia Pacific</option>
+                            <option value="europe">Europe</option>
+                            <option value="north_america">North America</option>
+                            <option value="middle_east">Middle East</option>
+                            <option value="africa">Africa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="timeframe" class="block text-sm font-medium text-gray-700">Time Frame</label>
+                        <select id="timeframe" name="timeframe" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option value="1y">1 Year</option>
+                            <option value="6m">6 Months</option>
+                            <option value="3m">3 Months</option>
+                            <option value="1m">1 Month</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dataSource" class="block text-sm font-medium text-gray-700">Data Source</label>
+                        <select id="dataSource" name="dataSource" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option value="all">All Sources</option>
+                            <option value="trade_data">Trade Data</option>
+                            <option value="market_reports">Market Reports</option>
+                            <option value="bell24h">Bell24h Platform</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key metrics -->
+        <div class="mb-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <!-- Metric card 1 -->
+            <div class="bg-white overflow-hidden shadow rounded-lg stat-card">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <div class="text-sm font-medium text-gray-500 truncate flex items-center">
+                                Market Growth Rate
+                                <div class="tooltip ml-1">
+                                    <i class="fas fa-info-circle text-gray-400"></i>
+                                    <span class="tooltiptext">Annualized growth rate based on trade volume and value over the selected time period.</span>
+                                </div>
+                            </div>
+                            <div class="flex items-baseline">
+                                <div class="text-2xl font-semibold text-gray-900">
+                                    8.4%
+                                </div>
+                                <div class="ml-2 flex items-baseline text-sm font-semibold trend-up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span class="sr-only">Increased by</span>
+                                    2.1%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metric card 2 -->
+            <div class="bg-white overflow-hidden shadow rounded-lg stat-card">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                            <i class="fas fa-dollar-sign text-white"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <div class="text-sm font-medium text-gray-500 truncate flex items-center">
+                                Average Price Index
+                                <div class="tooltip ml-1">
+                                    <i class="fas fa-info-circle text-gray-400"></i>
+                                    <span class="tooltiptext">Price index relative to baseline (100). Shows how prices have changed over time.</span>
+                                </div>
+                            </div>
+                            <div class="flex items-baseline">
+                                <div class="text-2xl font-semibold text-gray-900">
+                                    112.5
+                                </div>
+                                <div class="ml-2 flex items-baseline text-sm font-semibold trend-up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span class="sr-only">Increased by</span>
+                                    4.5
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metric card 3 -->
+            <div class="bg-white overflow-hidden shadow rounded-lg stat-card">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                            <i class="fas fa-balance-scale text-white"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <div class="text-sm font-medium text-gray-500 truncate flex items-center">
+                                Supply-Demand Ratio
+                                <div class="tooltip ml-1">
+                                    <i class="fas fa-info-circle text-gray-400"></i>
+                                    <span class="tooltiptext">Ratio of supply to demand. Values above 1.0 indicate excess supply, below 1.0 indicate shortage.</span>
+                                </div>
+                            </div>
+                            <div class="flex items-baseline">
+                                <div class="text-2xl font-semibold text-gray-900">
+                                    1.03
+                                </div>
+                                <div class="ml-2 flex items-baseline text-sm font-semibold trend-down">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span class="sr-only">Decreased by</span>
+                                    0.05
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metric card 4 -->
+            <div class="bg-white overflow-hidden shadow rounded-lg stat-card">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                            <i class="fas fa-clock text-white"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <div class="text-sm font-medium text-gray-500 truncate flex items-center">
+                                Avg. Lead Time (Days)
+                                <div class="tooltip ml-1">
+                                    <i class="fas fa-info-circle text-gray-400"></i>
+                                    <span class="tooltiptext">Average time from order to delivery across all suppliers in this industry.</span>
+                                </div>
+                            </div>
+                            <div class="flex items-baseline">
+                                <div class="text-2xl font-semibold text-gray-900">
+                                    32
+                                </div>
+                                <div class="ml-2 flex items-baseline text-sm font-semibold trend-up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span class="sr-only">Increased by</span>
+                                    3
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main charts section -->
+        <div class="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <!-- Price Trend Chart -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Price Trends</h3>
+                    <div class="flex space-x-2">
+                        <button type="button" class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-gray-50">
+                            Raw
+                        </button>
+                        <button type="button" class="px-3 py-1 border border-transparent rounded-md text-sm font-medium text-gray-800 bg-blue-100">
+                            Processed
+                        </button>
+                    </div>
+                </div>
+                <div class="border-t border-gray-200">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="chart-container">
+                            <canvas id="priceTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Composition Chart -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Market Composition</h3>
+                </div>
+                <div class="border-t border-gray-200">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="chart-container">
+                            <canvas id="marketCompositionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export/Import Flow -->
+        <div class="mb-6 bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Global Trade Flow Analysis</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">Major import/export routes for Electronics & Components</p>
+            </div>
+            <div class="border-t border-gray-200">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="chart-container">
+                        <canvas id="tradeFlowChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sub-industry analysis -->
+        <div class="mb-6 bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Sub-industry Analysis</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">Performance comparison across different segments</p>
+            </div>
+            <div class="border-t border-gray-200">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub-industry</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Growth (%)</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Market Share (%)</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price Trend</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supply-Demand</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead Time (Days)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Semiconductors</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-up">+12.8%</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">28.5%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-up"><i class="fas fa-arrow-up mr-1"></i>Rising</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0.85 (Shortage)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">45</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Displays & Optoelectronics</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-up">+7.3%</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">21.2%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-stable"><i class="fas fa-minus mr-1"></i>Stable</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1.05 (Balanced)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">32</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Printed Circuit Boards</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-up">+9.1%</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">18.7%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-up"><i class="fas fa-arrow-up mr-1"></i>Rising</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0.95 (Slight Shortage)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">28</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Batteries & Power</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-up">+15.2%</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">14.3%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-up"><i class="fas fa-arrow-up mr-1"></i>Rising</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">0.92 (Shortage)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">35</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Connectors & Cables</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-up">+5.8%</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10.5%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-stable"><i class="fas fa-minus mr-1"></i>Stable</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1.15 (Surplus)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">21</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Others</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-down">-1.2%</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6.8%</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span class="trend-down"><i class="fas fa-arrow-down mr-1"></i>Falling</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1.28 (Surplus)</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">25</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insight cards -->
+        <div class="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <!-- Insight card 1 -->
+            <div class="bg-white overflow-hidden shadow rounded-lg insight-card">
+                <div class="px-4 py-5 sm:px-6 bg-gradient-to-r from-blue-50 to-indigo-50">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-lightbulb text-xl text-yellow-500"></i>
+                        </div>
+                        <h3 class="ml-2 text-lg leading-6 font-medium text-gray-900">Key Insight</h3>
+                    </div>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <h4 class="text-base font-semibold text-gray-900 mb-2">Semiconductor Shortages Driving Price Increases</h4>
+                    <p class="text-sm text-gray-600">
+                        Ongoing semiconductor shortages are pushing prices up across the electronics supply chain.
+                        The supply-demand ratio of 0.85 indicates significant shortages, with lead times extending to 45 days on average.
+                        Manufacturers are securing long-term contracts to ensure stability.
+                    </p>
+                    <div class="mt-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            Market Alert
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insight card 2 -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:px-6 bg-gradient-to-r from-green-50 to-emerald-50">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-chart-line text-xl text-green-500"></i>
+                        </div>
+                        <h3 class="ml-2 text-lg leading-6 font-medium text-gray-900">Growth Opportunity</h3>
+                    </div>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <h4 class="text-base font-semibold text-gray-900 mb-2">Batteries & Power Components Showing Strong Growth</h4>
+                    <p class="text-sm text-gray-600">
+                        The Batteries & Power Components sub-industry is experiencing the highest growth at 15.2%, driven by increased
+                        demand for electric vehicles and portable electronics. This segment presents significant opportunities for
+                        suppliers who can scale production quickly.
+                    </p>
+                    <div class="mt-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Growth Trend
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insight card 3 -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:px-6 bg-gradient-to-r from-orange-50 to-amber-50">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-globe-asia text-xl text-orange-500"></i>
+                        </div>
+                        <h3 class="ml-2 text-lg leading-6 font-medium text-gray-900">Regional Shift</h3>
+                    </div>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <h4 class="text-base font-semibold text-gray-900 mb-2">Southeast Asia Manufacturing Expansion</h4>
+                    <p class="text-sm text-gray-600">
+                        Manufacturing capacity is shifting from China to Southeast Asian countries, particularly Vietnam and Thailand.
+                        This regional diversification is affecting supply chains and providing new sourcing opportunities for buyers
+                        looking to mitigate geographical risks.
+                    </p>
+                    <div class="mt-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                            Emerging Trend
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forecast and Recommendations -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Forecast & Recommendations</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">Powered by AI analysis of market trends and historical data</p>
+            </div>
+            <div class="border-t border-gray-200">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="mb-6">
+                        <h4 class="text-base font-semibold text-gray-900 mb-2">12-Month Market Forecast</h4>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-sm text-gray-600 mb-3">
+                                The Electronics & Components industry is projected to grow at 9.5% over the next 12 months, with
+                                semiconductors and battery components leading this growth. Price pressures are expected to persist 
+                                through Q3 2025 before beginning to normalize as new production capacity comes online.
+                            </p>
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                <div class="border-l-4 border-blue-500 pl-3">
+                                    <h5 class="text-sm font-semibold text-gray-900">Growth Forecast</h5>
+                                    <p class="text-sm text-gray-600">+9.5% overall, with +14% for semiconductors</p>
+                                </div>
+                                <div class="border-l-4 border-purple-500 pl-3">
+                                    <h5 class="text-sm font-semibold text-gray-900">Price Forecast</h5>
+                                    <p class="text-sm text-gray-600">+8% in H1, stabilizing in H2 2025</p>
+                                </div>
+                                <div class="border-l-4 border-green-500 pl-3">
+                                    <h5 class="text-sm font-semibold text-gray-900">Supply-Demand</h5>
+                                    <p class="text-sm text-gray-600">Improving to 0.95 ratio by Q4 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-base font-semibold text-gray-900 mb-2">Strategic Recommendations</h4>
+                        <div class="space-y-4">
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h5 class="text-sm font-semibold text-gray-900 flex items-center">
+                                    <span class="flex-shrink-0 h-5 w-5 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                                        <span class="text-blue-600 text-xs">1</span>
+                                    </span>
+                                    For Buyers
+                                </h5>
+                                <ul class="recommendations-for-buyers mt-2 space-y-1 text-sm text-gray-600 list-disc pl-5">
+                                    <li>Secure long-term contracts for semiconductors and battery components to mitigate supply chain risks</li>
+                                    <li>Consider diversifying suppliers geographically, particularly exploring Southeast Asian sources</li>
+                                    <li>Expect longer lead times (45+ days) for semiconductor components and plan inventory accordingly</li>
+                                    <li>Monitor connectors & cables sub-sector for potential cost savings opportunities (currently in surplus)</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h5 class="text-sm font-semibold text-gray-900 flex items-center">
+                                    <span class="flex-shrink-0 h-5 w-5 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                        <span class="text-green-600 text-xs">2</span>
+                                    </span>
+                                    For Suppliers
+                                </h5>
+                                <ul class="recommendations-for-suppliers mt-2 space-y-1 text-sm text-gray-600 list-disc pl-5">
+                                    <li>Focus on scaling production for high-growth segments such as batteries and power components</li>
+                                    <li>Communicate lead times transparently to buyers and provide regular updates</li>
+                                    <li>Consider premium pricing strategies for semiconductor components due to persistent shortages</li>
+                                    <li>Evaluate expansion opportunities in Vietnam and Thailand to align with regional manufacturing shifts</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h5 class="text-sm font-semibold text-gray-900 flex items-center">
+                                    <span class="flex-shrink-0 h-5 w-5 bg-purple-100 rounded-full flex items-center justify-center mr-2">
+                                        <span class="text-purple-600 text-xs">3</span>
+                                    </span>
+                                    Risk Mitigation
+                                </h5>
+                                <ul class="risk-factors mt-2 space-y-1 text-sm text-gray-600 list-disc pl-5">
+                                    <li>Implement buffer stock strategies for critical components, particularly semiconductors</li>
+                                    <li>Develop contingency plans for potential supply disruptions, especially from China</li>
+                                    <li>Monitor geopolitical developments that may impact trade routes and costs</li>
+                                    <li>Consider hedging strategies to manage price volatility for key raw materials</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize price trend chart
+            const priceTrendCtx = document.getElementById('priceTrendChart').getContext('2d');
+            const priceTrendChart = new Chart(priceTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Raw Materials',
+                            data: [100, 102, 105, 108, 112, 115, 118, 120, 122, 125, 128, 130],
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Processed Components',
+                            data: [100, 103, 107, 112, 116, 121, 125, 128, 132, 136, 140, 145],
+                            borderColor: '#8B5CF6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Price Index (Base 100)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize market composition chart
+            const marketCompositionCtx = document.getElementById('marketCompositionChart').getContext('2d');
+            const marketCompositionChart = new Chart(marketCompositionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Semiconductors', 'Displays & Optoelectronics', 'Printed Circuit Boards', 'Batteries & Power', 'Connectors & Cables', 'Others'],
+                    datasets: [
+                        {
+                            data: [28.5, 21.2, 18.7, 14.3, 10.5, 6.8],
+                            backgroundColor: [
+                                '#3B82F6', // blue
+                                '#8B5CF6', // purple
+                                '#10B981', // green
+                                '#F59E0B', // amber
+                                '#EF4444', // red
+                                '#6B7280'  // gray
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label;
+                                    let value = context.raw;
+                                    return `${label}: ${value}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize trade flow chart
+            const tradeFlowCtx = document.getElementById('tradeFlowChart').getContext('2d');
+            const tradeFlowChart = new Chart(tradeFlowCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['China', 'Vietnam', 'Taiwan', 'Malaysia', 'Japan', 'South Korea', 'Mexico', 'Germany'],
+                    datasets: [
+                        {
+                            label: 'Exports (USD Billions)',
+                            data: [320, 45, 130, 40, 85, 95, 25, 50],
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Imports (USD Billions)',
+                            data: [180, 25, 70, 30, 110, 85, 35, 85],
+                            backgroundColor: 'rgba(139, 92, 246, 0.7)',
+                            borderColor: 'rgba(139, 92, 246, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Trade Volume (USD Billions)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize data variables
+            let currentIndustryData = null;
+            let currentCommodityData = null;
+            let currentTradeFlowData = null;
+            let currentInsights = null;
+            
+            // Fetch all data on page load
+            fetchIndustryData();
+            
+            // Handle industry selection change
+            document.getElementById('industry').addEventListener('change', function(e) {
+                console.log('Industry changed to: ' + e.target.value);
+                fetchIndustryData();
+            });
+
+            // Handle region selection change
+            document.getElementById('region').addEventListener('change', function(e) {
+                console.log('Region changed to: ' + e.target.value);
+                fetchIndustryData();
+            });
+
+            // Handle timeframe selection change
+            document.getElementById('timeframe').addEventListener('change', function(e) {
+                console.log('Timeframe changed to: ' + e.target.value);
+                fetchIndustryData();
+            });
+
+            // Handle data source selection change
+            document.getElementById('dataSource').addEventListener('change', function(e) {
+                console.log('Data source changed to: ' + e.target.value);
+                fetchIndustryData();
+            });
+            
+            // Function to fetch industry data from API
+            function fetchIndustryData() {
+                // Show loading indicators
+                document.querySelectorAll('.stat-card').forEach(card => {
+                    card.querySelector('dd').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                });
+                
+                // Get selected values from filters
+                const industry = document.getElementById('industry').value;
+                const region = document.getElementById('region').value;
+                const timeframe = document.getElementById('timeframe').value;
+                const dataSource = document.getElementById('dataSource').value;
+                
+                // Fetch industry trend data
+                fetch(`/api/industry-trends?industry=${industry}&region=${region}&timeframe=${timeframe}&dataSource=${dataSource}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch industry data');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Store current data
+                        currentIndustryData = data;
+                        
+                        // Update key metrics
+                        updateKeyMetrics(data);
+                        
+                        // Update price trend chart
+                        updatePriceTrendChart(data.priceTrends);
+                        
+                        // Update market composition chart
+                        updateMarketCompositionChart(data.marketComposition);
+                        
+                        // Update sub-industry analysis table
+                        updateSubIndustryTable(data.subIndustryAnalysis);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching industry data:', error);
+                        showErrorMessage('Failed to fetch industry trend data. Please try again later.');
+                    });
+                
+                // Fetch commodity data
+                fetch(`/api/industry-trends/commodities?industry=${industry}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch commodity data');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Store current data
+                        currentCommodityData = data;
+                        
+                        // Update commodity section (if implemented)
+                        // updateCommoditySection(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching commodity data:', error);
+                    });
+                
+                // Fetch trade flow data
+                fetch(`/api/industry-trends/trade-flow?industry=${industry}&region=${region}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch trade flow data');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Store current data
+                        currentTradeFlowData = data;
+                        
+                        // Update trade flow chart
+                        updateTradeFlowChart(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching trade flow data:', error);
+                    });
+                
+                // Fetch AI-generated insights
+                fetch(`/api/industry-trends/insights?industry=${industry}&region=${region}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch industry insights');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Store current data
+                        currentInsights = data;
+                        
+                        // Update insights section
+                        updateInsightsSection(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching industry insights:', error);
+                    });
+            }
+            
+            // Update key metrics with data from API
+            function updateKeyMetrics(data) {
+                if (!data || !data.keyMetrics) return;
+                
+                const metrics = data.keyMetrics;
+                
+                // Update market growth rate
+                document.querySelector('.stat-card:nth-child(1) dd').innerHTML = `
+                    <div class="text-2xl font-semibold text-gray-900">
+                        ${metrics.marketGrowthRate.toFixed(1)}%
+                    </div>
+                    <div class="ml-2 flex items-baseline text-sm font-semibold trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span class="sr-only">Increased by</span>
+                        ${(Math.random() * 3).toFixed(1)}%
+                    </div>
+                `;
+                
+                // Update price index
+                document.querySelector('.stat-card:nth-child(2) dd').innerHTML = `
+                    <div class="text-2xl font-semibold text-gray-900">
+                        ${metrics.priceIndex.toFixed(1)}
+                    </div>
+                    <div class="ml-2 flex items-baseline text-sm font-semibold trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span class="sr-only">Increased by</span>
+                        ${(Math.random() * 5).toFixed(1)}
+                    </div>
+                `;
+                
+                // Update supply-demand ratio
+                document.querySelector('.stat-card:nth-child(3) dd').innerHTML = `
+                    <div class="text-2xl font-semibold text-gray-900">
+                        ${metrics.supplyDemandRatio.toFixed(2)}
+                    </div>
+                    <div class="ml-2 flex items-baseline text-sm font-semibold trend-down">
+                        <i class="fas fa-arrow-down"></i>
+                        <span class="sr-only">Decreased by</span>
+                        0.05
+                    </div>
+                `;
+                
+                // Update average lead time
+                document.querySelector('.stat-card:nth-child(4) dd').innerHTML = `
+                    <div class="text-2xl font-semibold text-gray-900">
+                        ${metrics.averageLeadTime}
+                    </div>
+                    <div class="ml-2 flex items-baseline text-sm font-semibold trend-up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span class="sr-only">Increased by</span>
+                        3
+                    </div>
+                `;
+            }
+            
+            // Update price trend chart with data from API
+            function updatePriceTrendChart(priceTrends) {
+                if (!priceTrends || !priceTrends.raw || !priceTrends.processed) return;
+                
+                // Extract labels (dates) and values for the chart
+                const labels = priceTrends.raw.map(item => item.date);
+                const rawData = priceTrends.raw.map(item => item.value);
+                const processedData = priceTrends.processed.map(item => item.value);
+                
+                // Update chart data
+                priceTrendChart.data.labels = labels;
+                priceTrendChart.data.datasets[0].data = rawData;
+                priceTrendChart.data.datasets[1].data = processedData;
+                
+                // Update the chart
+                priceTrendChart.update();
+            }
+            
+            // Update market composition chart with data from API
+            function updateMarketCompositionChart(marketComposition) {
+                if (!marketComposition || !marketComposition.length) return;
+                
+                // Extract labels and values
+                const labels = marketComposition.map(item => item.name);
+                const values = marketComposition.map(item => item.value);
+                
+                // Update chart data
+                marketCompositionChart.data.labels = labels;
+                marketCompositionChart.data.datasets[0].data = values;
+                
+                // Update the chart
+                marketCompositionChart.update();
+            }
+            
+            // Update trade flow chart with data from API
+            function updateTradeFlowChart(tradeFlowData) {
+                if (!tradeFlowData || !tradeFlowData.topExporters || !tradeFlowData.topImporters) return;
+                
+                // Get top 8 exporters and importers
+                const topExporters = tradeFlowData.topExporters.slice(0, 8);
+                const topImporters = tradeFlowData.topImporters.slice(0, 8);
+                
+                // Extract countries and values
+                const countries = topExporters.map(item => item.country);
+                const exportValues = topExporters.map(item => item.exports);
+                const importValues = topImporters
+                    .filter(item => countries.includes(item.country))
+                    .sort((a, b) => countries.indexOf(a.country) - countries.indexOf(b.country))
+                    .map(item => item.imports);
+                
+                // Update chart data
+                tradeFlowChart.data.labels = countries;
+                tradeFlowChart.data.datasets[0].data = exportValues;
+                tradeFlowChart.data.datasets[1].data = importValues;
+                
+                // Update the chart
+                tradeFlowChart.update();
+            }
+            
+            // Update sub-industry analysis table with data from API
+            function updateSubIndustryTable(subIndustryData) {
+                if (!subIndustryData || !subIndustryData.length) return;
+                
+                // Get the table body
+                const tableBody = document.querySelector('table tbody');
+                
+                // Clear existing rows
+                tableBody.innerHTML = '';
+                
+                // Add new rows
+                subIndustryData.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    // Determine trend class and icon
+                    let trendClass, trendIcon;
+                    if (item.priceTrend === 'Rising') {
+                        trendClass = 'trend-up';
+                        trendIcon = 'fa-arrow-up';
+                    } else if (item.priceTrend === 'Falling') {
+                        trendClass = 'trend-down';
+                        trendIcon = 'fa-arrow-down';
+                    } else {
+                        trendClass = 'trend-stable';
+                        trendIcon = 'fa-minus';
+                    }
+                    
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <span class="${item.growth.startsWith('+') ? 'trend-up' : 'trend-down'}">${item.growth}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.marketShare}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <span class="${trendClass}"><i class="fas ${trendIcon} mr-1"></i>${item.priceTrend}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.supplyDemand} ${parseFloat(item.supplyDemand) < 1 ? '(Shortage)' : '(Surplus)'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.leadTime}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Update insights section with data from API
+            function updateInsightsSection(insights) {
+                if (!insights) return;
+                
+                // Update key trends
+                if (insights.keyTrends && insights.keyTrends.length) {
+                    const keyInsightElement = document.querySelector('.insight-card:nth-child(1) p');
+                    if (keyInsightElement) {
+                        keyInsightElement.innerHTML = insights.keyTrends.join('<br>');
+                    }
+                }
+                
+                // Update buyer recommendations
+                if (insights.buyerRecommendations && insights.buyerRecommendations.length) {
+                    const buyerRecommendationsElement = document.querySelector('.recommendations-for-buyers');
+                    if (buyerRecommendationsElement) {
+                        buyerRecommendationsElement.innerHTML = insights.buyerRecommendations
+                            .map(rec => `<li>${rec}</li>`)
+                            .join('');
+                    }
+                }
+                
+                // Update supplier recommendations
+                if (insights.supplierRecommendations && insights.supplierRecommendations.length) {
+                    const supplierRecommendationsElement = document.querySelector('.recommendations-for-suppliers');
+                    if (supplierRecommendationsElement) {
+                        supplierRecommendationsElement.innerHTML = insights.supplierRecommendations
+                            .map(rec => `<li>${rec}</li>`)
+                            .join('');
+                    }
+                }
+                
+                // Update risk factors
+                if (insights.riskFactors && insights.riskFactors.length) {
+                    const riskFactorsElement = document.querySelector('.risk-factors');
+                    if (riskFactorsElement) {
+                        riskFactorsElement.innerHTML = insights.riskFactors
+                            .map(risk => `<li>${risk}</li>`)
+                            .join('');
+                    }
+                }
+            }
+            
+            // Show error message on the page
+            function showErrorMessage(message) {
+                // Create error message element
+                const errorElement = document.createElement('div');
+                errorElement.className = 'mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative';
+                errorElement.innerHTML = `
+                    <strong class="font-bold">Error:</strong>
+                    <span class="block sm:inline">${message}</span>
+                    <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                        <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <title>Close</title>
+                            <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+                        </svg>
+                    </span>
+                `;
+                
+                // Add click handler to close button
+                errorElement.querySelector('svg').addEventListener('click', function() {
+                    errorElement.remove();
+                });
+                
+                // Insert error message at the top of the main content
+                const mainContent = document.querySelector('main');
+                mainContent.insertBefore(errorElement, mainContent.firstChild);
+                
+                // Auto-remove after 10 seconds
+                setTimeout(() => {
+                    if (errorElement.parentNode) {
+                        errorElement.remove();
+                    }
+                }, 10000);
+            }
+            
+            // Add event listeners for buttons
+            document.querySelector('button[aria-label="Export Report"]').addEventListener('click', function() {
+                if (!currentIndustryData) {
+                    showErrorMessage('No data available to export. Please try again later.');
+                    return;
+                }
+                
+                // In a real implementation, this would generate a PDF or Excel file
+                alert('Export functionality would download a report PDF or Excel file in a real implementation.');
+            });
+            
+            document.querySelector('button[aria-label="Refresh Data"]').addEventListener('click', function() {
+                fetchIndustryData();
+            });
+        });
+    </script>
+</body>
+</html>

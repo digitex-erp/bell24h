@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bell24h - Blockchain Verification</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .navbar {
+      background-color: #0d6efd;
+    }
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .blockchain-card {
+      border-left: 5px solid #28a745;
+    }
+    .verification-card {
+      border-left: 5px solid #0d6efd;
+    }
+    .card-header {
+      font-weight: 600;
+    }
+    .blockchain-badge {
+      background-color: #28a745;
+      color: white;
+      padding: 0.4rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-left: 10px;
+    }
+    .blockchain-icon {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+    .copy-btn {
+      cursor: pointer;
+      color: #6c757d;
+    }
+    .copy-btn:hover {
+      color: #0d6efd;
+    }
+    .hash-display {
+      font-family: monospace;
+      font-size: 0.85rem;
+      word-break: break-all;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .alert-verified {
+      background-color: rgba(40, 167, 69, 0.1);
+      border-color: #28a745;
+      color: #155724;
+    }
+    .alert-failed {
+      background-color: rgba(220, 53, 69, 0.1);
+      border-color: #dc3545;
+      color: #721c24;
+    }
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #0d6efd;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <i class="bi bi-bell-fill me-2"></i>
+        Bell24h
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="rfq-dashboard.html">RFQs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="suppliers.html">Suppliers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="blockchain-verification.html">Blockchain</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="messages.html">Messages</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="settings.html">Settings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="logout-link">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="display-5 fw-bold">
+          <i class="bi bi-link-45deg me-2"></i>
+          Blockchain Verification
+        </h1>
+        <p class="lead">Verify and secure your RFQs with Polygon blockchain technology.</p>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="card blockchain-card">
+          <div class="card-header bg-light d-flex align-items-center">
+            <i class="bi bi-shield-lock-fill me-2"></i>
+            Record RFQ on Blockchain
+          </div>
+          <div class="card-body">
+            <p>Store your RFQ securely on the Polygon blockchain network to ensure data integrity and immutability.</p>
+            
+            <form id="record-blockchain-form">
+              <div class="mb-3">
+                <label for="rfq-id" class="form-label">RFQ ID</label>
+                <select class="form-select" id="rfq-id" required>
+                  <option value="">Select an RFQ</option>
+                  <!-- RFQ options will be populated by JavaScript -->
+                </select>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary" id="record-btn">
+                  <i class="bi bi-link-45deg me-2"></i>
+                  Record on Blockchain
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="card verification-card">
+          <div class="card-header bg-light d-flex align-items-center">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            Verify RFQ Integrity
+          </div>
+          <div class="card-body">
+            <p>Verify that your RFQ data has not been tampered with by checking against the blockchain record.</p>
+            
+            <form id="verify-blockchain-form">
+              <div class="mb-3">
+                <label for="verify-rfq-id" class="form-label">RFQ ID</label>
+                <select class="form-select" id="verify-rfq-id" required>
+                  <option value="">Select an RFQ</option>
+                  <!-- RFQ options will be populated by JavaScript -->
+                </select>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-success" id="verify-btn">
+                  <i class="bi bi-check-circle me-2"></i>
+                  Verify Integrity
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light">
+            <i class="bi bi-collection-fill me-2"></i>
+            Blockchain Records
+          </div>
+          <div class="card-body">
+            <div id="blockchain-records-container" class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>RFQ ID</th>
+                    <th>Timestamp</th>
+                    <th>Network</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="blockchain-records">
+                  <!-- Records will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verification result modal -->
+    <div class="modal fade" id="verification-modal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Blockchain Verification Result</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="verification-result">
+            <!-- Verification result will be displayed here -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Record result modal -->
+    <div class="modal fade" id="record-modal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Blockchain Record Result</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="record-result">
+            <!-- Record result will be displayed here -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="mt-5 py-3 bg-light">
+    <div class="container text-center">
+      <p class="mb-0">&copy; 2025 Bell24h.com - Secure B2B Marketplace with Blockchain Integration</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      fetch('/api/auth/user')
+        .then(response => {
+          if (!response.ok) {
+            window.location.href = 'login.html';
+            throw new Error('User not logged in');
+          }
+          return response.json();
+        })
+        .then(user => {
+          // User is logged in, continue loading the page
+          loadUserRfqs();
+          loadBlockchainRecords();
+        })
+        .catch(error => {
+          console.error('Auth error:', error);
+        });
+
+      // Load user's RFQs
+      function loadUserRfqs() {
+        fetch('/api/rfqs')
+          .then(response => response.json())
+          .then(rfqs => {
+            const rfqSelects = document.querySelectorAll('#rfq-id, #verify-rfq-id');
+            
+            rfqSelects.forEach(select => {
+              // Clear existing options except the first one
+              while (select.options.length > 1) {
+                select.remove(1);
+              }
+              
+              // Add RFQ options
+              rfqs.forEach(rfq => {
+                const option = document.createElement('option');
+                option.value = rfq.id;
+                option.textContent = `${rfq.referenceNumber}: ${rfq.title}`;
+                select.appendChild(option);
+              });
+            });
+          })
+          .catch(error => {
+            console.error('Error loading RFQs:', error);
+          });
+      }
+
+      // Load blockchain records
+      function loadBlockchainRecords() {
+        fetch('/api/blockchain/records')
+          .then(response => response.json())
+          .then(records => {
+            const recordsContainer = document.getElementById('blockchain-records');
+            recordsContainer.innerHTML = '';
+            
+            if (records.length === 0) {
+              recordsContainer.innerHTML = `
+                <tr>
+                  <td colspan="5" class="text-center py-3">
+                    <i class="bi bi-info-circle me-2"></i>
+                    No blockchain records found. Record an RFQ to see it here.
+                  </td>
+                </tr>
+              `;
+              return;
+            }
+            
+            records.forEach(record => {
+              const date = new Date(record.timestamp);
+              const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+              
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${record.rfqId}</td>
+                <td>${formattedDate}</td>
+                <td>${record.network}</td>
+                <td>
+                  <span class="badge ${record.status === 'confirmed' ? 'bg-success' : record.status === 'pending' ? 'bg-warning' : 'bg-secondary'}">
+                    ${record.status.toUpperCase()}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary view-record" data-id="${record.rfqId}">
+                    <i class="bi bi-eye"></i> View
+                  </button>
+                  <button class="btn btn-sm btn-outline-success verify-record" data-id="${record.rfqId}">
+                    <i class="bi bi-check-circle"></i> Verify
+                  </button>
+                </td>
+              `;
+              recordsContainer.appendChild(row);
+            });
+            
+            // Add event listeners to the view and verify buttons
+            document.querySelectorAll('.view-record').forEach(button => {
+              button.addEventListener('click', function() {
+                const rfqId = this.getAttribute('data-id');
+                viewRecord(rfqId);
+              });
+            });
+            
+            document.querySelectorAll('.verify-record').forEach(button => {
+              button.addEventListener('click', function() {
+                const rfqId = this.getAttribute('data-id');
+                verifyRfq(rfqId);
+              });
+            });
+          })
+          .catch(error => {
+            console.error('Error loading blockchain records:', error);
+            const recordsContainer = document.getElementById('blockchain-records');
+            recordsContainer.innerHTML = `
+              <tr>
+                <td colspan="5" class="text-center py-3 text-danger">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  Error loading blockchain records. Please try again later.
+                </td>
+              </tr>
+            `;
+          });
+      }
+
+      // Record RFQ on blockchain
+      document.getElementById('record-blockchain-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const rfqId = document.getElementById('rfq-id').value;
+        if (!rfqId) {
+          alert('Please select an RFQ');
+          return;
+        }
+        
+        const recordBtn = document.getElementById('record-btn');
+        const originalBtnText = recordBtn.innerHTML;
+        recordBtn.disabled = true;
+        recordBtn.innerHTML = '<div class="loader"></div> Recording...';
+        
+        fetch('/api/blockchain/record', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ rfqId: parseInt(rfqId) })
+        })
+        .then(response => response.json())
+        .then(result => {
+          recordBtn.disabled = false;
+          recordBtn.innerHTML = originalBtnText;
+          
+          const recordResult = document.getElementById('record-result');
+          
+          if (result.message && result.record) {
+            recordResult.innerHTML = `
+              <div class="alert alert-success">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                ${result.message}
+              </div>
+              <div class="card mb-3">
+                <div class="card-header bg-light">RFQ Record Details</div>
+                <div class="card-body">
+                  <p><strong>RFQ ID:</strong> ${result.record.rfqId}</p>
+                  <p><strong>Transaction Hash:</strong></p>
+                  <div class="hash-display mb-2">
+                    ${result.record.txHash}
+                    <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.record.txHash}"></i>
+                  </div>
+                  <p><strong>Blockchain Hash:</strong></p>
+                  <div class="hash-display mb-2">
+                    ${result.record.blockchainHash}
+                    <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.record.blockchainHash}"></i>
+                  </div>
+                  <p><strong>Network:</strong> ${result.record.network}</p>
+                  <p><strong>Status:</strong> 
+                    <span class="badge ${result.record.status === 'confirmed' ? 'bg-success' : 'bg-warning'}">
+                      ${result.record.status.toUpperCase()}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                Your RFQ has been successfully recorded on the blockchain. The transaction is currently pending confirmation.
+              </div>
+            `;
+          } else {
+            recordResult.innerHTML = `
+              <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                ${result.message || 'Failed to record RFQ on blockchain'}
+              </div>
+            `;
+          }
+          
+          // Add clipboard functionality
+          document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const text = this.getAttribute('data-clipboard');
+              navigator.clipboard.writeText(text).then(() => {
+                this.classList.remove('bi-clipboard');
+                this.classList.add('bi-clipboard-check');
+                setTimeout(() => {
+                  this.classList.remove('bi-clipboard-check');
+                  this.classList.add('bi-clipboard');
+                }, 2000);
+              });
+            });
+          });
+          
+          // Show the modal
+          const recordModal = new bootstrap.Modal(document.getElementById('record-modal'));
+          recordModal.show();
+          
+          // Reload blockchain records
+          loadBlockchainRecords();
+        })
+        .catch(error => {
+          console.error('Error recording RFQ:', error);
+          recordBtn.disabled = false;
+          recordBtn.innerHTML = originalBtnText;
+          
+          const recordResult = document.getElementById('record-result');
+          recordResult.innerHTML = `
+            <div class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              An error occurred while recording the RFQ on the blockchain. Please try again later.
+            </div>
+          `;
+          
+          const recordModal = new bootstrap.Modal(document.getElementById('record-modal'));
+          recordModal.show();
+        });
+      });
+
+      // Verify RFQ on blockchain
+      document.getElementById('verify-blockchain-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const rfqId = document.getElementById('verify-rfq-id').value;
+        if (!rfqId) {
+          alert('Please select an RFQ');
+          return;
+        }
+        
+        verifyRfq(rfqId);
+      });
+
+      // View blockchain record
+      function viewRecord(rfqId) {
+        fetch(`/api/blockchain/records/${rfqId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Record not found');
+            }
+            return response.json();
+          })
+          .then(record => {
+            const date = new Date(record.timestamp);
+            const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            
+            const recordResult = document.getElementById('record-result');
+            recordResult.innerHTML = `
+              <div class="card mb-3">
+                <div class="card-header bg-light">Blockchain Record Details</div>
+                <div class="card-body">
+                  <p><strong>RFQ ID:</strong> ${record.rfqId}</p>
+                  <p><strong>Transaction Hash:</strong></p>
+                  <div class="hash-display mb-2">
+                    ${record.txHash}
+                    <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${record.txHash}"></i>
+                  </div>
+                  <p><strong>Blockchain Hash:</strong></p>
+                  <div class="hash-display mb-2">
+                    ${record.blockchainHash}
+                    <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${record.blockchainHash}"></i>
+                  </div>
+                  <p><strong>Network:</strong> ${record.network}</p>
+                  <p><strong>Status:</strong> 
+                    <span class="badge ${record.status === 'confirmed' ? 'bg-success' : record.status === 'pending' ? 'bg-warning' : 'bg-secondary'}">
+                      ${record.status.toUpperCase()}
+                    </span>
+                  </p>
+                  <p><strong>Timestamp:</strong> ${formattedDate}</p>
+                </div>
+              </div>
+              <div class="d-grid gap-2">
+                <button class="btn btn-success" onclick="verifyRfq(${record.rfqId})">
+                  <i class="bi bi-check-circle me-2"></i>
+                  Verify This RFQ
+                </button>
+              </div>
+            `;
+            
+            // Add clipboard functionality
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+              btn.addEventListener('click', function() {
+                const text = this.getAttribute('data-clipboard');
+                navigator.clipboard.writeText(text).then(() => {
+                  this.classList.remove('bi-clipboard');
+                  this.classList.add('bi-clipboard-check');
+                  setTimeout(() => {
+                    this.classList.remove('bi-clipboard-check');
+                    this.classList.add('bi-clipboard');
+                  }, 2000);
+                });
+              });
+            });
+            
+            // Show the modal
+            const recordModal = new bootstrap.Modal(document.getElementById('record-modal'));
+            recordModal.show();
+          })
+          .catch(error => {
+            console.error('Error viewing record:', error);
+            const recordResult = document.getElementById('record-result');
+            recordResult.innerHTML = `
+              <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                No blockchain record found for this RFQ. Please record it first.
+              </div>
+            `;
+            
+            const recordModal = new bootstrap.Modal(document.getElementById('record-modal'));
+            recordModal.show();
+          });
+      }
+
+      // Verify RFQ against blockchain
+      function verifyRfq(rfqId) {
+        const verifyResult = document.getElementById('verification-result');
+        verifyResult.innerHTML = `
+          <div class="text-center py-4">
+            <div class="loader"></div>
+            <p class="mb-0 mt-2">Verifying RFQ integrity on the blockchain...</p>
+          </div>
+        `;
+        
+        const verificationModal = new bootstrap.Modal(document.getElementById('verification-modal'));
+        verificationModal.show();
+        
+        fetch(`/api/blockchain/verify/${rfqId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Verification failed');
+            }
+            return response.json();
+          })
+          .then(result => {
+            const date = new Date(result.blockchainRecord.timestamp);
+            const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            
+            if (result.verified) {
+              verifyResult.innerHTML = `
+                <div class="alert alert-verified">
+                  <i class="bi bi-shield-check fs-3 me-2 align-middle"></i>
+                  <strong>Verification Successful!</strong> The RFQ data integrity is verified against the blockchain record.
+                </div>
+                
+                <div class="card mb-3">
+                  <div class="card-header bg-light">Blockchain Record Details</div>
+                  <div class="card-body">
+                    <p><strong>RFQ ID:</strong> ${result.rfqId}</p>
+                    <p><strong>Transaction Hash:</strong></p>
+                    <div class="hash-display mb-2">
+                      ${result.blockchainRecord.txHash}
+                      <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.blockchainRecord.txHash}"></i>
+                    </div>
+                    <p><strong>Blockchain Hash:</strong></p>
+                    <div class="hash-display mb-2">
+                      ${result.blockchainRecord.blockchainHash}
+                      <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.blockchainRecord.blockchainHash}"></i>
+                    </div>
+                    <p><strong>Network:</strong> ${result.blockchainRecord.network}</p>
+                    <p><strong>Status:</strong> 
+                      <span class="badge ${result.blockchainRecord.status === 'confirmed' ? 'bg-success' : 'bg-warning'}">
+                        ${result.blockchainRecord.status.toUpperCase()}
+                      </span>
+                    </p>
+                    <p><strong>Timestamp:</strong> ${formattedDate}</p>
+                  </div>
+                </div>
+                
+                <div class="alert alert-info">
+                  <i class="bi bi-info-circle-fill me-2"></i>
+                  What does this mean? The RFQ data stored in our system matches exactly with the hash stored on the blockchain. This guarantees that the RFQ details have not been altered since they were recorded.
+                </div>
+              `;
+            } else {
+              verifyResult.innerHTML = `
+                <div class="alert alert-failed">
+                  <i class="bi bi-shield-exclamation fs-3 me-2 align-middle"></i>
+                  <strong>Verification Failed!</strong> The RFQ data does not match the blockchain record.
+                </div>
+                
+                <div class="card mb-3">
+                  <div class="card-header bg-light">Blockchain Record Details</div>
+                  <div class="card-body">
+                    <p><strong>RFQ ID:</strong> ${result.rfqId}</p>
+                    <p><strong>Transaction Hash:</strong></p>
+                    <div class="hash-display mb-2">
+                      ${result.blockchainRecord.txHash}
+                      <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.blockchainRecord.txHash}"></i>
+                    </div>
+                    <p><strong>Blockchain Hash:</strong></p>
+                    <div class="hash-display mb-2">
+                      ${result.blockchainRecord.blockchainHash}
+                      <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.blockchainRecord.blockchainHash}"></i>
+                    </div>
+                    <p><strong>Network:</strong> ${result.blockchainRecord.network}</p>
+                    <p><strong>Status:</strong> 
+                      <span class="badge ${result.blockchainRecord.status === 'confirmed' ? 'bg-success' : 'bg-warning'}">
+                        ${result.blockchainRecord.status.toUpperCase()}
+                      </span>
+                    </p>
+                    <p><strong>Timestamp:</strong> ${formattedDate}</p>
+                  </div>
+                </div>
+                
+                <div class="alert alert-warning">
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                  What does this mean? The current RFQ data in our system does not match with the hash stored on the blockchain. This may indicate that the RFQ details have been altered since they were recorded.
+                </div>
+              `;
+            }
+            
+            // Add clipboard functionality
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+              btn.addEventListener('click', function() {
+                const text = this.getAttribute('data-clipboard');
+                navigator.clipboard.writeText(text).then(() => {
+                  this.classList.remove('bi-clipboard');
+                  this.classList.add('bi-clipboard-check');
+                  setTimeout(() => {
+                    this.classList.remove('bi-clipboard-check');
+                    this.classList.add('bi-clipboard');
+                  }, 2000);
+                });
+              });
+            });
+          })
+          .catch(error => {
+            console.error('Verification error:', error);
+            verifyResult.innerHTML = `
+              <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Error verifying RFQ: ${error.message || 'No blockchain record found for this RFQ'}
+              </div>
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                To verify an RFQ, it must first be recorded on the blockchain.
+              </div>
+            `;
+          });
+      }
+
+      // Logout functionality
+      document.getElementById('logout-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        fetch('/api/auth/logout', {
+          method: 'POST'
+        })
+        .then(() => {
+          window.location.href = 'login.html';
+        })
+        .catch(error => {
+          console.error('Logout error:', error);
+        });
+      });
+    });
+
+    // Global function for verify button in view modal
+    function verifyRfq(rfqId) {
+      const verifyResult = document.getElementById('verification-result');
+      verifyResult.innerHTML = `
+        <div class="text-center py-4">
+          <div class="loader"></div>
+          <p class="mb-0 mt-2">Verifying RFQ integrity on the blockchain...</p>
+        </div>
+      `;
+      
+      const verificationModal = new bootstrap.Modal(document.getElementById('verification-modal'));
+      verificationModal.show();
+      
+      fetch(`/api/blockchain/verify/${rfqId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Verification failed');
+          }
+          return response.json();
+        })
+        .then(result => {
+          const date = new Date(result.blockchainRecord.timestamp);
+          const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+          
+          if (result.verified) {
+            verifyResult.innerHTML = `
+              <div class="alert alert-verified">
+                <i class="bi bi-shield-check fs-3 me-2 align-middle"></i>
+                <strong>Verification Successful!</strong> The RFQ data integrity is verified against the blockchain record.
+              </div>
+              
+              <div class="card mb-3">
+                <div class="card-header bg-light">Blockchain Record Details</div>
+                <div class="card-body">
+                  <p><strong>RFQ ID:</strong> ${result.rfqId}</p>
+                  <p><strong>Transaction Hash:</strong></p>
+                  <div class="hash-display mb-2">
+                    ${result.blockchainRecord.txHash}
+                    <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.blockchainRecord.txHash}"></i>
+                  </div>
+                  <p><strong>Blockchain Hash:</strong></p>
+                  <div class="hash-display mb-2">
+                    ${result.blockchainRecord.blockchainHash}
+                    <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.blockchainRecord.blockchainHash}"></i>
+                  </div>
+                  <p><strong>Network:</strong> ${result.blockchainRecord.network}</p>
+                  <p><strong>Status:</strong> 
+                    <span class="badge ${result.blockchainRecord.status === 'confirmed' ? 'bg-success' : 'bg-warning'}">
+                      ${result.blockchainRecord.status.toUpperCase()}
+                    </span>
+                  </p>
+                  <p><strong>Timestamp:</strong> ${formattedDate}</p>
+                </div>
+              </div>
+              
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                What does this mean? The RFQ data stored in our system matches exactly with the hash stored on the blockchain. This guarantees that the RFQ details have not been altered since they were recorded.
+              </div>
+            `;
+          } else {
+            verifyResult.innerHTML = `
+              <div class="alert alert-failed">
+                <i class="bi bi-shield-exclamation fs-3 me-2 align-middle"></i>
+                <strong>Verification Failed!</strong> The RFQ data does not match the blockchain record.
+              </div>
+              
+              <div class="card mb-3">
+                <div class="card-header bg-light">Blockchain Record Details</div>
+                <div class="card-body">
+                  <p><strong>RFQ ID:</strong> ${result.rfqId}</p>
+                  <p><strong>Transaction Hash:</strong></p>
+                  <div class="hash-display mb-2">
+                    ${result.blockchainRecord.txHash}
+                    <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.blockchainRecord.txHash}"></i>
+                  </div>
+                  <p><strong>Blockchain Hash:</strong></p>
+                  <div class="hash-display mb-2">
+                    ${result.blockchainRecord.blockchainHash}
+                    <i class="bi bi-clipboard ms-2 copy-btn" data-clipboard="${result.blockchainRecord.blockchainHash}"></i>
+                  </div>
+                  <p><strong>Network:</strong> ${result.blockchainRecord.network}</p>
+                  <p><strong>Status:</strong> 
+                    <span class="badge ${result.blockchainRecord.status === 'confirmed' ? 'bg-success' : 'bg-warning'}">
+                      ${result.blockchainRecord.status.toUpperCase()}
+                    </span>
+                  </p>
+                  <p><strong>Timestamp:</strong> ${formattedDate}</p>
+                </div>
+              </div>
+              
+              <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                What does this mean? The current RFQ data in our system does not match with the hash stored on the blockchain. This may indicate that the RFQ details have been altered since they were recorded.
+              </div>
+            `;
+          }
+          
+          // Add clipboard functionality
+          document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const text = this.getAttribute('data-clipboard');
+              navigator.clipboard.writeText(text).then(() => {
+                this.classList.remove('bi-clipboard');
+                this.classList.add('bi-clipboard-check');
+                setTimeout(() => {
+                  this.classList.remove('bi-clipboard-check');
+                  this.classList.add('bi-clipboard');
+                }, 2000);
+              });
+            });
+          });
+        })
+        .catch(error => {
+          console.error('Verification error:', error);
+          verifyResult.innerHTML = `
+            <div class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              Error verifying RFQ: ${error.message || 'No blockchain record found for this RFQ'}
+            </div>
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle-fill me-2"></i>
+              To verify an RFQ, it must first be recorded on the blockchain.
+            </div>
+          `;
+        });
+    }
+  </script>
+</body>
+</html>
