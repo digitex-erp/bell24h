@@ -45,6 +45,7 @@ function MainLayout({ children }: MainLayoutProps) {
     { name: 'Wallet', href: '/wallet', icon: Wallet },
     { name: 'Analytics', href: '/analytics', icon: BarChart },
     { name: 'Voice Analytics', href: '/voice-analytics', icon: MicVocal },
+    { name: 'Voice Tutorials', href: '/voice-tutorials', icon: Headphones },
   ];
 
   const MobileNavigation = () => (

@@ -7,6 +7,8 @@ import { createRFQBlockchainRecord, createContractBlockchainRecord, createPaymen
 import { insertRfqSchema, insertBidSchema, insertContractSchema, insertMessageSchema, insertTransactionSchema } from '../shared/schema';
 import analyticsRoutes from './routes/analytics';
 import voiceAnalyticsRoutes from './routes/voice-analytics';
+import organizationRoutes from './routes/organizations';
+import permissionRoutes from './routes/permissions';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
@@ -17,6 +19,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Set up voice analytics routes
   app.use('/api', voiceAnalyticsRoutes);
+  
+  // Set up organization and team routes
+  app.use(organizationRoutes);
+  
+  // Set up permission routes
+  app.use(permissionRoutes);
 
   // ===== RFQ Routes =====
   app.get('/api/rfqs', async (req, res, next) => {
