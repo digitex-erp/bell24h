@@ -1,0 +1,167 @@
+Here's a structured approach to implement and test your Perplexity API integration, combining industry best practices from API testing frameworks:
+
+## API Integration Testing Strategy
+**Core Components to Validate:**
+1. Authentication & Configuration
+2. Primary Perplexity workflow
+3. OpenAI fallback mechanism
+4. Error handling & data consistency
+
+### 1. Test Environment Setup ([1][2])
+**Configuration Checklist:**
+```typescript
+// Sample environment validation test
+describe('Environment Configuration', () => {
+  test('Should load Perplexity API key from env', () => {
+    expect(process.env.PERPLEXITY_API_KEY).toBeDefined();
+  });
+  
+  test('Should default to OpenAI if no Perplexity key', () => {
+    process.env.PERPLEXITY_API_KEY = '';
+    const service = new IndustryTrendsService();
+    expect(service.aiProvider).toBeInstanceOf(OpenAIService);
+  });
+});
+```
+*Key Considerations:*  
+- Isolate test environments using Docker containers[2]  
+- Implement feature flags for API switching  
+- Use mock servers for rate limiting scenarios[6]
+
+### 2. Test Case Design Matrix ([2][3])
+
+| Priority | Test Scenario | Expected Outcome | Validation Points |
+|----------|---------------|------------------|-------------------|
+| Critical | Successful Perplexity response | Structured JSON output | - Data schema validation- Response latency - Consistent output format |
+| Medium | Mixed provider responses | Unified data structure | - Field alignment check- Content quality assessment |
+| Low | High-load scenario | Graceful degradation | - Queue management- Rate limit headers |
+
+### 3. Automation Framework ([2][4])
+**Suggested Stack:**
+```bash
+# Test runner configuration example
+npm install --save-dev jest ts-jest @types/jest supertest
+```
+
+**CI/CD Pipeline Integration:**
+```yaml
+# GitHub Actions snippet
+- name: Run API Tests
+  env:
+    PERPLEXITY_API_KEY: ${{ secrets.TEST_PPLX_KEY }}
+    OPENAI_KEY: ${{ secrets.TEST_OPENAI_KEY }}
+  run: |
+    jest services/ --coverage --passWithNoTests
+```
+
+### 4. Monitoring Implementation ([2][6])
+**Key Metrics Dashboard:**
+```typescript
+// Performance tracking implementation
+class AnalyticsMiddleware {
+  trackResponse(provider: 'perplexity' | 'openai') {
+    const metrics = {
+      response_time: Date.now() - this.startTime,
+      success: !this.isError,
+      tokens_used: this.response?.usage?.total_tokens
+    };
+    // Send to monitoring service
+  }
+}
+```
+
+**Recommended Alerts:**
+1. Perplexity failure rate >5%/hour
+2. Fallback activation frequency
+3. Schema validation errors
+4. 95th percentile latency >3s
+
+## Best Practices for Maintenance ([3][6])
+1. **Version Control:** Maintain separate OpenAPI specs for each provider  
+2. **Chaos Testing:** Regularly disable Perplexity API to validate fallbacks  
+3. **Golden Dataset:** Preserve historical responses for regression testing  
+4. **Parameterization:** Externalize test data using JSON/YAML files
+
+**Example Maintenance Script:**
+```typescript
+// Schema validation test
+const validateTrendSchema = (response) => {
+  const schema = Joi.object({
+    trends: Joi.array().items(
+      Joi.object({
+        name: Joi.string().required(),
+        confidence: Joi.number().min(0).max(1).required(),
+        drivers: Joi.array().items(Joi.string()).min(3)
+      })
+    ).required().length(5)
+  });
+  return schema.validate(response);
+};
+```
+
+This approach ensures comprehensive validation of your integration while maintaining flexibility for future AI provider additions.
+
+Citations:
+[1] https://www.xenonstack.com/insights/what-is-api-testing
+[2] https://zuplo.com/blog/2025/02/01/end-to-end-api-testing-guide
+[3] https://luxequality.com/blog/api-integration-testing/
+[4] https://zuplo.com/blog/2025/03/28/perplexity-api
+[5] https://apipark.com/blog/3966
+[6] https://www.stackhawk.com/blog/creating-test-cases-for-api-testing-a-comprehensive-guide-with-examples/
+[7] https://www.merge.dev/blog/api-integration-testing
+[8] https://appwrite.io/docs/products/ai/integrations/perplexity
+[9] https://learning.postman.com/docs/tests-and-scripts/test-apis/integration-testing/
+[10] https://www.pynt.io/learning-hub/api-testing-guide/top-10-api-testing-best-practices
+[11] https://www.feathery.io/integrations/perplexity
+[12] https://www.weetechsolution.com/blog/steps-to-write-test-script-for-api-testing
+[13] https://apix-drive.com/en/blog/other/workflow-api-integration
+[14] https://pipedream.com/apps/openai/integrations/perplexity
+[15] https://www.devzery.com/post/how-to-identify-and-create-api-test-automation-scenarios-step-by-step-guide
+[16] https://docs.medusajs.com/learn/debugging-and-testing/testing-tools/integration-tests/workflows
+[17] https://wearebrain.com/blog/api-testing-postman-github/
+[18] https://learning.postman.com/docs/tests-and-scripts/test-apis/end-to-end-testing/
+[19] https://cyclr.com/blog/test-and-tweak-your-api-integration-workflows-with-postman
+[20] https://tyk.io/blog/res-integration-testing-for-api-management/
+[21] https://www.stackhawk.com/blog/creating-test-cases-for-api-testing-a-comprehensive-guide-with-examples/
+[22] https://www.browserstack.com/guide/integration-testing
+[23] https://www.cflowapps.com/workflow/workflow-api/
+[24] https://www.frugaltesting.com/blog/best-practices-for-api-test-automation-using-postman
+[25] https://dev.to/asaianudeep/api-integration-testing-made-easy-1lcp
+[26] https://dev.to/enbis/setting-up-github-actions-workflows-to-automate-the-api-tests-56m8
+[27] https://www.postman.com/api-platform/api-test-automation/
+[28] https://community.atlassian.com/forums/App-Central-articles/API-Testing-Guide-Types-Tools-and-Best-Practices-for-2025/ba-p/2917700
+[29] https://www.getambassador.io/blog/effective-guide-to-api-automation-testing
+[30] https://docs.perplexity.ai/home
+[31] https://community.openai.com/t/fine-tuned-perplexity/16326
+[32] https://docs.perplexity.ai/faq/faq
+[33] https://docs.perplexity.ai/feature-roadmap
+[34] https://badia-kharroubi.gitbooks.io/microservices-architecture/patterns/communication-patterns/fallback-pattern.html
+[35] https://magicaidocs.liquid-themes.com/perplexity-integration/
+[36] https://www.byteplus.com/en/topic/419675
+[37] https://api7.ai/blog/fallback-api-resilience-design-patterns
+[38] https://docs.livekit.io/agents/integrations/llm/perplexity/
+[39] https://docs.perplexity.ai/api-reference/chat-completions
+[40] https://billennium.com/best-practices-for-building-robust-and-resilient-apis/
+[41] https://github.com/instructor-ai/instructor/issues/1005
+[42] https://learning.postman.com/docs/tests-and-scripts/write-scripts/test-scripts/
+[43] https://katalon.com/resources-center/blog/test-cases-for-api-testing
+[44] https://learning.postman.com/docs/tests-and-scripts/write-scripts/test-examples/
+[45] https://gocobalt.io/blog/api-integration-testing/
+[46] https://github.com/helallao/perplexity-ai
+[47] https://testsigma.com/blog/test-cases-for-api-testing/
+[48] https://www.opkey.com/blog/integration-testing-a-comprehensive-guide-with-best-practices
+[49] https://zuplo.com/blog/2025/03/28/perplexity-api
+[50] https://saigontechnology.com/blog/how-to-automate-api-testing-like-a-piece-of-cake/
+[51] https://www.pynt.io/learning-hub/api-testing-guide/top-10-api-testing-best-practices
+[52] https://www.perplexity.ai/hub/blog/introducing-pplx-api
+[53] https://testfully.io/blog/postman-api-testing/
+[54] https://www.youtube.com/watch?v=rf4kwWUgGSc
+[55] https://learn.cuppa.ai/getting-started/perplexity-api
+[56] https://community.make.com/t/perplexity-module-timing-out/55528
+[57] https://apipark.com/techblog/en/understanding-fallback-configuration-unify-best-practices-for-enhanced-user-experience/
+[58] https://www.globalapptesting.com/blog/how-to-write-manual-test-cases-for-api-testing
+[59] https://broadhurst.digital/blog/perplexity-api-add-on-for-google-sheets-user-guide
+[60] https://luxequality.com/blog/api-integration-testing/
+
+---
+Answer from Perplexity: pplx.ai/share

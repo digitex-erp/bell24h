@@ -1,0 +1,139 @@
+modules = ["nodejs-20", "postgresql-16"]
+
+[nix]
+channel = "stable-24_05"
+
+[[ports]]
+localPort = 3000
+externalPort = 80
+
+[[ports]]
+localPort = 5000
+externalPort = 5000
+
+[workflows]
+runButton = "Run Application"
+
+[[workflows.workflow]]
+name = "Run Application"
+author = 41978031
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx tsx server/index.ts"
+
+[[workflows.workflow]]
+name = "Run Tests"
+author = 41978031
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/api-health.test.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/perplexity-integration.test.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/perplexity-fallback.test.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/run-all-tests.js"
+
+[[workflows.workflow]]
+name = "Run Full Test Suite"
+author = 41978031
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run test"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run test:api"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm test:integration"
+
+[[workflows.workflow]]
+name = "Full Test Suite"
+author = 41978031
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/run-all-tests.js"
+
+[[workflows.workflow]]
+name = "Run Test Suite"
+author = 41978031
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/run-all-tests.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/api-health.test.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/perplexity-integration.test.js "
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/perplexity-fallback.test.js"
+
+[[workflows.workflow]]
+name = "Preview Verification"
+author = 41978031
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node start-preview.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/api-health.test.js"
+
+[[workflows.workflow]]
+name = "Run All Tests"
+author = 41978031
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/run-all-tests.js"
+
+[[workflows.workflow]]
+name = "Test Suite"
+author = 41978031
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/api-health.test.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/perplexity-integration.test.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/perplexity-fallback.test.js"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node test/run-all-tests.js"
