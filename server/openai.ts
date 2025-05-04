@@ -1,215 +1,212 @@
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
-// Initialize OpenAI client
+// Create OpenAI client
+// Note: This assumes the OpenAI API key is provided in environment variables
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Process voice RFQ to convert audio to text and extract key information
-export async function processVoiceRFQ(audioBase64: string): Promise<{
-  text: string;
-  extractedInfo: {
-    title: string;
-    description: string;
-    category: string;
-    quantity: number;
-    budget?: number;
-    deliveryDeadline?: string;
-  };
-}> {
+// Check if OpenAI API key exists
+if (!process.env.OPENAI_API_KEY) {
+  console.warn('OPENAI_API_KEY is not set. Voice and AI features will not work properly.');
+}
+
+/**
+ * Processes a voice-based RFQ submission
+ * @param audioBase64 Base64-encoded audio data
+ * @returns Transcription and extracted RFQ information
+ */
+export async function processVoiceRFQ(audioBase64: string) {
   try {
-    // Convert base64 audio to buffer for OpenAI
-    const buffer = Buffer.from(audioBase64, 'base64');
-    const audioBlob = new Blob([buffer]);
-    
-    // Transcribe audio to text
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API key is not configured.');
+    }
+
+    // Convert base64 to Buffer
+    const audioBuffer = Buffer.from(audioBase64, 'base64');
+
+    // Create a temporary file with the audio data
+    const tempFilePath = `/tmp/voice-rfq-${Date.now()}.webm`;
+    require('fs').writeFileSync(tempFilePath, audioBuffer);
+
+    // Transcribe the audio
     const transcription = await openai.audio.transcriptions.create({
-      file: audioBlob as any,
-      model: "whisper-1",
+      file: require('fs').createReadStream(tempFilePath),
+      model: 'whisper-1',
     });
 
-    const transcribedText = transcription.text;
+    // Clean up temp file
+    require('fs').unlinkSync(tempFilePath);
 
-    // Extract RFQ information using GPT-4
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    // Extract RFQ information from transcription
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o', // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
         {
-          role: "system",
-          content: `You are an assistant that extracts key information from voice RFQs (Request for Quotes). 
-          Extract the following information and format as JSON:
-          - title: A concise title for the RFQ (string)
-          - description: Full description of the requirements (string)
-          - category: The product/service category (string)
-          - quantity: The quantity required (number)
-          - budget: The budget if mentioned (number, optional)
-          - deliveryDeadline: The delivery deadline if mentioned (string in YYYY-MM-DD format, optional)
+          role: 'system',
+          content: `You are an AI expert at extracting RFQ (Request for Quotation) details from spoken text. 
+          Extract the following information in JSON format:
+          - title: A concise title for the RFQ
+          - description: Detailed description of what is being requested
+          - category: The product or service category (e.g., "Electronics", "Manufacturing", "Software")
+          - quantity: The quantity being requested (numeric)
+          - budget: The budget or price range (numeric, without currency symbols)
+          - deliveryDeadline: Delivery deadline formatted as YYYY-MM-DD or null if not mentioned
           
-          If information is not explicitly provided, make reasonable inferences from context.`
+          Only include these fields in your response, formatted as a valid JSON object.`
         },
         {
-          role: "user",
-          content: transcribedText
+          role: 'user',
+          content: transcription.text
         }
       ],
-      response_format: { type: "json_object" }
+      response_format: { type: 'json_object' }
     });
 
-    const extractedInfo = JSON.parse(response.choices[0].message.content);
+    // Parse the JSON response
+    const extractedInfo = JSON.parse(completion.choices[0].message.content || '{}');
 
     return {
-      text: transcribedText,
+      text: transcription.text,
       extractedInfo
     };
   } catch (error: any) {
-    console.error("Error processing voice RFQ:", error);
+    console.error('Error processing voice RFQ:', error);
     throw new Error(`Failed to process voice RFQ: ${error.message}`);
   }
 }
 
-// Analyze supplier risk based on available data
-export async function analyzeSupplierRisk(supplierData: {
-  supplier: string;
-  company: string;
-  industry: string;
-  years_in_business: number;
-  previous_contracts?: number;
-  delivery_performance?: number;
-}): Promise<{
-  supplier: string;
-  company: string;
-  risk_score: number;
-  analysis: string;
-  risk_factors: string[];
-  recommendations: string[];
-}> {
+/**
+ * Analyzes supplier risk based on provided data
+ * @param supplierData Supplier information
+ * @returns Risk analysis with score and recommendations
+ */
+export async function analyzeSupplierRisk(supplierData: Record<string, any>) {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API key is not configured.');
+    }
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o', // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
         {
-          role: "system",
-          content: `You are a risk analysis expert for B2B procurement. Analyze the supplier data and provide:
-          1. A risk score from 0-100 (where 0 is lowest risk, 100 is highest)
-          2. A brief analysis paragraph
-          3. Key risk factors (3-5 bullet points)
-          4. Recommendations for risk mitigation (3-5 bullet points)
-          
-          Format the response as JSON with the following structure:
+          role: 'system',
+          content: `You are an expert in supply chain risk assessment. 
+          Analyze the supplier data and provide a risk assessment with the following JSON structure:
           {
-            "supplier": string,
-            "company": string,
-            "risk_score": number,
-            "analysis": string,
-            "risk_factors": string[],
-            "recommendations": string[]
-          }
-          
-          Consider factors like industry, years in business, previous contracts, delivery performance, etc.`
+            "risk_score": (number between 0-100, where 0 is lowest risk and 100 is highest),
+            "risk_level": (string, either "Low", "Medium", "High", or "Critical"),
+            "key_findings": (array of strings with key risk factors or strengths),
+            "recommendations": (array of strings with recommended actions),
+            "risk_breakdown": {
+              "financial_stability": (number 0-100),
+              "supply_reliability": (number 0-100),
+              "quality_consistency": (number 0-100),
+              "reputation": (number 0-100)
+            }
+          }`
         },
         {
-          role: "user",
+          role: 'user',
           content: JSON.stringify(supplierData)
         }
       ],
-      response_format: { type: "json_object" }
+      response_format: { type: 'json_object' }
     });
 
-    return JSON.parse(response.choices[0].message.content);
+    return JSON.parse(completion.choices[0].message.content || '{}');
   } catch (error: any) {
-    console.error("Error analyzing supplier risk:", error);
+    console.error('Error analyzing supplier risk:', error);
     throw new Error(`Failed to analyze supplier risk: ${error.message}`);
   }
 }
 
-// Generate market insights for specific industry
-export async function generateMarketInsights(industry: string): Promise<{
-  industry: string;
-  market_size: string;
-  growth_rate: string;
-  key_trends: string[];
-  major_players: { name: string; market_share: string }[];
-  opportunities: string[];
-  challenges: string[];
-  forecast: string;
-}> {
+/**
+ * Generate market insights for a specific industry
+ * @param industry Industry name or category
+ * @returns Market insights with trends, statistics, and opportunities
+ */
+export async function generateMarketInsights(industry: string) {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API key is not configured.');
+    }
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o', // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
         {
-          role: "system",
-          content: `You are a market research expert providing insights on specific industries. 
-          For the given industry, provide comprehensive market insights in the following JSON format:
-          
+          role: 'system',
+          content: `You are a market research expert. 
+          Generate insights about the following industry in JSON format with the following structure:
           {
-            "industry": string,
-            "market_size": string (include currency and year),
-            "growth_rate": string (include percentage and timeframe),
-            "key_trends": string[] (5-7 trends),
-            "major_players": [
-              { "name": string, "market_share": string (percentage) }
-            ] (4-6 players),
-            "opportunities": string[] (3-5 points),
-            "challenges": string[] (3-5 points),
-            "forecast": string (brief future outlook)
-          }
-          
-          Keep the insights specific, data-driven (use realistic estimates), and actionable for business decision-making.`
+            "market_size": {
+              "value": (string describing current market size),
+              "growth_rate": (string describing growth rate)
+            },
+            "key_trends": (array of strings describing current trends),
+            "top_players": (array of objects with "name" and "market_share" fields),
+            "opportunities": (array of strings describing opportunities),
+            "threats": (array of strings describing threats),
+            "forecast": (string with market forecast for next 2-3 years)
+          }`
         },
         {
-          role: "user",
-          content: `Generate detailed market insights for the ${industry} industry.`
+          role: 'user',
+          content: `Generate market insights for the ${industry} industry.`
         }
       ],
-      response_format: { type: "json_object" }
+      response_format: { type: 'json_object' }
     });
 
-    return JSON.parse(response.choices[0].message.content);
+    return JSON.parse(completion.choices[0].message.content || '{}');
   } catch (error: any) {
-    console.error("Error generating market insights:", error);
+    console.error('Error generating market insights:', error);
     throw new Error(`Failed to generate market insights: ${error.message}`);
   }
 }
 
-// Analyze RFQ content to extract key information and make recommendations
-export async function analyzeRFQ(rfqText: string): Promise<{
-  analysis: string;
-  key_requirements: string[];
-  suggested_categories: string[];
-  estimated_budget_range: { min: number; max: number };
-  potential_suppliers: string[];
-  recommendations: string[];
-}> {
+/**
+ * Analyzes an RFQ text and provides recommendations
+ * @param rfqText The text of the RFQ to analyze
+ * @returns Analysis with categories, potential suppliers, and recommendations
+ */
+export async function analyzeRFQ(rfqText: string) {
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API key is not configured.');
+    }
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o', // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
         {
-          role: "system",
-          content: `You are a procurement specialist who analyzes RFQs (Request for Quotes) to extract key information and make recommendations.
-          Given an RFQ text, provide the following analysis in JSON format:
-          
+          role: 'system',
+          content: `You are an expert in analyzing procurement requests. 
+          Analyze the provided RFQ (Request for Quotation) text and provide an analysis in JSON format with the following structure:
           {
-            "analysis": string (brief summary of the RFQ),
-            "key_requirements": string[] (3-5 main requirements),
-            "suggested_categories": string[] (2-3 relevant product/service categories),
-            "estimated_budget_range": { "min": number, "max": number } (in USD),
-            "potential_suppliers": string[] (3-5 generic supplier types that might be suitable),
-            "recommendations": string[] (3-5 suggestions to improve the RFQ or procurement process)
-          }
-          
-          Make reasonable inferences where information is not explicit.`
+            "categories": (array of relevant product/service categories),
+            "complexity": (string - "Low", "Medium", or "High"),
+            "estimated_budget_range": {
+              "min": (number - minimum estimated budget),
+              "max": (number - maximum estimated budget)
+            },
+            "key_requirements": (array of strings with key requirements),
+            "potential_challenges": (array of strings with potential challenges),
+            "supplier_suggestions": (array of strings with types of suppliers that would be good matches),
+            "improvement_suggestions": (array of strings with suggestions to improve the RFQ)
+          }`
         },
         {
-          role: "user",
+          role: 'user',
           content: rfqText
         }
       ],
-      response_format: { type: "json_object" }
+      response_format: { type: 'json_object' }
     });
 
-    return JSON.parse(response.choices[0].message.content);
+    return JSON.parse(completion.choices[0].message.content || '{}');
   } catch (error: any) {
-    console.error("Error analyzing RFQ:", error);
+    console.error('Error analyzing RFQ:', error);
     throw new Error(`Failed to analyze RFQ: ${error.message}`);
   }
 }

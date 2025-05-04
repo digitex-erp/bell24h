@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h - Product Catalog Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .gradient-text {
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+        }
+        .tab-active {
+            border-bottom: 2px solid #3B82F6;
+            color: #3B82F6;
+        }
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .drag-area {
+            border: 2px dashed #ccc;
+            height: 150px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .drag-area.active {
+            border: 2px dashed #3B82F6;
+        }
+        .checkbox-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .custom-checkbox {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .image-preview {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .image-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .remove-image {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #EF4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+        .badge-blue {
+            background-color: #EBF5FF;
+            color: #3B82F6;
+        }
+        .badge-green {
+            background-color: #ECFDF5;
+            color: #10B981;
+        }
+        .badge-purple {
+            background-color: #F5F3FF;
+            color: #8B5CF6;
+        }
+        .badge-orange {
+            background-color: #FFF7ED;
+            color: #F59E0B;
+        }
+        .specifications-container {
+            margin-top: 10px;
+        }
+        .spec-item {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        .spec-item input {
+            flex: 1;
+            margin-right: 5px;
+        }
+        .remove-spec {
+            color: #EF4444;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <h1 class="text-2xl font-bold gradient-text">Bell24h</h1>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="/" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Home
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            RFQs
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Suppliers
+                        </a>
+                        <a href="/product-catalog.html" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Products
+                        </a>
+                        <a href="/seller-profile.html" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Profile
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-medium mr-2">
+                        Supplier
+                    </span>
+                    <span class="px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium mr-2">
+                        Buyer
+                    </span>
+                    <img class="h-8 w-8 rounded-full" src="https://ui-avatars.com/api/?name=John+Smith&background=4F46E5&color=fff" alt="User profile">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header with stats -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:items-center md:justify-between">
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        Product Catalog Management
+                    </h1>
+                </div>
+                <div class="mt-4 flex md:mt-0 md:ml-4">
+                    <button id="bulkUploadBtn" type="button" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-file-upload mr-2"></i> Bulk Upload
+                    </button>
+                    <button id="addProductBtn" type="button" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-plus mr-2"></i> Add Product
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-4">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                                <i class="fas fa-box-open text-white"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                        Total Products
+                                    </dt>
+                                    <dd class="text-lg font-semibold text-gray-900">
+                                        <span id="totalProductsCount">0</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                <i class="fas fa-eye text-white"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                        Product Views
+                                    </dt>
+                                    <dd class="text-lg font-semibold text-gray-900">
+                                        1,248
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                                <i class="fas fa-file-signature text-white"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                        RFQ Mentions
+                                    </dt>
+                                    <dd class="text-lg font-semibold text-gray-900">
+                                        32
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                <i class="fas fa-chart-line text-white"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                        Conversion Rate
+                                    </dt>
+                                    <dd class="text-lg font-semibold text-gray-900">
+                                        3.8%
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- View Options Tabs -->
+        <div class="mb-6 border-b border-gray-200">
+            <div class="flex">
+                <button id="gridViewTab" class="px-4 py-2 text-sm font-medium text-blue-600 tab-active">
+                    <i class="fas fa-th-large mr-2"></i> Grid View
+                </button>
+                <button id="tableViewTab" class="px-4 py-2 text-sm font-medium text-gray-500">
+                    <i class="fas fa-list mr-2"></i> Table View
+                </button>
+                <button id="categoriesViewTab" class="px-4 py-2 text-sm font-medium text-gray-500">
+                    <i class="fas fa-tags mr-2"></i> Categories
+                </button>
+            </div>
+        </div>
+        
+        <!-- Search and Filter Bar -->
+        <div class="mb-6 bg-white p-4 rounded-lg shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-3">
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search products by name, SKU, or description..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <select id="categoryFilter" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        <option value="">All Categories</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Machinery">Machinery</option>
+                        <option value="Textiles">Textiles</option>
+                        <option value="Food & Beverages">Food & Beverages</option>
+                        <option value="Chemicals">Chemicals</option>
+                        <option value="Automotive">Automotive</option>
+                        <option value="Pharmaceuticals">Pharmaceuticals</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="sortOrder" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        <option value="name_asc">Name (A-Z)</option>
+                        <option value="name_desc">Name (Z-A)</option>
+                        <option value="price_asc">Price (Low to High)</option>
+                        <option value="price_desc">Price (High to Low)</option>
+                        <option value="created_desc">Newest First</option>
+                        <option value="created_asc">Oldest First</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid View -->
+        <div id="gridView" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Products will be loaded here via JavaScript -->
+            <div class="col-span-full text-center text-gray-500 py-8">
+                <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                <p>Loading products...</p>
+            </div>
+        </div>
+
+        <!-- Table View (initially hidden) -->
+        <div id="tableView" class="bg-white shadow overflow-hidden rounded-lg hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Features</th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productList" class="bg-white divide-y divide-gray-200">
+                        <!-- Products will be loaded here via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Categories View (initially hidden) -->
+        <div id="categoriesView" class="hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Categories will be generated here via JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="absolute inset-0 bg-black opacity-50" id="modalOverlay"></div>
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 z-10 max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
+                <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Add New Product</h3>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="px-6 py-4">
+                <form id="productForm" class="space-y-6">
+                    <!-- Basic Info Section -->
+                    <div>
+                        <h4 class="text-md font-medium text-gray-900 mb-4">Basic Information</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
+                                <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" required>
+                            </div>
+                            
+                            <div>
+                                <label for="sku" class="block text-sm font-medium text-gray-700">SKU</label>
+                                <input type="text" id="sku" name="sku" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                            
+                            <div>
+                                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                                <select id="category" name="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Machinery">Machinery</option>
+                                    <option value="Textiles">Textiles</option>
+                                    <option value="Food & Beverages">Food & Beverages</option>
+                                    <option value="Chemicals">Chemicals</option>
+                                    <option value="Automotive">Automotive</option>
+                                    <option value="Pharmaceuticals">Pharmaceuticals</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="subcategory" class="block text-sm font-medium text-gray-700">Subcategory</label>
+                                <input type="text" id="subcategory" name="subcategory" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                            
+                            <div class="md:col-span-2">
+                                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea id="description" name="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" required></textarea>
+                            </div>
+                            
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-700">Product Status</label>
+                                <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="discontinued">Discontinued</option>
+                                    <option value="coming_soon">Coming Soon</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                                <input type="text" id="tags" name="tags" placeholder="Comma separated tags" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pricing Section -->
+                    <div>
+                        <h4 class="text-md font-medium text-gray-900 mb-4">Price & Inventory</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                                <input type="number" id="price" name="price" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" required>
+                            </div>
+                            
+                            <div>
+                                <label for="priceUnit" class="block text-sm font-medium text-gray-700">Price Unit</label>
+                                <select id="priceUnit" name="priceUnit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" required>
+                                    <option value="per_piece">Per Piece</option>
+                                    <option value="per_kg">Per Kg</option>
+                                    <option value="per_ton">Per Ton</option>
+                                    <option value="per_liter">Per Liter</option>
+                                    <option value="per_box">Per Box</option>
+                                    <option value="per_meter">Per Meter</option>
+                                    <option value="per_sq_meter">Per Square Meter</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
+                                <select id="currency" name="currency" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="INR">INR (₹)</option>
+                                    <option value="AED">AED (د.إ)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="minimumOrderQuantity" class="block text-sm font-medium text-gray-700">Minimum Order Quantity</label>
+                                <input type="text" id="minimumOrderQuantity" name="minimumOrderQuantity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                            
+                            <div>
+                                <label for="leadTime" class="block text-sm font-medium text-gray-700">Lead Time (Days)</label>
+                                <input type="number" id="leadTime" name="leadTime" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                            
+                            <div>
+                                <label for="availability" class="block text-sm font-medium text-gray-700">Availability</label>
+                                <select id="availability" name="availability" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                                    <option value="in_stock">In Stock</option>
+                                    <option value="low_stock">Low Stock</option>
+                                    <option value="out_of_stock">Out of Stock</option>
+                                    <option value="made_to_order">Made to Order</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Specifications Section -->
+                    <div>
+                        <h4 class="text-md font-medium text-gray-900 mb-4">Specifications</h4>
+                        <div id="specificationsContainer" class="specifications-container">
+                            <div class="spec-item">
+                                <input type="text" name="specKey[]" placeholder="Key (e.g., Material)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                                <input type="text" name="specValue[]" placeholder="Value (e.g., Stainless Steel)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                                <button type="button" class="remove-spec p-2"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" id="addSpecBtn" class="mt-2 inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="fas fa-plus mr-2"></i> Add Specification
+                        </button>
+                    </div>
+                    
+                    <!-- Image Upload Section -->
+                    <div>
+                        <h4 class="text-md font-medium text-gray-900 mb-4">Product Images</h4>
+                        <div class="drag-area" id="dragArea">
+                            <span><i class="fas fa-cloud-upload-alt text-4xl mb-2 text-gray-400"></i></span>
+                            <span class="text-gray-600">Drag & drop images or click to browse</span>
+                            <input type="file" id="fileInput" hidden multiple accept="image/*">
+                        </div>
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+                    
+                    <!-- Additional Information -->
+                    <div>
+                        <h4 class="text-md font-medium text-gray-900 mb-4">Additional Information</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="origin" class="block text-sm font-medium text-gray-700">Country of Origin</label>
+                                <input type="text" id="origin" name="origin" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                            
+                            <div>
+                                <label for="warranty" class="block text-sm font-medium text-gray-700">Warranty</label>
+                                <input type="text" id="warranty" name="warranty" placeholder="e.g., 1 Year Limited Warranty" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                            
+                            <div>
+                                <label for="certifications" class="block text-sm font-medium text-gray-700">Certifications</label>
+                                <input type="text" id="certifications" name="certifications" placeholder="e.g., ISO9001, CE, RoHS" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                            
+                            <div>
+                                <label for="shippingWeight" class="block text-sm font-medium text-gray-700">Shipping Weight (kg)</label>
+                                <input type="number" id="shippingWeight" name="shippingWeight" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            </div>
+                            
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Features</label>
+                                <div class="checkbox-wrapper">
+                                    <div class="custom-checkbox">
+                                        <input type="checkbox" id="customizable" name="customizable" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <label for="customizable" class="ml-2 block text-sm text-gray-700">Customizable</label>
+                                    </div>
+                                    <div class="custom-checkbox">
+                                        <input type="checkbox" id="sampleAvailable" name="sampleAvailable" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <label for="sampleAvailable" class="ml-2 block text-sm text-gray-700">Sample Available</label>
+                                    </div>
+                                    <div class="custom-checkbox">
+                                        <input type="checkbox" id="bulkDiscount" name="bulkDiscount" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <label for="bulkDiscount" class="ml-2 block text-sm text-gray-700">Bulk Discount</label>
+                                    </div>
+                                    <div class="custom-checkbox">
+                                        <input type="checkbox" id="sustainableMaterial" name="sustainableMaterial" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <label for="sustainableMaterial" class="ml-2 block text-sm text-gray-700">Sustainable Material</label>
+                                    </div>
+                                    <div class="custom-checkbox">
+                                        <input type="checkbox" id="featured" name="featured" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                        <label for="featured" class="ml-2 block text-sm text-gray-700">Featured Product</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-end">
+                        <input type="hidden" id="supplierId" name="supplierId" value="1"> <!-- Default for testing -->
+                        <input type="hidden" id="productId" name="productId" value=""> <!-- For updating -->
+                        <button type="button" id="cancelBtn" class="mr-3 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Save Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Modal -->
+    <div id="bulkUploadModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="absolute inset-0 bg-black opacity-50" id="bulkUploadOverlay"></div>
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 z-10">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-medium text-gray-900">Bulk Upload Products</h3>
+                <button id="closeBulkUploadBtn" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="px-6 py-4">
+                <div class="mb-6">
+                    <p class="text-sm text-gray-600 mb-4">
+                        Upload multiple products at once using our template. Download the template, fill it with your products, and upload the completed file.
+                    </p>
+                    <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-download mr-2"></i> Download Template (CSV)
+                    </a>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-md font-medium text-gray-900 mb-2">Upload Your File</h4>
+                    <div class="drag-area border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center">
+                        <i class="fas fa-file-csv text-4xl mb-2 text-gray-400"></i>
+                        <p class="text-sm text-gray-600 mb-2">Drag & drop your CSV file or click to browse</p>
+                        <input type="file" id="bulkFileInput" hidden accept=".csv">
+                        <button type="button" id="browseBulkFileBtn" class="mt-2 px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Browse Files
+                        </button>
+                        <p id="selectedFileName" class="mt-2 text-sm text-blue-600 hidden"></p>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end">
+                    <button type="button" id="cancelBulkUploadBtn" class="mr-3 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Cancel
+                    </button>
+                    <button type="button" id="startBulkUploadBtn" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Upload & Process
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const productForm = document.getElementById('productForm');
+            const searchInput = document.getElementById('searchInput');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const sortOrder = document.getElementById('sortOrder');
+            const gridView = document.getElementById('gridView');
+            const tableView = document.getElementById('tableView');
+            const categoriesView = document.getElementById('categoriesView');
+            const gridViewTab = document.getElementById('gridViewTab');
+            const tableViewTab = document.getElementById('tableViewTab');
+            const categoriesViewTab = document.getElementById('categoriesViewTab');
+            const productModal = document.getElementById('productModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const addProductBtn = document.getElementById('addProductBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const bulkUploadBtn = document.getElementById('bulkUploadBtn');
+            const bulkUploadModal = document.getElementById('bulkUploadModal');
+            const closeBulkUploadBtn = document.getElementById('closeBulkUploadBtn');
+            const cancelBulkUploadBtn = document.getElementById('cancelBulkUploadBtn');
+            const bulkUploadOverlay = document.getElementById('bulkUploadOverlay');
+            const browseBulkFileBtn = document.getElementById('browseBulkFileBtn');
+            const bulkFileInput = document.getElementById('bulkFileInput');
+            const selectedFileName = document.getElementById('selectedFileName');
+            const totalProductsCount = document.getElementById('totalProductsCount');
+            const addSpecBtn = document.getElementById('addSpecBtn');
+            const specificationsContainer = document.getElementById('specificationsContainer');
+            const dragArea = document.getElementById('dragArea');
+            const fileInput = document.getElementById('fileInput');
+            const imagePreview = document.getElementById('imagePreview');
+            
+            let products = []; // To store all products
+            let fileList = []; // To store selected files
+            
+            // Load products on page load
+            fetchProducts();
+            
+            // Event listeners
+            productForm.addEventListener('submit', handleFormSubmit);
+            searchInput.addEventListener('input', filterProducts);
+            categoryFilter.addEventListener('change', filterProducts);
+            sortOrder.addEventListener('change', sortProducts);
+            
+            // Tab switching
+            gridViewTab.addEventListener('click', function() {
+                showView('grid');
+            });
+            
+            tableViewTab.addEventListener('click', function() {
+                showView('table');
+            });
+            
+            categoriesViewTab.addEventListener('click', function() {
+                showView('categories');
+            });
+            
+            // Modal controls
+            addProductBtn.addEventListener('click', openAddProductModal);
+            closeModalBtn.addEventListener('click', closeProductModal);
+            cancelBtn.addEventListener('click', closeProductModal);
+            modalOverlay.addEventListener('click', closeProductModal);
+            
+            // Bulk upload modal controls
+            bulkUploadBtn.addEventListener('click', openBulkUploadModal);
+            closeBulkUploadBtn.addEventListener('click', closeBulkUploadModal);
+            cancelBulkUploadBtn.addEventListener('click', closeBulkUploadModal);
+            bulkUploadOverlay.addEventListener('click', closeBulkUploadModal);
+            browseBulkFileBtn.addEventListener('click', function() {
+                bulkFileInput.click();
+            });
+            
+            bulkFileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    selectedFileName.textContent = this.files[0].name;
+                    selectedFileName.classList.remove('hidden');
+                }
+            });
+            
+            // Add specification button
+            addSpecBtn.addEventListener('click', addSpecification);
+            
+            // Remove specification
+            specificationsContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-spec') || e.target.parentElement.classList.contains('remove-spec')) {
+                    if (specificationsContainer.querySelectorAll('.spec-item').length > 1) {
+                        const specItem = e.target.closest('.spec-item');
+                        specItem.remove();
+                    } else {
+                        alert('You need at least one specification field.');
+                    }
+                }
+            });
+            
+            // File drag and drop
+            dragArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dragArea.classList.add('active');
+            });
+            
+            dragArea.addEventListener('dragleave', () => {
+                dragArea.classList.remove('active');
+            });
+            
+            dragArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dragArea.classList.remove('active');
+                const files = e.dataTransfer.files;
+                processImageFiles(files);
+            });
+            
+            dragArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function() {
+                processImageFiles(this.files);
+            });
+            
+            // Function to process image files
+            function processImageFiles(files) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (file.type.startsWith('image/')) {
+                        fileList.push(file);
+                        displayImagePreview(file);
+                    }
+                }
+            }
+            
+            // Function to display image preview
+            function displayImagePreview(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'image-item';
+                    imageContainer.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <span class="remove-image" data-name="${file.name}"><i class="fas fa-times"></i></span>
+                    `;
+                    imagePreview.appendChild(imageContainer);
+                    
+                    // Add remove event
+                    imageContainer.querySelector('.remove-image').addEventListener('click', function() {
+                        const fileName = this.getAttribute('data-name');
+                        fileList = fileList.filter(file => file.name !== fileName);
+                        imageContainer.remove();
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            // Add specification function
+            function addSpecification() {
+                const specItem = document.createElement('div');
+                specItem.className = 'spec-item';
+                specItem.innerHTML = `
+                    <input type="text" name="specKey[]" placeholder="Key (e.g., Material)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                    <input type="text" name="specValue[]" placeholder="Value (e.g., Stainless Steel)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                    <button type="button" class="remove-spec p-2"><i class="fas fa-trash"></i></button>
+                `;
+                specificationsContainer.appendChild(specItem);
+            }
+            
+            // Function to show different views
+            function showView(viewType) {
+                gridView.classList.add('hidden');
+                tableView.classList.add('hidden');
+                categoriesView.classList.add('hidden');
+                
+                gridViewTab.classList.remove('tab-active');
+                tableViewTab.classList.remove('tab-active');
+                categoriesViewTab.classList.remove('tab-active');
+                
+                gridViewTab.classList.add('text-gray-500');
+                tableViewTab.classList.add('text-gray-500');
+                categoriesViewTab.classList.add('text-gray-500');
+                
+                if (viewType === 'grid') {
+                    gridView.classList.remove('hidden');
+                    gridViewTab.classList.add('tab-active');
+                    gridViewTab.classList.remove('text-gray-500');
+                    gridViewTab.classList.add('text-blue-600');
+                } else if (viewType === 'table') {
+                    tableView.classList.remove('hidden');
+                    tableViewTab.classList.add('tab-active');
+                    tableViewTab.classList.remove('text-gray-500');
+                    tableViewTab.classList.add('text-blue-600');
+                    renderProductsTable(products);
+                } else if (viewType === 'categories') {
+                    categoriesView.classList.remove('hidden');
+                    categoriesViewTab.classList.add('tab-active');
+                    categoriesViewTab.classList.remove('text-gray-500');
+                    categoriesViewTab.classList.add('text-blue-600');
+                    renderProductsByCategory(products);
+                }
+            }
+            
+            // Function to open add product modal
+            function openAddProductModal() {
+                modalTitle.textContent = 'Add New Product';
+                productForm.reset();
+                document.getElementById('productId').value = '';
+                productModal.classList.remove('hidden');
+                imagePreview.innerHTML = '';
+                fileList = [];
+                
+                // Reset to one specification field
+                specificationsContainer.innerHTML = `
+                    <div class="spec-item">
+                        <input type="text" name="specKey[]" placeholder="Key (e.g., Material)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                        <input type="text" name="specValue[]" placeholder="Value (e.g., Stainless Steel)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                        <button type="button" class="remove-spec p-2"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            }
+            
+            // Function to close product modal
+            function closeProductModal() {
+                productModal.classList.add('hidden');
+            }
+            
+            // Function to open bulk upload modal
+            function openBulkUploadModal() {
+                bulkUploadModal.classList.remove('hidden');
+                selectedFileName.classList.add('hidden');
+                bulkFileInput.value = '';
+            }
+            
+            // Function to close bulk upload modal
+            function closeBulkUploadModal() {
+                bulkUploadModal.classList.add('hidden');
+            }
+            
+            // Fetch products from API
+            function fetchProducts() {
+                // For demo purposes, using supplier ID 1
+                const supplierId = 1;
+                
+                fetch(`/api/suppliers/${supplierId}/products`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch products');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        products = data || [];
+                        totalProductsCount.textContent = products.length;
+                        renderProductsGrid(products);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching products:', error);
+                        // Show mock data for testing frontend if API fails
+                        const mockProducts = [
+                            { 
+                                id: 1, 
+                                name: 'Solar Panel Module', 
+                                category: 'Electronics', 
+                                price: 150.00, 
+                                priceUnit: 'per_piece',
+                                currency: 'USD',
+                                description: '250W Monocrystalline solar panel with high efficiency and durability',
+                                status: 'active',
+                                minimumOrderQuantity: '10 pieces',
+                                origin: 'China',
+                                customizable: true,
+                                sampleAvailable: true,
+                                specifications: {
+                                    'Power': '250W',
+                                    'Type': 'Monocrystalline',
+                                    'Efficiency': '21.5%',
+                                    'Dimensions': '1650 x 992 x 35mm'
+                                },
+                                imageUrl: 'https://images.unsplash.com/photo-1592833159058-4825736edb44?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                                leadTime: 15,
+                                availability: 'in_stock'
+                            },
+                            { 
+                                id: 2, 
+                                name: 'Cotton Fabric', 
+                                category: 'Textiles', 
+                                price: 5.75, 
+                                priceUnit: 'per_kg',
+                                currency: 'USD',
+                                description: 'Premium quality cotton fabric suitable for clothing and home textiles',
+                                status: 'active',
+                                minimumOrderQuantity: '100 kg',
+                                origin: 'India',
+                                customizable: true,
+                                sampleAvailable: true,
+                                specifications: {
+                                    'Material': '100% Cotton',
+                                    'Weight': '180 GSM',
+                                    'Width': '150 cm',
+                                    'Color': 'Various'
+                                },
+                                imageUrl: 'https://images.unsplash.com/photo-1603566541830-742a9be1c891?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                                leadTime: 10,
+                                availability: 'in_stock'
+                            },
+                            { 
+                                id: 3, 
+                                name: 'Industrial Motor', 
+                                category: 'Machinery', 
+                                price: 320.50, 
+                                priceUnit: 'per_piece',
+                                currency: 'USD',
+                                description: 'High-performance three-phase electric motor for industrial applications',
+                                status: 'active',
+                                minimumOrderQuantity: '5 pieces',
+                                origin: 'Germany',
+                                customizable: false,
+                                sampleAvailable: false,
+                                specifications: {
+                                    'Power': '5 HP',
+                                    'Voltage': '380-440V',
+                                    'Frequency': '50/60 Hz',
+                                    'Speed': '1440-1460 RPM',
+                                    'Efficiency': 'IE3'
+                                },
+                                imageUrl: 'https://images.unsplash.com/photo-1628167085212-91c96d2dead5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                                leadTime: 20,
+                                availability: 'in_stock'
+                            },
+                            { 
+                                id: 4, 
+                                name: 'Stainless Steel Pipes', 
+                                category: 'Machinery', 
+                                price: 45.25, 
+                                priceUnit: 'per_meter',
+                                currency: 'USD',
+                                description: 'High-quality 304 stainless steel pipes suitable for various industrial applications',
+                                status: 'active',
+                                minimumOrderQuantity: '50 meters',
+                                origin: 'Japan',
+                                customizable: true,
+                                sampleAvailable: true,
+                                specifications: {
+                                    'Material': '304 Stainless Steel',
+                                    'Diameter': '25-150 mm',
+                                    'Wall Thickness': '1.5-3 mm',
+                                    'Surface': 'Polished'
+                                },
+                                imageUrl: 'https://images.unsplash.com/photo-1616093782722-55db3a8454b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                                leadTime: 15,
+                                availability: 'in_stock'
+                            },
+                            { 
+                                id: 5, 
+                                name: 'Organic Green Tea', 
+                                category: 'Food & Beverages', 
+                                price: 12.99, 
+                                priceUnit: 'per_kg',
+                                currency: 'USD',
+                                description: 'Premium organic green tea leaves harvested from high-altitude plantations',
+                                status: 'active',
+                                minimumOrderQuantity: '25 kg',
+                                origin: 'Sri Lanka',
+                                customizable: true,
+                                sampleAvailable: true,
+                                specifications: {
+                                    'Type': 'Green Tea',
+                                    'Certification': 'USDA Organic',
+                                    'Packaging': 'Bulk',
+                                    'Shelf Life': '24 months'
+                                },
+                                imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                                leadTime: 7,
+                                availability: 'in_stock'
+                            },
+                            { 
+                                id: 6, 
+                                name: 'LCD Display Module', 
+                                category: 'Electronics', 
+                                price: 32.75, 
+                                priceUnit: 'per_piece',
+                                currency: 'USD',
+                                description: '7-inch TFT LCD display module with capacitive touch panel',
+                                status: 'active',
+                                minimumOrderQuantity: '20 units',
+                                origin: 'Taiwan',
+                                customizable: false,
+                                sampleAvailable: true,
+                                specifications: {
+                                    'Screen Size': '7 inch',
+                                    'Resolution': '800 x 480',
+                                    'Interface': 'I2C/SPI',
+                                    'Touch': 'Capacitive'
+                                },
+                                imageUrl: 'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                                leadTime: 12,
+                                availability: 'in_stock'
+                            }
+                        ];
+                        products = mockProducts;
+                        totalProductsCount.textContent = mockProducts.length;
+                        renderProductsGrid(mockProducts);
+                        
+                        gridView.innerHTML = `
+                            <div class="col-span-full text-center text-sm text-red-500 mb-4">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                API connection error. Showing sample products for demonstration.
+                            </div>
+                        ` + gridView.innerHTML;
+                    });
+            }
+            
+            // Render products to grid
+            function renderProductsGrid(productsToRender) {
+                if (productsToRender.length === 0) {
+                    gridView.innerHTML = `
+                        <div class="col-span-full text-center py-8 text-gray-500">
+                            <i class="fas fa-box-open text-5xl mb-4 opacity-50"></i>
+                            <p class="text-lg">No products found</p>
+                            <p class="text-sm mt-2">Add your first product to get started</p>
+                            <button id="noProductsAddBtn" class="mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white gradient-bg focus:outline-none">
+                                <i class="fas fa-plus mr-2"></i> Add Product
+                            </button>
+                        </div>
+                    `;
+                    // Add event listener
+                    document.getElementById('noProductsAddBtn')?.addEventListener('click', openAddProductModal);
+                    return;
+                }
+                
+                gridView.innerHTML = productsToRender.map(product => `
+                    <div class="bg-white shadow rounded-lg overflow-hidden product-card" data-id="${product.id}">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="${product.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="${product.name}" class="w-full h-full object-cover">
+                            ${product.status === 'active' ? 
+                                `<span class="absolute top-2 right-2 px-2 py-1 bg-green-500 text-white text-xs rounded-full">Active</span>` : 
+                                product.status === 'inactive' ? 
+                                `<span class="absolute top-2 right-2 px-2 py-1 bg-gray-500 text-white text-xs rounded-full">Inactive</span>` :
+                                product.status === 'discontinued' ?
+                                `<span class="absolute top-2 right-2 px-2 py-1 bg-red-500 text-white text-xs rounded-full">Discontinued</span>` :
+                                `<span class="absolute top-2 right-2 px-2 py-1 bg-blue-500 text-white text-xs rounded-full">Coming Soon</span>`
+                            }
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-lg font-semibold text-gray-900 truncate">${product.name}</h3>
+                                <div class="text-sm font-bold text-blue-600">
+                                    ${formatCurrency(product.price, product.currency)} <span class="text-gray-500 font-normal">${formatPriceUnit(product.priceUnit)}</span>
+                                </div>
+                            </div>
+                            <div class="mt-1 text-sm text-gray-500 truncate">${product.category}</div>
+                            <p class="mt-2 text-sm text-gray-600 h-10 overflow-hidden">${product.description}</p>
+                            <div class="mt-2 flex flex-wrap">
+                                ${product.customizable ? '<span class="badge badge-blue"><i class="fas fa-pencil-alt mr-1"></i> Customizable</span>' : ''}
+                                ${product.sampleAvailable ? '<span class="badge badge-green"><i class="fas fa-vial mr-1"></i> Sample</span>' : ''}
+                                ${product.sustainableMaterial ? '<span class="badge badge-green"><i class="fas fa-leaf mr-1"></i> Sustainable</span>' : ''}
+                                ${product.featured ? '<span class="badge badge-purple"><i class="fas fa-star mr-1"></i> Featured</span>' : ''}
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <div class="text-xs text-gray-500">
+                                    <i class="fas fa-clock mr-1"></i> ${product.leadTime || 'N/A'} days
+                                </div>
+                                <div class="text-xs font-medium ${
+                                    product.availability === 'in_stock' ? 'text-green-600' : 
+                                    product.availability === 'low_stock' ? 'text-yellow-600' : 
+                                    product.availability === 'out_of_stock' ? 'text-red-600' : 'text-blue-600'
+                                }">
+                                    <i class="fas ${
+                                        product.availability === 'in_stock' ? 'fa-check-circle' : 
+                                        product.availability === 'low_stock' ? 'fa-exclamation-circle' : 
+                                        product.availability === 'out_of_stock' ? 'fa-times-circle' : 'fa-hourglass-half'
+                                    } mr-1"></i>
+                                    ${formatAvailability(product.availability)}
+                                </div>
+                            </div>
+                            <div class="mt-4 flex space-x-2">
+                                <button class="edit-product-btn flex-1 py-1 border border-blue-300 rounded text-blue-600 text-sm hover:bg-blue-50" data-id="${product.id}">
+                                    <i class="fas fa-edit mr-1"></i> Edit
+                                </button>
+                                <button class="duplicate-product-btn flex-1 py-1 border border-green-300 rounded text-green-600 text-sm hover:bg-green-50" data-id="${product.id}">
+                                    <i class="fas fa-copy mr-1"></i> Copy
+                                </button>
+                                <button class="delete-product-btn w-10 py-1 border border-red-300 rounded text-red-600 text-sm hover:bg-red-50" data-id="${product.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners for edit and delete buttons
+                document.querySelectorAll('.edit-product-btn').forEach(btn => {
+                    btn.addEventListener('click', () => editProduct(btn.getAttribute('data-id')));
+                });
+                
+                document.querySelectorAll('.duplicate-product-btn').forEach(btn => {
+                    btn.addEventListener('click', () => duplicateProduct(btn.getAttribute('data-id')));
+                });
+                
+                document.querySelectorAll('.delete-product-btn').forEach(btn => {
+                    btn.addEventListener('click', () => deleteProduct(btn.getAttribute('data-id')));
+                });
+            }
+            
+            // Render products to table
+            function renderProductsTable(productsToRender) {
+                const productList = document.getElementById('productList');
+                
+                if (productsToRender.length === 0) {
+                    productList.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">No products found</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                productList.innerHTML = productsToRender.map(product => `
+                    <tr data-id="${product.id}">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full object-cover" src="${product.imageUrl || 'https://via.placeholder.com/40?text=NA'}" alt="">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                                    <div class="text-sm text-gray-500">${product.sku || 'No SKU'}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${product.category}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${formatCurrency(product.price, product.currency)} ${formatPriceUnit(product.priceUnit)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                product.status === 'active' ? 'bg-green-100 text-green-800' : 
+                                product.status === 'inactive' ? 'bg-gray-100 text-gray-800' : 
+                                product.status === 'discontinued' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+                            }">
+                                ${formatStatus(product.status)}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${product.customizable ? '<i class="fas fa-check text-green-500 mr-1"></i> Custom' : ''}
+                            ${product.sampleAvailable ? '<i class="fas fa-check text-green-500 mr-1"></i> Sample' : ''}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button class="text-blue-600 hover:text-blue-900 mr-3" onclick="editProduct(${product.id})">
+                                <i class="fas fa-edit mr-1"></i> Edit
+                            </button>
+                            <button class="text-red-600 hover:text-red-900" onclick="deleteProduct(${product.id})">
+                                <i class="fas fa-trash mr-1"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            // Render products by category
+            function renderProductsByCategory(productsToRender) {
+                const categoryGroups = {};
+                
+                // Group products by category
+                productsToRender.forEach(product => {
+                    if (!categoryGroups[product.category]) {
+                        categoryGroups[product.category] = [];
+                    }
+                    categoryGroups[product.category].push(product);
+                });
+                
+                const categoriesHtml = Object.keys(categoryGroups).map(category => {
+                    const categoryProducts = categoryGroups[category];
+                    
+                    return `
+                        <div class="bg-white shadow overflow-hidden rounded-lg mb-6">
+                            <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">${category}</h3>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    ${categoryProducts.length} products
+                                </span>
+                            </div>
+                            <div class="border-t border-gray-200">
+                                <ul role="list" class="divide-y divide-gray-200">
+                                    ${categoryProducts.map(product => `
+                                        <li class="px-4 py-4 flex items-center justify-between hover:bg-gray-50">
+                                            <div class="flex items-center">
+                                                <div class="flex-shrink-0 h-10 w-10">
+                                                    <img class="h-10 w-10 rounded-md object-cover" src="${product.imageUrl || 'https://via.placeholder.com/40?text=NA'}" alt="">
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                                                    <div class="text-sm text-gray-500">${formatCurrency(product.price, product.currency)} ${formatPriceUnit(product.priceUnit)}</div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button class="text-blue-600 hover:text-blue-900 text-sm font-medium" onclick="editProduct(${product.id})">
+                                                    <i class="fas fa-edit mr-1"></i> Edit
+                                                </button>
+                                            </div>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                if (Object.keys(categoryGroups).length === 0) {
+                    categoriesView.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-tag text-5xl mb-4 opacity-50"></i>
+                            <p class="text-lg">No product categories found</p>
+                        </div>
+                    `;
+                } else {
+                    categoriesView.innerHTML = categoriesHtml;
+                }
+            }
+            
+            // Format price unit
+            function formatPriceUnit(unit) {
+                if (!unit) return '';
+                const unitMap = {
+                    'per_piece': 'per piece',
+                    'per_kg': 'per kg',
+                    'per_ton': 'per ton',
+                    'per_liter': 'per liter',
+                    'per_box': 'per box',
+                    'per_meter': 'per meter',
+                    'per_sq_meter': 'per sq.m'
+                };
+                return unitMap[unit] || unit;
+            }
+            
+            // Format currency
+            function formatCurrency(price, currency = 'USD') {
+                if (!price) return '0.00';
+                
+                const currencySymbols = {
+                    'USD': '$',
+                    'EUR': '€',
+                    'GBP': '£',
+                    'INR': '₹',
+                    'AED': 'AED'
+                };
+                
+                const symbol = currencySymbols[currency] || '';
+                return `${symbol}${parseFloat(price).toFixed(2)}`;
+            }
+            
+            // Format status
+            function formatStatus(status) {
+                if (!status) return 'Active';
+                
+                const statusMap = {
+                    'active': 'Active',
+                    'inactive': 'Inactive',
+                    'discontinued': 'Discontinued',
+                    'coming_soon': 'Coming Soon'
+                };
+                
+                return statusMap[status] || status;
+            }
+            
+            // Format availability
+            function formatAvailability(availability) {
+                if (!availability) return 'In Stock';
+                
+                const availabilityMap = {
+                    'in_stock': 'In Stock',
+                    'low_stock': 'Low Stock',
+                    'out_of_stock': 'Out of Stock',
+                    'made_to_order': 'Made to Order'
+                };
+                
+                return availabilityMap[availability] || availability;
+            }
+            
+            // Handle form submission (create/update product)
+            function handleFormSubmit(event) {
+                event.preventDefault();
+                
+                const formData = new FormData(productForm);
+                
+                // Process specifications
+                const specKeys = formData.getAll('specKey[]');
+                const specValues = formData.getAll('specValue[]');
+                const specifications = {};
+                
+                for (let i = 0; i < specKeys.length; i++) {
+                    if (specKeys[i].trim() && specValues[i].trim()) {
+                        specifications[specKeys[i].trim()] = specValues[i].trim();
+                    }
+                }
+                
+                const productData = {
+                    name: formData.get('name'),
+                    description: formData.get('description'),
+                    category: formData.get('category'),
+                    subcategory: formData.get('subcategory') || null,
+                    supplierId: parseInt(formData.get('supplierId')),
+                    price: parseFloat(formData.get('price')),
+                    priceUnit: formData.get('priceUnit'),
+                    currency: formData.get('currency'),
+                    minimumOrderQuantity: formData.get('minimumOrderQuantity'),
+                    origin: formData.get('origin'),
+                    customizable: formData.get('customizable') === 'on',
+                    sampleAvailable: formData.get('sampleAvailable') === 'on',
+                    bulkDiscount: formData.get('bulkDiscount') === 'on',
+                    sustainableMaterial: formData.get('sustainableMaterial') === 'on',
+                    featured: formData.get('featured') === 'on',
+                    status: formData.get('status'),
+                    sku: formData.get('sku') || null,
+                    leadTime: formData.get('leadTime') ? parseInt(formData.get('leadTime')) : null,
+                    availability: formData.get('availability'),
+                    warranty: formData.get('warranty') || null,
+                    certifications: formData.get('certifications') || null,
+                    shippingWeight: formData.get('shippingWeight') ? parseFloat(formData.get('shippingWeight')) : null,
+                    specifications: Object.keys(specifications).length > 0 ? specifications : null,
+                    tags: formData.get('tags') ? formData.get('tags').split(',').map(tag => tag.trim()) : []
+                };
+                
+                // Handle image files (in a real implementation, these would be uploaded)
+                // For now, we're using URLs or placeholders
+                
+                const productId = formData.get('productId');
+                
+                if (productId) {
+                    // Update existing product
+                    fetch(`/api/products/${productId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(productData),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to update product');
+                        }
+                        return response.json();
+                    })
+                    .then(updatedProduct => {
+                        // Find and update in products array
+                        const index = products.findIndex(p => p.id == productId);
+                        if (index !== -1) {
+                            products[index] = {...products[index], ...updatedProduct};
+                            
+                            // Re-render current view
+                            const currentViewType = getActiveViewType();
+                            if (currentViewType === 'grid') {
+                                renderProductsGrid(products);
+                            } else if (currentViewType === 'table') {
+                                renderProductsTable(products);
+                            } else if (currentViewType === 'categories') {
+                                renderProductsByCategory(products);
+                            }
+                        }
+                        
+                        // Close modal
+                        closeProductModal();
+                        
+                        // Show success notification (in a real app)
+                        alert('Product updated successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error updating product:', error);
+                        
+                        // For demo purposes
+                        const index = products.findIndex(p => p.id == productId);
+                        if (index !== -1) {
+                            products[index] = {...products[index], ...productData, id: parseInt(productId)};
+                            
+                            // Re-render current view
+                            const currentViewType = getActiveViewType();
+                            if (currentViewType === 'grid') {
+                                renderProductsGrid(products);
+                            } else if (currentViewType === 'table') {
+                                renderProductsTable(products);
+                            } else if (currentViewType === 'categories') {
+                                renderProductsByCategory(products);
+                            }
+                        }
+                        
+                        // Close modal
+                        closeProductModal();
+                        
+                        // Show success notification for demo
+                        alert('Product updated successfully! (Simulated for demo)');
+                    });
+                } else {
+                    // Create new product
+                    fetch('/api/products', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(productData),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to create product');
+                        }
+                        return response.json();
+                    })
+                    .then(newProduct => {
+                        // Add to products array
+                        products.push(newProduct);
+                        totalProductsCount.textContent = products.length;
+                        
+                        // Re-render current view
+                        const currentViewType = getActiveViewType();
+                        if (currentViewType === 'grid') {
+                            renderProductsGrid(products);
+                        } else if (currentViewType === 'table') {
+                            renderProductsTable(products);
+                        } else if (currentViewType === 'categories') {
+                            renderProductsByCategory(products);
+                        }
+                        
+                        // Close modal
+                        closeProductModal();
+                        
+                        // Show success notification (in a real app)
+                        alert('Product created successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error creating product:', error);
+                        
+                        // For demo purposes
+                        const newProduct = {
+                            ...productData,
+                            id: products.length + 1,
+                            imageUrl: 'https://via.placeholder.com/300x200?text=New+Product'
+                        };
+                        products.push(newProduct);
+                        totalProductsCount.textContent = products.length;
+                        
+                        // Re-render current view
+                        const currentViewType = getActiveViewType();
+                        if (currentViewType === 'grid') {
+                            renderProductsGrid(products);
+                        } else if (currentViewType === 'table') {
+                            renderProductsTable(products);
+                        } else if (currentViewType === 'categories') {
+                            renderProductsByCategory(products);
+                        }
+                        
+                        // Close modal
+                        closeProductModal();
+                        
+                        // Show success notification for demo
+                        alert('Product created successfully! (Simulated for demo)');
+                    });
+                }
+            }
+            
+            // Get active view type
+            function getActiveViewType() {
+                if (!gridView.classList.contains('hidden')) return 'grid';
+                if (!tableView.classList.contains('hidden')) return 'table';
+                if (!categoriesView.classList.contains('hidden')) return 'categories';
+                return 'grid';
+            }
+            
+            // Filter products based on search and category
+            function filterProducts() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const categoryValue = categoryFilter.value.toLowerCase();
+                
+                const filteredProducts = products.filter(product => {
+                    const nameMatch = product.name.toLowerCase().includes(searchTerm);
+                    const descMatch = product.description.toLowerCase().includes(searchTerm);
+                    const skuMatch = product.sku && product.sku.toLowerCase().includes(searchTerm);
+                    
+                    const categoryMatch = !categoryValue || product.category.toLowerCase() === categoryValue;
+                    
+                    return (nameMatch || descMatch || skuMatch) && categoryMatch;
+                });
+                
+                // Get current sort order and apply
+                const sortValue = sortOrder.value;
+                const sortedProducts = sortProductsBy(filteredProducts, sortValue);
+                
+                // Render based on active view
+                const currentViewType = getActiveViewType();
+                if (currentViewType === 'grid') {
+                    renderProductsGrid(sortedProducts);
+                } else if (currentViewType === 'table') {
+                    renderProductsTable(sortedProducts);
+                } else if (currentViewType === 'categories') {
+                    renderProductsByCategory(sortedProducts);
+                }
+            }
+            
+            // Sort products
+            function sortProducts() {
+                const sortValue = sortOrder.value;
+                const sortedProducts = sortProductsBy([...products], sortValue);
+                
+                // Render based on active view
+                const currentViewType = getActiveViewType();
+                if (currentViewType === 'grid') {
+                    renderProductsGrid(sortedProducts);
+                } else if (currentViewType === 'table') {
+                    renderProductsTable(sortedProducts);
+                } else if (currentViewType === 'categories') {
+                    renderProductsByCategory(sortedProducts);
+                }
+            }
+            
+            // Sort products by given criteria
+            function sortProductsBy(productsToSort, sortValue) {
+                switch (sortValue) {
+                    case 'name_asc':
+                        return productsToSort.sort((a, b) => a.name.localeCompare(b.name));
+                    case 'name_desc':
+                        return productsToSort.sort((a, b) => b.name.localeCompare(a.name));
+                    case 'price_asc':
+                        return productsToSort.sort((a, b) => a.price - b.price);
+                    case 'price_desc':
+                        return productsToSort.sort((a, b) => b.price - a.price);
+                    case 'created_desc':
+                        return productsToSort.sort((a, b) => {
+                            // For demo, we don't have real created dates
+                            return b.id - a.id;
+                        });
+                    case 'created_asc':
+                        return productsToSort.sort((a, b) => {
+                            // For demo, we don't have real created dates
+                            return a.id - b.id;
+                        });
+                    default:
+                        return productsToSort;
+                }
+            }
+            
+            // Make functions available globally
+            window.editProduct = function(productId) {
+                const product = products.find(p => p.id == productId);
+                if (!product) return;
+                
+                // Update modal title
+                modalTitle.textContent = 'Edit Product: ' + product.name;
+                
+                // Fill form with product data
+                document.getElementById('name').value = product.name;
+                document.getElementById('description').value = product.description;
+                document.getElementById('category').value = product.category;
+                document.getElementById('subcategory').value = product.subcategory || '';
+                document.getElementById('price').value = product.price;
+                document.getElementById('priceUnit').value = product.priceUnit || 'per_piece';
+                document.getElementById('currency').value = product.currency || 'USD';
+                document.getElementById('minimumOrderQuantity').value = product.minimumOrderQuantity || '';
+                document.getElementById('origin').value = product.origin || '';
+                document.getElementById('customizable').checked = product.customizable || false;
+                document.getElementById('sampleAvailable').checked = product.sampleAvailable || false;
+                document.getElementById('bulkDiscount').checked = product.bulkDiscount || false;
+                document.getElementById('sustainableMaterial').checked = product.sustainableMaterial || false;
+                document.getElementById('featured').checked = product.featured || false;
+                document.getElementById('status').value = product.status || 'active';
+                document.getElementById('sku').value = product.sku || '';
+                document.getElementById('leadTime').value = product.leadTime || '';
+                document.getElementById('availability').value = product.availability || 'in_stock';
+                document.getElementById('warranty').value = product.warranty || '';
+                document.getElementById('certifications').value = product.certifications || '';
+                document.getElementById('shippingWeight').value = product.shippingWeight || '';
+                document.getElementById('tags').value = product.tags?.join(', ') || '';
+                document.getElementById('productId').value = product.id;
+                
+                // Fill specifications
+                specificationsContainer.innerHTML = '';
+                if (product.specifications && Object.keys(product.specifications).length > 0) {
+                    Object.entries(product.specifications).forEach(([key, value]) => {
+                        const specItem = document.createElement('div');
+                        specItem.className = 'spec-item';
+                        specItem.innerHTML = `
+                            <input type="text" name="specKey[]" value="${key}" placeholder="Key (e.g., Material)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            <input type="text" name="specValue[]" value="${value}" placeholder="Value (e.g., Stainless Steel)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            <button type="button" class="remove-spec p-2"><i class="fas fa-trash"></i></button>
+                        `;
+                        specificationsContainer.appendChild(specItem);
+                    });
+                } else {
+                    // Add one empty specification field
+                    addSpecification();
+                }
+                
+                // Show product image if available
+                imagePreview.innerHTML = '';
+                if (product.imageUrl) {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'image-item';
+                    imageContainer.innerHTML = `
+                        <img src="${product.imageUrl}" alt="Preview">
+                        <span class="remove-image" data-name="existing-image"><i class="fas fa-times"></i></span>
+                    `;
+                    imagePreview.appendChild(imageContainer);
+                    
+                    // Add remove event
+                    imageContainer.querySelector('.remove-image').addEventListener('click', function() {
+                        imageContainer.remove();
+                    });
+                }
+                
+                // Show modal
+                productModal.classList.remove('hidden');
+            };
+            
+            window.duplicateProduct = function(productId) {
+                const product = products.find(p => p.id == productId);
+                if (!product) return;
+                
+                // Update modal title
+                modalTitle.textContent = 'Add New Product (Duplicated)';
+                
+                // Fill form with product data but clear productId
+                document.getElementById('name').value = product.name + ' (Copy)';
+                document.getElementById('description').value = product.description;
+                document.getElementById('category').value = product.category;
+                document.getElementById('subcategory').value = product.subcategory || '';
+                document.getElementById('price').value = product.price;
+                document.getElementById('priceUnit').value = product.priceUnit || 'per_piece';
+                document.getElementById('currency').value = product.currency || 'USD';
+                document.getElementById('minimumOrderQuantity').value = product.minimumOrderQuantity || '';
+                document.getElementById('origin').value = product.origin || '';
+                document.getElementById('customizable').checked = product.customizable || false;
+                document.getElementById('sampleAvailable').checked = product.sampleAvailable || false;
+                document.getElementById('bulkDiscount').checked = product.bulkDiscount || false;
+                document.getElementById('sustainableMaterial').checked = product.sustainableMaterial || false;
+                document.getElementById('featured').checked = product.featured || false;
+                document.getElementById('status').value = product.status || 'active';
+                document.getElementById('sku').value = ''; // Clear SKU for new product
+                document.getElementById('leadTime').value = product.leadTime || '';
+                document.getElementById('availability').value = product.availability || 'in_stock';
+                document.getElementById('warranty').value = product.warranty || '';
+                document.getElementById('certifications').value = product.certifications || '';
+                document.getElementById('shippingWeight').value = product.shippingWeight || '';
+                document.getElementById('tags').value = product.tags?.join(', ') || '';
+                document.getElementById('productId').value = ''; // Clear product ID for new product
+                
+                // Fill specifications
+                specificationsContainer.innerHTML = '';
+                if (product.specifications && Object.keys(product.specifications).length > 0) {
+                    Object.entries(product.specifications).forEach(([key, value]) => {
+                        const specItem = document.createElement('div');
+                        specItem.className = 'spec-item';
+                        specItem.innerHTML = `
+                            <input type="text" name="specKey[]" value="${key}" placeholder="Key (e.g., Material)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            <input type="text" name="specValue[]" value="${value}" placeholder="Value (e.g., Stainless Steel)" class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+                            <button type="button" class="remove-spec p-2"><i class="fas fa-trash"></i></button>
+                        `;
+                        specificationsContainer.appendChild(specItem);
+                    });
+                } else {
+                    // Add one empty specification field
+                    addSpecification();
+                }
+                
+                // Show product image if available
+                imagePreview.innerHTML = '';
+                if (product.imageUrl) {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'image-item';
+                    imageContainer.innerHTML = `
+                        <img src="${product.imageUrl}" alt="Preview">
+                        <span class="remove-image" data-name="existing-image"><i class="fas fa-times"></i></span>
+                    `;
+                    imagePreview.appendChild(imageContainer);
+                    
+                    // Add remove event
+                    imageContainer.querySelector('.remove-image').addEventListener('click', function() {
+                        imageContainer.remove();
+                    });
+                }
+                
+                // Show modal
+                productModal.classList.remove('hidden');
+            };
+            
+            window.deleteProduct = function(productId) {
+                if (!confirm('Are you sure you want to delete this product?')) return;
+                
+                fetch(`/api/products/${productId}`, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete product');
+                    }
+                    
+                    // Remove from products array
+                    products = products.filter(p => p.id != productId);
+                    totalProductsCount.textContent = products.length;
+                    
+                    // Re-render current view
+                    const currentViewType = getActiveViewType();
+                    if (currentViewType === 'grid') {
+                        renderProductsGrid(products);
+                    } else if (currentViewType === 'table') {
+                        renderProductsTable(products);
+                    } else if (currentViewType === 'categories') {
+                        renderProductsByCategory(products);
+                    }
+                    
+                    // Show success notification (in a real app)
+                    alert('Product deleted successfully!');
+                })
+                .catch(error => {
+                    console.error('Error deleting product:', error);
+                    
+                    // For demo purposes
+                    products = products.filter(p => p.id != productId);
+                    totalProductsCount.textContent = products.length;
+                    
+                    // Re-render current view
+                    const currentViewType = getActiveViewType();
+                    if (currentViewType === 'grid') {
+                        renderProductsGrid(products);
+                    } else if (currentViewType === 'table') {
+                        renderProductsTable(products);
+                    } else if (currentViewType === 'categories') {
+                        renderProductsByCategory(products);
+                    }
+                    
+                    // Show success notification for demo
+                    alert('Product deleted successfully! (Simulated for demo)');
+                });
+            };
+        });
+    </script>
+</body>
+</html>

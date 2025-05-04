@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bell24h - Create RFQ</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3182ce;
+      --primary-dark: #2c5282;
+      --secondary-color: #1a365d;
+      --accent-color: #4fd1c5;
+      --light-color: #f7fafc;
+      --dark-color: #2d3748;
+      --gray-color: #e2e8f0;
+      --gray-dark: #718096;
+      --success-color: #38a169;
+      --warning-color: #d69e2e;
+      --danger-color: #e53e3e;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+      color: var(--dark-color);
+      line-height: 1.6;
+    }
+    
+    /* Navbar Styles */
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 10px 0;
+    }
+    
+    .navbar-brand {
+      font-weight: bold;
+      color: var(--primary-color);
+      font-size: 1.5rem;
+    }
+    
+    .navbar-brand span {
+      color: var(--secondary-color);
+    }
+    
+    .nav-link {
+      padding: 0.5rem 1rem;
+      color: var(--dark-color);
+      font-weight: 500;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary-color);
+    }
+    
+    .nav-link.active {
+      color: var(--primary-color);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: var(--danger-color);
+      color: white;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    .profile-dropdown {
+      display: flex;
+      align-items: center;
+    }
+    
+    .profile-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      top: 72px;
+      left: 0;
+      bottom: 0;
+      width: 250px;
+      z-index: 100;
+      background-color: white;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      overflow-y: auto;
+    }
+    
+    .sidebar.collapsed {
+      width: 70px;
+    }
+    
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--gray-color);
+    }
+    
+    .sidebar-toggle {
+      background-color: transparent;
+      border: none;
+      color: var(--gray-dark);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: none;
+    }
+    
+    .sidebar-menu {
+      padding: 15px 0;
+    }
+    
+    .menu-label {
+      padding: 0 20px;
+      margin: 10px 0;
+      color: var(--gray-dark);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .menu-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      color: var(--dark-color);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .menu-item:hover {
+      background-color: rgba(49, 130, 206, 0.05);
+      color: var(--primary-color);
+    }
+    
+    .menu-item.active {
+      background-color: rgba(49, 130, 206, 0.1);
+      color: var(--primary-color);
+      border-left: 3px solid var(--primary-color);
+    }
+    
+    .menu-icon {
+      width: 24px;
+      text-align: center;
+      margin-right: 10px;
+    }
+    
+    .menu-text {
+      flex: 1;
+    }
+    
+    /* Main Content Styles */
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      padding-top: 90px;
+      transition: all 0.3s ease;
+    }
+    
+    .main-content.expanded {
+      margin-left: 70px;
+    }
+    
+    .page-header {
+      margin-bottom: 25px;
+    }
+    
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--secondary-color);
+      margin-bottom: 10px;
+    }
+    
+    .breadcrumb {
+      background-color: transparent;
+      padding: 0;
+      margin-bottom: 0;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: ">";
+    }
+    
+    .breadcrumb-item a {
+      color: var(--gray-dark);
+      text-decoration: none;
+    }
+    
+    .breadcrumb-item.active {
+      color: var(--dark-color);
+      font-weight: 500;
+    }
+    
+    /* Form Card Styles */
+    .form-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+    
+    .form-card-title {
+      font-weight: 600;
+      color: var(--secondary-color);
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--gray-color);
+    }
+    
+    .form-label {
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+    
+    .form-text {
+      font-size: 0.8rem;
+      color: var(--gray-dark);
+    }
+    
+    .form-control, .form-select {
+      padding: 0.5rem 0.75rem;
+      border-color: var(--gray-color);
+      border-radius: 8px;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(49, 130, 206, 0.25);
+    }
+    
+    /* Voice RFQ Styles */
+    .voice-container {
+      background-color: #f8fafc;
+      border: 2px dashed var(--gray-color);
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .mic-icon {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      cursor: pointer;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .mic-icon:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+    
+    .mic-icon.recording {
+      background-color: var(--danger-color);
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 15px rgba(229, 62, 62, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(229, 62, 62, 0);
+      }
+    }
+    
+    .recording-timer {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--dark-color);
+      margin-bottom: 15px;
+    }
+    
+    .recording-status {
+      font-size: 1rem;
+      color: var(--gray-dark);
+      margin-bottom: 20px;
+    }
+    
+    .voice-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .transcript-container {
+      background-color: white;
+      border: 1px solid var(--gray-color);
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    
+    .transcript-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--secondary-color);
+    }
+    
+    .transcript-text {
+      font-size: 0.95rem;
+      color: var(--dark-color);
+      white-space: pre-wrap;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.mobile-visible {
+        transform: translateX(0);
+      }
+      
+      .sidebar-toggle {
+        display: block;
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .main-content.expanded {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="dashboard.html">Bell<span>24h</span></a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTop">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarTop">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link" href="dashboard.html">Dashboard</a>
+          </li>
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link" href="rfqs.html">RFQs</a>
+          </li>
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link" href="suppliers.html">Suppliers</a>
+          </li>
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link" href="messages.html">Messages</a>
+          </li>
+        </ul>
+        
+        <div class="d-flex align-items-center">
+          <div class="position-relative me-3">
+            <a href="notifications.html" class="text-dark">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </a>
+          </div>
+          
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown">
+              <div class="profile-dropdown">
+                <div class="profile-avatar me-2">J</div>
+                <span class="d-none d-lg-block">John Doe</span>
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i> My Profile</a></li>
+              <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i> Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-menu">
+      <div class="menu-label">MAIN</div>
+      <a href="dashboard.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-tachometer-alt"></i></div>
+        <div class="menu-text">Dashboard</div>
+      </a>
+      <a href="rfqs.html" class="menu-item active">
+        <div class="menu-icon"><i class="fas fa-file-alt"></i></div>
+        <div class="menu-text">RFQs</div>
+        <span class="badge badge-primary">5</span>
+      </a>
+      <a href="suppliers.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-building"></i></div>
+        <div class="menu-text">Suppliers</div>
+      </a>
+      <a href="bids.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-gavel"></i></div>
+        <div class="menu-text">Bids</div>
+        <span class="badge badge-warning">3</span>
+      </a>
+      <a href="contracts.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-file-contract"></i></div>
+        <div class="menu-text">Contracts</div>
+      </a>
+      <a href="messages.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-comments"></i></div>
+        <div class="menu-text">Messages</div>
+        <span class="badge badge-danger">2</span>
+      </a>
+      
+      <div class="menu-label">FINANCE</div>
+      <a href="wallet.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-wallet"></i></div>
+        <div class="menu-text">Wallet</div>
+      </a>
+      <a href="invoices.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+        <div class="menu-text">Invoices</div>
+      </a>
+      
+      <div class="menu-label">ANALYTICS</div>
+      <a href="analytics.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="menu-text">Market Analysis</div>
+      </a>
+      <a href="reports.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-chart-pie"></i></div>
+        <div class="menu-text">Reports</div>
+      </a>
+      
+      <div class="menu-label">SETTINGS</div>
+      <a href="profile.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-user"></i></div>
+        <div class="menu-text">My Profile</div>
+      </a>
+      <a href="settings.html" class="menu-item">
+        <div class="menu-icon"><i class="fas fa-cog"></i></div>
+        <div class="menu-text">Settings</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <!-- Page Header -->
+    <div class="page-header d-flex flex-wrap justify-content-between align-items-center">
+      <div>
+        <h1 class="page-title">Create RFQ</h1>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="dashboard.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="rfqs.html">RFQs</a></li>
+            <li class="breadcrumb-item active">Create RFQ</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="d-flex">
+        <button class="btn btn-outline-secondary me-2 d-lg-none" id="toggleSidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- RFQ Type Selection -->
+    <div class="form-card">
+      <div class="form-card-title">Request For Quotation Type</div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="rfqType" id="typeText" value="text" checked onchange="showRfqForm('text')">
+                <label class="form-check-label fw-bold" for="typeText">
+                  <i class="fas fa-keyboard me-2 text-primary"></i> Text RFQ
+                </label>
+              </div>
+              <p class="small text-muted mt-2 mb-0">Create a standard text-based RFQ by filling out a form.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="rfqType" id="typeVoice" value="voice" onchange="showRfqForm('voice')">
+                <label class="form-check-label fw-bold" for="typeVoice">
+                  <i class="fas fa-microphone me-2 text-danger"></i> Voice RFQ
+                </label>
+              </div>
+              <p class="small text-muted mt-2 mb-0">Record your requirements using voice input. Our AI will convert it to text.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="rfqType" id="typeVideo" value="video" onchange="showRfqForm('video')">
+                <label class="form-check-label fw-bold" for="typeVideo">
+                  <i class="fas fa-video me-2 text-success"></i> Video RFQ
+                </label>
+              </div>
+              <p class="small text-muted mt-2 mb-0">Record a video describing your requirements. Face/voice masking available.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Text RFQ Form -->
+    <div id="textRfqForm" class="form-card">
+      <div class="form-card-title">Text RFQ Details</div>
+      <form id="rfqTextForm">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="rfqTitle" class="form-label">RFQ Title</label>
+            <input type="text" class="form-control" id="rfqTitle" placeholder="Enter a clear, descriptive title">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="rfqCategory" class="form-label">Category</label>
+            <select class="form-select" id="rfqCategory">
+              <option value="">Select category</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Chemicals">Chemicals</option>
+              <option value="Textiles">Textiles</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Pharmaceuticals">Pharmaceuticals</option>
+              <option value="Food">Food & Beverages</option>
+              <option value="Construction">Construction</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="rfqDescription" class="form-label">Description</label>
+          <textarea class="form-control" id="rfqDescription" rows="5" placeholder="Provide a detailed description of your requirements"></textarea>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="rfqQuantity" class="form-label">Quantity Required</label>
+            <input type="text" class="form-control" id="rfqQuantity" placeholder="e.g., 1000 units, 500 kg, etc.">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="rfqDeadline" class="form-label">Response Deadline</label>
+            <input type="date" class="form-control" id="rfqDeadline">
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Technical Specifications</label>
+          <div id="specificationFields">
+            <div class="row mb-2 specification-row">
+              <div class="col-md-5">
+                <input type="text" class="form-control" placeholder="Specification name" name="specName[]">
+              </div>
+              <div class="col-md-5">
+                <input type="text" class="form-control" placeholder="Value" name="specValue[]">
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-outline-secondary w-100" onclick="addSpecificationField()">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="rfqAttachments" class="form-label">Attachments (Optional)</label>
+          <input class="form-control" type="file" id="rfqAttachments" multiple>
+          <div class="form-text">Upload any relevant documents, diagrams, or drawings</div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-outline-secondary me-2">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="submitTextRfq()">Submit RFQ</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Voice RFQ Form -->
+    <div id="voiceRfqForm" class="form-card" style="display: none;">
+      <div class="form-card-title">Voice RFQ Details</div>
+      
+      <div class="voice-container">
+        <div class="mic-icon" id="micButton">
+          <i class="fas fa-microphone"></i>
+        </div>
+        <div class="recording-timer" id="recordingTimer">00:00</div>
+        <div class="recording-status" id="recordingStatus">Click the microphone to start recording</div>
+        
+        <div class="voice-controls">
+          <button type="button" class="btn btn-outline-danger" id="stopButton" style="display: none;">
+            <i class="fas fa-stop me-2"></i> Stop Recording
+          </button>
+          <button type="button" class="btn btn-outline-secondary" id="playButton" style="display: none;">
+            <i class="fas fa-play me-2"></i> Play Recording
+          </button>
+          <button type="button" class="btn btn-outline-secondary" id="resetButton" style="display: none;">
+            <i class="fas fa-redo me-2"></i> Reset
+          </button>
+        </div>
+        
+        <div class="transcript-container" id="transcriptContainer" style="display: none;">
+          <div class="transcript-title">AI-Generated Transcript</div>
+          <div class="transcript-text" id="transcriptText"></div>
+        </div>
+      </div>
+      
+      <form id="rfqVoiceForm">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="voiceRfqTitle" class="form-label">RFQ Title</label>
+            <input type="text" class="form-control" id="voiceRfqTitle" placeholder="Enter a clear, descriptive title">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="voiceRfqCategory" class="form-label">Category</label>
+            <select class="form-select" id="voiceRfqCategory">
+              <option value="">Select category</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Chemicals">Chemicals</option>
+              <option value="Textiles">Textiles</option>
+              <option value="Automotive">Automotive</option>
+              <option value="Pharmaceuticals">Pharmaceuticals</option>
+              <option value="Food">Food & Beverages</option>
+              <option value="Construction">Construction</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="voiceRfqQuantity" class="form-label">Quantity Required</label>
+            <input type="text" class="form-control" id="voiceRfqQuantity" placeholder="e.g., 1000 units, 500 kg, etc.">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="voiceRfqDeadline" class="form-label">Response Deadline</label>
+            <input type="date" class="form-control" id="voiceRfqDeadline">
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-outline-secondary me-2">Cancel</button>
+          <button type="button" class="btn btn-primary" id="submitVoiceRfq" disabled>Submit Voice RFQ</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Video RFQ Form -->
+    <div id="videoRfqForm" class="form-card" style="display: none;">
+      <div class="form-card-title">Video RFQ Details</div>
+      
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i> Video RFQ feature will be available in the next update. Please use text or voice RFQ options for now.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Mobile sidebar toggle
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('mobile-visible');
+    });
+    
+    // Form type toggle
+    function showRfqForm(type) {
+      document.getElementById('textRfqForm').style.display = 'none';
+      document.getElementById('voiceRfqForm').style.display = 'none';
+      document.getElementById('videoRfqForm').style.display = 'none';
+      
+      document.getElementById(type + 'RfqForm').style.display = 'block';
+    }
+    
+    // Add specification field
+    function addSpecificationField() {
+      const specFields = document.getElementById('specificationFields');
+      const newRow = document.createElement('div');
+      newRow.className = 'row mb-2 specification-row';
+      newRow.innerHTML = `
+        <div class="col-md-5">
+          <input type="text" class="form-control" placeholder="Specification name" name="specName[]">
+        </div>
+        <div class="col-md-5">
+          <input type="text" class="form-control" placeholder="Value" name="specValue[]">
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-outline-danger w-100" onclick="removeSpecificationField(this)">
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
+      `;
+      specFields.appendChild(newRow);
+    }
+    
+    // Remove specification field
+    function removeSpecificationField(button) {
+      const row = button.closest('.specification-row');
+      row.remove();
+    }
+    
+    // Submit text RFQ
+    function submitTextRfq() {
+      // Gather specs
+      const specNames = document.querySelectorAll('input[name="specName[]"]');
+      const specValues = document.querySelectorAll('input[name="specValue[]"]');
+      
+      const specifications = {};
+      for (let i = 0; i < specNames.length; i++) {
+        if (specNames[i].value) {
+          specifications[specNames[i].value] = specValues[i].value;
+        }
+      }
+      
+      const rfqData = {
+        userId: 1, // This would come from the logged-in user
+        title: document.getElementById('rfqTitle').value,
+        description: document.getElementById('rfqDescription').value,
+        quantity: document.getElementById('rfqQuantity').value,
+        deadline: document.getElementById('rfqDeadline').value,
+        category: document.getElementById('rfqCategory').value,
+        specifications: specifications,
+        rfqType: 'text'
+      };
+      
+      // Validate required fields
+      if (!rfqData.title || !rfqData.description || !rfqData.quantity || 
+          !rfqData.deadline || !rfqData.category) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // Submit the RFQ
+      fetch('/api/rfqs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rfqData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.id) {
+          alert('RFQ created successfully!');
+          window.location.href = 'rfqs.html';
+        } else {
+          alert('Error creating RFQ: ' + (data.error || 'Unknown error'));
+        }
+      })
+      .catch(error => {
+        alert('Error: ' + error.message);
+      });
+    }
+    
+    // Voice recording functionality
+    let mediaRecorder;
+    let audioChunks = [];
+    let audioBlob;
+    let audioUrl;
+    let recordingInterval;
+    let recordingSeconds = 0;
+    
+    // Set up voice recording interface
+    document.addEventListener('DOMContentLoaded', function() {
+      const micButton = document.getElementById('micButton');
+      const stopButton = document.getElementById('stopButton');
+      const playButton = document.getElementById('playButton');
+      const resetButton = document.getElementById('resetButton');
+      const recordingTimer = document.getElementById('recordingTimer');
+      const recordingStatus = document.getElementById('recordingStatus');
+      const submitVoiceButton = document.getElementById('submitVoiceRfq');
+      
+      micButton.addEventListener('click', async function() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          
+          mediaRecorder.addEventListener('dataavailable', event => {
+            audioChunks.push(event.data);
+          });
+          
+          mediaRecorder.addEventListener('stop', () => {
+            audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            audioUrl = URL.createObjectURL(audioBlob);
+            
+            playButton.style.display = 'inline-block';
+            resetButton.style.display = 'inline-block';
+            
+            // After recording, we would send the audio to the server for transcription
+            // For now, we'll simulate this with a sample transcript
+            setTimeout(() => {
+              const transcriptContainer = document.getElementById('transcriptContainer');
+              const transcriptText = document.getElementById('transcriptText');
+              
+              transcriptContainer.style.display = 'block';
+              transcriptText.innerText = "I need to purchase 500 industrial water pumps with the following specifications: flow rate of 100 gallons per minute, maximum head of 50 feet, and power consumption not exceeding 1500 watts. The pumps should be suitable for handling slightly corrosive liquids with a pH range of 4 to 9. They need to be compatible with 220V power supply and should have a warranty of at least 2 years. We require these pumps to be delivered within 60 days of order confirmation.";
+              
+              submitVoiceButton.disabled = false;
+            }, 2000);
+          });
+          
+          mediaRecorder.start();
+          
+          // Update UI
+          micButton.classList.add('recording');
+          stopButton.style.display = 'inline-block';
+          recordingStatus.innerText = 'Recording in progress...';
+          
+          // Start timer
+          recordingSeconds = 0;
+          recordingInterval = setInterval(() => {
+            recordingSeconds++;
+            const minutes = Math.floor(recordingSeconds / 60).toString().padStart(2, '0');
+            const seconds = (recordingSeconds % 60).toString().padStart(2, '0');
+            recordingTimer.innerText = `${minutes}:${seconds}`;
+          }, 1000);
+          
+        } catch (err) {
+          console.error('Error accessing microphone:', err);
+          alert('Could not access microphone. Please check permissions.');
+        }
+      });
+      
+      stopButton.addEventListener('click', function() {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+          clearInterval(recordingInterval);
+          
+          // Stop all tracks on the stream
+          mediaRecorder.stream.getTracks().forEach(track => track.stop());
+          
+          // Update UI
+          micButton.classList.remove('recording');
+          stopButton.style.display = 'none';
+          recordingStatus.innerText = 'Recording complete. Transcribing...';
+        }
+      });
+      
+      playButton.addEventListener('click', function() {
+        if (audioUrl) {
+          const audio = new Audio(audioUrl);
+          audio.play();
+        }
+      });
+      
+      resetButton.addEventListener('click', function() {
+        // Reset recording state
+        audioChunks = [];
+        audioBlob = null;
+        audioUrl = null;
+        recordingSeconds = 0;
+        recordingTimer.innerText = '00:00';
+        
+        // Reset UI
+        micButton.classList.remove('recording');
+        stopButton.style.display = 'none';
+        playButton.style.display = 'none';
+        resetButton.style.display = 'none';
+        recordingStatus.innerText = 'Click the microphone to start recording';
+        
+        document.getElementById('transcriptContainer').style.display = 'none';
+        document.getElementById('transcriptText').innerText = '';
+        
+        submitVoiceButton.disabled = true;
+      });
+      
+      // Set default date for deadlines (30 days from now)
+      const defaultDate = new Date();
+      defaultDate.setDate(defaultDate.getDate() + 30);
+      const dateString = defaultDate.toISOString().split('T')[0];
+      
+      document.getElementById('rfqDeadline').value = dateString;
+      document.getElementById('voiceRfqDeadline').value = dateString;
+    });
+  </script>
+</body>
+</html>
