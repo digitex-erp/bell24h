@@ -5,11 +5,13 @@ import { z } from 'zod';
 
 // Enums
 export const userTypeEnum = pgEnum('user_type', ['buyer', 'supplier', 'admin', 'both']);
+export const userRoleEnum = pgEnum('user_role', ['owner', 'admin', 'manager', 'member', 'viewer']);
 export const rfqStatusEnum = pgEnum('rfq_status', ['draft', 'open', 'in_review', 'awarded', 'closed', 'cancelled']);
 export const bidStatusEnum = pgEnum('bid_status', ['pending', 'under_review', 'accepted', 'rejected', 'withdrawn']);
 export const contractStatusEnum = pgEnum('contract_status', ['draft', 'pending_approval', 'active', 'completed', 'terminated']);
 export const transactionTypeEnum = pgEnum('transaction_type', ['deposit', 'withdrawal', 'payment', 'refund', 'escrow', 'fee']);
 export const messageStatusEnum = pgEnum('message_status', ['sent', 'delivered', 'read']);
+export const permissionTypeEnum = pgEnum('permission_type', ['full', 'create', 'read', 'update', 'delete', 'none']);
 
 // Users table
 export const users = pgTable('users', {
@@ -32,7 +34,11 @@ export const usersRelations = relations(users, ({ many }) => ({
   supplierInfo: many(suppliers),
   sentMessages: many(messages, { relationName: 'sender' }),
   receivedMessages: many(messages, { relationName: 'recipient' }),
-  transactions: many(transactions)
+  transactions: many(transactions),
+  ownedOrganizations: many(organizations, { relationName: 'owner' }),
+  organizationMemberships: many(organizationMembers, { relationName: 'user' }),
+  teamMemberships: many(teamMembers, { relationName: 'user' }),
+  teamLeaderships: many(teams, { relationName: 'lead' })
 }));
 
 // Suppliers table
@@ -192,6 +198,127 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   })
 }));
 
+// Organizations table
+export const organizations = pgTable('organizations', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  description: text('description'),
+  logo_url: text('logo_url'),
+  owner_id: integer('owner_id').references(() => users.id).notNull(),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').notNull().defaultNow()
+});
+
+export const organizationsRelations = relations(organizations, ({ one, many }) => ({
+  owner: one(users, {
+    fields: [organizations.owner_id],
+    references: [users.id],
+  }),
+  teams: many(teams),
+  members: many(organizationMembers)
+}));
+
+// Teams table
+export const teams = pgTable('teams', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  description: text('description'),
+  organization_id: integer('organization_id').references(() => organizations.id).notNull(),
+  lead_id: integer('lead_id').references(() => users.id),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').notNull().defaultNow()
+});
+
+export const teamsRelations = relations(teams, ({ one, many }) => ({
+  organization: one(organizations, {
+    fields: [teams.organization_id],
+    references: [organizations.id],
+  }),
+  lead: one(users, {
+    fields: [teams.lead_id],
+    references: [users.id],
+  }),
+  members: many(teamMembers)
+}));
+
+// Organization Members table (for user-organization relationship)
+export const organizationMembers = pgTable('organization_members', {
+  id: serial('id').primaryKey(),
+  organization_id: integer('organization_id').references(() => organizations.id).notNull(),
+  user_id: integer('user_id').references(() => users.id).notNull(),
+  role: userRoleEnum('role').notNull().default('member'),
+  invited_by: integer('invited_by').references(() => users.id),
+  joined_at: timestamp('joined_at').notNull().defaultNow()
+});
+
+export const organizationMembersRelations = relations(organizationMembers, ({ one }) => ({
+  organization: one(organizations, {
+    fields: [organizationMembers.organization_id],
+    references: [organizations.id],
+  }),
+  user: one(users, {
+    fields: [organizationMembers.user_id],
+    references: [users.id],
+  }),
+  inviter: one(users, {
+    fields: [organizationMembers.invited_by],
+    references: [users.id],
+  })
+}));
+
+// Team Members table (for user-team relationship)
+export const teamMembers = pgTable('team_members', {
+  id: serial('id').primaryKey(),
+  team_id: integer('team_id').references(() => teams.id).notNull(),
+  user_id: integer('user_id').references(() => users.id).notNull(),
+  role: userRoleEnum('role').notNull().default('member'),
+  added_by: integer('added_by').references(() => users.id),
+  joined_at: timestamp('joined_at').notNull().defaultNow()
+});
+
+export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
+  team: one(teams, {
+    fields: [teamMembers.team_id],
+    references: [teams.id],
+  }),
+  user: one(users, {
+    fields: [teamMembers.user_id],
+    references: [users.id],
+  }),
+  adder: one(users, {
+    fields: [teamMembers.added_by],
+    references: [users.id],
+  })
+}));
+
+// Resource Permissions table
+export const resourcePermissions = pgTable('resource_permissions', {
+  id: serial('id').primaryKey(),
+  resource_type: text('resource_type').notNull(), // e.g. 'rfq', 'contract', etc.
+  resource_id: integer('resource_id').notNull(),
+  user_id: integer('user_id').references(() => users.id),
+  team_id: integer('team_id').references(() => teams.id),
+  organization_id: integer('organization_id').references(() => organizations.id),
+  permission: permissionTypeEnum('permission').notNull().default('read'),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').notNull().defaultNow()
+});
+
+export const resourcePermissionsRelations = relations(resourcePermissions, ({ one }) => ({
+  user: one(users, {
+    fields: [resourcePermissions.user_id],
+    references: [users.id],
+  }),
+  team: one(teams, {
+    fields: [resourcePermissions.team_id],
+    references: [teams.id],
+  }),
+  organization: one(organizations, {
+    fields: [resourcePermissions.organization_id],
+    references: [organizations.id],
+  })
+}));
+
 // Zod schemas for validation
 export const insertUserSchema = createInsertSchema(users)
   .omit({ id: true, created_at: true, updated_at: true });
@@ -216,6 +343,21 @@ export const insertMessageSchema = createInsertSchema(messages)
 export const insertTransactionSchema = createInsertSchema(transactions)
   .omit({ id: true, created_at: true, blockchain_hash: true });
 
+export const insertOrganizationSchema = createInsertSchema(organizations)
+  .omit({ id: true, created_at: true, updated_at: true });
+
+export const insertTeamSchema = createInsertSchema(teams)
+  .omit({ id: true, created_at: true, updated_at: true });
+
+export const insertOrganizationMemberSchema = createInsertSchema(organizationMembers)
+  .omit({ id: true, joined_at: true });
+
+export const insertTeamMemberSchema = createInsertSchema(teamMembers)
+  .omit({ id: true, joined_at: true });
+
+export const insertResourcePermissionSchema = createInsertSchema(resourcePermissions)
+  .omit({ id: true, created_at: true, updated_at: true });
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -237,3 +379,18 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 
 export type Transaction = typeof transactions.$inferSelect;
 export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
+
+export type Organization = typeof organizations.$inferSelect;
+export type InsertOrganization = z.infer<typeof insertOrganizationSchema>;
+
+export type Team = typeof teams.$inferSelect;
+export type InsertTeam = z.infer<typeof insertTeamSchema>;
+
+export type OrganizationMember = typeof organizationMembers.$inferSelect;
+export type InsertOrganizationMember = z.infer<typeof insertOrganizationMemberSchema>;
+
+export type TeamMember = typeof teamMembers.$inferSelect;
+export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
+
+export type ResourcePermission = typeof resourcePermissions.$inferSelect;
+export type InsertResourcePermission = z.infer<typeof insertResourcePermissionSchema>;

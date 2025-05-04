@@ -16,6 +16,7 @@ import MessagesPage from "@/pages/messages-page";
 import WalletPage from "@/pages/wallet-page";
 import AnalyticsPage from "@/pages/analytics-page";
 import VoiceAnalyticsPage from "@/pages/voice-analytics-page";
+import VoiceTutorialPage from "@/pages/voice-tutorial-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -30,6 +31,7 @@ function Router() {
       <ProtectedRoute path="/wallet" component={WalletPage} />
       <ProtectedRoute path="/analytics" component={AnalyticsPage} />
       <ProtectedRoute path="/voice-analytics" component={VoiceAnalyticsPage} />
+      <ProtectedRoute path="/voice-tutorials" component={VoiceTutorialPage} />
       <Route component={NotFound} />
     </Switch>
   );
