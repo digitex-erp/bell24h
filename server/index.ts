@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
+// import cors from 'cors'; // Temporarily commented out
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { serveStatic, setupVite, log } from './vite';
@@ -10,12 +10,13 @@ async function main() {
   const app = express();
 
   // Apply middleware
-  app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-      ? 'https://bell24h.com' 
-      : ['http://localhost:3000', 'http://127.0.0.1:3000', '*'],
-    credentials: true
-  }));
+  // Temporarily commented out cors middleware
+  // app.use(cors({
+  //   origin: process.env.NODE_ENV === 'production' 
+  //     ? 'https://bell24h.com' 
+  //     : ['http://localhost:3000', 'http://127.0.0.1:3000', '*'],
+  //   credentials: true
+  // }));
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(cookieParser());
 

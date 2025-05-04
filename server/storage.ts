@@ -31,12 +31,15 @@ export interface IStorage {
   
   // RFQ operations
   getAllRFQs(): Promise<RFQ[]>;
+  getUserRFQs(userId: number): Promise<RFQ[]>;
   getRFQ(id: number): Promise<RFQ | undefined>;
   createRFQ(rfq: InsertRFQ): Promise<RFQ>;
   updateRFQ(id: number, data: Partial<RFQ>): Promise<RFQ | undefined>;
   
   // Bid operations
+  getAllBids(): Promise<Bid[]>;
   getBids(rfqId?: number, supplierId?: number): Promise<Bid[]>;
+  getUserBids(userId: number): Promise<Bid[]>;
   getBid(id: number): Promise<Bid | undefined>;
   createBid(bid: InsertBid): Promise<Bid>;
   updateBidStatus(id: number, status: string): Promise<Bid | undefined>;
@@ -122,6 +125,14 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(rfqs).orderBy(desc(rfqs.created_at));
   }
   
+  async getUserRFQs(userId: number): Promise<RFQ[]> {
+    return await db
+      .select()
+      .from(rfqs)
+      .where(eq(rfqs.user_id, userId))
+      .orderBy(desc(rfqs.created_at));
+  }
+  
   async getRFQ(id: number): Promise<RFQ | undefined> {
     const [rfq] = await db.select().from(rfqs).where(eq(rfqs.id, id));
     return rfq;
@@ -142,6 +153,10 @@ export class DatabaseStorage implements IStorage {
   }
   
   // Bid operations
+  async getAllBids(): Promise<Bid[]> {
+    return await db.select().from(bids).orderBy(desc(bids.created_at));
+  }
+  
   async getBids(rfqId?: number, supplierId?: number): Promise<Bid[]> {
     let query = db.select().from(bids);
     
@@ -154,6 +169,14 @@ export class DatabaseStorage implements IStorage {
     }
     
     return await query.orderBy(desc(bids.created_at));
+  }
+  
+  async getUserBids(userId: number): Promise<Bid[]> {
+    return await db
+      .select()
+      .from(bids)
+      .where(eq(bids.supplier_id, userId))
+      .orderBy(desc(bids.created_at));
   }
   
   async getBid(id: number): Promise<Bid | undefined> {

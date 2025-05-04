@@ -29,6 +29,7 @@ import {
   ExternalLink,
   ArrowRight
 } from "lucide-react";
+import AnalyticsExport from "@/components/AnalyticsExport";
 
 // Industry options for market insights
 const INDUSTRIES = [
@@ -353,6 +354,11 @@ export default function AnalyticsPage() {
                 </div>
               </CardContent>
             </Card>
+            
+            {/* Analytics Export Component */}
+            <div className="lg:col-span-3 flex justify-center py-6">
+              <AnalyticsExport />
+            </div>
           </div>
         </TabsContent>
         
