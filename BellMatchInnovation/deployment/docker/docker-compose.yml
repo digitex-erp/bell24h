@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+  # Database service
+  db:
+    image: postgres:14
+    container_name: bell24h-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - bell24h-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  # Server/Backend service
+  server:
+    build:
+      context: ../../
+      dockerfile: deployment/docker/Dockerfile.server
+    container_name: bell24h-server
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      PORT: 5000
+      GST_API_KEY: ${GST_API_KEY}
+      GST_API_BASE_URL: ${GST_API_BASE_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      M1_EXCHANGE_API_KEY: ${M1_EXCHANGE_API_KEY}
+      SESSION_SECRET: ${SESSION_SECRET}
+    ports:
+      - "5000:5000"
+    networks:
+      - bell24h-network
+  
+  # Client/Frontend service
+  client:
+    build:
+      context: ../../
+      dockerfile: deployment/docker/Dockerfile.client
+    container_name: bell24h-client
+    restart: always
+    depends_on:
+      - server
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - bell24h-network
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: bell24h-redis
+    restart: always
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis_data:/data
+    networks:
+      - bell24h-network
+
+  # Monitoring with Prometheus
+  prometheus:
+    image: prom/prometheus
+    container_name: bell24h-prometheus
+    restart: always
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - bell24h-network
+
+  # Visualization with Grafana
+  grafana:
+    image: grafana/grafana
+    container_name: bell24h-grafana
+    restart: always
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - bell24h-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  bell24h-network:
+    driver: bridge

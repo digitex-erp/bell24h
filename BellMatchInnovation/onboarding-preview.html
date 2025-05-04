@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bell24h Onboarding Preview</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 20px;
+      color: #111827;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    h1 {
+      color: #2563eb;
+      margin-bottom: 10px;
+    }
+    .onboarding-preview {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+      overflow: hidden;
+    }
+    .interface-mockup {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(to bottom, rgba(249, 250, 251, 0.8), rgba(249, 250, 251, 0.8)), 
+                        url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiNlNWU3ZWIiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==');
+      opacity: 0.5;
+    }
+    .screen-darkening {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+    .highlight-element {
+      position: absolute;
+      width: 180px;
+      height: 40px;
+      background-color: white;
+      border: 2px solid #2563eb;
+      border-radius: 4px;
+      z-index: 2;
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+      animation: pulse 2s infinite;
+    }
+    .tooltip-box {
+      position: absolute;
+      width: 320px;
+      background: linear-gradient(to right, #fef3c7, #fcd34d);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      z-index: 3;
+    }
+    .character {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      z-index: 4;
+      animation: bounce 3s infinite;
+    }
+    .speech-bubble {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      max-width: 180px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      z-index: 5;
+    }
+    .speech-bubble:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 8px solid transparent;
+      border-top-color: white;
+      border-bottom: 0;
+      margin-left: -8px;
+      margin-bottom: -8px;
+      bottom: 0;
+      left: 30%;
+    }
+    .tooltip-title {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .tooltip-description {
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .tooltip-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .step-indicator {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .btn {
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-next {
+      background-color: #2563eb;
+      color: white;
+    }
+    .btn-prev {
+      background-color: white;
+      color: #4b5563;
+      border: 1px solid #d1d5db;
+    }
+    .btn-sound {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: white;
+      border: 1px solid #d1d5db;
+      position: absolute;
+      top: 16px;
+      right: 48px;
+      z-index: 6;
+    }
+    .btn-close {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: white;
+      border: 1px solid #d1d5db;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 6;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(-5%);
+      }
+      50% {
+        transform: translateY(0);
+      }
+    }
+
+    /* Character designs */
+    .bell-character {
+      background-color: #fcd34d;
+      border: 2px solid #b45309;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+    .bell-character:before {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #92400e;
+      border-radius: 50%;
+      top: -5px;
+      left: 25px;
+    }
+    .bell-character .face {
+      position: absolute;
+      top: 15px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+    }
+    .bell-character .eyes {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+    .bell-character .eye {
+      width: 8px;
+      height: 8px;
+      background-color: black;
+      border-radius: 50%;
+    }
+    .bell-character .mouth {
+      width: 20px;
+      height: 10px;
+      border-bottom: 2px solid black;
+      border-radius: 0 0 10px 10px;
+      margin: 5px auto 0;
+    }
+
+    .genie-character {
+      background-color: #818cf8;
+      border: 2px solid #4f46e5;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+    .genie-character:before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background-color: #ef4444;
+      border: 1px solid #b91c1c;
+      border-radius: 50%;
+      top: 5px;
+      left: 24px;
+    }
+
+    .robot-character {
+      background-color: #52525b;
+      border: 2px solid #27272a;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .robot-character .antenna {
+      position: absolute;
+      width: 2px;
+      height: 10px;
+      background-color: #a1a1aa;
+      top: -5px;
+      left: 29px;
+    }
+    .robot-character .antenna:before {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #ef4444;
+      border-radius: 50%;
+      top: -5px;
+      left: -2px;
+    }
+    .robot-character .eyes {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .robot-character .eye {
+      width: 10px;
+      height: 10px;
+      background-color: #22d3ee;
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+    .robot-character .mouth {
+      width: 20px;
+      height: 5px;
+      background-color: #22d3ee;
+      margin: 8px auto 0;
+      border-radius: 3px;
+    }
+
+    .fairy-character {
+      background-color: #f472b6;
+      border: 2px solid #db2777;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+    .fairy-character:before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 20px;
+      background-color: #c084fc;
+      border-radius: 10px 0 0 10px;
+      top: 20px;
+      left: -5px;
+    }
+    .fairy-character:after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 20px;
+      background-color: #c084fc;
+      border-radius: 0 10px 10px 0;
+      top: 20px;
+      right: -5px;
+    }
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #facc15;
+      border-radius: 50%;
+      top: 5px;
+      right: 5px;
+      animation: sparkle 1.5s infinite;
+    }
+    @keyframes sparkle {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+    @keyframes blink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .character-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+    .character-table th, .character-table td {
+      border: 1px solid #e5e7eb;
+      padding: 12px;
+      text-align: left;
+    }
+    .character-table th {
+      background-color: #f3f4f6;
+    }
+    .character-demo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .character-demo .character {
+      position: relative;
+      margin: 0;
+      animation: bounce 3s infinite;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .feature-card {
+      background-color: white;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Bell24h Contextual Onboarding System</h1>
+      <p>Interactive character guides for user onboarding with playful personalities</p>
+    </header>
+
+    <h2>Visual Preview</h2>
+    <div class="onboarding-preview">
+      <div class="interface-mockup"></div>
+      <div class="screen-darkening"></div>
+
+      <!-- Highlighted UI element -->
+      <div class="highlight-element" style="top: 120px; left: 250px;"></div>
+
+      <!-- Bell character with speech bubble -->
+      <div class="character bell-character" style="top: 60px; left: 180px;">
+        <div class="face">
+          <div class="eyes">
+            <div class="eye"></div>
+            <div class="eye"></div>
+          </div>
+          <div class="mouth"></div>
+        </div>
+      </div>
+      <div class="speech-bubble" style="top: 50px; left: 240px;">
+        "This is our AI-powered supplier matching!"
+      </div>
+
+      <!-- Tooltip box -->
+      <div class="tooltip-box" style="top: 200px; left: 250px;">
+        <div class="tooltip-title">AI-Powered Supplier Matching</div>
+        <div class="tooltip-description">
+          Our advanced AI algorithms match your RFQs with the perfect suppliers based on your requirements, preferences, and past history.
+        </div>
+        <div class="tooltip-controls">
+          <div class="step-indicator">Step 2 of 5</div>
+          <div class="buttons">
+            <button class="btn btn-prev">Back</button>
+            <button class="btn btn-next">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control buttons -->
+      <button class="btn-sound">🔊</button>
+      <button class="btn-close">✕</button>
+    </div>
+
+    <h2>Character Guide Family</h2>
+    <table class="character-table">
+      <thead>
+        <tr>
+          <th>Character</th>
+          <th>Name</th>
+          <th>Personality</th>
+          <th>Feature Area</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="character-demo">
+              <div class="character bell-character" style="width: 40px; height: 40px;">
+                <div class="face">
+                  <div class="eyes">
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                  </div>
+                  <div class="mouth"></div>
+                </div>
+              </div>
+              <span>Bell Mascot</span>
+            </div>
+          </td>
+          <td>Bellie</td>
+          <td>Cheerful, friendly, helpful</td>
+          <td>General platform features, supplier matching</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="character-demo">
+              <div class="character genie-character" style="width: 40px; height: 40px;"></div>
+              <span>Procurement Genie</span>
+            </div>
+          </td>
+          <td>Aladdin</td>
+          <td>Wise, formal, mystical</td>
+          <td>Risk scoring, supplier insights</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="character-demo">
+              <div class="character robot-character" style="width: 40px; height: 40px;">
+                <div class="antenna"></div>
+                <div class="eyes">
+                  <div class="eye"></div>
+                  <div class="eye"></div>
+                </div>
+                <div class="mouth"></div>
+              </div>
+              <span>AI Assistant</span>
+            </div>
+          </td>
+          <td>RFQ-9000</td>
+          <td>Technical, precise, analytical</td>
+          <td>Blockchain payments, analytics, data visualization</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="character-demo">
+              <div class="character fairy-character" style="width: 40px; height: 40px;">
+                <div class="sparkle"></div>
+              </div>
+              <span>Voice Fairy</span>
+            </div>
+          </td>
+          <td>Voicelina</td>
+          <td>Whimsical, enthusiastic, magical</td>
+          <td>Voice RFQ creation, voice commands</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Key Features</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-title">Animated Character Guides</div>
+        <p>Playful SVG characters with animations that match their personality and the current context.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Interactive Speech Bubbles</div>
+        <p>Dynamic speech bubbles with animated typing effect that brings the characters to life.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Text-to-Speech Capability</div>
+        <p>Characters can speak their lines using Web Speech API with a toggle button for audio.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Context-Aware Personalities</div>
+        <p>Different characters specialize in different areas of the platform with unique speech patterns.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Element Highlighting</div>
+        <p>Automatically highlights relevant UI elements with a pulsing effect as the tour progresses.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Progress Tracking</div>
+        <p>Shows progress through each walkthrough and remembers completed tours for returning users.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

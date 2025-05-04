@@ -1,0 +1,25 @@
+/**
+ * Constants used throughout the server
+ */
+
+export const IMPLEMENTATION_STATUS = {
+  // RFQ Features
+  VOICE_RFQ_ENGLISH: 90,
+  VOICE_RFQ_HINDI: 70,
+  VIDEO_RFQ_PROCESSING: 80,
+  
+  // AI Features
+  AI_SUPPLIER_MATCHING: 85,
+  AI_RISK_SCORING: 95,
+  SHAP_LIME_EXPLAINABILITY: 75,
+  
+  // Payment and Financial Features
+  BLOCKCHAIN_INTEGRATION: 65,
+  ESCROW_SERVICE: 90,
+  KREDX_INTEGRATION: 80,
+  
+  // Marketplace Features
+  MULTILINGUAL_SUPPORT: 60,
+  GLOBAL_SUPPLIER_DATABASE: 75,
+  MOBILE_APP: 40
+};

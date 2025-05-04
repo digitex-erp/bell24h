@@ -1,0 +1,330 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  name              String
+  password          String
+  role              Role     @default(SUPPLIER)
+  isEmailVerified   Boolean  @default(false)
+  verificationToken String?
+  resetPasswordToken String?
+  resetPasswordExpires DateTime?
+  lastLoginAt       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Company relation
+  companyId         String
+  company           Company   @relation(fields: [companyId], references: [id])
+
+  // Relations
+  createdRfqs      RFQ[]    @relation("CreatedRFQs")
+  bids             Bid[]
+  invitedToRfqs    RFQ[]    @relation("InvitedSuppliers")
+
+  @@index([email])
+  @@index([companyId])
+}
+
+model Company {
+  id              String    @id @default(uuid())
+  name            String
+  description     String?
+  industry        String?
+  website         String?
+  address         String?
+  phone           String?
+  email           String?
+  logoUrl         String?
+  isVerified      Boolean   @default(false)
+  averageRating   Float?
+  
+  // Business details
+  registrationNumber String?
+  taxId             String?
+  gstNumber         String?  @unique    // GST Number (unique per company)
+  gstVerified       Boolean  @default(false)  // GST verification status
+  gstCertificate    String?  // URL to uploaded GST certificate
+  foundedYear       Int?
+  employeeCount     Int?
+  annualRevenue     Float?
+  certifications    Json?    // Array of certification objects
+  serviceAreas      Json?    // Array of service area objects
+  
+  // Relations
+  users           User[]
+  products        Product[]
+  
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([name])
+  @@index([industry])
+  @@index([gstNumber])
+}
+
+model Product {
+  id                  String    @id @default(uuid())
+  name                String
+  description         String?
+  category            String?
+  price               Float?
+  unit                String?
+  minimumOrderQuantity Int?
+  supplyAbility       String?
+  specifications      Json?     // Technical specifications
+  images              Json?     // Array of image URLs/keys
+  videos              Json?     // Array of video URLs/keys
+  keywords            Json?     // Array of search keywords
+  
+  // Relations
+  companyId           String
+  company             Company   @relation(fields: [companyId], references: [id])
+  
+  // Timestamps
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([name])
+  @@index([category])
+  @@index([companyId])
+}
+
+model RFQ {
+  id                   String   @id @default(uuid())
+  title               String
+  description         String
+  category            String
+  quantity            Float
+  unit                String
+  deadline            DateTime
+  status              RFQStatus @default(OPEN)
+  attachments         Json?
+  minBudget           Float?
+  maxBudget           Float?
+  preferredDeliveryDate DateTime?
+  deliveryLocation    String?
+  requirementsDocument String?
+  qualificationCriteria String[]
+  tags                String[]
+  visibility          Visibility @default(PUBLIC)
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  // Relations
+  createdBy           User      @relation("CreatedRFQs", fields: [userId], references: [id])
+  userId              String
+  invitedSuppliers    User[]    @relation("InvitedSuppliers")
+  bids                Bid[]
+
+  @@index([category])
+  @@index([status])
+  @@index([userId])
+}
+
+model Bid {
+  id                   String   @id @default(uuid())
+  price               Float
+  quantity            Float
+  deliveryTime        String
+  notes               String?
+  status              BidStatus @default(PENDING)
+  attachments         Json?
+  technicalSpecifications String?
+  termsAndConditions  String?
+  validity            DateTime
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Relations
+  rfq                 RFQ      @relation(fields: [rfqId], references: [id])
+  rfqId               String
+  supplier            User     @relation(fields: [supplierId], references: [id])
+  supplierId          String
+
+  // Alternative offers are stored as JSON in the database
+  alternativeOffers   Json?
+
+  @@index([rfqId])
+  @@index([supplierId])
+}
+
+enum Role {
+  ADMIN
+  BUYER
+  SUPPLIER
+}
+
+enum RFQStatus {
+  DRAFT
+  OPEN
+  IN_REVIEW
+  AWARDED
+  CANCELLED
+  EXPIRED
+}
+
+enum BidStatus {
+  PENDING
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+  INVITED
+}
+
+model Business {
+  id              String    @id @default(uuid())
+  name            String
+  description     String?
+  email           String    @unique
+  phone           String
+  address         String
+  city            String
+  state           String
+  country         String
+  pincode         String
+  
+  // GST Information
+  gstNumber       String?   @unique
+  gstVerified     Boolean   @default(false)
+  gstCertificate  String?   // S3 URL
+  
+  // Business Details
+  businessType    BusinessType
+  yearEstablished Int
+  employeeCount   Int
+  annualRevenue   Float?
+  
+  // Categories and Tags
+  categories      Category[]
+  tags           String[]
+  
+  // Documents
+  documents      Document[]
+  
+  // Relationships
+  products       Product[]
+  matches        BusinessMatch[]  @relation("BusinessMatches")
+  matchedWith    BusinessMatch[]  @relation("MatchedBusinesses")
+  
+  // Metadata
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  
+  // Relationships
+  products    Product[]
+  businesses  Business[]
+  
+  // Hierarchy
+  parentId    String?
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+}
+
+model Document {
+  id          String    @id @default(uuid())
+  name        String
+  type        DocumentType
+  url         String    // S3 URL
+  verified    Boolean   @default(false)
+  
+  // Business Relationship
+  business    Business  @relation(fields: [businessId], references: [id])
+  businessId  String
+  
+  // Metadata
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model BusinessMatch {
+  id              String    @id @default(uuid())
+  
+  // Relationships
+  business        Business  @relation("BusinessMatches", fields: [businessId], references: [id])
+  businessId      String
+  matchedBusiness Business  @relation("MatchedBusinesses", fields: [matchedBusinessId], references: [id])
+  matchedBusinessId String
+  
+  // Match Scores
+  profileScore    Float
+  productScore    Float
+  overallScore    Float
+  
+  // Match Status
+  status          MatchStatus @default(PENDING)
+  
+  // Metadata
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  @@unique([businessId, matchedBusinessId])
+}
+
+enum BusinessType {
+  MANUFACTURER
+  WHOLESALER
+  RETAILER
+  DISTRIBUTOR
+  SERVICE_PROVIDER
+}
+
+enum DocumentType {
+  GST_CERTIFICATE
+  COMPANY_REGISTRATION
+  TAX_RETURN
+  TRADE_LICENSE
+  OTHER
+}
+
+enum MatchStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+model GSTValidation {
+  id              String   @id @default(uuid())
+  gstNumber       String   @unique
+  isValid         Boolean
+  businessName    String?
+  businessType    String?
+  registrationDate DateTime?
+  status          String?
+  address         Json?
+  validatedAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([gstNumber])
+  @@index([validatedAt])
+}

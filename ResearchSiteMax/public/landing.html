@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bell24h - AI-Powered B2B Marketplace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3182ce;
+      --primary-dark: #2c5282;
+      --secondary-color: #1a365d;
+      --accent-color: #4fd1c5;
+      --light-color: #f7fafc;
+      --dark-color: #2d3748;
+      --success-color: #38a169;
+      --warning-color: #d69e2e;
+      --danger-color: #e53e3e;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--dark-color);
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .navbar-brand {
+      font-weight: bold;
+      color: var(--primary-color);
+      font-size: 1.5rem;
+    }
+    
+    .navbar-brand span {
+      color: var(--secondary-color);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+    
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .hero {
+      background: linear-gradient(135deg, #f6f9fc 0%, #e9f2fa 100%);
+      padding: 80px 0;
+      margin-bottom: 60px;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--secondary-color);
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #4a5568;
+    }
+    
+    .hero-image {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    .features {
+      padding: 60px 0;
+    }
+    
+    .feature-card {
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      background-color: white;
+      height: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+    
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+    
+    .how-it-works {
+      padding: 60px 0;
+      background-color: #f8fafc;
+    }
+    
+    .step-number {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .step-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+    
+    .testimonials {
+      padding: 60px 0;
+    }
+    
+    .testimonial-card {
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      background-color: white;
+      height: 100%;
+    }
+    
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    
+    .testimonial-author {
+      font-weight: 600;
+    }
+    
+    .testimonial-company {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+    
+    .cta {
+      padding: 80px 0;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      text-align: center;
+    }
+    
+    .cta h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    
+    .cta p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    .cta .btn {
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 30px;
+    }
+    
+    .footer {
+      padding: 60px 0 30px;
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .footer h5 {
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    
+    .footer ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .footer ul li {
+      margin-bottom: 10px;
+    }
+    
+    .footer a {
+      color: #cbd5e0;
+      text-decoration: none;
+    }
+    
+    .footer a:hover {
+      color: white;
+    }
+    
+    .social-icons a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.1);
+      color: white;
+      text-align: center;
+      line-height: 40px;
+      margin-right: 10px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+      background-color: var(--primary-color);
+    }
+    
+    .copyright {
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      font-size: 0.9rem;
+      color: #cbd5e0;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline;
+    }
+    
+    @media (max-width: 768px) {
+      .hero {
+        padding: 60px 0;
+        text-align: center;
+      }
+      
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-image {
+        margin-top: 30px;
+      }
+      
+      .feature-card {
+        margin-bottom: 30px;
+      }
+      
+      .testimonial-card {
+        margin-bottom: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Bell<span>24h</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#features">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#how-it-works">How It Works</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#pricing">Pricing</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#testimonials">Testimonials</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="api-docs.html">API Docs</a>
+          </li>
+          <li class="nav-item ms-lg-3">
+            <a class="btn btn-outline-primary" href="auth.html?mode=login">Login</a>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-primary" href="auth.html?mode=register">Register</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1>AI-Powered B2B Marketplace</h1>
+          <p class="mb-4">Bell24h connects buyers and suppliers with advanced AI matching, voice-based RFQ submission, supplier risk scoring, and predictive analytics.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="auth.html?mode=register" class="btn btn-primary btn-lg">Get Started</a>
+            <a href="#how-it-works" class="btn btn-outline-secondary btn-lg">Learn More</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <img src="https://via.placeholder.com/600x400?text=Bell24h+Platform" alt="Bell24h Platform" class="hero-image">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="mb-3">Powerful Features for Import/Export Success</h2>
+        <p class="lead text-muted">Leverage advanced technology to streamline your B2B transactions</p>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-microphone"></i>
+            </div>
+            <h3 class="feature-title">Voice-Based RFQ</h3>
+            <p>Submit requests for quotations using voice commands. Our AI transcribes and formats your requirements perfectly.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="feature-title">Supplier Risk Scoring</h3>
+            <p>Evaluate suppliers with our comprehensive risk analysis that includes financial stability, compliance, and performance metrics.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="feature-title">AI Matching</h3>
+            <p>Our advanced algorithms match your RFQs with the most suitable suppliers based on your specific requirements.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="feature-title">Blockchain Records</h3>
+            <p>Secure and immutable transaction records using Polygon blockchain technology for enhanced trust and transparency.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <h3 class="feature-title">Invoice Discounting</h3>
+            <p>Improve cash flow with our integrated KredX invoice discounting service, unlocking working capital when you need it.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <h3 class="feature-title">Logistics Tracking</h3>
+            <p>Real-time tracking of shipments with seamless integration with major logistics providers like Shiprocket and DHL.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="how-it-works">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="mb-3">How Bell24h Works</h2>
+        <p class="lead text-muted">Simple steps to transform your import/export business</p>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-md-3">
+          <div class="text-center">
+            <div class="step-number mx-auto">1</div>
+            <h3 class="step-title">Register</h3>
+            <p>Create your account as a buyer or supplier and complete your business profile.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="text-center">
+            <div class="step-number mx-auto">2</div>
+            <h3 class="step-title">Submit RFQs</h3>
+            <p>Create detailed requests using text, voice, or video to describe your requirements.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="text-center">
+            <div class="step-number mx-auto">3</div>
+            <h3 class="step-title">Receive Bids</h3>
+            <p>Get matched with qualified suppliers who submit competitive bids for your business.</p>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="text-center">
+            <div class="step-number mx-auto">4</div>
+            <h3 class="step-title">Close Deals</h3>
+            <p>Finalize contracts, manage payments, and track deliveries all within the platform.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing" class="features">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="mb-3">Simple, Transparent Pricing</h2>
+        <p class="lead text-muted">Choose the plan that fits your business needs</p>
+      </div>
+      
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body text-center p-4">
+              <h5 class="card-title text-muted">Basic</h5>
+              <h2 class="my-3">Free</h2>
+              <p class="card-text text-muted mb-4">For small businesses just getting started</p>
+              <ul class="list-unstyled text-start mb-4">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5 RFQs per month</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Basic supplier matching</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Text-based RFQs only</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Standard analytics</li>
+                <li class="mb-2 text-muted"><i class="fas fa-times text-danger me-2"></i> Voice/Video RFQs</li>
+                <li class="mb-2 text-muted"><i class="fas fa-times text-danger me-2"></i> Supplier risk scoring</li>
+              </ul>
+              <a href="auth.html?mode=register&plan=basic" class="btn btn-outline-primary w-100">Get Started</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card h-100 border-primary">
+            <div class="card-header bg-primary text-white text-center py-3">
+              <span class="badge bg-white text-primary">MOST POPULAR</span>
+            </div>
+            <div class="card-body text-center p-4">
+              <h5 class="card-title text-muted">Professional</h5>
+              <h2 class="my-3">$99<small class="text-muted">/month</small></h2>
+              <p class="card-text text-muted mb-4">For growing businesses with regular import/export needs</p>
+              <ul class="list-unstyled text-start mb-4">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited RFQs</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Advanced AI matching</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Voice & text RFQs</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Supplier risk assessment</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Advanced analytics</li>
+                <li class="mb-2 text-muted"><i class="fas fa-times text-danger me-2"></i> Invoice discounting</li>
+              </ul>
+              <a href="auth.html?mode=register&plan=professional" class="btn btn-primary w-100">Get Started</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-body text-center p-4">
+              <h5 class="card-title text-muted">Enterprise</h5>
+              <h2 class="my-3">$249<small class="text-muted">/month</small></h2>
+              <p class="card-text text-muted mb-4">For large businesses with complex requirements</p>
+              <ul class="list-unstyled text-start mb-4">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Everything in Professional</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Video RFQs with privacy features</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> KredX invoice discounting</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Blockchain verification</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Priority support</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom integrations</li>
+              </ul>
+              <a href="auth.html?mode=register&plan=enterprise" class="btn btn-outline-primary w-100">Get Started</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-4">
+        <p>Need a custom solution? <a href="#">Contact us</a> for tailored enterprise pricing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="mb-3">What Our Customers Say</h2>
+        <p class="lead text-muted">Join thousands of satisfied businesses on Bell24h</p>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-text">
+              "Bell24h has transformed our procurement process. The voice RFQ feature saves us hours of typing, and the supplier matching is incredibly accurate."
+            </div>
+            <div class="testimonial-author">Rajesh Kumar</div>
+            <div class="testimonial-company">Procurement Manager, Global Imports Ltd</div>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-text">
+              "As a supplier, I've been able to reach new customers globally. The risk scoring system helps build trust with potential buyers, making it easier to close deals."
+            </div>
+            <div class="testimonial-author">Sarah Johnson</div>
+            <div class="testimonial-company">CEO, Premium Electronics Co.</div>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="testimonial-text">
+              "The integrated invoice discounting feature through KredX has been a game-changer for our cash flow. We can now take on larger orders with confidence."
+            </div>
+            <div class="testimonial-author">Ahmed Al-Farsi</div>
+            <div class="testimonial-company">Finance Director, Dubai Trading LLC</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to Transform Your Import/Export Business?</h2>
+      <p>Join thousands of businesses already using Bell24h to streamline their operations.</p>
+      <a href="auth.html?mode=register" class="btn btn-light">Get Started Today</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5>About Bell24h</h5>
+          <p>Bell24h is an AI-driven B2B marketplace designed to streamline import/export operations with advanced matching algorithms, risk assessment, and integrated financial services.</p>
+          <div class="social-icons mt-3">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        
+        <div class="col-md-2">
+          <h5>Quick Links</h5>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="api-docs.html">API Documentation</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-md-2">
+          <h5>Resources</h5>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Knowledge Base</a></li>
+            <li><a href="#">Case Studies</a></li>
+            <li><a href="#">Webinars</a></li>
+            <li><a href="#">Developer Resources</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-md-4">
+          <h5>Contact Us</h5>
+          <p><i class="fas fa-map-marker-alt me-2"></i> 123 Innovation Drive, Mumbai, India</p>
+          <p><i class="fas fa-phone me-2"></i> +91 9876543210</p>
+          <p><i class="fas fa-envelope me-2"></i> info@bell24h.com</p>
+          <form>
+            <div class="input-group mb-3">
+              <input type="email" class="form-control" placeholder="Subscribe to our newsletter">
+              <button class="btn btn-primary" type="button">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        <p>&copy; 2025 Bell24h. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

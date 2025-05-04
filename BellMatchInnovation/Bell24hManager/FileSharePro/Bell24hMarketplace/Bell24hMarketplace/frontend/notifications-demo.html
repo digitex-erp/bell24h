@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h - Notification System Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .card {
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status-disconnected { background-color: #e74c3c; }
+        .status-connecting { background-color: #f39c12; }
+        .status-connected { background-color: #2ecc71; }
+        
+        .control-panel {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        input[type="text"], 
+        input[type="number"], 
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex-grow: 1;
+        }
+        
+        .notification-type-btn {
+            flex: 1;
+            min-width: 140px;
+            margin-bottom: 10px;
+        }
+        
+        .notification-type-btn.message { background-color: #2ecc71; }
+        .notification-type-btn.message:hover { background-color: #27ae60; }
+        
+        .notification-type-btn.bid { background-color: #f39c12; }
+        .notification-type-btn.bid:hover { background-color: #d35400; }
+        
+        .notification-type-btn.payment { background-color: #9b59b6; }
+        .notification-type-btn.payment:hover { background-color: #8e44ad; }
+        
+        .notification-type-btn.delivery { background-color: #e74c3c; }
+        .notification-type-btn.delivery:hover { background-color: #c0392b; }
+        
+        .notification-type-btn.rfq { background-color: #3498db; }
+        .notification-type-btn.rfq:hover { background-color: #2980b9; }
+        
+        .notification-type-btn.verification { background-color: #1abc9c; }
+        .notification-type-btn.verification:hover { background-color: #16a085; }
+        
+        .notification-list {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .url-input {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .url-input label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .debug-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 600px) {
+            .control-panel {
+                flex-direction: column;
+            }
+            .notification-type-btn {
+                width: 100%;
+            }
+        }
+        
+        /* Placeholder for notification container styling (will be created by JS) */
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bell24h - Notification System Demo</h1>
+    
+    <div class="card">
+        <h2>Notification System</h2>
+        <p>
+            This demo showcases our notification system for Bell24h, which features:
+        </p>
+        <ul>
+            <li>Real-time notifications via WebSocket, SSE, or HTTP polling</li>
+            <li>Distinctive sound alerts for different notification types</li>
+            <li>Toast-style on-screen notifications</li>
+            <li>Browser notifications for background alerts</li>
+            <li>Mobile-friendly design for users in Tier-2 cities</li>
+        </ul>
+        
+        <div class="status">
+            <div class="status-indicator status-disconnected" id="status-indicator"></div>
+            <span id="status-text">Disconnected</span>
+        </div>
+        
+        <h3>Connection Settings</h3>
+        
+        <div class="control-panel">
+            <div class="url-input">
+                <label for="websocket-url">WebSocket URL:</label>
+                <input type="text" id="websocket-url" placeholder="ws://hostname:port">
+            </div>
+            
+            <div class="url-input">
+                <label for="sse-url">SSE URL:</label>
+                <input type="text" id="sse-url" placeholder="http://hostname:port/events">
+            </div>
+            
+            <div class="url-input">
+                <label for="poll-url">Polling URL:</label>
+                <input type="text" id="poll-url" placeholder="http://hostname:port/api/notifications">
+            </div>
+        </div>
+        
+        <div class="control-panel">
+            <div class="checkbox-container">
+                <input type="checkbox" id="debug-mode" checked>
+                <label for="debug-mode">Debug Mode</label>
+            </div>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="enable-sounds" checked>
+                <label for="enable-sounds">Enable Sounds</label>
+            </div>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="enable-browser-notifications" checked>
+                <label for="enable-browser-notifications">Browser Notifications</label>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label for="poll-interval">Polling Interval (ms):</label>
+                <input type="number" id="poll-interval" value="3000" min="1000" step="500" style="width: 100px;">
+            </div>
+        </div>
+        
+        <div class="control-panel">
+            <button id="connect-btn">Connect</button>
+            <button id="disconnect-btn" disabled>Disconnect</button>
+            <button id="clear-btn">Clear Notifications</button>
+        </div>
+        
+        <h3>Test Notifications</h3>
+        <p>Click to trigger different types of notifications:</p>
+        
+        <div class="control-panel">
+            <button class="notification-type-btn message" data-type="message">Message</button>
+            <button class="notification-type-btn bid" data-type="bid">Bid Update</button>
+            <button class="notification-type-btn payment" data-type="payment">Payment</button>
+            <button class="notification-type-btn delivery" data-type="delivery">Delivery</button>
+            <button class="notification-type-btn rfq" data-type="rfq">RFQ</button>
+            <button class="notification-type-btn verification" data-type="verification">Verification</button>
+        </div>
+        
+        <h3>Notification History</h3>
+        <div class="notification-list" id="notification-list"></div>
+        
+        <div class="debug-info" id="debug-info"></div>
+    </div>
+    
+    <div id="notification-container"></div>
+    
+    <script src="/js/bell24h-websocket.js"></script>
+    <script src="/js/bell24h-notifications.js"></script>
+    <script>
+        // DOM Elements
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusText = document.getElementById('status-text');
+        const websocketUrlInput = document.getElementById('websocket-url');
+        const sseUrlInput = document.getElementById('sse-url');
+        const pollUrlInput = document.getElementById('poll-url');
+        const debugModeCheckbox = document.getElementById('debug-mode');
+        const enableSoundsCheckbox = document.getElementById('enable-sounds');
+        const enableBrowserNotificationsCheckbox = document.getElementById('enable-browser-notifications');
+        const pollIntervalInput = document.getElementById('poll-interval');
+        const connectBtn = document.getElementById('connect-btn');
+        const disconnectBtn = document.getElementById('disconnect-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const notificationList = document.getElementById('notification-list');
+        const debugInfo = document.getElementById('debug-info');
+        
+        // Bell24h Notification Manager
+        let notificationManager = null;
+        
+        // Set up default URLs based on the current host
+        document.addEventListener('DOMContentLoaded', () => {
+            const host = window.location.hostname;
+            const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const httpProtocol = window.location.protocol;
+            
+            websocketUrlInput.value = `${wsProtocol}//${host}:5000`;
+            sseUrlInput.value = `${httpProtocol}//${host}:5004/events`;
+            pollUrlInput.value = `${httpProtocol}//${host}:5003/api/notifications`;
+            
+            updateDebugInfo();
+        });
+        
+        // Setup notification type buttons
+        document.querySelectorAll('.notification-type-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const type = button.dataset.type;
+                createTestNotification(type);
+            });
+        });
+        
+        // Helper Functions
+        function updateStatus(status, text) {
+            statusIndicator.className = 'status-indicator';
+            statusIndicator.classList.add(`status-${status}`);
+            statusText.textContent = text;
+        }
+        
+        function updateDebugInfo() {
+            const connectionMode = notificationManager && notificationManager.realTimeClient ? 
+                notificationManager.realTimeClient.connectionMode : 'none';
+            const connectionState = notificationManager && notificationManager.realTimeClient ? 
+                notificationManager.realTimeClient.connectionState : 'disconnected';
+            
+            debugInfo.innerHTML = `
+                <h4>Debug Information</h4>
+                <p><strong>Window Location:</strong> ${window.location.href}</p>
+                <p><strong>Host:</strong> ${window.location.hostname}</p>
+                <p><strong>Connection Mode:</strong> ${connectionMode || 'None'}</p>
+                <p><strong>Connection State:</strong> ${connectionState}</p>
+                <p><strong>WebSocket URL:</strong> ${websocketUrlInput.value}</p>
+                <p><strong>SSE URL:</strong> ${sseUrlInput.value}</p>
+                <p><strong>Polling URL:</strong> ${pollUrlInput.value}</p>
+                <p><strong>Polling Interval:</strong> ${pollIntervalInput.value}ms</p>
+                <p><strong>Debug Mode:</strong> ${debugModeCheckbox.checked ? 'Enabled' : 'Disabled'}</p>
+                <p><strong>Sounds:</strong> ${enableSoundsCheckbox.checked ? 'Enabled' : 'Disabled'}</p>
+                <p><strong>Browser Notifications:</strong> ${enableBrowserNotificationsCheckbox.checked ? 'Enabled' : 'Disabled'}</p>
+                <p><strong>Total Notifications:</strong> ${notificationManager ? notificationManager.getNotifications().length : 0}</p>
+            `;
+        }
+        
+        function addNotificationToHistory(notification) {
+            const element = document.createElement('div');
+            element.style.padding = '10px';
+            element.style.marginBottom = '8px';
+            element.style.borderRadius = '4px';
+            element.style.background = '#f8f9fa';
+            element.style.borderLeft = '4px solid #3498db';
+            
+            // Add category-specific styles
+            if (notification.category) {
+                switch(notification.category.toLowerCase()) {
+                    case 'message':
+                        element.style.borderLeftColor = '#2ecc71';
+                        break;
+                    case 'bid':
+                    case 'bid_update':
+                        element.style.borderLeftColor = '#f39c12';
+                        break;
+                    case 'payment':
+                        element.style.borderLeftColor = '#9b59b6';
+                        break;
+                    case 'delivery':
+                        element.style.borderLeftColor = '#e74c3c';
+                        break;
+                    case 'rfq':
+                        element.style.borderLeftColor = '#3498db';
+                        break;
+                    case 'verification':
+                        element.style.borderLeftColor = '#1abc9c';
+                        break;
+                }
+            }
+            
+            const html = `
+                <div style="font-weight: bold;">${notification.title || 'Notification'}</div>
+                ${notification.message ? `<div>${notification.message}</div>` : ''}
+                <div style="font-size: 0.8em; color: #7f8c8d; margin-top: 5px;">
+                    ${new Date().toLocaleTimeString()}
+                </div>
+            `;
+            
+            element.innerHTML = html;
+            notificationList.prepend(element);
+        }
+        
+        function createTestNotification(type) {
+            if (notificationManager) {
+                notificationManager.createTestNotification(type)
+                    .then(notification => {
+                        console.log(`Created test ${type} notification:`, notification);
+                    })
+                    .catch(error => {
+                        console.error(`Error creating test ${type} notification:`, error);
+                    });
+            } else {
+                console.warn('Notification manager not initialized');
+            }
+        }
+        
+        // Event Handlers
+        connectBtn.addEventListener('click', () => {
+            try {
+                // Get configuration from inputs
+                const realTimeOptions = {
+                    websocketUrl: websocketUrlInput.value,
+                    sseUrl: sseUrlInput.value,
+                    pollUrl: pollUrlInput.value,
+                    pollInterval: parseInt(pollIntervalInput.value),
+                    autoConnect: false,
+                    debug: debugModeCheckbox.checked
+                };
+                
+                // Create new notification manager
+                notificationManager = new Bell24hNotificationManager({
+                    realTimeOptions,
+                    enableSounds: enableSoundsCheckbox.checked,
+                    enableBrowserNotifications: enableBrowserNotificationsCheckbox.checked,
+                    debug: debugModeCheckbox.checked,
+                    containerSelector: '#notification-container',
+                    onNotification: (notification) => {
+                        addNotificationToHistory(notification);
+                        updateDebugInfo();
+                    }
+                });
+                
+                // Connect to the service
+                updateStatus('connecting', 'Connecting...');
+                
+                notificationManager.realTimeClient.on('connect', (data) => {
+                    if (data.state === 'connected') {
+                        updateStatus('connected', `Connected (${data.mode})`);
+                        connectBtn.disabled = true;
+                        disconnectBtn.disabled = false;
+                        updateDebugInfo();
+                    }
+                });
+                
+                notificationManager.realTimeClient.on('disconnect', (data) => {
+                    updateStatus('disconnected', 'Disconnected');
+                    connectBtn.disabled = false;
+                    disconnectBtn.disabled = true;
+                    updateDebugInfo();
+                });
+                
+                notificationManager.realTimeClient.connect();
+                
+                updateDebugInfo();
+            } catch (error) {
+                console.error('Connection error:', error);
+            }
+        });
+        
+        disconnectBtn.addEventListener('click', () => {
+            if (notificationManager && notificationManager.realTimeClient) {
+                notificationManager.realTimeClient.disconnect();
+            }
+        });
+        
+        clearBtn.addEventListener('click', () => {
+            if (notificationManager) {
+                notificationManager.clearNotifications();
+                notificationList.innerHTML = '';
+                updateDebugInfo();
+            }
+        });
+        
+        // Update settings when changed
+        debugModeCheckbox.addEventListener('change', () => {
+            if (notificationManager) {
+                notificationManager.setDebug(debugModeCheckbox.checked);
+                updateDebugInfo();
+            }
+        });
+        
+        enableSoundsCheckbox.addEventListener('change', () => {
+            if (notificationManager) {
+                notificationManager.setSoundsEnabled(enableSoundsCheckbox.checked);
+                updateDebugInfo();
+            }
+        });
+        
+        enableBrowserNotificationsCheckbox.addEventListener('change', () => {
+            if (notificationManager) {
+                notificationManager.setBrowserNotificationsEnabled(enableBrowserNotificationsCheckbox.checked);
+                updateDebugInfo();
+            }
+        });
+        
+        // Update debug info when inputs change
+        [websocketUrlInput, sseUrlInput, pollUrlInput, pollIntervalInput].forEach(element => {
+            element.addEventListener('change', updateDebugInfo);
+        });
+    </script>
+</body>
+</html>
