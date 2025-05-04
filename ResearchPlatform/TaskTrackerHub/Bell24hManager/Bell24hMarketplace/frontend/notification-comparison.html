@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell24h Communication Methods</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bell24h-styles.css">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold">Bell24h Communication System</h1>
+            <p class="mt-2 text-blue-100">Real-time updates using HTTP Polling & WebSockets</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Choose a Demo</h2>
+            <p class="text-gray-600 mb-6">
+                Bell24h offers two methods for real-time communication between clients and the server.
+                Choose one of the demos below to explore each implementation.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- HTTP Polling Card -->
+                <div class="border rounded-lg shadow-sm hover:shadow-md transition p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-medium">HTTP Polling</h3>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">
+                        HTTP polling regularly checks the server for new notifications, making it compatible
+                        with all browsers and environments. This approach has been fully tested and implemented.
+                    </p>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Production Ready</span>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Universal Support</span>
+                    </div>
+                    
+                    <a href="notification-demo.html" class="mt-6 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                        View HTTP Polling Demo
+                    </a>
+                </div>
+                
+                <!-- WebSocket Card -->
+                <div class="border rounded-lg shadow-sm hover:shadow-md transition p-6 bg-gradient-to-br from-purple-50 to-pink-50">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-medium">WebSockets</h3>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">
+                        WebSockets provide a persistent connection for instant bi-directional communication,
+                        reducing latency and server load. This implementation is still in development.
+                    </p>
+                    
+                    <div class="flex items-center space-x-4">
+                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">In Development</span>
+                        <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Low Latency</span>
+                    </div>
+                    
+                    <a href="websocket-demo.html" class="mt-6 inline-block px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition">
+                        View WebSocket Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-semibold mb-4">Communication Method Comparison</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feature</th>
+                            <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">HTTP Polling</th>
+                            <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">WebSockets</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Connection Type</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Periodic Requests</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Persistent Connection</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Server Resource Usage</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Medium</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Low</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Latency</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5+ seconds</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Near Real-time</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Bi-directional Communication</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Limited</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Full Support</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Browser Compatibility</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Universal</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Most Modern Browsers</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Implementation Complexity</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Simple</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Moderate</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Bell24h Status</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500 font-medium">Implemented</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-500 font-medium">In Development</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <p class="text-center">Bell24h.com Communication System Demo © 2025</p>
+        </div>
+    </footer>
+</body>
+</html>
