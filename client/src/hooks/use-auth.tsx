@@ -4,17 +4,38 @@ import {
   useMutation,
   UseMutationResult,
 } from "@tanstack/react-query";
-import { insertUserSchema, User as SelectUser, InsertUser, loginUserSchema, LoginUser } from "@shared/schema";
-import { getQueryFn, apiRequest, queryClient } from "../lib/queryClient";
+import { getQueryFn, apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
+// Define the user type based on your application's needs
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+  organization_id: number | null;
+  created_at: string;
+};
+
+type LoginData = {
+  username: string;
+  password: string;
+};
+
+type RegisterData = {
+  username: string;
+  email: string;
+  password: string;
+  name?: string;
+};
+
 type AuthContextType = {
-  user: SelectUser | null;
+  user: User | null;
   isLoading: boolean;
   error: Error | null;
-  loginMutation: UseMutationResult<SelectUser, Error, LoginUser>;
+  loginMutation: UseMutationResult<User, Error, LoginData>;
   logoutMutation: UseMutationResult<void, Error, void>;
-  registerMutation: UseMutationResult<SelectUser, Error, InsertUser>;
+  registerMutation: UseMutationResult<User, Error, RegisterData>;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -25,18 +46,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     data: user,
     error,
     isLoading,
-  } = useQuery<SelectUser | undefined, Error>({
+  } = useQuery<User | null>({
     queryKey: ["/api/user"],
     queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const loginMutation = useMutation({
-    mutationFn: async (credentials: LoginUser) => {
-      const validatedCredentials = loginUserSchema.parse(credentials);
-      const res = await apiRequest("POST", "/api/login", validatedCredentials);
-      return await res.json();
+    async mutationFn(credentials: LoginData) {
+      const res = await apiRequest("POST", "/api/login", credentials);
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Login failed");
+      }
+      return res.json();
     },
-    onSuccess: (user: SelectUser) => {
+    onSuccess: (user: User) => {
       queryClient.setQueryData(["/api/user"], user);
       toast({
         title: "Login successful",
@@ -53,16 +77,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const registerMutation = useMutation({
-    mutationFn: async (userData: InsertUser) => {
-      const validatedData = insertUserSchema.parse(userData);
-      const res = await apiRequest("POST", "/api/register", validatedData);
-      return await res.json();
+    async mutationFn(data: RegisterData) {
+      const res = await apiRequest("POST", "/api/register", data);
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Registration failed");
+      }
+      return res.json();
     },
-    onSuccess: (user: SelectUser) => {
+    onSuccess: (user: User) => {
       queryClient.setQueryData(["/api/user"], user);
       toast({
         title: "Registration successful",
-        description: `Welcome to Bell24h, ${user.username}!`,
+        description: `Welcome, ${user.username}!`,
       });
     },
     onError: (error: Error) => {
@@ -75,14 +102,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const logoutMutation = useMutation({
-    mutationFn: async () => {
-      await apiRequest("POST", "/api/logout");
+    async mutationFn() {
+      const res = await apiRequest("POST", "/api/logout");
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Logout failed");
+      }
     },
     onSuccess: () => {
       queryClient.setQueryData(["/api/user"], null);
       toast({
         title: "Logged out",
-        description: "You've been successfully logged out.",
+        description: "You have been successfully logged out.",
       });
     },
     onError: (error: Error) => {

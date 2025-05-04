@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { ProtectedRoute } from "./lib/protected-route";
+import { AuthProvider } from "@/hooks/use-auth";
 
 // Pages
 import DashboardPage from "@/pages/dashboard-page";
@@ -17,6 +18,7 @@ import WalletPage from "@/pages/wallet-page";
 import AnalyticsPage from "@/pages/analytics-page";
 import VoiceAnalyticsPage from "@/pages/voice-analytics-page";
 import VoiceTutorialPage from "@/pages/voice-tutorial-page";
+import AclPage from "@/pages/acl-page";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -32,6 +34,7 @@ function Router() {
       <ProtectedRoute path="/analytics" component={AnalyticsPage} />
       <ProtectedRoute path="/voice-analytics" component={VoiceAnalyticsPage} />
       <ProtectedRoute path="/voice-tutorials" component={VoiceTutorialPage} />
+      <ProtectedRoute path="/acl" component={AclPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -42,8 +45,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class">
         <TooltipProvider>
-          <Toaster />
-          <Router />
+          <AuthProvider>
+            <Toaster />
+            <Router />
+          </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>

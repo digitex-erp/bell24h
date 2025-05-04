@@ -291,6 +291,74 @@ export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
   })
 }));
 
+// Access Control Lists
+export const accessControlLists = pgTable('access_control_lists', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  description: text('description'),
+  created_by: integer('created_by').references(() => users.id).notNull(),
+  organization_id: integer('organization_id').references(() => organizations.id),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').notNull().defaultNow()
+});
+
+export const aclRules = pgTable('acl_rules', {
+  id: serial('id').primaryKey(),
+  acl_id: integer('acl_id').references(() => accessControlLists.id).notNull(),
+  resource_type: text('resource_type').notNull(), // e.g. 'rfq', 'contract', etc.
+  permission: permissionTypeEnum('permission').notNull().default('read'),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').notNull().defaultNow()
+});
+
+export const accessControlListsRelations = relations(accessControlLists, ({ one, many }) => ({
+  creator: one(users, {
+    fields: [accessControlLists.created_by],
+    references: [users.id],
+  }),
+  organization: one(organizations, {
+    fields: [accessControlLists.organization_id],
+    references: [organizations.id],
+  }),
+  rules: many(aclRules),
+  assignments: many(aclAssignments)
+}));
+
+export const aclRulesRelations = relations(aclRules, ({ one }) => ({
+  acl: one(accessControlLists, {
+    fields: [aclRules.acl_id],
+    references: [accessControlLists.id],
+  })
+}));
+
+export const aclAssignments = pgTable('acl_assignments', {
+  id: serial('id').primaryKey(),
+  acl_id: integer('acl_id').references(() => accessControlLists.id).notNull(),
+  user_id: integer('user_id').references(() => users.id),
+  team_id: integer('team_id').references(() => teams.id),
+  organization_id: integer('organization_id').references(() => organizations.id),
+  created_at: timestamp('created_at').notNull().defaultNow()
+});
+
+export const aclAssignmentsRelations = relations(aclAssignments, ({ one }) => ({
+  acl: one(accessControlLists, {
+    fields: [aclAssignments.acl_id],
+    references: [accessControlLists.id],
+  }),
+  user: one(users, {
+    fields: [aclAssignments.user_id],
+    references: [users.id],
+  }),
+  team: one(teams, {
+    fields: [aclAssignments.team_id],
+    references: [teams.id],
+  }),
+  organization: one(organizations, {
+    fields: [aclAssignments.organization_id],
+    references: [organizations.id],
+  })
+}));
+
 // Resource Permissions table
 export const resourcePermissions = pgTable('resource_permissions', {
   id: serial('id').primaryKey(),
@@ -355,6 +423,15 @@ export const insertOrganizationMemberSchema = createInsertSchema(organizationMem
 export const insertTeamMemberSchema = createInsertSchema(teamMembers)
   .omit({ id: true, joined_at: true });
 
+export const insertAccessControlListSchema = createInsertSchema(accessControlLists)
+  .omit({ id: true, created_at: true, updated_at: true });
+
+export const insertAclRuleSchema = createInsertSchema(aclRules)
+  .omit({ id: true, created_at: true, updated_at: true });
+
+export const insertAclAssignmentSchema = createInsertSchema(aclAssignments)
+  .omit({ id: true, created_at: true });
+
 export const insertResourcePermissionSchema = createInsertSchema(resourcePermissions)
   .omit({ id: true, created_at: true, updated_at: true });
 
@@ -391,6 +468,15 @@ export type InsertOrganizationMember = z.infer<typeof insertOrganizationMemberSc
 
 export type TeamMember = typeof teamMembers.$inferSelect;
 export type InsertTeamMember = z.infer<typeof insertTeamMemberSchema>;
+
+export type AccessControlList = typeof accessControlLists.$inferSelect;
+export type InsertAccessControlList = z.infer<typeof insertAccessControlListSchema>;
+
+export type AclRule = typeof aclRules.$inferSelect;
+export type InsertAclRule = z.infer<typeof insertAclRuleSchema>;
+
+export type AclAssignment = typeof aclAssignments.$inferSelect;
+export type InsertAclAssignment = z.infer<typeof insertAclAssignmentSchema>;
 
 export type ResourcePermission = typeof resourcePermissions.$inferSelect;
 export type InsertResourcePermission = z.infer<typeof insertResourcePermissionSchema>;

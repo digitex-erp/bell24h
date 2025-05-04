@@ -3,14 +3,17 @@ import {
   Message, InsertMessage, Transaction, InsertTransaction, Supplier,
   Organization, InsertOrganization, Team, InsertTeam,
   OrganizationMember, InsertOrganizationMember, TeamMember, InsertTeamMember,
-  ResourcePermission, InsertResourcePermission
+  ResourcePermission, InsertResourcePermission,
+  AccessControlList, InsertAccessControlList, AclRule, InsertAclRule,
+  AclAssignment, InsertAclAssignment
 } from '@shared/schema';
 import { 
   users, rfqs, bids, contracts, messages, transactions, suppliers,
-  organizations, teams, organizationMembers, teamMembers, resourcePermissions
+  organizations, teams, organizationMembers, teamMembers, resourcePermissions,
+  accessControlLists, aclRules, aclAssignments
 } from '@shared/schema';
 import { db } from './db';
-import { eq, and, or, desc } from 'drizzle-orm';
+import { eq, and, or, desc, inArray } from 'drizzle-orm';
 import session from 'express-session';
 import connectPg from 'connect-pg-simple';
 import { pool } from './db';
@@ -109,6 +112,30 @@ export interface IStorage {
   canViewResourcePermissions(resourceType: string, resourceId: number, userId: number): Promise<boolean>;
   canManageResourcePermissions(resourceType: string, resourceId: number, userId: number): Promise<boolean>;
   getUserPermissionLevel(resourceType: string, resourceId: number, userId: number): Promise<string>;
+  
+  // Access Control Lists (ACL) operations
+  getAccessControlList(id: number): Promise<AccessControlList | undefined>;
+  getAccessControlLists(organizationId?: number): Promise<AccessControlList[]>;
+  getUserAccessControlLists(userId: number): Promise<AccessControlList[]>;
+  createAccessControlList(data: InsertAccessControlList): Promise<AccessControlList>;
+  updateAccessControlList(id: number, data: Partial<InsertAccessControlList>): Promise<AccessControlList>;
+  deleteAccessControlList(id: number): Promise<void>;
+  
+  // ACL Rules operations
+  getAclRule(id: number): Promise<AclRule | undefined>;
+  getAclRules(aclId: number): Promise<AclRule[]>;
+  createAclRule(data: InsertAclRule): Promise<AclRule>;
+  updateAclRule(id: number, data: Partial<InsertAclRule>): Promise<AclRule>;
+  deleteAclRule(id: number): Promise<void>;
+  
+  // ACL Assignments operations
+  getAclAssignment(id: number): Promise<AclAssignment | undefined>;
+  getAclAssignments(aclId: number): Promise<AclAssignment[]>;
+  createAclAssignment(data: InsertAclAssignment): Promise<AclAssignment>;
+  deleteAclAssignment(id: number): Promise<void>;
+  
+  // ACL Permission checking
+  getEffectivePermission(userId: number, resourceType: string, resourceId?: number): Promise<string>;
   
   // Session store
   sessionStore: session.Store;
@@ -354,6 +381,14 @@ export class DatabaseStorage implements IStorage {
     return organization;
   }
 
+  async getOrganizations(userId?: number): Promise<Organization[]> {
+    if (userId) {
+      return this.getUserOrganizations(userId);
+    }
+    
+    return await db.select().from(organizations).orderBy(organizations.name);
+  }
+
   async getUserOrganizations(userId: number): Promise<Organization[]> {
     // Get organizations where user is owner or member
     const ownedOrgs = await db
@@ -384,6 +419,16 @@ export class DatabaseStorage implements IStorage {
       updated_at: new Date()
     }).returning();
     
+    // If this is a new organization, automatically add the creator as an admin member
+    if (data.owner_id && organization.id) {
+      await this.addOrganizationMember({
+        organization_id: organization.id,
+        user_id: data.owner_id,
+        role: 'admin',
+        invited_by: data.owner_id
+      });
+    }
+    
     return organization;
   }
 
@@ -399,54 +444,95 @@ export class DatabaseStorage implements IStorage {
     
     return organization;
   }
-
+  
   async deleteOrganization(id: number): Promise<void> {
-    // Delete all teams first
-    const orgTeams = await this.getOrganizationTeams(id);
-    for (const team of orgTeams) {
-      await this.deleteTeam(team.id);
-    }
-    
-    // Delete all memberships
+    // Delete all related organization members
     await db
       .delete(organizationMembers)
       .where(eq(organizationMembers.organization_id, id));
     
-    // Delete all resource permissions
-    await db
-      .delete(resourcePermissions)
-      .where(eq(resourcePermissions.organization_id, id));
+    // Delete all related teams and team members
+    const teams = await this.getOrganizationTeams(id);
+    for (const team of teams) {
+      await db
+        .delete(teamMembers)
+        .where(eq(teamMembers.team_id, team.id));
+    }
     
-    // Delete organization
+    await db
+      .delete(teams)
+      .where(eq(teams.organization_id, id));
+    
+    // Delete all related ACLs, rules, and assignments
+    const acls = await this.getAccessControlLists(id);
+    for (const acl of acls) {
+      await db
+        .delete(aclRules)
+        .where(eq(aclRules.acl_id, acl.id));
+      
+      await db
+        .delete(aclAssignments)
+        .where(eq(aclAssignments.acl_id, acl.id));
+    }
+    
+    await db
+      .delete(accessControlLists)
+      .where(eq(accessControlLists.organization_id, id));
+    
+    // Finally, delete the organization
     await db
       .delete(organizations)
       .where(eq(organizations.id, id));
   }
-
-  async isOrganizationMember(organizationId: number, userId: number): Promise<boolean> {
-    // Check if user is owner
-    const org = await this.getOrganization(organizationId);
-    if (org && org.owner_id === userId) {
+  
+  async isOrganizationMember(userId: number, organizationId: number): Promise<boolean> {
+    // Check if user is owner of the organization
+    const organization = await this.getOrganization(organizationId);
+    if (organization && organization.owner_id === userId) {
       return true;
     }
     
-    // Check if user is member
-    const [membership] = await db
+    // Check if user has a member record
+    const [member] = await db
       .select()
       .from(organizationMembers)
-      .where(and(
-        eq(organizationMembers.organization_id, organizationId),
-        eq(organizationMembers.user_id, userId)
-      ));
+      .where(
+        and(
+          eq(organizationMembers.organization_id, organizationId),
+          eq(organizationMembers.user_id, userId)
+        )
+      );
     
-    return !!membership;
+    return !!member;
   }
-
+  
+  async isOrganizationAdmin(userId: number, organizationId: number): Promise<boolean> {
+    // Check if user is owner of the organization
+    const organization = await this.getOrganization(organizationId);
+    if (organization && organization.owner_id === userId) {
+      return true;
+    }
+    
+    // Check if user has an admin role
+    const [member] = await db
+      .select()
+      .from(organizationMembers)
+      .where(
+        and(
+          eq(organizationMembers.organization_id, organizationId),
+          eq(organizationMembers.user_id, userId),
+          eq(organizationMembers.role, 'admin')
+        )
+      );
+    
+    return !!member;
+  }
+  
   async isOrganizationOwner(organizationId: number, userId: number): Promise<boolean> {
-    const org = await this.getOrganization(organizationId);
-    return !!org && org.owner_id === userId;
+    const organization = await this.getOrganization(organizationId);
+    return !!(organization && organization.owner_id === userId);
   }
-
+  
   async canManageOrganization(organizationId: number, userId: number): Promise<boolean> {
     // Owner can always manage
     const isOwner = await this.isOrganizationOwner(organizationId, userId);
@@ -801,6 +887,253 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(resourcePermissions)
       .where(eq(resourcePermissions.id, id));
+  }
+  
+  // Access Control Lists (ACL) operations
+  async getAccessControlList(id: number): Promise<AccessControlList | undefined> {
+    const [acl] = await db
+      .select()
+      .from(accessControlLists)
+      .where(eq(accessControlLists.id, id));
+    
+    return acl;
+  }
+  
+  async getAccessControlLists(organizationId?: number): Promise<AccessControlList[]> {
+    let query = db.select().from(accessControlLists);
+    
+    if (organizationId) {
+      query = query.where(eq(accessControlLists.organization_id, organizationId));
+    }
+    
+    return await query;
+  }
+  
+  async getUserAccessControlLists(userId: number): Promise<AccessControlList[]> {
+    // Get ACLs directly assigned to the user
+    const userAssignments = await db
+      .select()
+      .from(aclAssignments)
+      .where(eq(aclAssignments.user_id, userId));
+    
+    const aclIds = userAssignments.map(assignment => assignment.acl_id);
+    
+    // Get ACLs assigned to teams the user belongs to
+    const userTeams = await this.getUserTeams(userId);
+    const teamIds = userTeams.map(team => team.id);
+    
+    if (teamIds.length > 0) {
+      const teamAssignments = await db
+        .select()
+        .from(aclAssignments)
+        .where(inArray(aclAssignments.team_id, teamIds));
+      
+      aclIds.push(...teamAssignments.map(assignment => assignment.acl_id));
+    }
+    
+    // Get ACLs assigned to organizations the user belongs to
+    const userOrgs = await this.getUserOrganizations(userId);
+    const orgIds = userOrgs.map(org => org.id);
+    
+    if (orgIds.length > 0) {
+      const orgAssignments = await db
+        .select()
+        .from(aclAssignments)
+        .where(inArray(aclAssignments.organization_id, orgIds));
+      
+      aclIds.push(...orgAssignments.map(assignment => assignment.acl_id));
+    }
+    
+    // If no ACLs found, return empty array
+    if (aclIds.length === 0) {
+      return [];
+    }
+    
+    // Remove duplicates
+    const uniqueAclIds = [...new Set(aclIds)];
+    
+    // Get the actual ACL objects
+    return await db
+      .select()
+      .from(accessControlLists)
+      .where(inArray(accessControlLists.id, uniqueAclIds));
+  }
+  
+  async createAccessControlList(data: InsertAccessControlList): Promise<AccessControlList> {
+    const [acl] = await db
+      .insert(accessControlLists)
+      .values({
+        ...data,
+        created_at: new Date(),
+        updated_at: new Date()
+      })
+      .returning();
+    
+    return acl;
+  }
+  
+  async updateAccessControlList(id: number, data: Partial<InsertAccessControlList>): Promise<AccessControlList> {
+    const [acl] = await db
+      .update(accessControlLists)
+      .set({
+        ...data,
+        updated_at: new Date()
+      })
+      .where(eq(accessControlLists.id, id))
+      .returning();
+    
+    return acl;
+  }
+  
+  async deleteAccessControlList(id: number): Promise<void> {
+    // First delete all rules and assignments
+    await db
+      .delete(aclRules)
+      .where(eq(aclRules.acl_id, id));
+    
+    await db
+      .delete(aclAssignments)
+      .where(eq(aclAssignments.acl_id, id));
+    
+    // Then delete the ACL itself
+    await db
+      .delete(accessControlLists)
+      .where(eq(accessControlLists.id, id));
+  }
+  
+  // ACL Rules operations
+  async getAclRule(id: number): Promise<AclRule | undefined> {
+    const [rule] = await db
+      .select()
+      .from(aclRules)
+      .where(eq(aclRules.id, id));
+    
+    return rule;
+  }
+  
+  async getAclRules(aclId: number): Promise<AclRule[]> {
+    return await db
+      .select()
+      .from(aclRules)
+      .where(eq(aclRules.acl_id, aclId));
+  }
+  
+  async createAclRule(data: InsertAclRule): Promise<AclRule> {
+    const [rule] = await db
+      .insert(aclRules)
+      .values({
+        ...data,
+        created_at: new Date(),
+        updated_at: new Date()
+      })
+      .returning();
+    
+    return rule;
+  }
+  
+  async updateAclRule(id: number, data: Partial<InsertAclRule>): Promise<AclRule> {
+    const [rule] = await db
+      .update(aclRules)
+      .set({
+        ...data,
+        updated_at: new Date()
+      })
+      .where(eq(aclRules.id, id))
+      .returning();
+    
+    return rule;
+  }
+  
+  async deleteAclRule(id: number): Promise<void> {
+    await db
+      .delete(aclRules)
+      .where(eq(aclRules.id, id));
+  }
+  
+  // ACL Assignments operations
+  async getAclAssignment(id: number): Promise<AclAssignment | undefined> {
+    const [assignment] = await db
+      .select()
+      .from(aclAssignments)
+      .where(eq(aclAssignments.id, id));
+    
+    return assignment;
+  }
+  
+  async getAclAssignments(aclId: number): Promise<AclAssignment[]> {
+    return await db
+      .select()
+      .from(aclAssignments)
+      .where(eq(aclAssignments.acl_id, aclId));
+  }
+  
+  async createAclAssignment(data: InsertAclAssignment): Promise<AclAssignment> {
+    const [assignment] = await db
+      .insert(aclAssignments)
+      .values({
+        ...data,
+        created_at: new Date()
+      })
+      .returning();
+    
+    return assignment;
+  }
+  
+  async deleteAclAssignment(id: number): Promise<void> {
+    await db
+      .delete(aclAssignments)
+      .where(eq(aclAssignments.id, id));
+  }
+  
+  // ACL Permission checking
+  async getEffectivePermission(userId: number, resourceType: string, resourceId?: number): Promise<string> {
+    // First check direct resource permissions
+    if (resourceId) {
+      const directPermission = await this.getUserPermissionLevel(resourceType, resourceId, userId);
+      if (directPermission !== 'none') {
+        return directPermission;
+      }
+    }
+    
+    // Check ACLs assigned to the user, their teams, and organizations
+    const userAcls = await this.getUserAccessControlLists(userId);
+    
+    // If no ACLs, return 'none'
+    if (userAcls.length === 0) {
+      return 'none';
+    }
+    
+    const aclIds = userAcls.map(acl => acl.id);
+    
+    // Get all rules for these ACLs that match the resource type
+    const rules = await db
+      .select()
+      .from(aclRules)
+      .where(and(
+        inArray(aclRules.acl_id, aclIds),
+        eq(aclRules.resource_type, resourceType)
+      ));
+    
+    // Find the highest permission level
+    let highestPermission = 'none';
+    
+    for (const rule of rules) {
+      if (rule.permission === 'full') {
+        return 'full';
+      }
+      
+      if (rule.permission === 'create' && highestPermission === 'read') {
+        highestPermission = 'create';
+      } else if (rule.permission === 'update' && ['read', 'create'].includes(highestPermission)) {
+        highestPermission = 'update';
+      } else if (rule.permission === 'delete' && ['read', 'create', 'update'].includes(highestPermission)) {
+        highestPermission = 'delete';
+      } else if (rule.permission === 'read' && highestPermission === 'none') {
+        highestPermission = 'read';
+      }
+    }
+    
+    return highestPermission;
   }
 
   async canViewResourcePermissions(resourceType: string, resourceId: number, userId: number): Promise<boolean> {

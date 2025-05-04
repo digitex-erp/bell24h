@@ -1,17 +1,19 @@
 import { Router, Request, Response } from 'express';
 import { storage } from '../storage';
-import { insertOrganizationSchema, insertOrganizationMemberSchema, insertTeamSchema, insertTeamMemberSchema } from '../../shared/schema';
+import { insertOrganizationSchema, insertOrganizationMemberSchema } from '@shared/schema';
+import { z } from 'zod';
 
 const router = Router();
 
-// ===== Organization Routes =====
-router.get('/api/organizations', async (req: Request, res: Response) => {
+// Get all organizations
+router.get('/', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organizations = await storage.getUserOrganizations(req.user!.id);
+    const organizations = await storage.getOrganizations(req.user.id);
     res.json(organizations);
   } catch (error) {
     console.error('Error fetching organizations:', error);
@@ -19,21 +21,25 @@ router.get('/api/organizations', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/api/organizations/:id', async (req: Request, res: Response) => {
+// Get a specific organization by ID
+router.get('/:id', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organization = await storage.getOrganization(parseInt(req.params.id));
+    const orgId = Number(req.params.id);
+    const organization = await storage.getOrganization(orgId);
+    
     if (!organization) {
       return res.status(404).json({ error: 'Organization not found' });
     }
     
-    // Check if user can access this organization
-    const isMember = await storage.isOrganizationMember(organization.id, req.user!.id);
-    if (!isMember) {
-      return res.status(403).json({ error: 'Not authorized to view this organization' });
+    // Check if user is a member of this organization
+    const isMember = await storage.isOrganizationMember(req.user.id, orgId);
+    if (!isMember && organization.owner_id !== req.user.id) {
+      return res.status(403).json({ error: 'You do not have permission to view this organization' });
     }
     
     res.json(organization);
@@ -43,85 +49,121 @@ router.get('/api/organizations/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/api/organizations', async (req: Request, res: Response) => {
+// Create a new organization
+router.post('/', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const validatedData = insertOrganizationSchema.parse(req.body);
+    const result = insertOrganizationSchema.safeParse(req.body);
     
-    // Set the current user as the owner
-    validatedData.owner_id = req.user!.id;
+    if (!result.success) {
+      return res.status(400).json({ error: result.error.message });
+    }
     
-    const organization = await storage.createOrganization(validatedData);
-    res.status(201).json(organization);
+    const newOrganization = await storage.createOrganization({
+      ...result.data,
+      owner_id: req.user.id
+    });
+    
+    res.status(201).json(newOrganization);
   } catch (error) {
     console.error('Error creating organization:', error);
     res.status(500).json({ error: 'Failed to create organization' });
   }
 });
 
-router.patch('/api/organizations/:id', async (req: Request, res: Response) => {
+// Update an organization
+router.put('/:id', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organizationId = parseInt(req.params.id);
+    const orgId = Number(req.params.id);
+    const organization = await storage.getOrganization(orgId);
     
-    // Check if user can update this organization
-    const canManage = await storage.canManageOrganization(organizationId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to update this organization' });
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
     }
     
-    const organization = await storage.updateOrganization(organizationId, req.body);
-    res.json(organization);
+    // Check if user is the owner or an admin
+    if (organization.owner_id !== req.user.id) {
+      const isAdmin = await storage.isOrganizationAdmin(req.user.id, orgId);
+      if (!isAdmin) {
+        return res.status(403).json({ error: 'You do not have permission to update this organization' });
+      }
+    }
+    
+    // Update schema to allow partial updates
+    const updateSchema = insertOrganizationSchema.omit({ owner_id: true }).partial();
+    const result = updateSchema.safeParse(req.body);
+    
+    if (!result.success) {
+      return res.status(400).json({ error: result.error.message });
+    }
+    
+    const updatedOrganization = await storage.updateOrganization(orgId, result.data);
+    res.json(updatedOrganization);
   } catch (error) {
     console.error('Error updating organization:', error);
     res.status(500).json({ error: 'Failed to update organization' });
   }
 });
 
-router.delete('/api/organizations/:id', async (req: Request, res: Response) => {
+// Delete an organization
+router.delete('/:id', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organizationId = parseInt(req.params.id);
+    const orgId = Number(req.params.id);
+    const organization = await storage.getOrganization(orgId);
     
-    // Only owner can delete organization
-    const isOwner = await storage.isOrganizationOwner(organizationId, req.user!.id);
-    if (!isOwner) {
-      return res.status(403).json({ error: 'Not authorized to delete this organization' });
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
     }
     
-    await storage.deleteOrganization(organizationId);
-    res.status(204).end();
+    // Only the owner can delete the organization
+    if (organization.owner_id !== req.user.id) {
+      return res.status(403).json({ error: 'Only the owner can delete an organization' });
+    }
+    
+    await storage.deleteOrganization(orgId);
+    res.status(204).send();
   } catch (error) {
     console.error('Error deleting organization:', error);
     res.status(500).json({ error: 'Failed to delete organization' });
   }
 });
 
-// ===== Organization Member Routes =====
-router.get('/api/organizations/:id/members', async (req: Request, res: Response) => {
+// Get members of an organization
+router.get('/:id/members', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organizationId = parseInt(req.params.id);
+    const orgId = Number(req.params.id);
+    const organization = await storage.getOrganization(orgId);
     
-    // Check if user can view organization members
-    const isMember = await storage.isOrganizationMember(organizationId, req.user!.id);
-    if (!isMember) {
-      return res.status(403).json({ error: 'Not authorized to view organization members' });
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
     }
     
-    const members = await storage.getOrganizationMembers(organizationId);
+    // Check if user is a member of this organization
+    const isMember = await storage.isOrganizationMember(req.user.id, orgId);
+    if (!isMember && organization.owner_id !== req.user.id) {
+      return res.status(403).json({ error: 'You do not have permission to view members of this organization' });
+    }
+    
+    const members = await storage.getOrganizationMembers(orgId);
     res.json(members);
   } catch (error) {
     console.error('Error fetching organization members:', error);
@@ -129,344 +171,179 @@ router.get('/api/organizations/:id/members', async (req: Request, res: Response)
   }
 });
 
-router.post('/api/organizations/:id/members', async (req: Request, res: Response) => {
+// Add a member to an organization
+router.post('/:id/members', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organizationId = parseInt(req.params.id);
+    const orgId = Number(req.params.id);
+    const organization = await storage.getOrganization(orgId);
     
-    // Check if user can manage organization
-    const canManage = await storage.canManageOrganization(organizationId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to add members to this organization' });
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
     }
     
-    const validatedData = insertOrganizationMemberSchema.parse({
-      ...req.body,
-      organization_id: organizationId
+    // Check if user is the owner or an admin
+    const canAddMembers = organization.owner_id === req.user.id || 
+                         await storage.isOrganizationAdmin(req.user.id, orgId);
+    
+    if (!canAddMembers) {
+      return res.status(403).json({ error: 'You do not have permission to add members to this organization' });
+    }
+    
+    const addMemberSchema = insertOrganizationMemberSchema.extend({
+      invited_by: z.number().optional()
+    }).omit({ organization_id: true });
+    
+    const result = addMemberSchema.safeParse(req.body);
+    
+    if (!result.success) {
+      return res.status(400).json({ error: result.error.message });
+    }
+    
+    const newMember = await storage.addOrganizationMember({
+      ...result.data,
+      organization_id: orgId,
+      invited_by: req.user.id
     });
     
-    // Check if user already exists in organization
-    const isMember = await storage.isOrganizationMember(organizationId, validatedData.user_id);
-    if (isMember) {
-      return res.status(400).json({ error: 'User is already a member of this organization' });
-    }
-    
-    const member = await storage.addOrganizationMember(validatedData);
-    res.status(201).json(member);
+    res.status(201).json(newMember);
   } catch (error) {
     console.error('Error adding organization member:', error);
     res.status(500).json({ error: 'Failed to add organization member' });
   }
 });
 
-router.patch('/api/organizations/:orgId/members/:userId', async (req: Request, res: Response) => {
+// Update a member's role in an organization
+router.put('/:orgId/members/:memberId', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organizationId = parseInt(req.params.orgId);
-    const userId = parseInt(req.params.userId);
+    const orgId = Number(req.params.orgId);
+    const memberId = Number(req.params.memberId);
     
-    // Check if user can manage organization
-    const canManage = await storage.canManageOrganization(organizationId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to update members in this organization' });
+    const organization = await storage.getOrganization(orgId);
+    
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
     }
     
-    // Check if trying to update organization owner's role
-    const org = await storage.getOrganization(organizationId);
-    if (org && org.owner_id === userId) {
-      return res.status(400).json({ error: 'Cannot modify the role of the organization owner' });
+    // Check if user is the owner or an admin
+    const canUpdateMembers = organization.owner_id === req.user.id || 
+                           await storage.isOrganizationAdmin(req.user.id, orgId);
+    
+    if (!canUpdateMembers) {
+      return res.status(403).json({ error: 'You do not have permission to update members in this organization' });
     }
     
-    const member = await storage.updateOrganizationMember(organizationId, userId, req.body);
-    res.json(member);
+    const member = await storage.getOrganizationMember(memberId);
+    
+    if (!member || member.organization_id !== orgId) {
+      return res.status(404).json({ error: 'Member not found in this organization' });
+    }
+    
+    // Prevent demoting the owner
+    const memberUser = await storage.getUser(member.user_id);
+    if (memberUser && memberUser.id === organization.owner_id) {
+      return res.status(403).json({ error: 'Cannot change the role of the organization owner' });
+    }
+    
+    const updateSchema = z.object({
+      role: z.enum(['admin', 'manager', 'member', 'viewer'])
+    });
+    
+    const result = updateSchema.safeParse(req.body);
+    
+    if (!result.success) {
+      return res.status(400).json({ error: result.error.message });
+    }
+    
+    const updatedMember = await storage.updateOrganizationMemberRole(memberId, result.data.role);
+    res.json(updatedMember);
   } catch (error) {
     console.error('Error updating organization member:', error);
     res.status(500).json({ error: 'Failed to update organization member' });
   }
 });
 
-router.delete('/api/organizations/:orgId/members/:userId', async (req: Request, res: Response) => {
+// Remove a member from an organization
+router.delete('/:orgId/members/:memberId', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organizationId = parseInt(req.params.orgId);
-    const userId = parseInt(req.params.userId);
+    const orgId = Number(req.params.orgId);
+    const memberId = Number(req.params.memberId);
     
-    // Check if user can manage organization
-    const canManage = await storage.canManageOrganization(organizationId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to remove members from this organization' });
+    const organization = await storage.getOrganization(orgId);
+    
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
     }
     
-    // Check if trying to remove organization owner
-    const org = await storage.getOrganization(organizationId);
-    if (org && org.owner_id === userId) {
-      return res.status(400).json({ error: 'Cannot remove the organization owner' });
+    const member = await storage.getOrganizationMember(memberId);
+    
+    if (!member || member.organization_id !== orgId) {
+      return res.status(404).json({ error: 'Member not found in this organization' });
     }
     
-    await storage.removeOrganizationMember(organizationId, userId);
-    res.status(204).end();
+    // Allow self-removal, owner removal, or admin removal
+    const canRemove = member.user_id === req.user.id || // Self-removal
+                     organization.owner_id === req.user.id || // Owner can remove anyone
+                     (await storage.isOrganizationAdmin(req.user.id, orgId) && 
+                      member.user_id !== organization.owner_id); // Admin can remove non-owners
+    
+    if (!canRemove) {
+      return res.status(403).json({ error: 'You do not have permission to remove this member' });
+    }
+    
+    // Prevent removing the owner
+    if (member.user_id === organization.owner_id) {
+      return res.status(403).json({ error: 'Cannot remove the organization owner' });
+    }
+    
+    await storage.removeOrganizationMember(memberId);
+    res.status(204).send();
   } catch (error) {
     console.error('Error removing organization member:', error);
     res.status(500).json({ error: 'Failed to remove organization member' });
   }
 });
 
-// ===== Team Routes =====
-router.get('/api/organizations/:id/teams', async (req: Request, res: Response) => {
+// Get the teams in an organization
+router.get('/:id/teams', async (req: Request, res: Response) => {
   try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
+    // Check if the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     
-    const organizationId = parseInt(req.params.id);
+    const orgId = Number(req.params.id);
+    const organization = await storage.getOrganization(orgId);
     
-    // Check if user can view organization teams
-    const isMember = await storage.isOrganizationMember(organizationId, req.user!.id);
-    if (!isMember) {
-      return res.status(403).json({ error: 'Not authorized to view teams in this organization' });
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
     }
     
-    const teams = await storage.getOrganizationTeams(organizationId);
+    // Check if user is a member of this organization
+    const isMember = await storage.isOrganizationMember(req.user.id, orgId);
+    if (!isMember && organization.owner_id !== req.user.id) {
+      return res.status(403).json({ error: 'You do not have permission to view teams in this organization' });
+    }
+    
+    const teams = await storage.getOrganizationTeams(orgId);
     res.json(teams);
   } catch (error) {
-    console.error('Error fetching teams:', error);
-    res.status(500).json({ error: 'Failed to fetch teams' });
-  }
-});
-
-router.post('/api/organizations/:id/teams', async (req: Request, res: Response) => {
-  try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const organizationId = parseInt(req.params.id);
-    
-    // Check if user can manage organization
-    const canManage = await storage.canManageOrganization(organizationId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to create teams in this organization' });
-    }
-    
-    const validatedData = insertTeamSchema.parse({
-      ...req.body,
-      organization_id: organizationId
-    });
-    
-    // By default, make the current user the team lead
-    if (!validatedData.lead_id) {
-      validatedData.lead_id = req.user!.id;
-    }
-    
-    const team = await storage.createTeam(validatedData);
-    res.status(201).json(team);
-  } catch (error) {
-    console.error('Error creating team:', error);
-    res.status(500).json({ error: 'Failed to create team' });
-  }
-});
-
-router.get('/api/teams/:id', async (req: Request, res: Response) => {
-  try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const teamId = parseInt(req.params.id);
-    
-    const team = await storage.getTeam(teamId);
-    if (!team) {
-      return res.status(404).json({ error: 'Team not found' });
-    }
-    
-    // Check if user can access this team
-    const canAccess = await storage.canAccessTeam(teamId, req.user!.id);
-    if (!canAccess) {
-      return res.status(403).json({ error: 'Not authorized to view this team' });
-    }
-    
-    res.json(team);
-  } catch (error) {
-    console.error('Error fetching team:', error);
-    res.status(500).json({ error: 'Failed to fetch team' });
-  }
-});
-
-router.patch('/api/teams/:id', async (req: Request, res: Response) => {
-  try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const teamId = parseInt(req.params.id);
-    
-    // Check if user can manage this team
-    const canManage = await storage.canManageTeam(teamId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to update this team' });
-    }
-    
-    const team = await storage.updateTeam(teamId, req.body);
-    res.json(team);
-  } catch (error) {
-    console.error('Error updating team:', error);
-    res.status(500).json({ error: 'Failed to update team' });
-  }
-});
-
-router.delete('/api/teams/:id', async (req: Request, res: Response) => {
-  try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const teamId = parseInt(req.params.id);
-    
-    // Check if user can manage this team
-    const canManage = await storage.canManageTeam(teamId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to delete this team' });
-    }
-    
-    await storage.deleteTeam(teamId);
-    res.status(204).end();
-  } catch (error) {
-    console.error('Error deleting team:', error);
-    res.status(500).json({ error: 'Failed to delete team' });
-  }
-});
-
-// ===== Team Member Routes =====
-router.get('/api/teams/:id/members', async (req: Request, res: Response) => {
-  try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const teamId = parseInt(req.params.id);
-    
-    // Check if user can access this team
-    const canAccess = await storage.canAccessTeam(teamId, req.user!.id);
-    if (!canAccess) {
-      return res.status(403).json({ error: 'Not authorized to view members of this team' });
-    }
-    
-    const members = await storage.getTeamMembers(teamId);
-    res.json(members);
-  } catch (error) {
-    console.error('Error fetching team members:', error);
-    res.status(500).json({ error: 'Failed to fetch team members' });
-  }
-});
-
-router.post('/api/teams/:id/members', async (req: Request, res: Response) => {
-  try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const teamId = parseInt(req.params.id);
-    
-    // Check if user can manage this team
-    const canManage = await storage.canManageTeam(teamId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to add members to this team' });
-    }
-    
-    const validatedData = insertTeamMemberSchema.parse({
-      ...req.body,
-      team_id: teamId
-    });
-    
-    // Check if the user is already a member of the team
-    const isTeamMember = await storage.isTeamMember(teamId, validatedData.user_id);
-    if (isTeamMember) {
-      return res.status(400).json({ error: 'User is already a member of this team' });
-    }
-    
-    // Check if the user is a member of the organization
-    const team = await storage.getTeam(teamId);
-    if (!team) {
-      return res.status(404).json({ error: 'Team not found' });
-    }
-    
-    const isOrgMember = await storage.isOrganizationMember(team.organization_id, validatedData.user_id);
-    if (!isOrgMember) {
-      return res.status(400).json({ error: 'User must be a member of the organization before being added to a team' });
-    }
-    
-    const member = await storage.addTeamMember(validatedData);
-    res.status(201).json(member);
-  } catch (error) {
-    console.error('Error adding team member:', error);
-    res.status(500).json({ error: 'Failed to add team member' });
-  }
-});
-
-router.patch('/api/teams/:teamId/members/:userId', async (req: Request, res: Response) => {
-  try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const teamId = parseInt(req.params.teamId);
-    const userId = parseInt(req.params.userId);
-    
-    // Check if user can manage this team
-    const canManage = await storage.canManageTeam(teamId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to update members in this team' });
-    }
-    
-    // Check if trying to update team lead's role
-    const team = await storage.getTeam(teamId);
-    if (team && team.lead_id === userId) {
-      return res.status(400).json({ error: 'Cannot modify the role of the team lead' });
-    }
-    
-    const member = await storage.updateTeamMember(teamId, userId, req.body);
-    res.json(member);
-  } catch (error) {
-    console.error('Error updating team member:', error);
-    res.status(500).json({ error: 'Failed to update team member' });
-  }
-});
-
-router.delete('/api/teams/:teamId/members/:userId', async (req: Request, res: Response) => {
-  try {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-    
-    const teamId = parseInt(req.params.teamId);
-    const userId = parseInt(req.params.userId);
-    
-    // Check if user can manage this team
-    const canManage = await storage.canManageTeam(teamId, req.user!.id);
-    if (!canManage) {
-      return res.status(403).json({ error: 'Not authorized to remove members from this team' });
-    }
-    
-    // Check if trying to remove team lead
-    const team = await storage.getTeam(teamId);
-    if (team && team.lead_id === userId) {
-      return res.status(400).json({ error: 'Cannot remove the team lead' });
-    }
-    
-    await storage.removeTeamMember(teamId, userId);
-    res.status(204).end();
-  } catch (error) {
-    console.error('Error removing team member:', error);
-    res.status(500).json({ error: 'Failed to remove team member' });
+    console.error('Error fetching organization teams:', error);
+    res.status(500).json({ error: 'Failed to fetch organization teams' });
   }
 });
 
