@@ -1,0 +1,185 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  password        String?
+  name            String?
+  companyname     String?
+  role            String?  @default("SUPPLIER")
+  isemailverified Boolean? @default(false)
+  gstin           String?
+  pan             String?
+  phone           String?
+  address         String?
+  city            String?
+  state           String?
+  pincode         String?
+  businesstype    String?
+  annualturnover  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  wallet   Wallet?
+  profile  Profile?
+  products Product[]
+  pageViews PageView[]
+  events    Event[]
+  sessions  Session[]
+  esgScores ESGScore[]
+}
+
+model Wallet {
+  id               String   @id @default(cuid())
+  userid           String   @unique
+  availablebalance Float?   @default(0)
+  totalbalance     Float?   @default(0)
+  primarycurrency  String?  @default("INR")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userid], references: [id])
+}
+
+model Profile {
+  id                  String   @id @default(cuid())
+  userid              String   @unique
+  categories          String?
+  isverified          Boolean? @default(false)
+  verificationstatus  String?  @default("PENDING")
+  businessdescription String?
+  yearestablished     String?
+  employeecount       String?
+  certifications      String?
+  tradereferences     String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userid], references: [id])
+}
+
+model Product {
+  id               String   @id @default(cuid())
+  name             String
+  description      String
+  category         String
+  price            Float?
+  minOrderQuantity Int?
+  unit             String?
+  specifications   String?
+  images           String?
+  supplierId       String
+  status           String?  @default("ACTIVE")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  supplier User @relation(fields: [supplierId], references: [id])
+}
+
+model RFQ {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String
+  quantity    Int?
+  unit        String?
+  budget      Float?
+  buyerId     String
+  status      String?  @default("OPEN")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Quote {
+  id           String   @id @default(cuid())
+  rfqId        String
+  supplierId   String
+  price        Float
+  deliveryTime String?
+  terms        String?
+  status       String?  @default("PENDING")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  buyerId     String
+  supplierId  String
+  productId   String?
+  quantity    Int
+  totalAmount Float
+  status      String?  @default("PENDING")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Analytics Models
+model PageView {
+  id        String   @id @default(cuid())
+  page      String
+  userId    String?
+  sessionId String?
+  timestamp DateTime @default(now())
+  metadata  Json?
+  
+  session Session? @relation(fields: [sessionId], references: [id])
+  user    User?    @relation(fields: [userId], references: [id])
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  event     String
+  page      String
+  userId    String?
+  sessionId String?
+  timestamp DateTime @default(now())
+  metadata  Json?
+  
+  session Session? @relation(fields: [sessionId], references: [id])
+  user    User?    @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String?
+  createdAt    DateTime @default(now())
+  lastActivity DateTime @default(now())
+  pageViews    PageView[]
+  events       Event[]
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ESGScore {
+  id                  String   @id @default(cuid())
+  companyId           String?
+  userId              String?
+  industry            String
+  environmentalScore  Float
+  socialScore         Float
+  governanceScore     Float
+  overallScore        Float
+  grade               String
+  recommendations     String[]
+  esgData             Json
+  benchmark           Json
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  user                User?    @relation(fields: [userId], references: [id])
+}
