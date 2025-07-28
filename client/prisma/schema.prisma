@@ -11,64 +11,105 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(cuid())
-  email           String   @unique
-  password        String?
-  name            String?
-  companyname     String?
-  role            String?  @default("SUPPLIER")
-  isemailverified Boolean? @default(false)
-  gstin           String?
-  pan             String?
-  phone           String?
-  address         String?
-  city            String?
-  state           String?
-  pincode         String?
-  businesstype    String?
-  annualturnover  String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime? @map("emailverified")
+  image         String?
+  password      String?
+  companyname   String?   @map("companyname")
+  role          String?   @default("SUPPLIER")
+  isemailverified Boolean? @default(false) @map("isemailverified")
+  gstin         String?
+  pan           String?
+  phone         String?
+  address       String?
+  city          String?
+  state         String?
+  pincode       String?
+  businesstype  String?   @map("businesstype")
+  annualturnover String?  @map("annualturnover")
+  createdAt     DateTime  @default(now()) @map("createdat")
+  updatedAt     DateTime  @updatedAt @map("updatedat")
 
   // Relations
-  wallet   Wallet?
+  accounts Account[]
+  sessions Session[]
   profile  Profile?
+  wallet   Wallet?
   products Product[]
   pageViews PageView[]
   events    Event[]
-  sessions  Session[]
   esgScores ESGScore[]
+  @@map("user")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("userid")
+  type              String
+  provider          String
+  providerAccountId String  @map("provideraccountid")
+  refresh_token     String? @map("refresh_token")
+  access_token      String? @map("access_token")
+  expires_at        Int?
+  token_type        String? @map("token_type")
+  scope             String?
+  id_token          String? @map("id_token")
+  session_state     String? @map("session_state")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("account")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("sessiontoken")
+  userId       String?  @map("userid")
+  expires      DateTime
+  createdAt    DateTime @default(now()) @map("createdat")
+  lastActivity DateTime @default(now()) @map("lastactivity")
+  
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pageViews    PageView[]
+  events       Event[]
+  
+  @@map("session")
 }
 
 model Wallet {
   id               String   @id @default(cuid())
   userid           String   @unique
-  availablebalance Float?   @default(0)
-  totalbalance     Float?   @default(0)
-  primarycurrency  String?  @default("INR")
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  availablebalance Float?   @default(0) @map("availablebalance")
+  totalbalance     Float?   @default(0) @map("totalbalance")
+  primarycurrency  String?  @default("INR") @map("primarycurrency")
+  createdAt        DateTime @default(now()) @map("createdat")
+  updatedAt        DateTime @updatedAt @map("updatedat")
 
   // Relations
   user User @relation(fields: [userid], references: [id])
+  @@map("wallet")
 }
 
 model Profile {
   id                  String   @id @default(cuid())
   userid              String   @unique
   categories          String?
-  isverified          Boolean? @default(false)
-  verificationstatus  String?  @default("PENDING")
-  businessdescription String?
-  yearestablished     String?
-  employeecount       String?
+  isverified          Boolean? @default(false) @map("isverified")
+  verificationstatus  String?  @default("PENDING") @map("verificationstatus")
+  businessdescription String?  @map("businessdescription")
+  yearestablished     String?  @map("yearestablished")
+  employeecount       String?  @map("employeecount")
   certifications      String?
-  tradereferences     String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  tradereferences     String?  @map("tradereferences")
+  createdAt           DateTime @default(now()) @map("createdat")
+  updatedAt           DateTime @updatedAt @map("updatedat")
 
   // Relations
   user User @relation(fields: [userid], references: [id])
+  @@map("profile")
 }
 
 model Product {
@@ -77,17 +118,18 @@ model Product {
   description      String
   category         String
   price            Float?
-  minOrderQuantity Int?
+  minOrderQuantity Int?     @map("minorderquantity")
   unit             String?
   specifications   String?
   images           String?
-  supplierId       String
+  supplierId       String   @map("supplierid")
   status           String?  @default("ACTIVE")
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now()) @map("createdat")
+  updatedAt        DateTime @updatedAt @map("updatedat")
 
   // Relations
   supplier User @relation(fields: [supplierId], references: [id])
+  @@map("product")
 }
 
 model RFQ {
@@ -98,88 +140,83 @@ model RFQ {
   quantity    Int?
   unit        String?
   budget      Float?
-  buyerId     String
+  buyerId     String   @map("buyerid")
   status      String?  @default("OPEN")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @map("createdat")
+  updatedAt   DateTime @updatedAt @map("updatedat")
+  @@map("rfq")
 }
 
 model Quote {
   id           String   @id @default(cuid())
-  rfqId        String
-  supplierId   String
+  rfqId        String   @map("rfqid")
+  supplierId   String   @map("supplierid")
   price        Float
-  deliveryTime String?
+  deliveryTime String?  @map("deliverytime")
   terms        String?
   status       String?  @default("PENDING")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now()) @map("createdat")
+  updatedAt    DateTime @updatedAt @map("updatedat")
+  @@map("quote")
 }
 
 model Order {
   id          String   @id @default(cuid())
-  buyerId     String
-  supplierId  String
-  productId   String?
+  buyerId     String   @map("buyerid")
+  supplierId  String   @map("supplierid")
+  productId   String?  @map("productid")
   quantity    Int
-  totalAmount Float
+  totalAmount Float    @map("totalamount")
   status      String?  @default("PENDING")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now()) @map("createdat")
+  updatedAt   DateTime @updatedAt @map("updatedat")
+  @@map("order")
 }
 
 // Analytics Models
 model PageView {
   id        String   @id @default(cuid())
   page      String
-  userId    String?
-  sessionId String?
+  userId    String?  @map("userid")
+  sessionId String?  @map("sessionid")
   timestamp DateTime @default(now())
   metadata  Json?
   
   session Session? @relation(fields: [sessionId], references: [id])
   user    User?    @relation(fields: [userId], references: [id])
+  @@map("pageview")
 }
 
 model Event {
   id        String   @id @default(cuid())
   event     String
   page      String
-  userId    String?
-  sessionId String?
+  userId    String?  @map("userid")
+  sessionId String?  @map("sessionid")
   timestamp DateTime @default(now())
   metadata  Json?
   
   session Session? @relation(fields: [sessionId], references: [id])
   user    User?    @relation(fields: [userId], references: [id])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String?
-  createdAt    DateTime @default(now())
-  lastActivity DateTime @default(now())
-  pageViews    PageView[]
-  events       Event[]
-  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("event")
 }
 
 model ESGScore {
   id                  String   @id @default(cuid())
-  companyId           String?
-  userId              String?
+  companyId           String?  @map("companyid")
+  userId              String?  @map("userid")
   industry            String
-  environmentalScore  Float
-  socialScore         Float
-  governanceScore     Float
-  overallScore        Float
+  environmentalScore  Float    @map("environmentalscore")
+  socialScore         Float    @map("socialscore")
+  governanceScore     Float    @map("governancescore")
+  overallScore        Float    @map("overallscore")
   grade               String
   recommendations     String[]
-  esgData             Json
+  esgData             Json     @map("esgdata")
   benchmark           Json
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt           DateTime @default(now()) @map("createdat")
+  updatedAt           DateTime @updatedAt @map("updatedat")
   
   user                User?    @relation(fields: [userId], references: [id])
+  @@map("esgscore")
 }
