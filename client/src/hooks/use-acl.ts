@@ -1,8 +1,7 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { AccessControlList, insertAccessControlListSchema } from '@shared/schema';
+import { AccessControlList } from '@shared/schema';
 import { queryClient, apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { z } from 'zod';
 
 // Type for the ACL list response
 export type AclListResponse = AccessControlList[];
@@ -36,6 +35,14 @@ export interface AclAssignment {
 // Type for the ACL Assignment response
 export type AclAssignmentResponse = AclAssignment[];
 
+// Interface for ACL creation/update data
+interface AclData {
+  name: string;
+  description?: string;
+  organization_id?: number;
+  is_active?: boolean;
+}
+
 // Custom hook to fetch and manage ACLs
 export function useACLs(organizationId?: number) {
   const { toast } = useToast();
@@ -54,7 +61,12 @@ export function useACLs(organizationId?: number) {
 
   // Mutation to create a new ACL
   const createAclMutation = useMutation({
-    mutationFn: async (data: z.infer<typeof insertAccessControlListSchema>) => {
+    mutationFn: async (data: {
+      name: string;
+      description?: string;
+      organization_id?: number;
+      is_active?: boolean;
+    }) => {
       const response = await apiRequest('POST', '/api/acl', data);
       return await response.json();
     },
@@ -76,7 +88,18 @@ export function useACLs(organizationId?: number) {
 
   // Mutation to update an existing ACL
   const updateAclMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<z.infer<typeof insertAccessControlListSchema>> }) => {
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: Partial<{
+        name: string;
+        description?: string;
+        organization_id?: number;
+        is_active?: boolean;
+      }>;
+    }) => {
       const response = await apiRequest('PUT', `/api/acl/${id}`, data);
       return await response.json();
     },
@@ -311,21 +334,35 @@ export function usePermissionCheck() {
       if (resourceId) {
         url.searchParams.append('resourceId', resourceId.toString());
       }
-      
+
       const response = await fetch(url.toString());
-      
+
       if (!response.ok) {
         if (response.status === 401) {
-          return { permission: 'none', canView: false, canCreate: false, canUpdate: false, canDelete: false, canManage: false };
+          return {
+            permission: 'none',
+            canView: false,
+            canCreate: false,
+            canUpdate: false,
+            canDelete: false,
+            canManage: false,
+          };
         }
         throw new Error(`Error checking permissions: ${response.statusText}`);
       }
-      
+
       const data = await response.json();
       return data;
     } catch (error) {
       console.error('Failed to check permissions:', error);
-      return { permission: 'none', canView: false, canCreate: false, canUpdate: false, canDelete: false, canManage: false };
+      return {
+        permission: 'none',
+        canView: false,
+        canCreate: false,
+        canUpdate: false,
+        canDelete: false,
+        canManage: false,
+      };
     }
   };
 

@@ -1,6 +1,6 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 // Analytics data types
 interface SupplierRiskData {
@@ -50,21 +50,21 @@ export function useAnalytics() {
   // Analyze RFQ
   const analyzeRFQMutation = useMutation({
     mutationFn: async (id: number) => {
-      const res = await apiRequest("POST", `/api/rfqs/${id}/analyze`, {});
+      const res = await apiRequest('POST', `/api/rfqs/${id}/analyze`, {});
       return res.json();
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       toast({
-        title: "RFQ Analysis Complete",
-        description: "The RFQ has been analyzed successfully.",
+        title: 'RFQ Analysis Complete',
+        description: 'The RFQ has been analyzed successfully.',
       });
       return data;
     },
     onError: (error: Error) => {
       toast({
-        title: "Failed to analyze RFQ",
+        title: 'Failed to analyze RFQ',
         description: error.message,
-        variant: "destructive",
+        variant: 'destructive',
       });
     },
   });

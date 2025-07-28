@@ -1,8 +1,8 @@
 // Minimal toast implementation
 
-import { useState } from "react";
+import { useState } from 'react';
 
-type ToastVariant = "default" | "destructive";
+type ToastVariant = 'default' | 'destructive';
 
 interface Toast {
   id: string;
@@ -26,21 +26,21 @@ export function useToast() {
       id,
       title: options.title,
       description: options.description,
-      variant: options.variant || "default",
+      variant: options.variant || 'default',
     };
-    
-    setToasts((prevToasts) => [...prevToasts, newToast]);
-    
+
+    setToasts(prevToasts => [...prevToasts, newToast]);
+
     // Auto-dismiss toast after 3 seconds
     setTimeout(() => {
-      setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+      setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id));
     }, 3000);
-    
+
     return id;
   };
 
   const dismiss = (id: string) => {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+    setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id));
   };
 
   return {

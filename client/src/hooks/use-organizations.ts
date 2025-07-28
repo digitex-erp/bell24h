@@ -1,8 +1,26 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { Organization, insertOrganizationSchema, OrganizationMember, Team } from '@shared/schema';
+import { Organization } from '@shared/schema';
 import { queryClient, apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { z } from 'zod';
+
+// Local type definitions
+interface OrganizationMember {
+  id: string;
+  organizationId: string;
+  userId: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Team {
+  id: string;
+  organizationId: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 // Types for API responses
 export type OrganizationListResponse = Organization[];
@@ -29,7 +47,7 @@ export function useOrganizations() {
 
   // Mutation to create a new organization
   const createMutation = useMutation({
-    mutationFn: async (data: z.infer<typeof insertOrganizationSchema>) => {
+    mutationFn: async (data: { name: string; type: string }) => {
       const response = await apiRequest('POST', '/api/organizations', data);
       return await response.json();
     },
@@ -51,7 +69,13 @@ export function useOrganizations() {
 
   // Mutation to update an organization
   const updateMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<z.infer<typeof insertOrganizationSchema>> }) => {
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: Partial<{ name: string; type: string }>;
+    }) => {
       const response = await apiRequest('PUT', `/api/organizations/${id}`, data);
       return await response.json();
     },
@@ -170,7 +194,9 @@ export function useOrganization(id: number) {
   // Mutation to update a member's role
   const updateMemberMutation = useMutation({
     mutationFn: async ({ memberId, role }: { memberId: number; role: string }) => {
-      const response = await apiRequest('PUT', `/api/organizations/${id}/members/${memberId}`, { role });
+      const response = await apiRequest('PUT', `/api/organizations/${id}/members/${memberId}`, {
+        role,
+      });
       return await response.json();
     },
     onSuccess: () => {
