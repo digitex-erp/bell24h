@@ -1,5 +1,5 @@
 /**
- * Simplified Express server for Bell24h
+ * Simplified Express server for Bell24H
  */
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';

@@ -1,13 +1,13 @@
 /**
- * Bell24h Build Script
+ * Bell24H Build Script
  * 
- * This script runs the build process for the Bell24h application.
+ * This script runs the build process for the Bell24H application.
  * It's designed to be a simple wrapper around npm build commands.
  */
 
 const { exec } = require('child_process');
 
-console.log('📦 Starting Bell24h build process...');
+console.log('📦 Starting Bell24H build process...');
 
 // Function to execute a command and log output
 function execCommand(command, description) {

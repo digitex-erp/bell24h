@@ -1,0 +1,712 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Agriculture",
+      "description": "Agricultural tools, equipment, and products for farming and livestock.",
+      "slug": "agriculture",
+      "icon": "🌾",
+      "subcategories": [
+        "Agriculture Equipment",
+        "Fresh Flowers",
+        "Seeds & Saplings",
+        "Tractor Parts",
+        "Animal Feed",
+        "Irrigation Systems",
+        "Fertilizers & Pesticides",
+        "Organic Farming Tools"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Apparel & Fashion",
+      "description": "Clothing, accessories, and fashion-related products.",
+      "slug": "apparel-fashion",
+      "icon": "👗",
+      "subcategories": [
+        "Sarees",
+        "Sunglasses",
+        "Unisex Clothing",
+        "Suitcases & Briefcases",
+        "Footwear",
+        "Textiles & Fabrics",
+        "Sportswear",
+        "Fashion Accessories"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Automobile",
+      "description": "Vehicle parts, accessories, and services.",
+      "slug": "automobile",
+      "icon": "🚗",
+      "subcategories": [
+        "Auto Electrical Parts",
+        "Engine Parts",
+        "Commercial Vehicles",
+        "Coach Building",
+        "Car Accessories",
+        "Tires & Tubes",
+        "Lubricants & Greases"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Ayurveda & Herbal Products",
+      "description": "Herbal remedies, Ayurvedic products, and wellness solutions.",
+      "slug": "ayurveda",
+      "icon": "🌿",
+      "subcategories": [
+        "Herbal Henna",
+        "Ayurvedic Extracts",
+        "Herbal Foods",
+        "Ayurvedic Medicines",
+        "Herbal Oils",
+        "Natural Skincare"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Business Services",
+      "description": "Consulting, documentation, and business solutions.",
+      "slug": "business-services",
+      "icon": "💼",
+      "subcategories": [
+        "Turnkey Project Services",
+        "Environmental Services",
+        "Business Consultants",
+        "Import/Export Documentation",
+        "Financial Consulting",
+        "Legal & Compliance Services"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Chemical",
+      "description": "Chemical products and industrial materials.",
+      "slug": "chemical",
+      "icon": "🧪",
+      "subcategories": [
+        "Catalysts",
+        "PET Granules",
+        "Dyes & Pigments",
+        "Agrochemicals",
+        "Specialty Chemicals",
+        "Industrial Gases",
+        "Detergent Chemicals"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Computers and Internet",
+      "description": "IT services, hardware, and digital solutions.",
+      "slug": "computers-internet",
+      "icon": "💻",
+      "subcategories": [
+        "Software Development",
+        "Data Entry Services",
+        "Web Development",
+        "Cloud Computing Solutions",
+        "E-commerce Platforms",
+        "Cybersecurity Services",
+        "IT Hardware & Peripherals"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Consumer Electronics",
+      "description": "Consumer electronics and accessories.",
+      "slug": "consumer-electronics",
+      "icon": "📱",
+      "subcategories": [
+        "Surveillance Equipment",
+        "Photography Supplies",
+        "Mobile Accessories",
+        "Televisions & Home Audio",
+        "Laptops & Tablets",
+        "Wearables (Smartwatches, Fitness Trackers)"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Cosmetics & Personal Care",
+      "description": "Beauty products and personal care items.",
+      "slug": "cosmetics-personal-care",
+      "icon": "💄",
+      "subcategories": [
+        "Body Care",
+        "Ayurvedic Oils",
+        "Fragrances",
+        "Hair Care Products",
+        "Makeup & Beauty Products",
+        "Organic Skincare",
+        "Personal Hygiene Products"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Electronics & Electrical",
+      "description": "Electronics, electrical components, and devices.",
+      "slug": "electronics-electrical",
+      "icon": "🔌",
+      "subcategories": [
+        "Cables & Wires",
+        "Active Devices",
+        "Testing Devices",
+        "Electrical Transformers",
+        "Batteries & Energy Storage",
+        "Switches & Circuit Breakers"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Food Products & Beverage",
+      "description": "Food, beverages, and related products.",
+      "slug": "food-beverages",
+      "icon": "🍎",
+      "subcategories": [
+        "Vegetables",
+        "Dry Fruits",
+        "Baked Goods",
+        "Cooking Spices",
+        "Dairy Products",
+        "Canned Foods",
+        "Beverages (Juices, Soft Drinks, Coffee)"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Furniture & Carpentry Services",
+      "description": "Furniture and carpentry solutions.",
+      "slug": "furniture-carpentry",
+      "icon": "🪑",
+      "subcategories": [
+        "Bedroom Furniture",
+        "Kitchen Furniture",
+        "Office Furniture",
+        "Custom Carpentry",
+        "Shelving & Storage Solutions",
+        "Outdoor Furniture",
+        "Wooden Artifacts"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Gifts & Crafts",
+      "description": "Handmade gifts and artisanal products.",
+      "slug": "gifts-crafts",
+      "icon": "🎁",
+      "subcategories": [
+        "Metal Handicrafts",
+        "Festival Items",
+        "Personalized Gifts",
+        "Handmade Jewelry",
+        "Artistic Ceramics",
+        "Corporate Gifts"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Health & Beauty",
+      "description": "Health products, supplements, and beauty solutions.",
+      "slug": "health-beauty",
+      "icon": "💆",
+      "subcategories": [
+        "Dietary Supplements",
+        "Veterinary Medicines",
+        "Organic Health Products",
+        "Beauty Enhancers",
+        "Wellness Products"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Home Furnishings",
+      "description": "Home decor, textiles, and interior products.",
+      "slug": "home-furnishings",
+      "icon": "🛋️",
+      "subcategories": [
+        "Bed Linen",
+        "Rugs",
+        "Placemats",
+        "Curtains & Drapes",
+        "Cushions & Throws",
+        "Tableware"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Home Supplies",
+      "description": "Household products and cleaning supplies.",
+      "slug": "home-supplies",
+      "icon": "🧼",
+      "subcategories": [
+        "Cleaning Liquids",
+        "Pest Control Services",
+        "Household Tools",
+        "Sanitary Products",
+        "Storage Solutions"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Industrial Machinery",
+      "description": "Machinery and equipment for industrial use.",
+      "slug": "industrial-machinery",
+      "icon": "🏭",
+      "subcategories": [
+        "Chemical Machinery",
+        "CNC Machines",
+        "Milling Tools",
+        "Heavy Machinery",
+        "Hydraulic Equipment",
+        "Packaging Machines"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Industrial Supplies",
+      "description": "Industrial tools, parts, and supplies.",
+      "slug": "industrial-supplies",
+      "icon": "⚙️",
+      "subcategories": [
+        "Pumps",
+        "Insulators",
+        "Trolleys & Pallets",
+        "Bearings",
+        "Conveyor Belts"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Jewelry & Jewelry Designers",
+      "description": "Jewelry, accessories, and design services.",
+      "slug": "jewelry",
+      "icon": "💍",
+      "subcategories": [
+        "Precious Stones",
+        "Diamond Jewelry",
+        "Custom Jewelry",
+        "Gold & Silver Accessories",
+        "Fashion Jewelry"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Mineral & Metals",
+      "description": "Minerals, metals, and related products.",
+      "slug": "mineral-metals",
+      "icon": "💎",
+      "subcategories": [
+        "Mica",
+        "Steel",
+        "Non-Ferrous Scrap",
+        "Aluminum",
+        "Copper",
+        "Rare Earth Elements"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Office Supplies",
+      "description": "Office products and stationery.",
+      "slug": "office-supplies",
+      "icon": "📄",
+      "subcategories": [
+        "Stationery",
+        "Printer Consumables",
+        "Office Furniture",
+        "Paper Products",
+        "Filing Solutions"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Packaging & Paper",
+      "description": "Packaging solutions and paper products.",
+      "slug": "packaging-paper",
+      "icon": "📦",
+      "subcategories": [
+        "Bulk Bags",
+        "Pallets",
+        "Food Packaging",
+        "Industrial Packaging",
+        "Paper Products",
+        "Sustainable Packaging"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Real Estate, Building & Construction",
+      "description": "Construction materials and real estate solutions.",
+      "slug": "construction",
+      "icon": "🏗️",
+      "subcategories": [
+        "Bricks",
+        "Sanitary Ware",
+        "Tiles",
+        "Building Materials",
+        "Cement & Concrete",
+        "Construction Equipment"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Security Products & Services",
+      "description": "Security systems and equipment.",
+      "slug": "security",
+      "icon": "🛡️",
+      "subcategories": [
+        "Alarms",
+        "Safety Systems",
+        "Surveillance Equipment",
+        "Fire Protection Systems",
+        "Access Control Systems"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Sports Goods & Entertainment",
+      "description": "Sports equipment and entertainment products.",
+      "slug": "sports-games",
+      "icon": "⚽",
+      "subcategories": [
+        "Sporting Goods",
+        "Exercise Accessories",
+        "Fitness Equipment",
+        "Gaming Consoles",
+        "Outdoor Games"
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Telecommunication",
+      "description": "Telecom equipment and services.",
+      "slug": "telecom",
+      "icon": "📶",
+      "subcategories": [
+        "Equipment",
+        "Wi-Fi Solutions",
+        "VOIP Systems",
+        "Mobile Networks",
+        "Satellite Communication"
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Textiles, Yarn & Fabrics",
+      "description": "Textiles, fabrics, and yarns.",
+      "slug": "textiles",
+      "icon": "🧵",
+      "subcategories": [
+        "Cotton Fabrics",
+        "Leather Materials",
+        "Embroidery Tools",
+        "Synthetic Fibers",
+        "Organic Textiles"
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Tools & Equipment",
+      "description": "Tools for manufacturing and DIY.",
+      "slug": "tools-equipment",
+      "icon": "🛠️",
+      "subcategories": [
+        "Saw Blades",
+        "Hydraulic Tools",
+        "Thermometers",
+        "Hand Tools",
+        "Power Tools"
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Tours, Travels & Hotels",
+      "description": "Travel services and hospitality solutions.",
+      "slug": "travel-hotels",
+      "icon": "✈️",
+      "subcategories": [
+        "Tour Providers",
+        "Bus Rentals",
+        "Hotel Booking",
+        "Holiday Packages",
+        "Travel Accessories"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Toys & Games",
+      "description": "Toys, games, and entertainment products.",
+      "slug": "toys-games",
+      "icon": "🧸",
+      "subcategories": [
+        "Stuffed Toys",
+        "Video Games",
+        "Educational Toys",
+        "Board Games",
+        "Outdoor Games"
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Renewable Energy Equipment",
+      "description": "Solar, wind, and energy solutions.",
+      "slug": "renewable-energy",
+      "icon": "☀️",
+      "subcategories": [
+        "Solar Panels",
+        "Wind Turbines",
+        "Energy Storage Solutions",
+        "Hydroelectric Equipment"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Artificial Intelligence & Automation Tools",
+      "description": "AI and automation solutions for businesses.",
+      "slug": "ai-automation",
+      "icon": "🤖",
+      "subcategories": [
+        "AI Software",
+        "Robotics",
+        "Machine Learning Tools",
+        "AI Hardware"
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Sustainable & Eco-Friendly Products",
+      "description": "Eco-conscious and sustainable solutions.",
+      "slug": "sustainable-products",
+      "icon": "♻️",
+      "subcategories": [
+        "Recyclable Materials",
+        "Eco-Friendly Packaging",
+        "Organic Clothing",
+        "Zero-Waste Products"
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Healthcare Equipment & Technology",
+      "description": "Medical devices and health tech solutions.",
+      "slug": "healthcare",
+      "icon": "🏥",
+      "subcategories": [
+        "Telemedicine Devices",
+        "Health Wearables",
+        "Medical Devices",
+        "Health Informatics"
+      ]
+    },
+    {
+      "id": 35,
+      "name": "E-commerce & Digital Platforms Solutions",
+      "description": "E-commerce platforms and digital tools.",
+      "slug": "ecommerce-platforms",
+      "icon": "🛒",
+      "subcategories": [
+        "Online Marketplaces",
+        "Payment Gateways",
+        "E-commerce Software",
+        "Dropshipping Platforms"
+      ]
+    },
+    {
+      "id": 36,
+      "name": "Gaming & Esports Hardware",
+      "description": "Gaming equipment and esports solutions.",
+      "slug": "gaming-esports",
+      "icon": "🎮",
+      "subcategories": [
+        "Gaming Consoles",
+        "VR & AR Devices",
+        "Esports Equipment",
+        "Gaming Software"
+      ]
+    },
+    {
+      "id": 37,
+      "name": "Electric Vehicles (EVs) & Charging Solutions",
+      "description": "EVs and charging infrastructure.",
+      "slug": "ev-charging",
+      "icon": "🚗",
+      "subcategories": [
+        "EV Batteries",
+        "Charging Stations",
+        "Electric Cars",
+        "EV Accessories"
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Drones & UAVs",
+      "description": "Drone technology and services.",
+      "slug": "drones-uavs",
+      "icon": "🚁",
+      "subcategories": [
+        "UAV Manufacturing",
+        "Drone Software",
+        "Drone Photography",
+        "Aerial Mapping Services"
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Wearable Technology",
+      "description": "Smart wearables and health devices.",
+      "slug": "wearables",
+      "icon": "⌚",
+      "subcategories": [
+        "Smartwatches",
+        "Fitness Trackers",
+        "Medical Wearables",
+        "AR Glasses"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Logistics & Supply Chain Solutions",
+      "description": "Supply chain and logistics services.",
+      "slug": "logistics-supply-chain",
+      "icon": "🚚",
+      "subcategories": [
+        "Warehouse Automation",
+        "Fleet Management",
+        "Freight Forwarding",
+        "Supply Chain Analytics"
+      ]
+    },
+    {
+      "id": 41,
+      "name": "3D Printing Equipment",
+      "description": "3D printing tools and services.",
+      "slug": "3d-printing",
+      "icon": "🖨️",
+      "subcategories": [
+        "3D Printers",
+        "Printing Materials",
+        "Prototyping Services",
+        "Custom Manufacturing"
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Food Tech & Agri-Tech",
+      "description": "Agri-tech and food innovation solutions.",
+      "slug": "food-tech",
+      "icon": "🌾",
+      "subcategories": [
+        "Vertical Farming",
+        "Food Delivery Platforms",
+        "Lab-Grown Meat",
+        "Precision Agriculture"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Iron & Steel Industry",
+      "description": "Steel and iron production and services.",
+      "slug": "iron-steel",
+      "icon": "🏭",
+      "subcategories": [
+        "Steel Production",
+        "Iron Smelting",
+        "Ferrous Metals",
+        "Foundries"
+      ]
+    },
+    {
+      "id": 44,
+      "name": "Mining & Raw Materials",
+      "description": "Mining equipment and raw materials.",
+      "slug": "mining-materials",
+      "icon": "⛏️",
+      "subcategories": [
+        "Iron Ore",
+        "Bauxite",
+        "Coal Mining",
+        "Precious Metals"
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Metal Recycling",
+      "description": "Metal recycling and processing solutions.",
+      "slug": "metal-recycling",
+      "icon": "♻️",
+      "subcategories": [
+        "Scrap Iron",
+        "Recycled Steel",
+        "Non-Ferrous Scrap",
+        "Metal Processing"
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Metallurgy & Metalworking",
+      "description": "Metalworking and alloy production.",
+      "slug": "metallurgy",
+      "icon": "🔧",
+      "subcategories": [
+        "Metal Forging",
+        "Casting",
+        "Alloy Production",
+        "Heat Treatment"
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Heavy Machinery & Mining Equipment",
+      "description": "Mining and heavy machinery solutions.",
+      "slug": "heavy-machinery",
+      "icon": "🏗️",
+      "subcategories": [
+        "Mining Trucks",
+        "Excavators",
+        "Drilling Machines",
+        "Crushing Equipment"
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Ferrous and Non-Ferrous Metals",
+      "description": "Ferrous and non-ferrous metal solutions.",
+      "slug": "ferrous-metals",
+      "icon": "🔩",
+      "subcategories": [
+        "Steel",
+        "Aluminum",
+        "Copper",
+        "Zinc"
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Mining Safety & Environmental Solutions",
+      "description": "Safety and environmental solutions for mining.",
+      "slug": "mining-safety",
+      "icon": "⛑️",
+      "subcategories": [
+        "Mining Safety Gear",
+        "Environmental Monitoring",
+        "Dust Control Solutions",
+        "Mine Rehabilitation"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Precious Metals & Mining",
+      "description": "Precious metals and mining services.",
+      "slug": "precious-metals",
+      "icon": "💰",
+      "subcategories": [
+        "Gold",
+        "Silver",
+        "Platinum",
+        "Mining Exploration"
+      ]
+    }
+  ]
+}

@@ -89,6 +89,15 @@ app.get('/api/acl/check', (req, res) => {
   res.json(result);
 });
 
+// Register video RFQ analytics API
+app.use('/api/video-rfq-analytics', require('./api/video-rfq-analytics'));
+
+// Register video RFQ upload API
+app.use('/api/video-rfq', require('./api/video-rfq'));
+
+// Register product showcases API
+app.use('/api/product-showcases', require('./api/product-showcases'));
+
 // Serve the main HTML file for all other requests
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'index.html'));

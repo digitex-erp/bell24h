@@ -1,6 +1,6 @@
-# Bell24h Marketplace - Local Development Guide
+# Bell24H Marketplace - Local Development Guide
 
-This guide will help you set up and run the Bell24h Marketplace project on your local machine, preparing it for deployment to a production environment.
+This guide will help you set up and run the Bell24H Marketplace project on your local machine, preparing it for deployment to a production environment.
 
 ## Prerequisites
 

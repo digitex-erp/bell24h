@@ -1,4 +1,4 @@
-# Bell24h.com Project Structure
+# Bell24H.com Project Structure
 
 ## Main Project Structure
 ```

@@ -1,5 +1,5 @@
 /**
- * Simple Express server to test Bell24h platform
+ * Simple Express server to test Bell24H platform
  * This is a temporary solution to bypass vite.config.ts issues
  */
 

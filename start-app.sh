@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Bell24h Application Starter Script
-echo "Starting Bell24h application..."
+# Bell24H Application Starter Script
+echo "Starting Bell24H application..."
 
 # Make sure uploads directory exists
 mkdir -p uploads/audio 2>/dev/null
@@ -19,7 +19,7 @@ if [ ! -f public/index.html ]; then
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bell24h Voice RFQ Demo</title>
+    <title>Bell24H Voice RFQ Demo</title>
     <style>
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -70,7 +70,7 @@ if [ ! -f public/index.html ]; then
     </style>
 </head>
 <body>
-    <h1>Bell24h Voice RFQ Demo</h1>
+    <h1>Bell24H Voice RFQ Demo</h1>
     
     <div class="card">
         <h2>Create RFQ with Voice</h2>

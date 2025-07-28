@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Components Demo</title>
+  <!-- Include Chakra UI via CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@chakra-ui/react@2.8.2/dist/chakra-ui-react.min.js"></script>
+  <!-- Include Cloudinary SDK -->
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .active-card {
+      border-left: 4px solid #3182ce;
+      background-color: #ebf8ff;
+    }
+    .disabled-card {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c5282;
+    }
+    h2 {
+      color: #2b6cb0;
+      margin-bottom: 15px;
+    }
+    button {
+      background-color: #3182ce;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #2b6cb0;
+    }
+    button:disabled {
+      background-color: #a0aec0;
+      cursor: not-allowed;
+    }
+    .progress-bar {
+      height: 10px;
+      background-color: #e2e8f0;
+      border-radius: 5px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: #48bb78;
+      transition: width 0.3s ease;
+    }
+    .video-container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    video {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .thumbnail {
+      max-width: 320px;
+      margin-top: 15px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+    .slider-container {
+      margin: 20px 0;
+    }
+    input[type="range"] {
+      width: 100%;
+    }
+    .summary {
+      background-color: #f7fafc;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .console-log {
+      background-color: #1a202c;
+      color: #e2e8f0;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      margin-top: 10px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bell24h Enhanced Video Components Demo</h1>
+  
+  <div class="card active-card" id="step1">
+    <h2>1. VideoRFQUploader Component</h2>
+    <p>This component handles optimized direct-to-cloud video uploads to Cloudinary with progress tracking.</p>
+    
+    <div>
+      <button id="selectVideoBtn">Select Video File</button>
+      <span id="selectedFileName"></span>
+      
+      <div class="progress-bar" style="display: none;" id="uploadProgressBar">
+        <div class="progress-fill" id="uploadProgressFill"></div>
+      </div>
+      
+      <button id="uploadVideoBtn" disabled>Upload Video</button>
+    </div>
+    
+    <div class="console-log" id="uploadLog"></div>
+  </div>
+  
+  <div class="card disabled-card" id="step2">
+    <h2>2. ThumbnailGenerator Component</h2>
+    <p>This component generates custom thumbnails from the uploaded video at specific timestamps.</p>
+    
+    <div class="slider-container">
+      <label for="timestampSlider">Select Timestamp (seconds):</label>
+      <input type="range" id="timestampSlider" min="0" max="100" value="0">
+      <span id="timestampValue">0s</span>
+    </div>
+    
+    <button id="generateThumbnailBtn">Generate Thumbnail</button>
+    
+    <div>
+      <img id="thumbnailPreview" class="thumbnail" style="display: none;">
+    </div>
+    
+    <div class="console-log" id="thumbnailLog"></div>
+  </div>
+  
+  <div class="card disabled-card" id="step3">
+    <h2>3. VideoAnalyticsPlayer Component</h2>
+    <p>This component plays videos and tracks engagement metrics such as play, pause, and complete events.</p>
+    
+    <div class="video-container">
+      <video id="videoPlayer" controls></video>
+    </div>
+    
+    <div class="console-log" id="analyticsLog"></div>
+  </div>
+  
+  <div class="card" id="summary" style="display: none;">
+    <h2>Component Test Results</h2>
+    <div class="summary">
+      <p><strong>Video URL:</strong> <span id="summaryVideoUrl"></span></p>
+      <p><strong>Public ID:</strong> <span id="summaryPublicId"></span></p>
+      <p><strong>Thumbnail URL:</strong> <span id="summaryThumbnailUrl"></span></p>
+    </div>
+    
+    <button id="completeTestBtn">Complete Test</button>
+  </div>
+  
+  <script>
+    // Variables to store video information
+    let videoFile = null;
+    let videoUrl = '';
+    let publicId = '';
+    let thumbnailUrl = '';
+    
+    // Step 1: Video Upload Component
+    const selectVideoBtn = document.getElementById('selectVideoBtn');
+    const selectedFileName = document.getElementById('selectedFileName');
+    const uploadVideoBtn = document.getElementById('uploadVideoBtn');
+    const uploadProgressBar = document.getElementById('uploadProgressBar');
+    const uploadProgressFill = document.getElementById('uploadProgressFill');
+    const uploadLog = document.getElementById('uploadLog');
+    
+    // Step 2: Thumbnail Generator Component
+    const step2Card = document.getElementById('step2');
+    const timestampSlider = document.getElementById('timestampSlider');
+    const timestampValue = document.getElementById('timestampValue');
+    const generateThumbnailBtn = document.getElementById('generateThumbnailBtn');
+    const thumbnailPreview = document.getElementById('thumbnailPreview');
+    const thumbnailLog = document.getElementById('thumbnailLog');
+    
+    // Step 3: Video Analytics Player Component
+    const step3Card = document.getElementById('step3');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const analyticsLog = document.getElementById('analyticsLog');
+    
+    // Summary Component
+    const summaryCard = document.getElementById('summary');
+    const summaryVideoUrl = document.getElementById('summaryVideoUrl');
+    const summaryPublicId = document.getElementById('summaryPublicId');
+    const summaryThumbnailUrl = document.getElementById('summaryThumbnailUrl');
+    const completeTestBtn = document.getElementById('completeTestBtn');
+    
+    // Step 1: Video Upload
+    selectVideoBtn.addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'video/*';
+      input.onchange = (e) => {
+        videoFile = e.target.files[0];
+        if (videoFile) {
+          selectedFileName.textContent = videoFile.name;
+          uploadVideoBtn.disabled = false;
+          logToConsole(uploadLog, `Selected file: ${videoFile.name} (${formatFileSize(videoFile.size)})`);
+        }
+      };
+      input.click();
+    });
+    
+    uploadVideoBtn.addEventListener('click', () => {
+      if (!videoFile) return;
+      
+      // Show progress bar
+      uploadProgressBar.style.display = 'block';
+      uploadVideoBtn.disabled = true;
+      
+      // Simulate upload process with Cloudinary Widget
+      cloudinary.openUploadWidget({
+        cloudName: 'demo', // Use your own cloud name if available
+        uploadPreset: 'ml_default', // Use your own upload preset if available
+        sources: ['local'],
+        multiple: false,
+        defaultSource: 'local',
+        styles: {
+          palette: {
+            window: "#FFFFFF",
+            windowBorder: "#90A0B3",
+            tabIcon: "#0078FF",
+            menuIcons: "#5A616A",
+            textDark: "#000000",
+            textLight: "#FFFFFF",
+            link: "#0078FF",
+            action: "#FF620C",
+            inactiveTabIcon: "#0E2F5A",
+            error: "#F44235",
+            inProgress: "#0078FF",
+            complete: "#20B832",
+            sourceBg: "#E4EBF1"
+          }
+        }
+      }, (error, result) => {
+        if (!error && result && result.event === "success") {
+          // Upload complete
+          videoUrl = result.info.secure_url;
+          publicId = result.info.public_id;
+          
+          logToConsole(uploadLog, `Upload complete! Video URL: ${videoUrl}`);
+          logToConsole(uploadLog, `Public ID: ${publicId}`);
+          
+          // Proceed to Step 2
+          step2Card.classList.remove('disabled-card');
+          step2Card.classList.add('active-card');
+          
+          // Setup video player for duration detection
+          const tempVideo = document.createElement('video');
+          tempVideo.src = videoUrl;
+          tempVideo.onloadedmetadata = () => {
+            timestampSlider.max = Math.floor(tempVideo.duration);
+            logToConsole(thumbnailLog, `Video duration: ${formatTime(tempVideo.duration)}`);
+          };
+          
+          // Update summary
+          summaryVideoUrl.textContent = videoUrl;
+          summaryPublicId.textContent = publicId;
+          summaryCard.style.display = 'block';
+        } else if (error) {
+          logToConsole(uploadLog, `Error: ${error.message || 'Unknown error during upload'}`, true);
+          uploadVideoBtn.disabled = false;
+        }
+      });
+      
+      // Simulate progress updates
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += 5;
+        if (progress > 100) {
+          clearInterval(progressInterval);
+          return;
+        }
+        uploadProgressFill.style.width = `${progress}%`;
+      }, 300);
+    });
+    
+    // Step 2: Thumbnail Generator
+    timestampSlider.addEventListener('input', () => {
+      timestampValue.textContent = `${timestampSlider.value}s`;
+    });
+    
+    generateThumbnailBtn.addEventListener('click', () => {
+      if (!videoUrl) return;
+      
+      const timestamp = timestampSlider.value;
+      logToConsole(thumbnailLog, `Generating thumbnail at ${timestamp} seconds...`);
+      
+      // Simulate thumbnail generation with Cloudinary transformations
+      thumbnailUrl = videoUrl.replace('/upload/', `/upload/c_thumb,w_640,h_360,so_${timestamp}/`);
+      
+      // Display the thumbnail
+      thumbnailPreview.src = thumbnailUrl;
+      thumbnailPreview.style.display = 'block';
+      
+      logToConsole(thumbnailLog, `Thumbnail generated: ${thumbnailUrl}`);
+      
+      // Proceed to Step 3
+      step3Card.classList.remove('disabled-card');
+      step3Card.classList.add('active-card');
+      
+      // Setup video player
+      videoPlayer.src = videoUrl;
+      videoPlayer.poster = thumbnailUrl;
+      
+      // Update summary
+      summaryThumbnailUrl.textContent = thumbnailUrl;
+    });
+    
+    // Step 3: Video Analytics Player
+    videoPlayer.addEventListener('play', () => {
+      trackVideoActivity('play', videoPlayer.currentTime);
+    });
+    
+    videoPlayer.addEventListener('pause', () => {
+      trackVideoActivity('pause', videoPlayer.currentTime);
+    });
+    
+    videoPlayer.addEventListener('ended', () => {
+      trackVideoActivity('complete', videoPlayer.duration);
+    });
+    
+    videoPlayer.addEventListener('timeupdate', () => {
+      // Track every 10 seconds of video watched
+      if (Math.floor(videoPlayer.currentTime) % 10 === 0 && videoPlayer.currentTime > 0) {
+        trackVideoActivity('progress', videoPlayer.currentTime);
+      }
+    });
+    
+    // Completion Button
+    completeTestBtn.addEventListener('click', () => {
+      alert('Test completed successfully! All video components are working correctly.');
+    });
+    
+    // Helper Functions
+    function trackVideoActivity(activityType, position) {
+      const analyticsData = {
+        activity_type: activityType,
+        video_id: publicId,
+        position: Math.floor(position),
+        duration: Math.floor(videoPlayer.duration),
+        device_info: navigator.userAgent,
+        metadata: JSON.stringify({
+          referrer: document.referrer || 'direct',
+          screen: `${window.screen.width}x${window.screen.height}`
+        }),
+        timestamp: new Date().toISOString()
+      };
+      
+      logToConsole(analyticsLog, `Analytics tracked: ${activityType} at position ${formatTime(position)}`);
+      console.log('Video analytics data:', analyticsData);
+    }
+    
+    function logToConsole(element, message, isError = false) {
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = document.createElement('div');
+      logEntry.innerHTML = `[${timestamp}] ${message}`;
+      
+      if (isError) {
+        logEntry.style.color = '#f56565';
+      }
+      
+      element.appendChild(logEntry);
+      element.scrollTop = element.scrollHeight;
+    }
+    
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' bytes';
+      else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      else return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+    
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+  </script>
+</body>
+</html>

@@ -189,18 +189,20 @@ async function trackEvent(data: {
   try {
     // Create or update session with sessionToken and expires
     if (data.sessionId) {
+      const expiresDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+      
       await prisma.session.upsert({
         where: { id: data.sessionId },
         update: {
           lastActivity: new Date(),
-          sessionToken: data.sessionToken, // Ensure sessionToken is set
-          expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
+          sessionToken: data.sessionToken,
+          expires: expiresDate,
         },
         create: {
           id: data.sessionId,
-          sessionToken: data.sessionToken, // Required field
+          sessionToken: data.sessionToken,
           userId: data.userId,
-          expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
+          expires: expiresDate,
           createdAt: new Date(),
           lastActivity: new Date(),
         },

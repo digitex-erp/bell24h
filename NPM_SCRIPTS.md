@@ -1,6 +1,6 @@
-# Bell24h NPM Scripts Reference
+# Bell24H NPM Scripts Reference
 
-This document provides a reference for the npm scripts you can use when developing the Bell24h project locally. To run these scripts, you'll need to add them to your `package.json` file after downloading the project.
+This document provides a reference for the npm scripts you can use when developing the Bell24H project locally. To run these scripts, you'll need to add them to your `package.json` file after downloading the project.
 
 ## Current Scripts
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800px" height="400px" viewBox="0 0 800 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Dashboard Illustration</title>
+  <g stroke="none" fill="none">
+    <rect fill="#1976D2" x="0" y="0" width="800" height="400"></rect>
+    
+    <!-- Chart Elements -->
+    <rect fill="#FFFFFF" opacity="0.7" x="50" y="100" width="700" height="200" rx="8"></rect>
+    
+    <!-- Bar Chart -->
+    <rect fill="#4CAF50" x="100" y="150" width="40" height="100" rx="4"></rect>
+    <rect fill="#2196F3" x="150" y="120" width="40" height="130" rx="4"></rect>
+    <rect fill="#FFC107" x="200" y="180" width="40" height="70" rx="4"></rect>
+    <rect fill="#F44336" x="250" y="100" width="40" height="150" rx="4"></rect>
+    <rect fill="#9C27B0" x="300" y="140" width="40" height="110" rx="4"></rect>
+    
+    <!-- Line Chart -->
+    <polyline points="400,150 450,140 500,160 550,120 600,180 650,150" stroke="#4CAF50" stroke-width="4" fill="none"></polyline>
+    <polyline points="400,190 450,210 500,180 550,160 600,220 650,190" stroke="#2196F3" stroke-width="4" fill="none"></polyline>
+    
+    <!-- Data Points -->
+    <circle cx="400" cy="150" r="6" fill="#4CAF50"></circle>
+    <circle cx="450" cy="140" r="6" fill="#4CAF50"></circle>
+    <circle cx="500" cy="160" r="6" fill="#4CAF50"></circle>
+    <circle cx="550" cy="120" r="6" fill="#4CAF50"></circle>
+    <circle cx="600" cy="180" r="6" fill="#4CAF50"></circle>
+    <circle cx="650" cy="150" r="6" fill="#4CAF50"></circle>
+    
+    <circle cx="400" cy="190" r="6" fill="#2196F3"></circle>
+    <circle cx="450" cy="210" r="6" fill="#2196F3"></circle>
+    <circle cx="500" cy="180" r="6" fill="#2196F3"></circle>
+    <circle cx="550" cy="160" r="6" fill="#2196F3"></circle>
+    <circle cx="600" cy="220" r="6" fill="#2196F3"></circle>
+    <circle cx="650" cy="190" r="6" fill="#2196F3"></circle>
+    
+    <!-- Decorative Elements -->
+    <circle fill="#FFFFFF" opacity="0.1" cx="700" cy="80" r="40"></circle>
+    <circle fill="#FFFFFF" opacity="0.1" cx="100" cy="320" r="30"></circle>
+    <circle fill="#FFFFFF" opacity="0.1" cx="750" cy="350" r="20"></circle>
+  </g>
+</svg>

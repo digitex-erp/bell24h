@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Bell24h Application Runner Script
-echo "Starting Bell24h application..."
+# Bell24H Application Runner Script
+echo "Starting Bell24H application..."
 
 # Check if database is connected
 node -e "require('./src/db').connectToDatabase().then(connected => { if (!connected) process.exit(1); else process.exit(0); })" 

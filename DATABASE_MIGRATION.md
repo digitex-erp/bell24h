@@ -1,10 +1,10 @@
-# Bell24h Marketplace - Database Migration Guide
+# Bell24H Marketplace - Database Migration Guide
 
-This document provides instructions for migrating the Bell24h database to a new environment or backing up and restoring data.
+This document provides instructions for migrating the Bell24H database to a new environment or backing up and restoring data.
 
 ## Database Schema
 
-Bell24h uses a PostgreSQL database with the following schema managed by Drizzle ORM. The schema definitions can be found in `shared/schema.ts`.
+Bell24H uses a PostgreSQL database with the following schema managed by Drizzle ORM. The schema definitions can be found in `shared/schema.ts`.
 
 ## Exporting Data from Replit
 
@@ -87,7 +87,7 @@ Best for selective data migration or when restructuring:
 ### Option 3: API-Based Migration
 
 For very selective migration or when transforming data:
-- Create a custom migration script using the Bell24h API
+- Create a custom migration script using the Bell24H API
 - Fetch data from the old environment via API calls
 - Transform data as needed
 - Insert into the new environment

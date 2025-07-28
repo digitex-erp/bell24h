@@ -1,4 +1,4 @@
-# Bell24h Marketplace - Hosting Platform Guide
+# Bell24H Marketplace - Hosting Platform Guide
 
 This guide provides specific deployment instructions for popular hosting platforms.
 

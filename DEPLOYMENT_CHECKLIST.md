@@ -1,6 +1,6 @@
-# Bell24h Marketplace - Deployment Checklist
+# Bell24H Marketplace - Deployment Checklist
 
-Use this checklist to ensure your Bell24h Marketplace application is ready for production deployment.
+Use this checklist to ensure your Bell24H Marketplace application is ready for production deployment.
 
 ## 1. Code Quality and Testing ✅
 
