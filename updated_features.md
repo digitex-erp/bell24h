@@ -1,4 +1,4 @@
-# Bell24h.com B2B Marketplace Features
+# Bell24H.com B2B Marketplace Features
 
 ## Core Features - Implemented
 

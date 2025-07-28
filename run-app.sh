@@ -1,6 +1,6 @@
 #!/bin/bash
-# Bell24h Application Runner Script
-# This script provides an easy way to run the Bell24h application in different environments
+# Bell24H Application Runner Script
+# This script provides an easy way to run the Bell24H application in different environments
 
 # Text styling
 BOLD="\033[1m"
@@ -11,7 +11,7 @@ RED="\033[0;31m"
 NC="\033[0m" # No Color
 
 # Print header
-echo -e "${BOLD}${BLUE}Bell24h Marketplace Application Runner${NC}"
+echo -e "${BOLD}${BLUE}Bell24H Marketplace Application Runner${NC}"
 echo "--------------------------------------"
 
 # Check if Node.js is installed
@@ -27,7 +27,7 @@ NODE_MAJOR_VERSION=$(echo $NODE_VERSION | cut -d '.' -f 1)
 
 if [ "$NODE_MAJOR_VERSION" -lt 18 ]; then
     echo -e "${YELLOW}Warning: Node.js version ${NODE_VERSION} detected${NC}"
-    echo -e "Bell24h recommends Node.js v18 or later. You may experience issues."
+    echo -e "Bell24H recommends Node.js v18 or later. You may experience issues."
     echo ""
 fi
 

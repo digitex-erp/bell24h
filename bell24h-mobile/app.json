@@ -1,0 +1,95 @@
+{
+  "expo": {
+    "name": "Bell24H Mobile",
+    "slug": "bell24h-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bell24h.mobile",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "This app needs access to microphone for voice RFQ creation",
+        "NSCameraUsageDescription": "This app needs access to camera for document scanning",
+        "NSPhotoLibraryUsageDescription": "This app needs access to photo library for document uploads",
+        "NSLocationWhenInUseUsageDescription": "This app needs location access for delivery tracking",
+        "UIBackgroundModes": [
+          "audio",
+          "fetch",
+          "remote-notification"
+        ]
+      }
+    },
+    "android": {
+      "package": "com.bell24h.mobile",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.INTERNET",
+        "android.permission.VIBRATE",
+        "android.permission.WAKE_LOCK"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#ffffff",
+          "sounds": []
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow Bell24H to access your microphone for voice RFQ creation."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Bell24H to access your camera for document scanning."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Bell24H to access your photo library for document uploads."
+        }
+      ]
+    ],
+    "notification": {
+      "color": "#ffffff",
+      "iosDisplayInForeground": true,
+      "androidMode": "default",
+      "androidCollapsedTitle": "Bell24H"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "your-expo-project-id"
+      }
+    },
+    "owner": "bell24h",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/your-expo-project-id"
+    }
+  }
+} 

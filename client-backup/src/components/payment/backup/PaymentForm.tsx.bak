@@ -1,0 +1,1300 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/router';
+// @ts-ignore - Add proper type definitions in a real project
+import { useForm } from 'react-hook-form';
+// @ts-ignore - Add proper type definitions in a real project
+import { useSnackbar } from 'notistack';
+
+// Material UI Components
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormHelperText from '@mui/material/FormHelperText';
+import Alert from '@mui/material/Alert';
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+
+// Material UI Icons
+import LockIcon from '@mui/icons-material/Lock';
+import PaymentIcon from '@mui/icons-material/Payment';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import CloseIcon from '@mui/icons-material/Close';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
+// Add payment SDKs to Window interface
+declare global {
+  interface Window {
+    Razorpay: any;
+    paypal: any;
+    Stripe: any;
+  }
+}
+
+// Types and interfaces
+type PaymentProvider = 'stripe' | 'paypal' | 'razorpay';
+
+interface CustomerDetails {
+  name: string;
+  email: string;
+  phone?: string;
+  address?: {
+    line1?: string;
+    line2?: string;
+    city?: string;
+    state?: string;
+    postal_code?: string;
+    country?: string;
+  };
+}
+
+interface PaymentFormProps {
+  amount: number;
+  currency?: string;
+  description?: string;
+  onSuccess: (data: PaymentResult) => void;
+  onError: (error: any) => void;
+  onCancel: () => void;
+  redirectUrl?: string;
+  customerDetails?: CustomerDetails;
+  metadata?: Record<string, any>;
+  allowedProviders?: PaymentProvider[];
+}
+
+interface PaymentResult {
+  success: boolean;
+  canceled?: boolean;
+  payment: Record<string, any>;
+  error?: any;
+}
+
+// Utility function to get currency symbol
+const getCurrencySymbol = (currency: string): string => {
+  switch (currency.toLowerCase()) {
+    case 'usd': return '$';
+    case 'eur': return '€';
+    case 'gbp': return '£';
+    case 'jpy': return '¥';
+    case 'inr': return '₹';
+    default: return '$';
+  }
+};
+
+// Utility function to get currency symbol
+const getCurrencySymbol = (currency: string): string => {
+  switch (currency.toLowerCase()) {
+    case 'usd': return '$';
+    case 'eur': return '€';
+    case 'gbp': return '£';
+    case 'jpy': return '¥';
+    case 'inr': return '₹';
+    default: return '$';
+  }
+};
+
+// PaymentForm component
+const PaymentForm: React.FC<PaymentFormProps> = ({
+  amount,
+  currency = 'usd',
+  description = 'Payment for services',
+  onSuccess,
+  onError,
+  onCancel,
+  redirectUrl,
+  customerDetails,
+  metadata,
+  allowedProviders = ['stripe', 'paypal', 'razorpay'],
+}) => {
+  // State hooks
+  const [loading, setLoading] = useState(false);
+  const [processingPayment, setProcessingPayment] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<PaymentProvider | ''>(allowedProviders[0] || '');
+  const [cardElement, setCardElement] = useState<any>(null);
+  const [formValid, setFormValid] = useState(false);
+  const [useSavedCard, setUseSavedCard] = useState(false);
+  const [savedCards] = useState<any[]>([]); // In a real app, fetch this from API
+  const [formError, setFormError] = useState<string | null>(null);
+  
+  // Router and snackbar
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
+  
+  // React Hook Form setup
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors }, 
+    watch,
+    setValue
+  } = useForm({
+    defaultValues: {
+      name: customerDetails?.name || '',
+      email: customerDetails?.email || '',
+      phone: customerDetails?.phone || '',
+      provider: selectedProvider,
+      savedCard: '',
+      cardName: '',
+      cardNumber: '',
+      cardExpiry: '',
+      cardCvc: ''
+    },
+    mode: 'onChange'
+  });
+  // Validate form on change
+  useEffect(() => {
+    const subscription = watch((value) => {
+      validateForm(value);
+    });
+    
+    return () => subscription.unsubscribe();
+  }, [watch]);
+  
+  // Validate the form fields
+  const validateForm = (formData: any) => {
+    if (!formData.provider) {
+      setFormValid(false);
+      return;
+    }
+    
+    if (!formData.name || !formData.email) {
+      setFormValid(false);
+      return;
+    }
+    
+    // Email validation
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setFormValid(false);
+      return;
+    }
+    
+    // Provider-specific validation
+    if (formData.provider === 'stripe') {
+      if (useSavedCard && !formData.savedCard) {
+        setFormValid(false);
+        return;
+      }
+    }
+    
+    setFormValid(true);
+  };
+  
+  // Handle cancel action
+  const handleCancel = () => {
+    if (processingPayment) return;
+    onCancel();
+  };
+
+  // Load SDK based on selected provider
+  useEffect(() => {
+    if (!selectedProvider) return;
+    
+    const loadProviderSDK = async () => {
+      setLoading(true);
+      try {
+        switch (selectedProvider) {
+          case 'stripe':
+            await loadStripeSDK();
+            break;
+          case 'paypal':
+            await loadPayPalSDK();
+            break;
+          case 'razorpay':
+            await loadRazorpaySDK();
+            break;
+        }
+      } catch (error) {
+        console.error(`Failed to load ${selectedProvider} SDK:`, error);
+        setFormError(`Failed to load ${selectedProvider} payment. Please try again.`);
+        enqueueSnackbar(`Failed to load ${selectedProvider} payment. Please try again.`, { variant: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadProviderSDK();
+  }, [selectedProvider, enqueueSnackbar]);
+  
+  // SDK Loading functions
+  const loadStripeSDK = async () => {
+    if (window.Stripe) return true;
+    
+    try {
+      await loadScript('https://js.stripe.com/v3/');
+      return true;
+    } catch (error) {
+      console.error('Failed to load Stripe SDK', error);
+      throw new Error('Failed to load Stripe payment provider');
+    }
+  };
+  
+  const loadPayPalSDK = async () => {
+    if (window.paypal) return true;
+    
+    try {
+      await loadScript(`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&currency=${currency}`);
+      return true;
+    } catch (error) {
+      console.error('Failed to load PayPal SDK', error);
+      throw new Error('Failed to load PayPal payment provider');
+    }
+  };
+  
+  const loadRazorpaySDK = async () => {
+    if (window.Razorpay) return true;
+    
+    try {
+      await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+      return true;
+    } catch (error) {
+      console.error('Failed to load Razorpay SDK', error);
+      throw new Error('Failed to load Razorpay payment provider');
+    }
+  };
+
+  // Utility function to load scripts dynamically
+  const loadScript = (src: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      document.body.appendChild(script);
+    });
+  };
+  
+  // Handle payment method change
+  const handleProviderChange = (event: SelectChangeEvent) => {
+    const provider = event.target.value as PaymentProvider | '';
+    setSelectedProvider(provider);
+    setValue('provider', provider);
+  };
+  
+  // Process payment with Stripe
+  const processStripePayment = async (data: any) => {
+    try {
+      if (!window.Stripe) {
+        throw new Error('Stripe SDK not loaded');
+      }
+      
+      const stripe = window.Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+      
+      // In a real app, you would call your backend API to create a payment intent
+      // and then confirm the payment with Stripe.js
+      const paymentResult = {
+        success: true,
+        payment: {
+          id: 'mock-stripe-payment-id-' + Date.now(),
+          amount,
+          currency,
+          status: 'succeeded',
+          provider: 'stripe',
+          customerId: 'mock-customer-id',
+          metadata: { ...metadata, ...data },
+          timestamp: new Date().toISOString()
+        }
+      };
+      
+      return paymentResult;
+    } catch (error) {
+      console.error('Stripe payment failed:', error);
+      throw error;
+    }
+  };
+  
+  // Process payment with PayPal
+  const processPayPalPayment = async (data: any) => {
+    try {
+      if (!window.paypal) {
+        throw new Error('PayPal SDK not loaded');
+      }
+      
+      // In a real app, you would integrate with PayPal checkout flow
+      const paymentResult = {
+        success: true,
+        payment: {
+          id: 'mock-paypal-payment-id-' + Date.now(),
+          amount,
+          currency,
+          status: 'COMPLETED',
+          provider: 'paypal',
+          customerId: 'mock-paypal-customer',
+          metadata: { ...metadata, ...data },
+          timestamp: new Date().toISOString()
+        }
+      };
+      
+      return paymentResult;
+    } catch (error) {
+      console.error('PayPal payment failed:', error);
+      throw error;
+    }
+  };
+  
+  // Process payment with Razorpay
+  const processRazorpayPayment = async (data: any) => {
+    try {
+      if (!window.Razorpay) {
+        throw new Error('Razorpay SDK not loaded');
+      }
+      
+      return new Promise<PaymentResult>((resolve, reject) => {
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
+          amount: amount * 100, // Razorpay expects amount in smallest currency unit
+          currency,
+          name: 'Bell24h',
+          description,
+          handler: (response: any) => {
+            const paymentResult = {
+              success: true,
+              payment: {
+                id: response.razorpay_payment_id,
+                amount,
+                currency,
+                status: 'completed',
+                provider: 'razorpay',
+                customerId: 'mock-customer-id',
+                metadata: { ...metadata, ...data, response },
+                timestamp: new Date().toISOString()
+              }
+            };
+            
+            resolve(paymentResult);
+          },
+          prefill: {
+            name: data.name,
+            email: data.email,
+            contact: data.phone
+          },
+          notes: metadata,
+          theme: {
+            color: '#3f51b5'
+          },
+          modal: {
+            ondismiss: () => {
+              reject(new Error('Payment cancelled by user'));
+            }
+          }
+        };
+        
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+      });
+    } catch (error) {
+      console.error('Razorpay payment failed:', error);
+      throw error;
+    }
+  };
+};
+
+// Mock validation function
+const validatePaymentAmount = (amount: number, _currency: string, _provider: PaymentProvider) => {
+  if (amount <= 0) {
+    return { isValid: false, errors: ['Amount must be greater than 0'] };
+  }
+  return { isValid: true, errors: [] };
+};
+
+// Define the payment result type
+interface PaymentResult {
+  success: boolean;
+  canceled?: boolean;
+  payment: any;
+  error?: string;
+}
+
+interface PaymentFormProps {
+  amount: number;
+  currency: string;
+  description: string;
+  allowedProviders: PaymentProvider[];
+  onSuccess?: () => void;
+  onCancel?: () => void;
+  onError?: (error: Error) => void;
+  redirectUrl?: string;
+  customerDetails?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+  };
+  metadata?: Record<string, string>;
+}
+
+const PaymentForm: React.FC<PaymentFormProps> = ({
+  amount,
+  currency = 'usd',
+  description = 'Payment for services',
+  onSuccess,
+  onError,
+  onCancel,
+  redirectUrl,
+  customerDetails,
+  metadata,
+  allowedProviders = ['stripe', 'paypal', 'razorpay'],
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [processingPayment, setProcessingPayment] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<PaymentProvider | ''>(allowedProviders[0] || '');
+  const [cardElement, setCardElement] = useState<any>(null);
+  // Remove unused state
+  const [formValid, setFormValid] = useState(false);
+  const [useSavedCard, setUseSavedCard] = useState(false);
+  const [savedCards] = useState<any[]>([]);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isValid },
+    watch,
+    setValue,
+    trigger
+  } = useForm({
+    defaultValues: {
+      name: customerDetails?.name || '',
+      email: customerDetails?.email || '',
+      phone: customerDetails?.phone || '',
+      provider: allowedProviders[0] || '',
+      savedCard: '',
+    },
+    mode: 'onChange',
+    criteriaMode: 'all',
+  });
+
+  // Form validation schema
+  useEffect(() => {
+    // Update formValid state based on form validation
+    setFormValid(isValid && !!selectedProvider);
+  }, [isValid, selectedProvider]);
+
+  const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
+
+  // Watch form fields for validation
+  const watchedName = watch('name');
+  const watchedEmail = watch('email');
+  const watchedProvider = watch('provider');
+
+  // Fetch saved payment methods on component mount
+  useEffect(() => {
+    const fetchSavedCards = async () => {
+      try {
+        // TODO: Replace with actual API call to fetch saved payment methods
+        // const response = await api.get('/api/payments/methods');
+        // setSavedCards(response.data);
+      } catch (error) {
+        console.error('Error fetching saved cards:', error);
+      }
+    };
+
+    fetchSavedCards();
+  }, []);
+
+  // Function to validate the form fields
+  const validateForm = async () => {
+    const nameValid = watchedName?.length > 0;
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchedEmail || '');
+    const providerValid = !!watchedProvider;
+
+    setFormValid(nameValid && emailValid && providerValid);
+  };
+
+  // Add effect to validate form whenever watched fields change
+  useEffect(() => {
+    validateForm();
+  }, [watchedName, watchedEmail, watchedProvider, validateForm]);
+
+  // Trigger validation when isValid changes
+  useEffect(() => {
+    setFormValid(isValid && !!selectedProvider);
+  }, [isValid, selectedProvider]);
+
+  // Initialize payment provider SDK when provider changes
+  useEffect(() => {
+    if (!selectedProvider) return;
+
+    const loadProviderSDK = async () => {
+      try {
+        setLoading(true);
+        setFormError(null);
+
+        switch (selectedProvider) {
+          case 'stripe':
+            await loadStripeSDK();
+            break;
+          case 'paypal':
+            await loadPayPalSDK();
+            break;
+          case 'razorpay':
+            await loadRazorpaySDK();
+            break;
+        }
+
+        enqueueSnackbar(`${selectedProvider.charAt(0).toUpperCase() + selectedProvider.slice(1)} payment method loaded successfully`, { variant: 'success' });
+      } catch (error) {
+        console.error(`Error loading ${selectedProvider} SDK:`, error);
+        setFormError(`Failed to load ${selectedProvider} payment. Please try again.`);
+        enqueueSnackbar(`Failed to load ${selectedProvider} payment. Please try again.`, { variant: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProviderSDK();
+  }, [selectedProvider, enqueueSnackbar]);
+
+  // Render the appropriate payment form based on selected provider
+  const renderPaymentForm = () => {
+    if (!selectedProvider) return null;
+    
+    switch (selectedProvider) {
+      case 'stripe':
+        return (
+          <Box style={{ marginTop: '16px' }}>
+            {savedCards.length > 0 && (
+              <FormControl fullWidth style={{ marginBottom: '16px' }}>
+                <Box style={{ display: 'flex', alignItems: 'center' }}>
+                  <input
+                    type="checkbox"
+                    id="use-saved-card"
+                    checked={useSavedCard}
+                    onChange={(e) => setUseSavedCard(e.target.checked)}
+                    style={{ margin: 0 }}
+                    name="useSavedCard"
+                  />
+                  <label htmlFor="use-saved-card" style={{ marginLeft: '8px' }}>
+                    Use saved card
+                  </label>
+                </Box>
+              </FormControl>
+            )}
+            
+            {useSavedCard ? (
+              <FormControl fullWidth style={{ marginBottom: '16px' }}>
+                <InputLabel id="saved-card-label">Select Card</InputLabel>
+                <Select
+                  labelId="saved-card-label"
+                  id="saved-card"
+                  label="Select Card"
+                  value={watch('savedCard')}
+                  onChange={(e) => setValue('savedCard', e.target.value)}
+                  disabled={loading || processingPayment}
+                >
+                  <MenuItem value=""><em>Select a saved card</em></MenuItem>
+                  {savedCards.map((card) => (
+                    <MenuItem key={card.id} value={card.id}>
+                      <Box style={{ display: 'flex', alignItems: 'center' }}>
+                        <CreditCardIcon fontSize="small" style={{ marginRight: '8px' }} />
+                        <Typography>{card.brand} •••• {card.last4} ({card.exp_month}/{card.exp_year})</Typography>
+                      </Box>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            ) : (
+              <div id="stripe-elements" style={{ padding: '12px', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
+                {/* Stripe card element will be inserted here by the SDK */}
+                {!cardElement && <Typography variant="body2">Loading Stripe payment form...</Typography>}
+              </div>
+            )}
+            
+            <Typography variant="caption" style={{ display: 'block', marginTop: '8px', color: 'rgba(0, 0, 0, 0.6)' }}>
+              Your card details are securely processed by Stripe. We don't store your full card details.
+            </Typography>
+          </Box>
+        );
+        
+      case 'paypal':
+        return (
+          <Box style={{ marginTop: '16px' }}>
+            <div id="paypal-button-container" style={{ minHeight: '45px' }}>
+              {/* PayPal buttons will be rendered here by the SDK */}
+              <Typography variant="body2">Preparing PayPal payment options...</Typography>
+            </div>
+          </Box>
+        );
+        
+      case 'razorpay':
+        return (
+          <Box style={{ marginTop: '16px' }}>
+            <Typography variant="body2" style={{ marginBottom: '8px' }}>
+              You'll be redirected to Razorpay's secure payment page after clicking the Pay button.
+            </Typography>
+          </Box>
+        );
+        
+      default:
+        return null;
+    }
+  };
+
+  // handleProviderChange function removed as it's now implemented inline in the Select onChange
+
+  const loadStripeSDK = async () => {
+    // Load Stripe.js asynchronously
+    await loadScript('https://js.stripe.com/v3/');
+
+    // Access the global Stripe object
+    const stripeJs = (window as any).Stripe;
+    if (!stripeJs) {
+      throw new Error('Failed to load Stripe.js');
+    }
+
+    // Initialize Stripe with API key
+    const stripe = stripeJs(process.env.NEXT_PUBLIC_STRIPE_KEY || 'pk_test_dummy');
+    if (!stripe || typeof stripe.elements !== 'function') {
+      throw new Error('Stripe instance is not available');
+    }
+
+    const elements = stripe.elements();
+    const card = elements.create('card', {
+      style: {
+        base: {
+          fontSize: '16px',
+          color: '#32325d',
+          '::placeholder': {
+            color: '#aab7c4',
+          },
+        },
+        invalid: {
+          color: '#fa755a',
+          iconColor: '#fa755a',
+        },
+      },
+    });
+
+    // Mount the card element
+    const cardElement = document.getElementById('card-element');
+    if (cardElement) {
+      card.mount(cardElement);
+      setCardElement(card);
+    }
+
+    return () => {
+      if (card && typeof card.unmount === 'function') {
+        card.unmount();
+      }
+    };
+  };
+
+  const loadPayPalSDK = async () => {
+    // Load PayPal SDK asynchronously
+    await loadScript(`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&currency=${currency.toUpperCase()}`);
+    // PayPal button will be rendered in the component
+  };
+
+  const loadRazorpaySDK = async () => {
+    // Load Razorpay SDK asynchronously
+    await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+  };
+
+  const loadScript = (src: string): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) {
+        resolve(true);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      document.body.appendChild(script);
+
+      // Store the script reference for potential cleanup
+      const scriptElement = script;
+      setTimeout(() => {
+        // In case the script fails to load properly, provide a cleanup method
+        if (scriptElement && !scriptElement.hasAttribute('data-loaded')) {
+          if (scriptElement.parentNode) {
+            scriptElement.parentNode.removeChild(scriptElement);
+          }
+          reject(new Error(`Script load timed out: ${src}`));
+        }
+      }, 10000); // 10 second timeout
+    });
+  };
+
+  const handlePayment = async (_data: Record<string, any>) => {
+    if (!selectedProvider) {
+      enqueueSnackbar('Please select a payment method', { variant: 'warning' });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Validate amount
+      const amountValidation = validatePaymentAmount(amount, currency, selectedProvider);
+      if (!amountValidation.isValid) {
+        enqueueSnackbar(amountValidation.errors[0], { variant: 'error' });
+        setLoading(false);
+        return;
+      }
+
+      // Process payment based on the selected provider
+      let result: PaymentResult;
+
+      if (selectedProvider === 'stripe') {
+        result = await handleStripePayment();
+      } else if (selectedProvider === 'paypal') {
+        result = await handlePayPalPayment();
+      } else if (selectedProvider === 'razorpay') {
+        result = await handleRazorpayPayment();
+      } else {
+        throw new Error('Unsupported payment provider');
+      }
+
+      // Handle successful payment
+      if (result.success) {
+        enqueueSnackbar('Payment successful!', { variant: 'success' });
+        if (onSuccess) {
+          onSuccess(); // Updated to match interface without passing payment details
+        }
+        // Redirect to success page or specified redirect URL
+        if (redirectUrl) {
+          router.push(redirectUrl);
+        } else {
+          router.push('/payment/success');
+        }
+      } else if (result.canceled) {
+        enqueueSnackbar('Payment was canceled', { variant: 'info' });
+        if (onCancel) {
+          onCancel();
+        }
+      } else {
+        throw new Error(result.error || 'Payment failed');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Payment failed. Please try again.';
+      enqueueSnackbar(errorMessage, { variant: 'error' });
+      if (onError && error instanceof Error) {
+        onError(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStripePayment = async (): Promise<PaymentResult> => {
+    if (!cardElement) {
+      throw new Error('Card element not initialized');
+    }
+
+    // Create payment intent
+    const response = await fetch('/api/payments/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({
+        amount,
+        currency,
+        provider: 'stripe',
+        description,
+        metadata
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to create payment intent');
+    }
+
+    const { clientSecret } = await response.json();
+
+    // Confirm card payment
+    const { error, paymentIntent } = await (window as any).stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardElement,
+        billing_details: {
+          name: watch ? watch('cardName') : '',
+        },
+      },
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return { success: true, payment: paymentIntent };
+  };
+
+  const handlePayPalPayment = async (): Promise<PaymentResult> => {
+    return new Promise((resolve) => {
+      // This will be handled by the PayPal button component
+      // The actual implementation would be in the PayPal button's onApprove handler
+      // For now, we'll just show a message
+      enqueueSnackbar('Redirecting to PayPal...', { variant: 'info' });
+      // In a real implementation, you would return a promise that resolves when the payment is complete
+      // This is just a placeholder
+      setTimeout(() => {
+        resolve({ success: true, payment: { id: 'paypal_payment_id' } });
+      }, 2000);
+    });
+  };
+
+  const handleRazorpayPayment = (): Promise<PaymentResult> => {
+    return new Promise((resolve) => {
+      if (!window.Razorpay) {
+        resolve({
+          success: false,
+          payment: null,
+          error: 'Razorpay SDK not loaded'
+        });
+        return;
+      }
+
+      // Create a mock order for demo purposes
+      const orderResponse = {
+        id: `order_${Math.random().toString(36).substring(2, 15)}`,
+        amount: amount * 100, // Convert to smallest currency unit (paisa for INR)
+        currency: currency.toUpperCase(),
+        receipt: `receipt_${Math.random().toString(36).substring(2, 10)}`,
+        status: 'created',
+        created_at: Date.now()
+      };
+
+      // Create Razorpay checkout options
+      const options: Record<string, any> = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_key', // Replace with actual key
+        amount: orderResponse.amount,
+        currency: orderResponse.currency,
+        name: 'Bell 24h Services',
+        description: description,
+        order_id: orderResponse.id,
+        handler: function (response: Record<string, any>) {
+          resolve({
+            success: true,
+            payment: response,
+            error: undefined
+          });
+        },
+        prefill: {
+          name: watch('name') || '',
+          email: watch('email') || '',
+          contact: watch('phone') || '',
+        },
+        theme: {
+          color: '#3399cc',
+        },
+        modal: {
+          ondismiss: function () {
+            resolve({
+              success: false,
+              canceled: true,
+              payment: null,
+              error: 'Payment canceled by user'
+            });
+          }
+        }
+      };
+
+      try {
+        const rzp = new (window as any).Razorpay(options);
+        rzp.on('payment.failed', function (response: Record<string, any>) {
+          resolve({
+            success: false,
+            payment: null,
+            error: response.error?.description || 'Payment failed'
+          });
+        });
+        rzp.open();
+      } catch (error) {
+        console.error('Error creating Razorpay instance:', error);
+        resolve({
+          success: false,
+          payment: null,
+          error: 'Failed to initialize payment'
+        });
+      }
+    });
+  };
+
+  return (
+    <Card style={{ maxWidth: 600, margin: '0 auto', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+      <CardContent style={{ padding: '24px' }}>
+        <Typography variant="h5" gutterBottom style={{ fontWeight: 500, color: '#1976d2', marginBottom: '16px' }}>
+          Payment Details
+        </Typography>
+
+        <Box style={{ marginBottom: '24px' }}>
+          <Typography variant="subtitle1" gutterBottom style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+            Amount: <strong>{getCurrencySymbol(currency)}{amount.toFixed(2)}</strong>
+          </Typography>
+          <Typography variant="body2" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+            {description}
+          </Typography>
+          <Box style={{ display: 'flex', alignItems: 'center', marginTop: '16px' }}>
+            <LockIcon fontSize="small" style={{ color: 'rgba(0, 0, 0, 0.54)', marginRight: '8px' }} />
+            <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+              Secure, encrypted payment processing
+            </Typography>
+          </Box>
+        </Box>
+        
+        <form onSubmit={handleSubmit(handlePayment)}>
+          {/* Customer Details Section */}
+          <Typography variant="subtitle1" gutterBottom style={{ marginTop: '16px', marginBottom: '8px' }}>
+            Customer Details
+          </Typography>
+          
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+            <TextField
+              id="customer-name"
+              label="Name"
+              fullWidth
+              style={{ marginBottom: '8px' }}
+              error={!!errors.name}
+              helperText={errors.name?.message as string}
+              disabled={loading || processingPayment}
+              {...register('name', { 
+                required: 'Name is required'
+              })}
+              InputProps={{ 
+                'aria-required': 'true',
+                'aria-invalid': !!errors.name
+              }}
+            />
+            <TextField
+              id="customer-email"
+              label="Email"
+              fullWidth
+              style={{ marginBottom: '8px' }}
+              error={!!errors.email}
+              helperText={errors.email?.message as string}
+              disabled={loading || processingPayment}
+              {...register('email', { 
+                required: 'Email is required',
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: 'Please enter a valid email address'
+                }
+              })}
+              InputProps={{ 
+                'aria-required': 'true',
+                'aria-invalid': !!errors.email
+              }}
+            />
+            <TextField
+              id="customer-phone"
+              label="Phone"
+              fullWidth
+              style={{ marginBottom: '16px' }}
+              error={!!errors.phone}
+              helperText={errors.phone?.message as string}
+              disabled={loading || processingPayment}
+              {...register('phone', { 
+                pattern: {
+                  value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
+                  message: 'Please enter a valid phone number'
+                }
+              })}
+              InputProps={{ 
+                'aria-invalid': !!errors.phone,
+                'aria-label': 'Customer phone number'
+              }}
+            />
+          </Box>
+          
+          {/* Payment Method Selection */}
+          <FormControl fullWidth style={{ marginBottom: '16px' }} error={!!errors.provider}>
+            <InputLabel id="payment-provider-label">Payment Method</InputLabel>
+            <Select
+              labelId="payment-provider-label"
+              id="payment-provider"
+              value={selectedProvider}
+              label="Payment Method"
+              disabled={loading || processingPayment}
+              {...register('provider', {
+                required: 'Please select a payment method'
+              })}
+              onChange={(e) => {
+                const value = e.target.value as PaymentProvider;
+                setSelectedProvider(value);
+                setUseSavedCard(false);
+                setValue('provider', value, { shouldValidate: true });
+              }}
+              inputProps={{
+                'aria-required': 'true',
+                'aria-invalid': !!errors.provider,
+                'aria-describedby': 'payment-provider-helper-text'
+              }}
+            >
+              <MenuItem value=""><em>Select a payment method</em></MenuItem>
+              {allowedProviders.includes('stripe') && (
+                <MenuItem value="stripe">
+                  <Box style={{ display: 'flex', alignItems: 'center' }}>
+                    <CreditCardIcon fontSize="small" style={{ marginRight: '8px' }} />
+                    <Typography>Credit/Debit Card</Typography>
+                  </Box>
+                </MenuItem>
+              )}
+              {allowedProviders.includes('paypal') && (
+                <MenuItem value="paypal">
+                  <Box style={{ display: 'flex', alignItems: 'center' }}>
+                    <AccountBalanceIcon fontSize="small" style={{ marginRight: '8px' }} />
+                    <Typography>PayPal</Typography>
+                  </Box>
+                </MenuItem>
+              )}
+              {allowedProviders.includes('razorpay') && (
+                <MenuItem value="razorpay">
+                  <Box style={{ display: 'flex', alignItems: 'center' }}>
+                    <AccountBalanceWalletIcon fontSize="small" style={{ marginRight: '8px' }} />
+                    <Typography>Razorpay</Typography>
+                  </Box>
+                </MenuItem>
+              )}
+            </Select>
+            {errors.provider && (
+              <FormHelperText error>{errors.provider.message as string}</FormHelperText>
+            )}
+          </FormControl>
+          
+          {/* Dynamic Payment Form based on selected provider */}
+          {selectedProvider && (
+            <Box style={{ marginTop: '16px', marginBottom: '24px' }}>
+              {renderPaymentForm()}
+            </Box>
+          )}
+          {/* Form Actions */}
+          <Box style={{ display: 'flex', justifyContent: 'space-between', marginTop: '24px' }}>
+            <Button
+              variant="outlined"
+              onClick={handleCancel}
+              disabled={processingPayment}
+              style={{ minWidth: '100px' }}
+              aria-label="Cancel payment"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!formValid || processingPayment || loading}
+              style={{ minWidth: '100px' }}
+              endIcon={processingPayment ? <CircularProgress size={20} color="inherit" /> : null}
+              aria-label="Complete payment"
+            >
+              {loading ? 'Processing...' : 'Pay with Razorpay'}
+            </Button>
+          </Box>
+          );
+
+          default:
+          return null;
+    }
+  };
+
+          return (
+          <Card style={{ maxWidth: 600, margin: '0 auto', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+            <CardContent style={{ padding: '24px' }}>
+              <Typography variant="h5" gutterBottom style={{ fontWeight: 500, color: '#1976d2', marginBottom: '16px' }}>
+                Payment Details
+              </Typography>
+
+              <Box style={{ marginBottom: '24px' }}>
+                <Typography variant="subtitle1" gutterBottom style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                  Amount: <strong>{getCurrencySymbol(currency)}{amount.toFixed(2)}</strong>
+                </Typography>
+                <Typography variant="body2" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                  {description}
+                </Typography>
+                <Box style={{ display: 'flex', alignItems: 'center', marginTop: '16px' }}>
+                  <LockIcon fontSize="small" style={{ color: 'rgba(0, 0, 0, 0.54)', marginRight: '8px' }} />
+                  <Typography variant="caption" style={{ color: 'rgba(0, 0, 0, 0.6)' }}>
+                    Secure, encrypted payment processing
+                  </Typography>
+                </Box>
+              </Box>
+
+              <form onSubmit={handleSubmit(handlePayment)}>
+                {/* Customer Details Section */}
+                <Typography variant="subtitle1" gutterBottom style={{ marginTop: '16px', marginBottom: '8px' }}>
+                  Customer Information
+                </Typography>
+
+                <Box style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+                  <TextField
+                    id="customer-name"
+                    label="Name"
+                    fullWidth
+                    {...register('name', {
+                      required: 'Name is required',
+                      minLength: {
+                        value: 2,
+                        message: 'Name must be at least 2 characters'
+                      }
+                    })}
+                    error={!!errors.name}
+                    helperText={errors.name?.message as string}
+                    style={{ marginBottom: '16px' }}
+                    disabled={loading || processingPayment}
+                    InputProps={{
+                      'aria-required': 'true',
+                      'aria-invalid': !!errors.name
+                    }}
+                  />
+                  <TextField
+                    id="customer-email"
+                    label="Email"
+                    type="email"
+                    fullWidth
+                    style={{ marginBottom: '16px' }}
+                    error={!!errors.email}
+                    helperText={errors.email?.message as string}
+                    disabled={loading || processingPayment}
+                    {...register('email', {
+                      required: 'Email is required',
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: 'Please enter a valid email address'
+                      }
+                    })}
+                    InputProps={{
+                      'aria-required': 'true',
+                      'aria-invalid': !!errors.email
+                    }}
+                  />
+                  <TextField
+                    id="customer-phone"
+                    label="Phone"
+                    fullWidth
+                    style={{ marginBottom: '16px' }}
+                    error={!!errors.phone}
+                    helperText={errors.phone?.message as string}
+                    disabled={loading || processingPayment}
+                    {...register('phone', {
+                      pattern: {
+                        value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
+                        message: 'Please enter a valid phone number'
+                      }
+                    })}
+                    InputProps={{
+                      'aria-invalid': !!errors.phone,
+                      'aria-label': 'Customer phone number'
+                    }}
+                  />
+                </Box>
+
+                {/* Payment Method Selection */}
+                <Typography variant="subtitle1" gutterBottom style={{ marginTop: '16px', marginBottom: '8px' }}>
+                  Select Payment Method
+                </Typography>
+
+                <FormControl fullWidth style={{ marginBottom: '16px' }} error={!!errors.provider}>
+                  <InputLabel id="payment-provider-label">Payment Method</InputLabel>
+                  <Select
+                    labelId="payment-provider-label"
+                    id="payment-provider"
+                    value={selectedProvider}
+                    label="Payment Method"
+                    disabled={loading || processingPayment}
+                    {...register('provider', {
+                      required: 'Please select a payment method'
+                    })}
+                    onChange={(e) => {
+                      const value = e.target.value as PaymentProvider;
+                      setSelectedProvider(value);
+                      setUseSavedCard(false);
+                      setValue('provider', value, { shouldValidate: true });
+                    }}
+                    inputProps={{
+                      'aria-required': 'true',
+                      'aria-invalid': !!errors.provider,
+                      'aria-describedby': 'payment-provider-helper-text'
+                    }}
+                  >
+                    <MenuItem value=""><em>Select a payment method</em></MenuItem>
+                    {allowedProviders.includes('stripe') && (
+                      <MenuItem value="stripe">
+                        <Box style={{ display: 'flex', alignItems: 'center' }}>
+                          <CreditCardIcon fontSize="small" style={{ marginRight: '8px' }} />
+                          <Typography>Credit Card (Stripe)</Typography>
+                        </Box>
+                      </MenuItem>
+                    )}
+                    {allowedProviders.includes('paypal') && (
+                      <MenuItem value="paypal">
+                        <Box style={{ display: 'flex', alignItems: 'center' }}>
+                          <AccountBalanceIcon fontSize="small" style={{ marginRight: '8px' }} />
+                          <Typography>PayPal</Typography>
+                        </Box>
+                      </MenuItem>
+                    )}
+                    {allowedProviders.includes('razorpay') && (
+                      <MenuItem value="razorpay">
+                        <Box style={{ display: 'flex', alignItems: 'center' }}>
+                          <AccountBalanceWalletIcon fontSize="small" style={{ marginRight: '8px' }} />
+                          <Typography>Razorpay</Typography>
+                        </Box>
+                      </MenuItem>
+                    )}
+                  </Select>
+                  {errors.provider && (
+                    <FormHelperText error>{errors.provider.message as string}</FormHelperText>
+                  )}
+                </FormControl>
+
+                {selectedProvider && (
+                  <Box style={{ marginTop: '24px', marginBottom: '32px', padding: '16px', backgroundColor: '#fff', borderRadius: '4px', border: '1px solid #e0e0e0' }}>
+                    <Typography variant="subtitle2" gutterBottom style={{ fontWeight: 500, color: '#1976d2', display: 'flex', alignItems: 'center' }}>
+                        startIcon={<CloseIcon />}
+                        aria-label="Cancel payment"
+                        style={{
+                          marginRight: '8px'
+                        }}
+                      >
+                        Cancel
+                      </Button>
+
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={loading || processingPayment || !formValid || !selectedProvider}
+                        startIcon={processingPayment ? <CircularProgress size={20} style={{ color: 'white' }} /> : <PaymentIcon />}
+                        aria-label="Complete payment"
+                        aria-busy={processingPayment}
+                        type="submit"
+                        style={{
+                          position: 'relative',
+                          backgroundColor: processingPayment ? '#1976d2' : undefined,
+                          color: processingPayment ? '#ffffff' : undefined,
+                          opacity: processingPayment ? 0.8 : undefined,
+                          minWidth: '120px',
+                          padding: '8px 16px',
+                          fontWeight: 500,
+                          boxShadow: '0 3px 5px rgba(0,0,0,0.2)',
+                          transition: 'all 0.3s ease'
+                        }}
+                      >
+                        {processingPayment ? 'Processing...' : `Pay ${currency.toUpperCase()} ${amount.toFixed(2)}`}
+                      </Button>
+                    </Box>
+                  </Box>
+                )}
+                <Typography variant="body2" style={{ marginTop: '24px', fontSize: '0.75rem', color: 'rgba(0, 0, 0, 0.6)', textAlign: 'center' }}>
+                  Your payment is secure and encrypted. All transactions are processed with industry-standard security.
+                </Typography>
+              </form>
+            </CardContent>
+          </Card>
+          );
+};
+
+          export default PaymentForm;

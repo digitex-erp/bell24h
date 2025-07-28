@@ -1,6 +1,6 @@
-# Bell24h.com Deployment File Structure
+# Bell24H.com Deployment File Structure
 
-This document outlines the key files and directories required for deploying Bell24h.com to various platforms including Vercel, Render, AWS, and Snky.
+This document outlines the key files and directories required for deploying Bell24H.com to various platforms including Vercel, Render, AWS, and Snky.
 
 ## Overall Project Completion: 78%
 

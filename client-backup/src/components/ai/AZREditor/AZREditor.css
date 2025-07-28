@@ -1,0 +1,190 @@
+/* Base styles for the AZR Editor */
+.azr-editor {
+  --primary-color: #3f51b5;
+  --primary-light: #757de8;
+  --primary-dark: #002984;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --divider-color: #e0e0e0;
+  --background-default: #f5f5f5;
+  --background-paper: #ffffff;
+  --hover-bg: rgba(0, 0, 0, 0.04);
+  --active-bg: rgba(0, 0, 0, 0.08);
+  --border-radius: 4px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --transition: all 0.2s ease-in-out;
+}
+
+/* Toolbar styles */
+.azr-toolbar {
+  background-color: var(--background-paper);
+  border-bottom: 1px solid var(--divider-color);
+  padding: 8px 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.azr-toolbar button {
+  background-color: var(--background-paper);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--border-radius);
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.azr-toolbar button:hover:not(:disabled) {
+  background-color: var(--hover-bg);
+  border-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.azr-toolbar button:active:not(:disabled) {
+  background-color: var(--active-bg);
+  transform: translateY(1px);
+}
+
+.azr-toolbar button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Status bar styles */
+.azr-status-bar {
+  background-color: var(--background-paper);
+  border-top: 1px solid var(--divider-color);
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Panel styles */
+.azr-panel {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  background-color: var(--background-paper);
+  border-left: 1px solid var(--divider-color);
+}
+
+/* Suggestion list */
+.azr-suggestion-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.azr-suggestion-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  margin-bottom: 4px;
+  transition: var(--transition);
+}
+
+.azr-suggestion-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.azr-suggestion-item.active {
+  background-color: var(--primary-light);
+  color: white;
+}
+
+/* Code block styles */
+.azr-code-block {
+  background-color: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius);
+  padding: 12px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+/* Tabs */
+.azr-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--divider-color);
+  margin-bottom: 12px;
+}
+
+.azr-tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.azr-tab.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.azr-tab:hover:not(.active) {
+  color: var(--text-primary);
+  background-color: var(--hover-bg);
+}
+
+/* Buttons */
+.azr-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.azr-button:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+  box-shadow: var(--box-shadow);
+}
+
+.azr-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Utility classes */
+.azr-mt-1 { margin-top: 8px; }
+.azr-mt-2 { margin-top: 16px; }
+.azr-mt-3 { margin-top: 24px; }
+.azr-mb-1 { margin-bottom: 8px; }
+.azr-mb-2 { margin-bottom: 16px; }
+.azr-mb-3 { margin-bottom: 24px; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .azr-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .azr-toolbar button {
+    width: 100%;
+    justify-content: center;
+  }
+}

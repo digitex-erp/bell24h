@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Bell24h Application Startup Script
-# This script starts the Bell24h application using the unified startup process
+# Bell24H Application Startup Script
+# This script starts the Bell24H application using the unified startup process
 
 # Header display
 echo "-----------------------------------------"
@@ -34,5 +34,5 @@ if [ -z "$DATABASE_URL" ]; then
 fi
 
 # Start the application
-echo "Starting Bell24h application..."
+echo "Starting Bell24H application..."
 node bell24h-unified-startup.js

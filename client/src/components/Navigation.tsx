@@ -56,7 +56,7 @@ export default function Navigation() {
     <nav className="bg-white shadow-lg border-b sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* Logo - FIXED: Single logo with consistent styling */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
@@ -69,7 +69,7 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - FIXED: Consistent flex usage */}
           <div className="hidden lg:flex items-center space-x-1">
             {/* Main Navigation */}
             {mainNavigation.slice(0, 2).map((item) => (
@@ -87,7 +87,7 @@ export default function Navigation() {
               </Link>
             ))}
 
-            {/* AI Features Dropdown */}
+            {/* AI Features Dropdown - FIXED: Proper dropdown structure */}
             <div className="relative">
               <button
                 onClick={() => setIsFeaturesDropdownOpen(!isFeaturesDropdownOpen)}
@@ -135,7 +135,7 @@ export default function Navigation() {
               </Link>
             ))}
 
-            {/* Login Button */}
+            {/* Login Button - FIXED: Consistent button styling */}
             <Link
               href="/auth/login"
               className="ml-4 px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg"
@@ -145,7 +145,7 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu button - FIXED: Proper mobile button */}
           <div className="lg:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -160,7 +160,7 @@ export default function Navigation() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - FIXED: Clean mobile layout */}
         {isMobileMenuOpen && (
           <div className="lg:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
@@ -169,7 +169,7 @@ export default function Navigation() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`block px-3 py-3 rounded-lg text-base font-medium transition-all flex items-center space-x-3 ${
+                  className={` px-3 py-3 rounded-lg text-base font-medium transition-all flex items-center space-x-3 ${
                     isActive(item.href)
                       ? 'bg-blue-100 text-blue-700'
                       : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
@@ -181,7 +181,7 @@ export default function Navigation() {
                 </Link>
               ))}
 
-              {/* AI Features Section */}
+              {/* AI Features Section - FIXED: Proper mobile section */}
               <div className="border-t border-gray-200 pt-3 mt-3">
                 <div className="px-3 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wider">
                   AI Features
@@ -190,7 +190,7 @@ export default function Navigation() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`block px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center space-x-3 ${
+                    className={` px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center space-x-3 ${
                       isActive(item.href)
                         ? 'bg-blue-100 text-blue-700'
                         : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
@@ -203,11 +203,11 @@ export default function Navigation() {
                 ))}
               </div>
 
-              {/* Login Button */}
+              {/* Login Button - FIXED: Mobile login button */}
               <div className="border-t border-gray-200 pt-3 mt-3">
                 <Link
                   href="/auth/login"
-                  className="block px-3 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center space-x-3"
+                  className=" px-3 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center space-x-3"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <LogIn className="w-5 h-5" />
@@ -219,7 +219,7 @@ export default function Navigation() {
         )}
       </div>
 
-      {/* Click outside to close dropdown */}
+      {/* Click outside to close dropdown - FIXED: Proper overlay */}
       {isFeaturesDropdownOpen && (
         <div 
           className="fixed inset-0 z-40" 

@@ -76,3 +76,44 @@ ws.on('error', (error) => {
 ws.on('close', (code, reason) => {
   console.log(`❌ Connection closed: ${code} - ${reason || 'No reason provided'}`);
 });
+
+// client/src/components/VoiceRFQ.tsx
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, TextInput, FlatList, StyleSheet, ActivityIndicator } from 'react';
+import Toast from 'react-native-toast-message';
+
+const VoiceRFQ: React.FC = () => {
+  const [transcript, setTranscript] = useState<string>('');
+  const [isListening, setIsListening] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Add loading state and error handling
+  const startListening = async () => {
+    setIsLoading(true);
+    try {
+      // Simulate voice recognition
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setTranscript("Sample transcription");
+      setIsListening(true);
+    } catch (e) {
+      setError("Failed to start voice recognition");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // In your submitRFQ function
+  const submitRFQ = () => {
+    // Your submit logic here
+    Toast.show({ type: 'success', text1: 'RFQ submitted successfully!' });
+  };
+
+  return (
+    <View style={styles.container}>
+      {isLoading && <ActivityIndicator size="large" />}
+      {error && <Text style={styles.error}>{error}</Text>}
+      {/* Rest of your component */}
+    </View>
+  );
+};

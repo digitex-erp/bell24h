@@ -1,6 +1,6 @@
-# Bell24h Environment Variables Guide
+# Bell24H Environment Variables Guide
 
-This document provides a quick reference for setting up environment variables for Bell24h Marketplace in your production environment.
+This document provides a quick reference for setting up environment variables for Bell24H Marketplace in your production environment.
 
 ## Required Environment Variables
 

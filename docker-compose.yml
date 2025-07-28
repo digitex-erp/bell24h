@@ -1,49 +1,65 @@
-version: '3.8'
 
 services:
+  # Main Application
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
+    container_name: bell24h-app
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
       - PORT=5000
-      - DATABASE_URL=${DATABASE_URL}
-      - SESSION_SECRET=${SESSION_SECRET}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      # Uncomment if needed
-      # - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
-      # - SENDGRID_API_KEY=${SENDGRID_API_KEY}
-    restart: unless-stopped
-    depends_on:
-      - postgres
-    networks:
-      - bell24h-network
-
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_USER=bell24h
-      - POSTGRES_PASSWORD=bell24h_secure_password
-      - POSTGRES_DB=bell24h
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - '5000:5000'
+    depends_on:
+      - mongodb
     networks:
       - bell24h-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U bell24h"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
+  # n8n Service
+  n8n:
+    image: n8nio/n8n:1.94.1
+    container_name: bell24h-n8n
+    restart: unless-stopped
+    ports:
+      - '5678:5678'
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_WEBHOOK_URL=http://localhost:5678/
+      - N8N_EMAIL_MODE=smtp
+      - N8N_SMTP_HOST=your-smtp-host
+      - N8N_SMTP_PORT=587
+      - N8N_SMTP_USER=your-email@example.com
+      - N8N_SMTP_PASS=your-email-password
+      - N8N_SMTP_SENDER=your-email@example.com
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - bell24h-network
+
+  # MongoDB Service
+  mongodb:
+    image: mongo:6.0
+    container_name: bell24h-mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_DATABASE=bell24h
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - bell24h-network
+
+# Volumes
+volumes:
+  n8n_data:
+  mongodb_data:
+
+# Networks
 networks:
   bell24h-network:
     driver: bridge
-
-volumes:
-  postgres-data:

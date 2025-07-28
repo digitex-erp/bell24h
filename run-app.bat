@@ -1,8 +1,8 @@
 @echo off
-:: Bell24h Application Runner for Windows
-:: This script provides an easy way to run the Bell24h application on Windows
+:: Bell24H Application Runner for Windows
+:: This script provides an easy way to run the Bell24H application on Windows
 
-TITLE Bell24h Marketplace Application Runner
+TITLE Bell24H Marketplace Application Runner
 
 :: Text styling
 set "BOLD=[1m"
@@ -13,7 +13,7 @@ set "RED=[91m"
 set "NC=[0m"
 
 :: Print header
-echo %BLUE%%BOLD%Bell24h Marketplace Application Runner%NC%
+echo %BLUE%%BOLD%Bell24H Marketplace Application Runner%NC%
 echo --------------------------------------
 
 :: Check if Node.js is installed
@@ -32,7 +32,7 @@ for /f "tokens=1,2,3 delims=." %%a in ('node -v ^| find "v"') do (
 
 if %NODE_MAJOR% LSS 18 (
     echo %YELLOW%Warning: Node.js version below v18 detected%NC%
-    echo Bell24h recommends Node.js v18 or later. You may experience issues.
+    echo Bell24H recommends Node.js v18 or later. You may experience issues.
     echo.
 )
 
