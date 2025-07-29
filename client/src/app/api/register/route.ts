@@ -1,6 +1,18 @@
 import { supabase } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
+// Handle GET requests (prevent 405 errors)
+export async function GET(request: NextRequest) {
+  return NextResponse.json(
+    {
+      error: 'Method not allowed',
+      message: 'Please use POST method for registration',
+      allowedMethods: ['POST'],
+    },
+    { status: 405 }
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password, companyName, businessType } = await request.json();
