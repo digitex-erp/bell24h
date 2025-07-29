@@ -25,7 +25,7 @@ export default function DashboardPage() {
     const checkAuth = () => {
       if (typeof window !== 'undefined') {
         const token = localStorage.getItem('auth-token');
-        const userData = localStorage.getItem('user-data');
+        const userData = localStorage.getItem('bell24h-user') || localStorage.getItem('user-data');
 
         if (!token) {
           console.log('No auth token found, redirecting to login...');
@@ -42,6 +42,7 @@ export default function DashboardPage() {
           } catch (error) {
             console.error('Error parsing user data:', error);
             localStorage.removeItem('auth-token');
+            localStorage.removeItem('bell24h-user');
             localStorage.removeItem('user-data');
             router.push('/auth/login?redirect=/dashboard');
           }
@@ -69,6 +70,7 @@ export default function DashboardPage() {
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('auth-token');
+      localStorage.removeItem('bell24h-user');
       localStorage.removeItem('user-data');
       router.push('/auth/login');
     }
