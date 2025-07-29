@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,171 +8,141 @@ datasource db {
 }
 
 model User {
-  id                    String    @id @default(cuid())
-  email                 String    @unique
-  name                  String?
-  hashedPassword        String?
-  role                  UserRole  @default(BUYER)
-  companyname           String?
-  isemailverified       Boolean   @default(false)
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-
-  // Bell24h 2.0 - Multi-Role System
-  roles                 String[]  @default(["buyer"]) // Multiple roles: ["buyer", "supplier", "msme", "manufacturer"]
-  trafficTier           TrafficTier @default(FREE)
-  showcaseEnabled       Boolean   @default(false)
-  logoUrl               String?
-  brandName             String?
-  about                 String?
-  msmeCertUrl           String?
-  msmeCertNumber        String?
-  
-  // RazorpayX Integration Fields
-  razorpay_contact_id     String? @map("razorpay_contact_id")
-  razorpay_fund_account_id String? @map("razorpay_fund_account_id")
-  bank_account_number      String? @map("bank_account_number")
-  bank_ifsc_code          String? @map("bank_ifsc_code")
-  bank_account_holder      String? @map("bank_account_holder")
-  bank_account_type        String? @default("savings") @map("bank_account_type")
-
-  // Relations
-  wallet                 Wallet?
-  products               Product[]
-  rfqs                   RFQ[]
-  sessions               Session[]
-  trafficAnalytics       TrafficAnalytics[]
+  id                       String             @id @default(cuid())
+  email                    String             @unique
+  name                     String?
+  hashedPassword           String?
+  role                     UserRole           @default(BUYER)
+  companyname              String?
+  isemailverified          Boolean            @default(false)
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  roles                    String[]           @default(["buyer"])
+  trafficTier              TrafficTier        @default(FREE)
+  showcaseEnabled          Boolean            @default(false)
+  logoUrl                  String?
+  brandName                String?
+  about                    String?
+  msmeCertUrl              String?
+  msmeCertNumber           String?
+  razorpay_contact_id      String?            @map("razorpay_contact_id")
+  razorpay_fund_account_id String?            @map("razorpay_fund_account_id")
+  bank_account_number      String?            @map("bank_account_number")
+  bank_ifsc_code           String?            @map("bank_ifsc_code")
+  bank_account_holder      String?            @map("bank_account_holder")
+  bank_account_type        String?            @default("savings") @map("bank_account_type")
+  products                 Product[]
+  rfqs                     RFQ[]
+  sessions                 Session[]
+  trafficAnalytics         TrafficAnalytics[]
+  wallet                   Wallet?
 }
 
 model Wallet {
-  id              String   @id @default(cuid())
-  userid          String   @unique @map("userid")
-  balance         Float    @default(0)
-  totalbalance    Float    @default(0)
-  availablebalance Float   @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  user            User     @relation(fields: [userid], references: [id], onDelete: Cascade)
-  transactions    Transaction[]
+  id               String        @id @default(cuid())
+  userid           String        @unique @map("userid")
+  balance          Float         @default(0)
+  totalbalance     Float         @default(0)
+  availablebalance Float         @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  transactions     Transaction[]
+  user             User          @relation(fields: [userid], references: [id], onDelete: Cascade)
 }
 
 model Transaction {
-  id              String   @id @default(cuid())
-  walletid        String   @map("walletid")
-  transactionid   String   @unique @map("transactionid")
-  amount          Float
-  currency        String   @default("INR")
-  type            String   // DEPOSIT, WITHDRAWAL, TRANSFER, REFUND
-  status          String   @default("PENDING") // PENDING, COMPLETED, FAILED
-  description     String?
-  metadata        Json?    // Additional transaction data
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  wallet          Wallet   @relation(fields: [walletid], references: [id], onDelete: Cascade)
+  id            String   @id @default(cuid())
+  walletid      String   @map("walletid")
+  transactionid String   @unique @map("transactionid")
+  amount        Float
+  currency      String   @default("INR")
+  type          String
+  status        String   @default("PENDING")
+  description   String?
+  metadata      Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  wallet        Wallet   @relation(fields: [walletid], references: [id], onDelete: Cascade)
 }
 
-// Bell24h 2.0 - Product Showcase System
 model Product {
-  id              String   @id @default(cuid())
-  name            String
-  brand           String
-  logoUrl         String?
-  description     String
-  images          String[] // Cloudinary URLs
-  basePrice       Float
-  trafficPrice    Float    // Dynamic per-impression pricing
-  msmePrice       Float?   // Special MSME discount
-  category        String
-  subcategory     String?
-  specifications  Json?    // Technical specifications
-  userId          String
-  userRole        UserRole // Role when product was created
-  views           Int      @default(0)
-  impressions     Int      @default(0)
-  rfqCount        Int      @default(0)
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  rfqs            RFQ[]
+  id               String             @id @default(cuid())
+  name             String
+  brand            String
+  logoUrl          String?
+  description      String
+  images           String[]
+  basePrice        Float
+  trafficPrice     Float
+  msmePrice        Float?
+  category         String
+  subcategory      String?
+  specifications   Json?
+  userId           String
+  userRole         UserRole
+  views            Int                @default(0)
+  impressions      Int                @default(0)
+  rfqCount         Int                @default(0)
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rfqs             RFQ[]
   trafficAnalytics TrafficAnalytics[]
 }
 
-// Bell24h 2.0 - Enhanced RFQ System
 model RFQ {
-  id              String   @id @default(cuid())
-  title           String
-  description     String
-  category        String
-  subcategory     String?
-  quantity        Int
-  unit            String
-  budget          Float?
-  deadline        DateTime?
-  status          RFQStatus @default(OPEN)
-  priority        Priority @default(MEDIUM)
-  
-  // AI Enhancement Fields
-  aiSuggestions   Json?    // AI-generated suggestions
-  riskScore       Float?   // AI-calculated risk score
-  marketTrend     Json?    // Price trend analysis
-  competitorAnalysis Json? // Competitor insights
-  
-  // User and Product Relations
-  buyerId         String
-  productId       String?
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  buyer           User     @relation(fields: [buyerId], references: [id], onDelete: Cascade)
-  product         Product? @relation(fields: [productId], references: [id])
-  responses       RFQResponse[]
+  id                 String        @id @default(cuid())
+  title              String
+  description        String
+  category           String
+  subcategory        String?
+  quantity           Int
+  unit               String
+  budget             Float?
+  deadline           DateTime?
+  status             RFQStatus     @default(OPEN)
+  priority           Priority      @default(MEDIUM)
+  aiSuggestions      Json?
+  riskScore          Float?
+  marketTrend        Json?
+  competitorAnalysis Json?
+  buyerId            String
+  productId          String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  buyer              User          @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  product            Product?      @relation(fields: [productId], references: [id])
+  responses          RFQResponse[]
 }
 
-// Bell24h 2.0 - RFQ Response System
 model RFQResponse {
-  id              String   @id @default(cuid())
-  rfqId           String
-  supplierId      String
-  price           Float
-  quantity        Int
-  deliveryTime    Int      // Days
-  description     String?
-  status          ResponseStatus @default(PENDING)
-  
-  // AI Negotiation Fields
-  aiScore         Float?   // AI matching score
-  negotiationHistory Json? // Negotiation tracking
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  rfq             RFQ      @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  id                 String         @id @default(cuid())
+  rfqId              String
+  supplierId         String
+  price              Float
+  quantity           Int
+  deliveryTime       Int
+  description        String?
+  status             ResponseStatus @default(PENDING)
+  aiScore            Float?
+  negotiationHistory Json?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  rfq                RFQ            @relation(fields: [rfqId], references: [id], onDelete: Cascade)
 }
 
-// Bell24h 2.0 - Traffic Analytics
 model TrafficAnalytics {
-  id              String   @id @default(cuid())
-  userId          String
-  productId       String?
-  page            String
-  impressions     Int      @default(0)
-  clicks          Int      @default(0)
-  conversions     Int      @default(0)
-  date            DateTime @default(now())
-  
-  // Relations
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product         Product? @relation(fields: [productId], references: [id])
+  id          String   @id @default(cuid())
+  userId      String
+  productId   String?
+  page        String
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  conversions Int      @default(0)
+  date        DateTime @default(now())
+  product     Product? @relation(fields: [productId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Session {
@@ -185,8 +152,7 @@ model Session {
   expires      DateTime
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -197,7 +163,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// Enums for Bell24h 2.0
 enum UserRole {
   BUYER
   SUPPLIER
