@@ -11,253 +11,226 @@ datasource db {
 }
 
 model User {
-  id              String    @id @default(cuid())
-  name            String?
-  email           String    @unique
-  emailVerified   DateTime? @map("emailverified")
-  image           String?
-  password        String?
-  companyname     String?   @map("companyname")
-  role            String?   @default("SUPPLIER")
-  isemailverified Boolean?  @default(false) @map("isemailverified")
-  gstin           String?
-  pan             String?
-  phone           String?
-  address         String?
-  city            String?
-  state           String?
-  pincode         String?
-  businesstype    String?   @map("businesstype")
-  annualturnover  String?   @map("annualturnover")
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  name                  String?
+  hashedPassword        String?
+  role                  UserRole  @default(BUYER)
+  companyname           String?
+  isemailverified       Boolean   @default(false)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
+  // Bell24h 2.0 - Multi-Role System
+  roles                 String[]  @default(["buyer"]) // Multiple roles: ["buyer", "supplier", "msme", "manufacturer"]
+  trafficTier           TrafficTier @default(FREE)
+  showcaseEnabled       Boolean   @default(false)
+  logoUrl               String?
+  brandName             String?
+  about                 String?
+  msmeCertUrl           String?
+  msmeCertNumber        String?
+  
   // RazorpayX Integration Fields
-  razorpay_contact_id      String? @map("razorpay_contact_id")
+  razorpay_contact_id     String? @map("razorpay_contact_id")
   razorpay_fund_account_id String? @map("razorpay_fund_account_id")
   bank_account_number      String? @map("bank_account_number")
-  bank_ifsc_code           String? @map("bank_ifsc_code")
+  bank_ifsc_code          String? @map("bank_ifsc_code")
   bank_account_holder      String? @map("bank_account_holder")
   bank_account_type        String? @default("savings") @map("bank_account_type")
 
-  createdAt DateTime @default(now()) @map("createdat")
-  updatedAt DateTime @updatedAt @map("updatedat")
-
   // Relations
-  accounts  Account[]
-  sessions  Session[]
-  profile   Profile?
-  wallet    Wallet?
-  products  Product[]
-  pageViews PageView[]
-  events    Event[]
-  esgScores ESGScore[]
-
-  @@map("user")
+  wallet                 Wallet?
+  products               Product[]
+  rfqs                   RFQ[]
+  sessions               Session[]
+  trafficAnalytics       TrafficAnalytics[]
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            String  @map("userid")
-  type              String
-  provider          String
-  providerAccountId String  @map("provideraccountid")
-  refresh_token     String? @map("refresh_token")
-  access_token      String? @map("access_token")
-  expires_at        Int?
-  token_type        String? @map("token_type")
-  scope             String?
-  id_token          String? @map("id_token")
-  session_state     String? @map("session_state")
+model Wallet {
+  id              String   @id @default(cuid())
+  userid          String   @unique @map("userid")
+  balance         Float    @default(0)
+  totalbalance    Float    @default(0)
+  availablebalance Float   @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Relations
+  user            User     @relation(fields: [userid], references: [id], onDelete: Cascade)
+  transactions    Transaction[]
+}
 
-  @@unique([provider, providerAccountId])
-  @@map("account")
+model Transaction {
+  id              String   @id @default(cuid())
+  walletid        String   @map("walletid")
+  transactionid   String   @unique @map("transactionid")
+  amount          Float
+  currency        String   @default("INR")
+  type            String   // DEPOSIT, WITHDRAWAL, TRANSFER, REFUND
+  status          String   @default("PENDING") // PENDING, COMPLETED, FAILED
+  description     String?
+  metadata        Json?    // Additional transaction data
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  wallet          Wallet   @relation(fields: [walletid], references: [id], onDelete: Cascade)
+}
+
+// Bell24h 2.0 - Product Showcase System
+model Product {
+  id              String   @id @default(cuid())
+  name            String
+  brand           String
+  logoUrl         String?
+  description     String
+  images          String[] // Cloudinary URLs
+  basePrice       Float
+  trafficPrice    Float    // Dynamic per-impression pricing
+  msmePrice       Float?   // Special MSME discount
+  category        String
+  subcategory     String?
+  specifications  Json?    // Technical specifications
+  userId          String
+  userRole        UserRole // Role when product was created
+  views           Int      @default(0)
+  impressions     Int      @default(0)
+  rfqCount        Int      @default(0)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rfqs            RFQ[]
+  trafficAnalytics TrafficAnalytics[]
+}
+
+// Bell24h 2.0 - Enhanced RFQ System
+model RFQ {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  category        String
+  subcategory     String?
+  quantity        Int
+  unit            String
+  budget          Float?
+  deadline        DateTime?
+  status          RFQStatus @default(OPEN)
+  priority        Priority @default(MEDIUM)
+  
+  // AI Enhancement Fields
+  aiSuggestions   Json?    // AI-generated suggestions
+  riskScore       Float?   // AI-calculated risk score
+  marketTrend     Json?    // Price trend analysis
+  competitorAnalysis Json? // Competitor insights
+  
+  // User and Product Relations
+  buyerId         String
+  productId       String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  buyer           User     @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  product         Product? @relation(fields: [productId], references: [id])
+  responses       RFQResponse[]
+}
+
+// Bell24h 2.0 - RFQ Response System
+model RFQResponse {
+  id              String   @id @default(cuid())
+  rfqId           String
+  supplierId      String
+  price           Float
+  quantity        Int
+  deliveryTime    Int      // Days
+  description     String?
+  status          ResponseStatus @default(PENDING)
+  
+  // AI Negotiation Fields
+  aiScore         Float?   // AI matching score
+  negotiationHistory Json? // Negotiation tracking
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  rfq             RFQ      @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+}
+
+// Bell24h 2.0 - Traffic Analytics
+model TrafficAnalytics {
+  id              String   @id @default(cuid())
+  userId          String
+  productId       String?
+  page            String
+  impressions     Int      @default(0)
+  clicks          Int      @default(0)
+  conversions     Int      @default(0)
+  date            DateTime @default(now())
+  
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product         Product? @relation(fields: [productId], references: [id])
 }
 
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique @map("sessiontoken")
-  userId       String?  @map("userid")
+  sessionToken String   @unique
+  userId       String
   expires      DateTime
-  createdAt    DateTime @default(now()) @map("createdat")
-  lastActivity DateTime @default(now()) @map("lastactivity")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  pageViews PageView[]
-  events    Event[]
-
-  @@map("session")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Wallet {
-  id               String   @id @default(cuid())
-  userid           String   @unique
-  availablebalance Float?   @default(0) @map("availablebalance")
-  totalbalance     Float?   @default(0) @map("totalbalance")
-  primarycurrency  String?  @default("INR") @map("primarycurrency")
-  createdAt        DateTime @default(now()) @map("createdat")
-  updatedAt        DateTime @updatedAt @map("updatedat")
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-  // Relations
-  user         User          @relation(fields: [userid], references: [id])
-  transactions Transaction[]
-
-  @@map("wallet")
+  @@unique([identifier, token])
 }
 
-model Transaction {
-  id               String   @id @default(cuid())
-  walletid         String   @map("walletid")
-  transactionid    String   @unique @map("transactionid")
-  amount           Float
-  currency         String   @default("INR")
-  type             String // DEPOSIT, WITHDRAWAL, TRANSFER, REFUND
-  status           String   @default("PENDING") // PENDING, COMPLETED, FAILED, CANCELLED
-  description      String?
-  gateway          String? // RAZORPAY, RAZORPAYX, UPI, NEFT, RTGS
-  reference_id     String?  @map("reference_id")
-  gateway_response String?  @map("gateway_response")
-  createdat        DateTime @default(now()) @map("createdat")
-  updatedat        DateTime @updatedAt @map("updatedat")
-
-  // Relations
-  wallet Wallet @relation(fields: [walletid], references: [id])
-
-  @@map("transaction")
+// Enums for Bell24h 2.0
+enum UserRole {
+  BUYER
+  SUPPLIER
+  MSME
+  MANUFACTURER
+  ADMIN
 }
 
-model Profile {
-  id                  String   @id @default(cuid())
-  userid              String   @unique
-  categories          String?
-  isverified          Boolean? @default(false) @map("isverified")
-  verificationstatus  String?  @default("PENDING") @map("verificationstatus")
-  businessdescription String?  @map("businessdescription")
-  yearestablished     String?  @map("yearestablished")
-  employeecount       String?  @map("employeecount")
-  certifications      String?
-  tradereferences     String?  @map("tradereferences")
-  createdAt           DateTime @default(now()) @map("createdat")
-  updatedAt           DateTime @updatedAt @map("updatedat")
-
-  // Relations
-  user User @relation(fields: [userid], references: [id])
-
-  @@map("profile")
+enum TrafficTier {
+  FREE
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
 }
 
-model Product {
-  id               String   @id @default(cuid())
-  name             String
-  description      String
-  category         String
-  price            Float?
-  minOrderQuantity Int?     @map("minorderquantity")
-  unit             String?
-  specifications   String?
-  images           String?
-  supplierId       String   @map("supplierid")
-  status           String?  @default("ACTIVE")
-  createdAt        DateTime @default(now()) @map("createdat")
-  updatedAt        DateTime @updatedAt @map("updatedat")
-
-  // Relations
-  supplier User @relation(fields: [supplierId], references: [id])
-
-  @@map("product")
+enum RFQStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+  CANCELLED
 }
 
-model RFQ {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  category    String
-  quantity    Int?
-  unit        String?
-  budget      Float?
-  buyerId     String   @map("buyerid")
-  status      String?  @default("OPEN")
-  createdAt   DateTime @default(now()) @map("createdat")
-  updatedAt   DateTime @updatedAt @map("updatedat")
-
-  @@map("rfq")
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
 
-model Quote {
-  id           String   @id @default(cuid())
-  rfqId        String   @map("rfqid")
-  supplierId   String   @map("supplierid")
-  price        Float
-  deliveryTime String?  @map("deliverytime")
-  terms        String?
-  status       String?  @default("PENDING")
-  createdAt    DateTime @default(now()) @map("createdat")
-  updatedAt    DateTime @updatedAt @map("updatedat")
-
-  @@map("quote")
-}
-
-model Order {
-  id          String   @id @default(cuid())
-  buyerId     String   @map("buyerid")
-  supplierId  String   @map("supplierid")
-  productId   String?  @map("productid")
-  quantity    Int
-  totalAmount Float    @map("totalamount")
-  status      String?  @default("PENDING")
-  createdAt   DateTime @default(now()) @map("createdat")
-  updatedAt   DateTime @updatedAt @map("updatedat")
-
-  @@map("order")
-}
-
-// Analytics Models
-model PageView {
-  id        String   @id @default(cuid())
-  page      String
-  userId    String?  @map("userid")
-  sessionId String?  @map("sessionid")
-  timestamp DateTime @default(now())
-  metadata  Json?
-
-  session Session? @relation(fields: [sessionId], references: [id])
-  user    User?    @relation(fields: [userId], references: [id])
-
-  @@map("pageview")
-}
-
-model Event {
-  id        String   @id @default(cuid())
-  event     String
-  page      String
-  userId    String?  @map("userid")
-  sessionId String?  @map("sessionid")
-  timestamp DateTime @default(now())
-  metadata  Json?
-
-  session Session? @relation(fields: [sessionId], references: [id])
-  user    User?    @relation(fields: [userId], references: [id])
-
-  @@map("event")
-}
-
-model ESGScore {
-  id                 String   @id @default(cuid())
-  companyId          String?  @map("companyid")
-  userId             String?  @map("userid")
-  industry           String
-  environmentalScore Float    @map("environmentalscore")
-  socialScore        Float    @map("socialscore")
-  governanceScore    Float    @map("governancescore")
-  overallScore       Float    @map("overallscore")
-  grade              String
-  recommendations    String[]
-  esgData            Json     @map("esgdata")
-  benchmark          Json
-  createdAt          DateTime @default(now()) @map("createdat")
-  updatedAt          DateTime @updatedAt @map("updatedat")
-
-  user User? @relation(fields: [userId], references: [id])
-
-  @@map("esgscore")
+enum ResponseStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  NEGOTIATING
 }
