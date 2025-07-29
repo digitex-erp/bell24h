@@ -1,895 +1,647 @@
 'use client';
 
-import React, { useState } from 'react';
-import { redirect, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import RFQExplanationButton from '@/components/RFQExplanationButton';
-
-interface FileAttachment {
-  name: string;
-  url: string;
-  size: number;
-  type: string;
-}
+import { generateRFQReport } from '@/lib/napkin-pdf';
+import { calculateTrafficPricing, getPricingDisplay } from '@/lib/traffic-pricing';
+import { Brain, CheckCircle, FileText, Mic, Star, TrendingUp, Users } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState, Suspense } from 'react';
 
 interface RFQForm {
   title: string;
   description: string;
   category: string;
   subcategory: string;
-  quantity: string;
+  quantity: number;
   unit: string;
-  minBudget: string;
-  maxBudget: string;
+  budget: number;
   deadline: string;
-  priority: string;
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
   specifications: string;
-  qualityStandards: string;
-  deliveryTerms: string;
-  paymentTerms: string;
-  location: string;
-  attachments: FileAttachment[];
-  videoUrl: string;
+  attachments: File[];
 }
 
-// Video RFQ Uploader Component
-const VideoRFQUploader = ({ onVideoUploaded }: { onVideoUploaded: (videoUrl: string) => void }) => {
-  const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
+interface SupplierSuggestion {
+  id: string;
+  name: string;
+  brandName: string;
+  logoUrl: string;
+  aiScore: number;
+  trafficTier: string;
+  roles: string[];
+  specialties: string[];
+  rating: number;
+  responseTime: string;
+  priceRange: [number, number];
+}
 
-  const handleVideoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      if (file.type.startsWith('video/')) {
-        setVideoFile(file);
-      }
-    }
-  };
-
-  const uploadVideo = async () => {
-    if (!videoFile) return;
-
-    setUploading(true);
-    setUploadProgress(0);
-
-    // Simulate video upload with progress
-    const interval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setUploading(false);
-          onVideoUploaded(URL.createObjectURL(videoFile));
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 200);
-  };
-
-  return (
-    <div className='bg-white p-6 rounded-lg border border-gray-200'>
-      <h3 className='text-lg font-semibold mb-4 flex items-center'>
-        <span>🎥</span>
-        Video RFQ Upload
-      </h3>
-
-      {!videoFile ? (
-        <div className='border-2 border-dashed border-gray-300 rounded-lg p-8 text-center'>
-          <span>🎥</span>
-          <p className='text-gray-600 mb-4'>
-            Upload a video explaining your requirements to help suppliers understand your needs
-            better.
-          </p>
-          <input
-            type='file'
-            accept='video/*'
-            onChange={handleVideoSelect}
-            className='hidden'
-            id='video-upload'
-          />
-          <label
-            htmlFor='video-upload'
-            className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer inline-flex items-center'
-          >
-            <span>⬆️</span>
-            Select Video
-          </label>
-        </div>
-      ) : (
-        <div className='space-y-4'>
-          <div className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'>
-            <div className='flex items-center'>
-              <span>🎥</span>
-              <span className='font-medium'>{videoFile.name}</span>
-            </div>
-            <button onClick={() => setVideoFile(null)} className='text-red-600 hover:text-red-800'>
-              <span>❌</span>
-            </button>
-          </div>
-
-          {uploading ? (
-            <div className='space-y-2'>
-              <div className='w-full bg-gray-200 rounded-full h-2'>
-                <div
-                  className='bg-blue-600 h-2 rounded-full transition-all duration-300'
-                  style={{ width: `${uploadProgress}%` }}
-                ></div>
-              </div>
-              <p className='text-sm text-gray-600'>Uploading... {uploadProgress}%</p>
-            </div>
-          ) : (
-            <button
-              onClick={uploadVideo}
-              className='w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 flex items-center justify-center'
-            >
-              <span>⬆️</span>
-              Upload Video RFQ
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default function CreateRFQPage() {
-  const { data: session, status } = () => ({ data: { user: { id: "demo", email: "demo@bell24h.com", name: "Demo User" } }, status: "authenticated" });
+function RFQCreationContent() {
   const router = useRouter();
-  const [isRecording, setIsRecording] = useState(false);
-  const [showVideoUpload, setShowVideoUpload] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('');
-  const [rfqForm, setRfqForm] = useState<RFQForm>({
+  const searchParams = useSearchParams();
+  const prefillProductId = searchParams.get('product');
+
+  const [form, setForm] = useState<RFQForm>({
     title: '',
     description: '',
     category: '',
     subcategory: '',
-    quantity: '',
+    quantity: 1,
     unit: 'pieces',
-    minBudget: '',
-    maxBudget: '',
+    budget: 0,
     deadline: '',
-    priority: 'medium',
+    priority: 'MEDIUM',
     specifications: '',
-    qualityStandards: '',
-    deliveryTerms: '',
-    paymentTerms: '',
-    location: '',
     attachments: [],
-    videoUrl: '',
   });
 
-  const [dragActive, setDragActive] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
+  const [supplierSuggestions, setSupplierSuggestions] = useState<SupplierSuggestion[]>([]);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pricingPreview, setPricingPreview] = useState<any>(null);
+  const [voiceRecording, setVoiceRecording] = useState(false);
 
-  const categories = [
+  // Mock supplier suggestions
+  const mockSuppliers: SupplierSuggestion[] = [
     {
-      value: 'chemicals',
-      label: 'Chemicals & Materials',
-      subcategories: ['Industrial Chemicals', 'Raw Materials', 'Specialty Chemicals'],
+      id: 'supplier1',
+      name: 'SteelCorp Industries',
+      brandName: 'SteelCorp',
+      logoUrl: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100',
+      aiScore: 95,
+      trafficTier: 'GOLD',
+      roles: ['supplier', 'manufacturer'],
+      specialties: ['Steel', 'Alloys', 'Industrial'],
+      rating: 4.8,
+      responseTime: '2-4 hours',
+      priceRange: [40000, 60000],
     },
     {
-      value: 'automotive',
-      label: 'Automotive & Transportation',
-      subcategories: ['Auto Parts', 'Components', 'Accessories'],
+      id: 'supplier2',
+      name: 'AluTech Solutions',
+      brandName: 'AluTech',
+      logoUrl: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100',
+      aiScore: 87,
+      trafficTier: 'SILVER',
+      roles: ['supplier'],
+      specialties: ['Aluminum', 'Lightweight Materials'],
+      rating: 4.5,
+      responseTime: '4-6 hours',
+      priceRange: [30000, 45000],
     },
     {
-      value: 'electronics',
-      label: 'Electronics & Technology',
-      subcategories: ['Components', 'PCB', 'Semiconductors'],
-    },
-    {
-      value: 'machinery',
-      label: 'Machinery & Equipment',
-      subcategories: ['Industrial Machinery', 'Tools', 'Equipment'],
-    },
-    {
-      value: 'textiles',
-      label: 'Textiles & Apparel',
-      subcategories: ['Fabrics', 'Garments', 'Accessories'],
-    },
-    {
-      value: 'food',
-      label: 'Food & Agriculture',
-      subcategories: ['Food Products', 'Agricultural Products', 'Processing'],
+      id: 'supplier3',
+      name: 'CopperMax Industries',
+      brandName: 'CopperMax',
+      logoUrl: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100',
+      aiScore: 92,
+      trafficTier: 'PLATINUM',
+      roles: ['supplier', 'manufacturer', 'msme'],
+      specialties: ['Copper', 'Electrical', 'Thermal'],
+      rating: 4.9,
+      responseTime: '1-2 hours',
+      priceRange: [25000, 40000],
     },
   ];
 
-  const units = ['pieces', 'kg', 'tons', 'meters', 'liters', 'boxes', 'sets', 'pairs'];
-  const priorities = [
-    { value: 'low', label: 'Low Priority', color: 'text-green-600 bg-green-100' },
-    { value: 'medium', label: 'Medium Priority', color: 'text-yellow-600 bg-yellow-100' },
-    { value: 'high', label: 'High Priority', color: 'text-red-600 bg-red-100' },
-  ];
-
-  // Removed status loading check since mock auth always returns 'authenticated'
-
-  if (!session) {
-    redirect('/login');
-  }
-
-  const handleFileUpload = async (files: FileList) => {
-    setUploading(true);
-
-    // Simulate file upload
-    for (let file of Array.from(files)) {
-      const fileUrl = URL.createObjectURL(file);
-      setRfqForm(prev => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          {
-            name: file.name,
-            url: fileUrl,
-            size: file.size,
-            type: file.type,
-          },
-        ],
-      }));
+  useEffect(() => {
+    // If product is pre-filled, load its details
+    if (prefillProductId) {
+      // In a real app, fetch product details
+      console.log('Pre-filling product:', prefillProductId);
     }
 
-    setUploading(false);
+    // Generate initial AI suggestions
+    generateAISuggestions();
+  }, [prefillProductId]);
+
+  const generateAISuggestions = async () => {
+    setIsGeneratingAI(true);
+    try {
+      // Simulate AI processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      const suggestions = [
+        'Consider specifying material grade requirements for better supplier matching',
+        'Include delivery timeline preferences to optimize logistics',
+        'Mention quality certifications needed for compliance',
+        'Specify packaging requirements for safe transportation',
+      ];
+
+      setAiSuggestions(suggestions);
+      setSupplierSuggestions(mockSuppliers);
+    } catch (error) {
+      console.error('Error generating AI suggestions:', error);
+    } finally {
+      setIsGeneratingAI(false);
+    }
   };
 
-  const removeFile = (index: number) => {
-    setRfqForm(prev => ({
-      ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index),
-    }));
+  const calculatePricingPreview = () => {
+    if (!form.category || !form.quantity) return;
+
+    const config = {
+      basePrice: form.budget / form.quantity,
+      impressions: 100, // Sample data
+      clicks: 10,
+      conversions: 2,
+      trafficTier: 'GOLD' as const,
+      category: form.category,
+      msmeDiscount: true,
+    };
+
+    const pricing = calculateTrafficPricing(config);
+    const display = getPricingDisplay(pricing);
+    setPricingPreview({ ...pricing, display });
   };
 
-  const startVoiceRecording = () => {
-    setIsRecording(true);
-    // Implement voice recording logic
+  const handleFormChange = (field: keyof RFQForm, value: any) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+
+    // Recalculate pricing when relevant fields change
+    if (['category', 'quantity', 'budget'].includes(field)) {
+      calculatePricingPreview();
+    }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    setForm(prev => ({ ...prev, attachments: [...prev.attachments, ...files] }));
+  };
+
+  const handleVoiceInput = () => {
+    setVoiceRecording(true);
+    // In a real app, implement voice recording and transcription
     setTimeout(() => {
-      setIsRecording(false);
-      setMessage({
-        type: 'success',
-        text: 'Voice recording processed! RFQ details have been auto-filled.',
-      });
-      // Auto-fill some demo data
-      setRfqForm(prev => ({
+      setVoiceRecording(false);
+      // Simulate voice transcription
+      setForm(prev => ({
         ...prev,
-        title: 'Industrial Steel Pipes for Chemical Plant',
         description:
-          'We need high-grade stainless steel pipes for our new chemical processing facility. The pipes should be corrosion-resistant and meet international standards.',
-        category: 'chemicals',
-        quantity: '500',
-        unit: 'meters',
+          prev.description + ' [Voice input: Need high-quality steel for construction project]',
       }));
     }, 3000);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitting(true);
-    setMessage({ type: '', text: '' });
+    setIsSubmitting(true);
 
     try {
-      // Include video URL in the form data
-      const formDataWithVideo = {
-        ...rfqForm,
-        videoUrl: videoUrl,
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Generate RFQ report
+      const reportData = {
+        rfqId: 'rfq-' + Date.now(),
+        title: form.title,
+        category: form.category,
+        quantity: form.quantity,
+        unit: form.unit,
+        budget: form.budget,
+        deadline: new Date(form.deadline),
+        priceTrend: {
+          dates: ['2024-01-01', '2024-01-15', '2024-01-30'],
+          prices: [45000, 48000, 52000],
+          trend: 'up' as const,
+          percentageChange: 15.6,
+          marketAverage: 47000,
+        },
+        competitorAnalysis: supplierSuggestions.map(s => ({
+          name: s.name,
+          price: s.priceRange[1],
+          rating: s.rating,
+          deliveryTime: 7,
+          riskScore: 100 - s.aiScore,
+        })),
+        aiRecommendations: aiSuggestions,
+        marketInsights: [
+          {
+            type: 'price' as const,
+            title: 'Market Price Trend',
+            description: 'Steel prices are trending upward due to increased demand',
+            impact: 'negative' as const,
+            confidence: 85,
+          },
+        ],
+        responses: supplierSuggestions.map(s => ({
+          supplierId: s.id,
+          supplierName: s.name,
+          price: s.priceRange[1],
+          quantity: form.quantity,
+          deliveryTime: 7,
+          aiScore: s.aiScore,
+          riskScore: 100 - s.aiScore,
+          status: 'pending' as const,
+        })),
       };
 
-      const response = await fetch('/api/rfq', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formDataWithVideo),
-      });
+      // Generate report
+      await generateRFQReport(reportData);
 
-      if (response.ok) {
-        setMessage({ type: 'success', text: 'RFQ created successfully!' });
-        setTimeout(() => {
-          router.push('/dashboard?tab=rfqs');
-        }, 2000);
-      } else {
-        const errorData = await response.json();
-        setMessage({ type: 'error', text: errorData.error || 'Failed to create RFQ' });
-      }
+      // Redirect to RFQ management
+      router.push('/dashboard/rfq');
     } catch (error) {
-      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+      console.error('Error creating RFQ:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setSubmitting(false);
   };
 
-  const selectedCategory = categories.find(cat => cat.value === rfqForm.category);
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'URGENT':
+        return 'bg-red-500';
+      case 'HIGH':
+        return 'bg-orange-500';
+      case 'MEDIUM':
+        return 'bg-yellow-500';
+      case 'LOW':
+        return 'bg-green-500';
+      default:
+        return 'bg-gray-500';
+    }
+  };
+
+  const getTrafficTierColor = (tier: string) => {
+    switch (tier) {
+      case 'PLATINUM':
+        return 'bg-purple-500';
+      case 'GOLD':
+        return 'bg-yellow-500';
+      case 'SILVER':
+        return 'bg-gray-500';
+      case 'BRONZE':
+        return 'bg-orange-500';
+      default:
+        return 'bg-gray-400';
+    }
+  };
 
   return (
-    <div className='min-h-screen bg-gray-50'>
-      {/* Header */}
-      <header className='bg-white shadow-sm border-b border-gray-200'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex justify-between items-center h-16'>
-            <div className='flex items-center space-x-4'>
-              <Link
-                href='/dashboard'
-                className='flex items-center space-x-2 text-gray-600 hover:text-gray-900'
-              >
-                <span>←</span>
-                <span>Back to Dashboard</span>
-              </Link>
-              <div className='h-6 border-l border-gray-300'></div>
-              <h1 className='text-2xl font-bold text-gray-900'>Create New RFQ</h1>
-            </div>
-            <div className='flex space-x-4'>
-              <button
-                type='button'
-                onClick={startVoiceRecording}
-                disabled={isRecording}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${
-                  isRecording
-                    ? 'bg-red-100 border-red-300 text-red-700'
-                    : 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200'
-                }`}
-              >
-                {isRecording ? <span>🎤</span> : <span>🎤</span>}
-                <span>{isRecording ? 'Recording...' : 'Voice RFQ'}</span>
-              </button>
-              <button
-                type='button'
-                onClick={() => setShowVideoUpload(!showVideoUpload)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${
-                  showVideoUpload
-                    ? 'bg-purple-100 border-purple-300 text-purple-700'
-                    : 'bg-green-100 border-green-300 text-green-700 hover:bg-green-200'
-                }`}
-              >
-                {showVideoUpload ? <span>🎥</span> : <span>🎥</span>}
-                <span>{showVideoUpload ? 'Hide Video' : 'Video RFQ'}</span>
-              </button>
-              <RFQExplanationButton
-                rfqId='preview'
-                rfqTitle={rfqForm.title || 'New RFQ'}
-                className='flex-shrink-0'
-              />
-              <button
-                type='submit'
-                form='rfq-form'
-                disabled={submitting}
-                className='bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 disabled:opacity-50'
-              >
-                <span>💾</span>
-                <span>{submitting ? 'Creating...' : 'Create RFQ'}</span>
-              </button>
-            </div>
-          </div>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
+      <div className='container mx-auto px-4 py-8'>
+        {/* Header */}
+        <div className='mb-8'>
+          <h1 className='text-4xl font-bold text-gray-900 mb-2'>Create RFQ</h1>
+          <p className='text-xl text-gray-600'>
+            AI-powered Request for Quotation with smart supplier matching
+          </p>
         </div>
-      </header>
-
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-        {/* Message Display */}
-        {message.text && (
-          <div
-            className={`mb-6 p-4 rounded-lg flex items-center space-x-2 ${
-              message.type === 'success'
-                ? 'bg-green-50 text-green-700 border border-green-200'
-                : 'bg-red-50 text-red-700 border border-red-200'
-            }`}
-          >
-            {message.type === 'success' ? (
-              <span>✅</span>
-            ) : (
-              <AlertTriangle className='w-5 h-5' />
-            )}
-            <span>{message.text}</span>
-          </div>
-        )}
 
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Main Form */}
           <div className='lg:col-span-2'>
-            <form id='rfq-form' onSubmit={handleSubmit} className='space-y-6'>
-              {/* Basic Information */}
-              <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
-                <h3 className='text-lg font-semibold text-gray-900 mb-6'>Basic Information</h3>
+            <div className='bg-white rounded-xl shadow-lg p-6'>
+              <form onSubmit={handleSubmit} className='space-y-6'>
+                {/* Basic Information */}
+                <div>
+                  <h3 className='text-lg font-semibold text-gray-900 mb-4 flex items-center'>
+                    <FileText className='w-5 h-5 mr-2' />
+                    Basic Information
+                  </h3>
 
-                <div className='space-y-6'>
-                  {/* RFQ Title */}
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        RFQ Title *
+                      </label>
+                      <input
+                        type='text'
+                        value={form.title}
+                        onChange={e => handleFormChange('title', e.target.value)}
+                        className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                        placeholder='Enter RFQ title'
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        Priority *
+                      </label>
+                      <select
+                        value={form.priority}
+                        onChange={e => handleFormChange('priority', e.target.value)}
+                        className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                        required
+                      >
+                        <option value='LOW'>Low</option>
+                        <option value='MEDIUM'>Medium</option>
+                        <option value='HIGH'>High</option>
+                        <option value='URGENT'>Urgent</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description with Voice Input */}
+                <div>
+                  <div className='flex items-center justify-between mb-2'>
+                    <label className='block text-sm font-medium text-gray-700'>Description *</label>
+                    <button
+                      type='button'
+                      onClick={handleVoiceInput}
+                      disabled={voiceRecording}
+                      className='flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors'
+                    >
+                      <Mic className='w-4 h-4' />
+                      {voiceRecording ? 'Recording...' : 'Voice Input'}
+                    </button>
+                  </div>
+                  <textarea
+                    value={form.description}
+                    onChange={e => handleFormChange('description', e.target.value)}
+                    rows={4}
+                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                    placeholder='Describe your requirements in detail...'
+                    required
+                  />
+                </div>
+
+                {/* Category and Specifications */}
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <div>
                     <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      RFQ Title *
+                      Category *
+                    </label>
+                    <select
+                      value={form.category}
+                      onChange={e => handleFormChange('category', e.target.value)}
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      required
+                    >
+                      <option value=''>Select category</option>
+                      <option value='steel'>Steel</option>
+                      <option value='aluminum'>Aluminum</option>
+                      <option value='copper'>Copper</option>
+                      <option value='machinery'>Machinery</option>
+                      <option value='electronics'>Electronics</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>
+                      Subcategory
                     </label>
                     <input
                       type='text'
+                      value={form.subcategory}
+                      onChange={e => handleFormChange('subcategory', e.target.value)}
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      placeholder='Enter subcategory'
+                    />
+                  </div>
+                </div>
+
+                {/* Quantity and Budget */}
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                  <div>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>
+                      Quantity *
+                    </label>
+                    <input
+                      type='number'
+                      value={form.quantity}
+                      onChange={e => handleFormChange('quantity', parseInt(e.target.value))}
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      min='1'
                       required
-                      value={rfqForm.title}
-                      onChange={e => setRfqForm(prev => ({ ...prev, title: e.target.value }))}
-                      className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='e.g., Industrial Steel Pipes for Chemical Plant'
                     />
                   </div>
 
-                  {/* Category & Subcategory */}
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Category *
-                      </label>
-                      <select
-                        required
-                        value={rfqForm.category}
-                        onChange={e =>
-                          setRfqForm(prev => ({
-                            ...prev,
-                            category: e.target.value,
-                            subcategory: '',
-                          }))
-                        }
-                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      >
-                        <option value=''>Select Category</option>
-                        {categories.map(category => (
-                          <option key={category.value} value={category.value}>
-                            {category.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Subcategory
-                      </label>
-                      <select
-                        value={rfqForm.subcategory}
-                        onChange={e =>
-                          setRfqForm(prev => ({ ...prev, subcategory: e.target.value }))
-                        }
-                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        disabled={!selectedCategory}
-                      >
-                        <option value=''>Select Subcategory</option>
-                        {selectedCategory?.subcategories.map(sub => (
-                          <option key={sub} value={sub}>
-                            {sub}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                  <div>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Unit</label>
+                    <select
+                      value={form.unit}
+                      onChange={e => handleFormChange('unit', e.target.value)}
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                    >
+                      <option value='pieces'>Pieces</option>
+                      <option value='kg'>Kilograms</option>
+                      <option value='tons'>Tons</option>
+                      <option value='meters'>Meters</option>
+                      <option value='units'>Units</option>
+                    </select>
                   </div>
 
-                  {/* Description */}
                   <div>
                     <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      Description *
+                      Budget (₹) *
                     </label>
-                    <textarea
+                    <input
+                      type='number'
+                      value={form.budget}
+                      onChange={e => handleFormChange('budget', parseFloat(e.target.value))}
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      min='0'
                       required
-                      value={rfqForm.description}
-                      onChange={e => setRfqForm(prev => ({ ...prev, description: e.target.value }))}
-                      rows={4}
-                      className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='Detailed description of what you need, intended use, and any specific requirements...'
-                    />
-                  </div>
-
-                  {/* Quantity & Unit */}
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Quantity *
-                      </label>
-                      <input
-                        type='text'
-                        required
-                        value={rfqForm.quantity}
-                        onChange={e => setRfqForm(prev => ({ ...prev, quantity: e.target.value }))}
-                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        placeholder='e.g., 500, 1000, 2.5'
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>Unit *</label>
-                      <select
-                        required
-                        value={rfqForm.unit}
-                        onChange={e => setRfqForm(prev => ({ ...prev, unit: e.target.value }))}
-                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      >
-                        {units.map(unit => (
-                          <option key={unit} value={unit}>
-                            {unit}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Budget & Timeline */}
-              <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
-                <h3 className='text-lg font-semibold text-gray-900 mb-6'>Budget & Timeline</h3>
-
-                <div className='space-y-6'>
-                  {/* Budget Range */}
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Minimum Budget
-                      </label>
-                      <div className='relative'>
-                        <span className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500'>
-                          ₹
-                        </span>
-                        <input
-                          type='text'
-                          value={rfqForm.minBudget}
-                          onChange={e =>
-                            setRfqForm(prev => ({ ...prev, minBudget: e.target.value }))
-                          }
-                          className='w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                          placeholder='10,00,000'
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Maximum Budget
-                      </label>
-                      <div className='relative'>
-                        <span className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500'>
-                          ₹
-                        </span>
-                        <input
-                          type='text'
-                          value={rfqForm.maxBudget}
-                          onChange={e =>
-                            setRfqForm(prev => ({ ...prev, maxBudget: e.target.value }))
-                          }
-                          className='w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                          placeholder='15,00,000'
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Deadline & Priority */}
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Deadline *
-                      </label>
-                      <div className='relative'>
-                        <span>📅</span>
-                        <input
-                          type='date'
-                          required
-                          value={rfqForm.deadline}
-                          onChange={e =>
-                            setRfqForm(prev => ({ ...prev, deadline: e.target.value }))
-                          }
-                          className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                          min={new Date().toISOString().split('T')[0]}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Priority
-                      </label>
-                      <select
-                        value={rfqForm.priority}
-                        onChange={e => setRfqForm(prev => ({ ...prev, priority: e.target.value }))}
-                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      >
-                        {priorities.map(priority => (
-                          <option key={priority.value} value={priority.value}>
-                            {priority.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Technical Specifications */}
-              <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
-                <h3 className='text-lg font-semibold text-gray-900 mb-6'>
-                  Technical Specifications
-                </h3>
-
-                <div className='space-y-6'>
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      Technical Specifications
-                    </label>
-                    <textarea
-                      value={rfqForm.specifications}
-                      onChange={e =>
-                        setRfqForm(prev => ({ ...prev, specifications: e.target.value }))
-                      }
-                      rows={4}
-                      className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='Material specifications, dimensions, technical standards, certifications required...'
-                    />
-                  </div>
-
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      Quality Standards
-                    </label>
-                    <textarea
-                      value={rfqForm.qualityStandards}
-                      onChange={e =>
-                        setRfqForm(prev => ({ ...prev, qualityStandards: e.target.value }))
-                      }
-                      rows={3}
-                      className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='ISO standards, industry certifications, testing requirements...'
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* Terms & Conditions */}
-              <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
-                <h3 className='text-lg font-semibold text-gray-900 mb-6'>Terms & Conditions</h3>
-
-                <div className='space-y-6'>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Delivery Terms
-                      </label>
-                      <input
-                        type='text'
-                        value={rfqForm.deliveryTerms}
-                        onChange={e =>
-                          setRfqForm(prev => ({ ...prev, deliveryTerms: e.target.value }))
-                        }
-                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        placeholder='e.g., FOB Mumbai, Door delivery, Ex-works'
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        Payment Terms
-                      </label>
-                      <input
-                        type='text'
-                        value={rfqForm.paymentTerms}
-                        onChange={e =>
-                          setRfqForm(prev => ({ ...prev, paymentTerms: e.target.value }))
-                        }
-                        className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        placeholder='e.g., 30% advance, 70% on delivery'
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      Delivery Location
-                    </label>
-                    <div className='relative'>
-                      <span>📍</span>
-                      <input
-                        type='text'
-                        value={rfqForm.location}
-                        onChange={e => setRfqForm(prev => ({ ...prev, location: e.target.value }))}
-                        className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        placeholder='City, State, Country'
-                      />
-                    </div>
-                  </div>
+                {/* Deadline */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>Deadline *</label>
+                  <input
+                    type='date'
+                    value={form.deadline}
+                    onChange={e => handleFormChange('deadline', e.target.value)}
+                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                    required
+                  />
                 </div>
-              </div>
 
-              {/* File Attachments */}
-              <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
-                <h3 className='text-lg font-semibold text-gray-900 mb-6'>Attachments</h3>
+                {/* Specifications */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    Technical Specifications
+                  </label>
+                  <textarea
+                    value={form.specifications}
+                    onChange={e => handleFormChange('specifications', e.target.value)}
+                    rows={3}
+                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                    placeholder='Enter technical specifications, quality requirements, etc.'
+                  />
+                </div>
 
-                <div
-                  className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-                    dragActive ? 'border-blue-400 bg-blue-50' : 'border-gray-300'
-                  }`}
-                  onDragOver={e => {
-                    e.preventDefault();
-                    setDragActive(true);
-                  }}
-                  onDragLeave={() => setDragActive(false)}
-                  onDrop={e => {
-                    e.preventDefault();
-                    setDragActive(false);
-                    handleFileUpload(e.dataTransfer.files);
-                  }}
-                >
-                  <span>📄</span>
-                  <p className='text-gray-600 mb-2'>Drag and drop files here, or</p>
+                {/* Attachments */}
+                <div>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    Attachments
+                  </label>
                   <input
                     type='file'
                     multiple
-                    onChange={e => e.target.files && handleFileUpload(e.target.files)}
-                    className='hidden'
-                    id='file-upload'
+                    onChange={handleFileUpload}
+                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                    accept='.pdf,.doc,.docx,.jpg,.png'
                   />
-                  <label
-                    htmlFor='file-upload'
-                    className='bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors'
-                  >
-                    Choose Files
-                  </label>
-                  <p className='text-xs text-gray-500 mt-2'>
-                    PDF, DOC, XLS, Images up to 10MB each
-                  </p>
-                </div>
-
-                {/* File Preview */}
-                {rfqForm.attachments.length > 0 && (
-                  <div className='space-y-3 mt-4'>
-                    {rfqForm.attachments.map((file, index) => (
-                      <div
-                        key={index}
-                        className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'
-                      >
-                        <div className='flex items-center space-x-3'>
-                          <span>📄</span>
-                          <span className='text-sm font-medium'>{file.name}</span>
-                          <span className='text-xs text-gray-500'>
-                            ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                          </span>
-                        </div>
-                        <button
-                          type='button'
-                          onClick={() => removeFile(index)}
-                          className='text-red-600 hover:text-red-800 transition-colors'
-                        >
-                          <span>❌</span>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Video RFQ Upload Section */}
-              {showVideoUpload && (
-                <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
-                  <h3 className='text-lg font-semibold text-gray-900 mb-6 flex items-center'>
-                    <span>🎥</span>
-                    Video RFQ Upload
-                  </h3>
-
-                  <div className='space-y-4'>
-                    <div className='bg-purple-50 border border-purple-200 rounded-lg p-4'>
-                      <h4 className='font-medium text-purple-900 mb-2'>Why Use Video RFQs?</h4>
-                      <ul className='text-sm text-purple-800 space-y-1'>
-                        <li>• Better supplier understanding of your requirements</li>
-                        <li>• Higher response rates from qualified suppliers</li>
-                        <li>• Visual demonstration of complex specifications</li>
-                        <li>• Faster communication and clarification</li>
+                  {form.attachments.length > 0 && (
+                    <div className='mt-2'>
+                      <p className='text-sm text-gray-600'>Attached files:</p>
+                      <ul className='text-sm text-gray-500'>
+                        {form.attachments.map((file, index) => (
+                          <li key={index}>{file.name}</li>
+                        ))}
                       </ul>
                     </div>
-
-                    <VideoRFQUploader onVideoUploaded={url => setVideoUrl(url)} />
-
-                    {videoUrl && (
-                      <div className='bg-green-50 border border-green-200 rounded-lg p-4'>
-                        <div className='flex items-center space-x-2'>
-                          <span>✅</span>
-                          <span className='text-green-800 font-medium'>
-                            Video uploaded successfully!
-                          </span>
-                        </div>
-                        <p className='text-sm text-green-700 mt-1'>
-                          Your video will be included with this RFQ submission.
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
-              )}
-            </form>
+
+                {/* Submit Button */}
+                <button
+                  type='submit'
+                  disabled={isSubmitting}
+                  className='w-full bg-blue-600 text-white py-4 px-6 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2'
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
+                      Creating RFQ...
+                    </>
+                  ) : (
+                    <>
+                      <FileText className='w-5 h-5' />
+                      Create RFQ
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
           </div>
 
-          {/* Sidebar - Tips & Preview */}
+          {/* AI Sidebar */}
           <div className='space-y-6'>
-            {/* RFQ Preview */}
-            <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
-              <h4 className='text-lg font-semibold text-gray-900 mb-4'>RFQ Preview</h4>
-              <div className='space-y-3 text-sm'>
-                <div>
-                  <span className='font-medium text-gray-700'>Title:</span>
-                  <p className='text-gray-900'>{rfqForm.title || 'RFQ Title'}</p>
-                </div>
-                <div>
-                  <span className='font-medium text-gray-700'>Category:</span>
-                  <p className='text-gray-900'>{selectedCategory?.label || 'Not selected'}</p>
-                </div>
-                <div>
-                  <span className='font-medium text-gray-700'>Quantity:</span>
-                  <p className='text-gray-900'>
-                    {rfqForm.quantity ? `${rfqForm.quantity} ${rfqForm.unit}` : 'Not specified'}
-                  </p>
-                </div>
-                <div>
-                  <span className='font-medium text-gray-700'>Budget:</span>
-                  <p className='text-gray-900'>
-                    {rfqForm.minBudget || rfqForm.maxBudget
-                      ? `₹${rfqForm.minBudget || '0'} - ₹${rfqForm.maxBudget || '0'}`
-                      : 'Not specified'}
-                  </p>
-                </div>
-                <div>
-                  <span className='font-medium text-gray-700'>Deadline:</span>
-                  <p className='text-gray-900'>{rfqForm.deadline || 'Not set'}</p>
-                </div>
-                <div>
-                  <span className='font-medium text-gray-700'>Priority:</span>
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
-                      priorities.find(p => p.value === rfqForm.priority)?.color ||
-                      'text-gray-600 bg-gray-100'
-                    }`}
-                  >
-                    {priorities.find(p => p.value === rfqForm.priority)?.label || 'Medium'}
-                  </span>
-                </div>
+            {/* AI Suggestions */}
+            <div className='bg-white rounded-xl shadow-lg p-6'>
+              <h3 className='text-lg font-semibold text-gray-900 mb-4 flex items-center'>
+                <Brain className='w-5 h-5 mr-2 text-purple-600' />
+                AI Suggestions
+                {isGeneratingAI && (
+                  <div className='ml-2 animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600'></div>
+                )}
+              </h3>
+
+              <div className='space-y-3'>
+                {aiSuggestions.map((suggestion, index) => (
+                  <div key={index} className='flex items-start gap-3 p-3 bg-purple-50 rounded-lg'>
+                    <CheckCircle className='w-4 h-4 text-purple-600 mt-0.5' />
+                    <p className='text-sm text-purple-800'>{suggestion}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Tips */}
-            <div className='bg-blue-50 rounded-xl border border-blue-200 p-6'>
-              <h4 className='text-lg font-semibold text-blue-900 mb-4'>
-                Tips for Better Responses
-              </h4>
-              <div className='space-y-3 text-sm'>
-                <div className='flex items-start space-x-2'>
-                  <span>✅</span>
-                  <span className='text-blue-800'>
-                    Be specific about your requirements and quality standards
-                  </span>
-                </div>
-                <div className='flex items-start space-x-2'>
-                  <span>📦</span>
-                  <span className='text-blue-800'>
-                    Include technical specifications and certifications needed
-                  </span>
-                </div>
-                <div className='flex items-start space-x-2'>
-                  <span>🕐</span>
-                  <span className='text-blue-800'>
-                    Set realistic deadlines to get quality responses
-                  </span>
-                </div>
-                <div className='flex items-start space-x-2'>
-                  <span>$</span>
-                  <span className='text-blue-800'>
-                    Provide budget range to attract suitable suppliers
-                  </span>
+            {/* Traffic-Based Pricing Preview */}
+            {pricingPreview && (
+              <div className='bg-white rounded-xl shadow-lg p-6'>
+                <h3 className='text-lg font-semibold text-gray-900 mb-4 flex items-center'>
+                  <TrendingUp className='w-5 h-5 mr-2 text-blue-600' />
+                  Pricing Preview
+                </h3>
+
+                <div className='space-y-3'>
+                  <div className='flex justify-between'>
+                    <span className='text-sm text-gray-600'>Base Price:</span>
+                    <span className='text-sm text-gray-500 line-through'>
+                      ₹{pricingPreview.basePrice.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className='flex justify-between'>
+                    <span className='text-sm text-gray-600'>Traffic Price:</span>
+                    <span className='text-sm font-bold text-blue-600'>
+                      ₹{pricingPreview.trafficPrice.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className='flex justify-between'>
+                    <span className='text-sm text-gray-600'>Traffic Boost:</span>
+                    <span className='text-sm text-green-600'>
+                      +{pricingPreview.display.trafficMultiplier}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Voice RFQ Info */}
-            <div className='bg-green-50 rounded-xl border border-green-200 p-6'>
-              <h4 className='text-lg font-semibold text-green-900 mb-4 flex items-center'>
-                <span>🔊</span>
-                Voice-Powered RFQ
-              </h4>
-              <p className='text-sm text-green-800 mb-3'>
-                Use our AI-powered voice feature to create RFQs instantly. Just speak your
-                requirements and our system will auto-fill the form.
-              </p>
-              <div className='text-xs text-green-700'>
-                ✓ Natural language processing
-                <br />
-                ✓ Auto-categorization
-                <br />
-                ✓ Specification extraction
-                <br />✓ 90%+ accuracy rate
+            {/* Supplier Suggestions */}
+            <div className='bg-white rounded-xl shadow-lg p-6'>
+              <h3 className='text-lg font-semibold text-gray-900 mb-4 flex items-center'>
+                <Users className='w-5 h-5 mr-2 text-green-600' />
+                AI-Matched Suppliers
+              </h3>
+
+              <div className='space-y-4'>
+                {supplierSuggestions.map(supplier => (
+                  <div key={supplier.id} className='border border-gray-200 rounded-lg p-4'>
+                    <div className='flex items-center gap-3 mb-3'>
+                      <img
+                        src={supplier.logoUrl}
+                        alt={supplier.brandName}
+                        className='w-8 h-8 rounded-full'
+                      />
+                      <div className='flex-1'>
+                        <h4 className='font-medium text-gray-900'>{supplier.brandName}</h4>
+                        <div className='flex items-center gap-2'>
+                          <span
+                            className={`${getTrafficTierColor(supplier.trafficTier)} text-white px-2 py-1 rounded-full text-xs`}
+                          >
+                            {supplier.trafficTier}
+                          </span>
+                          <div className='flex items-center gap-1'>
+                            <Star className='w-3 h-3 text-yellow-500 fill-current' />
+                            <span className='text-xs text-gray-600'>{supplier.rating}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='text-right'>
+                        <div className='text-sm font-bold text-green-600'>{supplier.aiScore}%</div>
+                        <div className='text-xs text-gray-500'>AI Score</div>
+                      </div>
+                    </div>
+
+                    <div className='space-y-2 text-xs text-gray-600'>
+                      <div className='flex justify-between'>
+                        <span>Response Time:</span>
+                        <span>{supplier.responseTime}</span>
+                      </div>
+                      <div className='flex justify-between'>
+                        <span>Price Range:</span>
+                        <span>
+                          ₹{supplier.priceRange[0].toLocaleString()} - ₹
+                          {supplier.priceRange[1].toLocaleString()}
+                        </span>
+                      </div>
+                      <div className='flex gap-1'>
+                        {supplier.specialties.map((specialty, index) => (
+                          <span key={index} className='px-2 py-1 bg-gray-100 rounded text-xs'>
+                            {specialty}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RFQCreationPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading RFQ creation...</p>
+        </div>
+      </div>
+    }>
+      <RFQCreationContent />
+    </Suspense>
   );
 }

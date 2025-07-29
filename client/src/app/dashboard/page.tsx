@@ -1,24 +1,82 @@
 'use client';
 
+import RoleToggle, {
+  BuyerDashboard,
+  MSMEDashboard,
+  ManufacturerDashboard,
+  SupplierDashboard,
+} from '@/components/RoleToggle';
+import {
+  BarChart3,
+  Brain,
+  Building2,
+  CheckCircle,
+  Factory,
+  FileText,
+  LogOut,
+  MessageSquare,
+  Mic,
+  Package,
+  Plus,
+  Search,
+  Shield,
+  ShoppingCart,
+  Star,
+  Target,
+  TrendingUp,
+  Truck,
+  Upload,
+  Users,
+  Wallet,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
-  const [currentMode, setCurrentMode] = useState('buying');
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [liveStats, setLiveStats] = useState({
-    activeRFQs: 23,
-    pendingQuotes: 8,
-    sourcingProjects: 12,
-    savedSuppliers: 156,
-    activeListings: 15,
-    quoteRequests: 34,
-    salesOpportunities: 7,
-    businessConnections: 89,
-  });
+  const [currentRole, setCurrentRole] = useState<'buyer' | 'supplier' | 'msme' | 'manufacturer'>(
+    'buyer'
+  );
+  const [availableRoles, setAvailableRoles] = useState<
+    Array<'buyer' | 'supplier' | 'msme' | 'manufacturer'>
+  >(['buyer']);
   const router = useRouter();
+
+  // Live stats for different roles
+  const [liveStats, setLiveStats] = useState({
+    buyer: {
+      activeRFQs: 23,
+      pendingQuotes: 8,
+      sourcingProjects: 12,
+      savedSuppliers: 156,
+      monthlySpend: 245000,
+      suppliersConnected: 48,
+    },
+    supplier: {
+      activeListings: 15,
+      quoteRequests: 34,
+      salesOpportunities: 7,
+      businessConnections: 89,
+      monthlyRevenue: 520000,
+      productsListed: 24,
+    },
+    msme: {
+      msmeBenefits: 45000,
+      governmentSchemes: 3,
+      certificationStatus: 'Valid',
+      bulkOrders: 8,
+      exportAssistance: 2,
+    },
+    manufacturer: {
+      productionCapacity: 85,
+      customOrders: 12,
+      qualityScore: 98.5,
+      supplyChainPartners: 23,
+      technicalSpecs: 45,
+    },
+  });
 
   useEffect(() => {
     // Check authentication with retry logic
@@ -31,6 +89,12 @@ export default function DashboardPage() {
           try {
             const parsedUser = JSON.parse(userData);
             setUser(parsedUser);
+
+            // Set available roles based on user data
+            const userRoles = parsedUser.roles || ['buyer'];
+            setAvailableRoles(userRoles);
+            setCurrentRole(userRoles[0]);
+
             setIsLoading(false);
             console.log('User authenticated:', parsedUser.email);
           } catch (error) {
@@ -41,8 +105,16 @@ export default function DashboardPage() {
           }
         } else {
           console.log('No user data found, showing demo dashboard');
-          // Show demo dashboard instead of redirecting
-          setUser({ email: 'demo@bell24h.com', name: 'Demo User', role: 'BUYER' });
+          // Show demo dashboard with all roles available
+          setUser({
+            email: 'demo@bell24h.com',
+            name: 'Demo User',
+            role: 'BUYER',
+            roles: ['buyer', 'supplier', 'msme', 'manufacturer'],
+            trafficTier: 'GOLD',
+          });
+          setAvailableRoles(['buyer', 'supplier', 'msme', 'manufacturer']);
+          setCurrentRole('buyer');
           setIsLoading(false);
         }
       }
@@ -71,45 +143,166 @@ export default function DashboardPage() {
     }
   };
 
+  const handleRoleChange = (newRole: 'buyer' | 'supplier' | 'msme' | 'manufacturer') => {
+    setCurrentRole(newRole);
+    // In a real app, you might want to update the user's current role in the database
+    console.log(`Switched to ${newRole} role`);
+  };
+
   if (isLoading) {
     return (
       <div className='min-h-screen bg-gray-100 flex items-center justify-center'>
         <div className='text-center'>
           <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto'></div>
-          <p className='mt-4 text-gray-600'>Loading dashboard...</p>
+          <p className='mt-4 text-gray-600'>Loading Bell24h 2.0 Dashboard...</p>
         </div>
       </div>
     );
   }
 
-  const buyingStats = [
-    { label: 'Active RFQs', value: liveStats.activeRFQs, icon: '📦', color: 'blue' },
-    { label: 'Pending Quotes', value: liveStats.pendingQuotes, icon: '📅', color: 'orange' },
-    { label: 'Sourcing Projects', value: liveStats.sourcingProjects, icon: '📈', color: 'green' },
-    { label: 'Saved Suppliers', value: liveStats.savedSuppliers, icon: '👥', color: 'purple' },
-  ];
+  const getCurrentStats = () => {
+    return liveStats[currentRole];
+  };
 
-  const sellingStats = [
-    { label: 'Active Listings', value: liveStats.activeListings, icon: '📦', color: 'blue' },
-    { label: 'Quote Requests', value: liveStats.quoteRequests, icon: '📅', color: 'orange' },
-    {
-      label: 'Sales Opportunities',
-      value: liveStats.salesOpportunities,
-      icon: '📈',
-      color: 'green',
-    },
-    {
-      label: 'Business Connections',
-      value: liveStats.businessConnections,
-      icon: '👥',
-      color: 'purple',
-    },
-  ];
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case 'buyer':
+        return <ShoppingCart className='w-5 h-5' />;
+      case 'supplier':
+        return <Building2 className='w-5 h-5' />;
+      case 'msme':
+        return <Users className='w-5 h-5' />;
+      case 'manufacturer':
+        return <Factory className='w-5 h-5' />;
+      default:
+        return <Users className='w-5 h-5' />;
+    }
+  };
 
-  const currentStats = currentMode === 'buying' ? buyingStats : sellingStats;
+  const getRoleColor = (role: string) => {
+    switch (role) {
+      case 'buyer':
+        return 'bg-blue-500';
+      case 'supplier':
+        return 'bg-green-500';
+      case 'msme':
+        return 'bg-purple-500';
+      case 'manufacturer':
+        return 'bg-orange-500';
+      default:
+        return 'bg-gray-500';
+    }
+  };
+
+  const quickActions = {
+    buyer: [
+      {
+        title: 'Create RFQ',
+        icon: Plus,
+        action: () => router.push('/rfq/create'),
+        color: 'bg-blue-500',
+      },
+      {
+        title: 'Find Suppliers',
+        icon: Search,
+        action: () => router.push('/suppliers'),
+        color: 'bg-green-500',
+      },
+      {
+        title: 'View Analytics',
+        icon: BarChart3,
+        action: () => router.push('/analytics'),
+        color: 'bg-purple-500',
+      },
+      {
+        title: 'Manage Wallet',
+        icon: Wallet,
+        action: () => router.push('/dashboard/wallet'),
+        color: 'bg-orange-500',
+      },
+    ],
+    supplier: [
+      {
+        title: 'Upload Product',
+        icon: Upload,
+        action: () => router.push('/products/upload'),
+        color: 'bg-green-500',
+      },
+      {
+        title: 'Respond to RFQs',
+        icon: FileText,
+        action: () => router.push('/rfq/responses'),
+        color: 'bg-blue-500',
+      },
+      {
+        title: 'View Analytics',
+        icon: BarChart3,
+        action: () => router.push('/analytics'),
+        color: 'bg-purple-500',
+      },
+      {
+        title: 'Manage Showcase',
+        icon: Star,
+        action: () => router.push('/showcase'),
+        color: 'bg-orange-500',
+      },
+    ],
+    msme: [
+      {
+        title: 'MSME Benefits',
+        icon: Shield,
+        action: () => router.push('/msme/benefits'),
+        color: 'bg-purple-500',
+      },
+      {
+        title: 'Government Schemes',
+        icon: Target,
+        action: () => router.push('/msme/schemes'),
+        color: 'bg-blue-500',
+      },
+      {
+        title: 'Bulk Orders',
+        icon: Package,
+        action: () => router.push('/msme/bulk-orders'),
+        color: 'bg-green-500',
+      },
+      {
+        title: 'Export Assistance',
+        icon: Truck,
+        action: () => router.push('/msme/export'),
+        color: 'bg-orange-500',
+      },
+    ],
+    manufacturer: [
+      {
+        title: 'Production Capacity',
+        icon: Factory,
+        action: () => router.push('/manufacturer/capacity'),
+        color: 'bg-orange-500',
+      },
+      {
+        title: 'Custom Orders',
+        icon: Package,
+        action: () => router.push('/manufacturer/custom'),
+        color: 'bg-blue-500',
+      },
+      {
+        title: 'Quality Control',
+        icon: Shield,
+        action: () => router.push('/manufacturer/quality'),
+        color: 'bg-green-500',
+      },
+      {
+        title: 'Supply Chain',
+        icon: Truck,
+        action: () => router.push('/manufacturer/supply-chain'),
+        color: 'bg-purple-500',
+      },
+    ],
+  };
 
   return (
-    <div className='min-h-screen bg-gray-100'>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
       {/* HEADER */}
       <header className='bg-white shadow-lg border-b border-gray-200'>
         <div className='px-6 py-4'>
@@ -119,15 +312,23 @@ export default function DashboardPage() {
                 href='/'
                 className='text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'
               >
-                BELL24H
+                BELL24H 2.0
               </Link>
               <div className='border-l border-gray-300 pl-4'>
-                <h1 className='text-2xl font-bold text-gray-900'>Business Dashboard</h1>
-                <p className='text-sm text-gray-600'>Welcome back, {user?.email || 'Demo User'}</p>
+                <h1 className='text-2xl font-bold text-gray-900'>Multi-Role Dashboard</h1>
+                <p className='text-sm text-gray-600'>Welcome back, {user?.name || 'Demo User'}</p>
               </div>
             </div>
 
             <div className='flex items-center space-x-4'>
+              {/* Role Toggle */}
+              <RoleToggle
+                currentRole={currentRole}
+                availableRoles={availableRoles}
+                onRoleChange={handleRoleChange}
+                className='mr-4'
+              />
+
               <button className='p-2 rounded-lg hover:bg-gray-100 transition-colors'>
                 <span className='text-lg'>🔔</span>
               </button>
@@ -138,7 +339,7 @@ export default function DashboardPage() {
                 onClick={handleLogout}
                 className='flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors'
               >
-                <span>🚪</span>
+                <LogOut className='w-4 h-4' />
                 <span>Logout</span>
               </button>
             </div>
@@ -161,162 +362,145 @@ export default function DashboardPage() {
               </svg>
             </div>
             <div>
-              <p className='text-green-800 font-medium'>🎉 Dashboard Access Successful!</p>
+              <p className='text-green-800 font-medium'>🎉 Bell24h 2.0 Dashboard Active!</p>
               <p className='text-green-700 text-sm'>
-                The 307 redirect loop has been fixed. You can now access the dashboard.
+                Multi-role system with traffic-based pricing and AI features enabled.
               </p>
             </div>
           </div>
         </div>
 
-        {/* MODE TOGGLE */}
+        {/* Current Role Display */}
         <div className='mb-8'>
-          <div className='bg-white rounded-xl p-1 shadow-sm inline-flex'>
-            <button
-              onClick={() => setCurrentMode('buying')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                currentMode === 'buying'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Buying Mode
-            </button>
-            <button
-              onClick={() => setCurrentMode('selling')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                currentMode === 'selling'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Selling Mode
-            </button>
+          <div
+            className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${getRoleColor(currentRole)} text-white`}
+          >
+            {getRoleIcon(currentRole)}
+            <span className='ml-2 capitalize'>Currently in {currentRole} mode</span>
           </div>
         </div>
 
-        {/* STATS GRID */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
-          {currentStats.map((stat, index) => (
-            <div
-              key={index}
-              className='bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow'
-            >
-              <div className='flex items-center justify-between'>
-                <div>
-                  <p className='text-sm font-medium text-gray-600'>{stat.label}</p>
-                  <p className='text-3xl font-bold text-gray-900 mt-1'>{stat.value}</p>
-                </div>
-                <div className='text-3xl'>{stat.icon}</div>
-              </div>
-            </div>
-          ))}
+        {/* Role-Specific Dashboard */}
+        <div className='mb-8'>
+          {currentRole === 'buyer' && <BuyerDashboard />}
+          {currentRole === 'supplier' && <SupplierDashboard />}
+          {currentRole === 'msme' && <MSMEDashboard />}
+          {currentRole === 'manufacturer' && <ManufacturerDashboard />}
         </div>
 
-        {/* QUICK ACTIONS */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-          <div className='bg-white rounded-xl p-6 shadow-sm border border-gray-100'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-4'>Quick Actions</h3>
-            <div className='space-y-3'>
-              <Link
-                href='/rfq/create'
-                className='flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition-colors'
+        {/* Quick Actions */}
+        <div className='mb-8'>
+          <h2 className='text-xl font-semibold text-gray-900 mb-4'>Quick Actions</h2>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+            {quickActions[currentRole].map((action, index) => (
+              <button
+                key={index}
+                onClick={action.action}
+                className={`${action.color} text-white p-4 rounded-xl hover:opacity-90 transition-all duration-200 flex items-center space-x-3`}
               >
-                <span className='text-2xl'>📝</span>
-                <span className='font-medium'>Create RFQ</span>
-              </Link>
-              <Link
-                href='/suppliers'
-                className='flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition-colors'
-              >
-                <span className='text-2xl'>🔍</span>
-                <span className='font-medium'>Find Suppliers</span>
-              </Link>
-              <Link
-                href='/analytics'
-                className='flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition-colors'
-              >
-                <span className='text-2xl'>📊</span>
-                <span className='font-medium'>View Analytics</span>
-              </Link>
-            </div>
+                <action.icon className='w-6 h-6' />
+                <span className='font-medium'>{action.title}</span>
+              </button>
+            ))}
           </div>
+        </div>
 
-          <div className='bg-white rounded-xl p-6 shadow-sm border border-gray-100'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-4'>Recent Activity</h3>
-            <div className='space-y-3'>
-              <div className='flex items-center space-x-3 p-3 rounded-lg bg-green-50'>
-                <span className='text-2xl'>✅</span>
+        {/* AI Features Section */}
+        <div className='mb-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-200'>
+          <h2 className='text-xl font-semibold text-gray-900 mb-4 flex items-center'>
+            <Brain className='w-6 h-6 mr-2 text-purple-600' />
+            AI-Powered Features
+          </h2>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+            <Link
+              href='/dashboard/voice-rfq'
+              className='bg-white p-4 rounded-lg border border-purple-200 hover:border-purple-300 transition-colors'
+            >
+              <div className='flex items-center space-x-3'>
+                <Mic className='w-6 h-6 text-purple-600' />
                 <div>
-                  <p className='font-medium text-sm'>Quote Received</p>
-                  <p className='text-xs text-gray-600'>2 hours ago</p>
+                  <h3 className='font-medium text-gray-900'>Voice RFQ</h3>
+                  <p className='text-sm text-gray-600'>Create RFQs with voice commands</p>
                 </div>
               </div>
-              <div className='flex items-center space-x-3 p-3 rounded-lg bg-blue-50'>
-                <span className='text-2xl'>📦</span>
+            </Link>
+            <Link
+              href='/dashboard/ai-matching'
+              className='bg-white p-4 rounded-lg border border-purple-200 hover:border-purple-300 transition-colors'
+            >
+              <div className='flex items-center space-x-3'>
+                <Brain className='w-6 h-6 text-purple-600' />
                 <div>
-                  <p className='font-medium text-sm'>New RFQ Posted</p>
-                  <p className='text-xs text-gray-600'>4 hours ago</p>
+                  <h3 className='font-medium text-gray-900'>AI Matching</h3>
+                  <p className='text-sm text-gray-600'>Smart supplier recommendations</p>
                 </div>
               </div>
-              <div className='flex items-center space-x-3 p-3 rounded-lg bg-yellow-50'>
-                <span className='text-2xl'>⚠️</span>
+            </Link>
+            <Link
+              href='/dashboard/analytics'
+              className='bg-white p-4 rounded-lg border border-purple-200 hover:border-purple-300 transition-colors'
+            >
+              <div className='flex items-center space-x-3'>
+                <BarChart3 className='w-6 h-6 text-purple-600' />
                 <div>
-                  <p className='font-medium text-sm'>Payment Pending</p>
-                  <p className='text-xs text-gray-600'>1 day ago</p>
+                  <h3 className='font-medium text-gray-900'>Analytics</h3>
+                  <p className='text-sm text-gray-600'>Traffic-based insights</p>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
+        </div>
 
-          <div className='bg-white rounded-xl p-6 shadow-sm border border-gray-100'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-4'>Account Info</h3>
-            <div className='space-y-3'>
-              <div className='flex items-center space-x-3 p-3 rounded-lg bg-gray-50'>
-                <span className='text-2xl'>👤</span>
-                <div>
-                  <p className='font-medium text-sm'>{user?.name || 'Demo User'}</p>
-                  <p className='text-xs text-gray-600'>{user?.email || 'demo@bell24h.com'}</p>
-                </div>
-              </div>
-              <div className='flex items-center space-x-3 p-3 rounded-lg bg-gray-50'>
-                <span className='text-2xl'>🏢</span>
-                <div>
-                  <p className='font-medium text-sm'>{user?.companyName || 'Bell24h Demo'}</p>
-                  <p className='text-xs text-gray-600'>{user?.role || 'BUYER'}</p>
-                </div>
-              </div>
-              <div className='flex items-center space-x-3 p-3 rounded-lg bg-gray-50'>
-                <span className='text-2xl'>🔐</span>
-                <div>
-                  <p className='font-medium text-sm'>Account Status</p>
-                  <p className='text-xs text-green-600'>Active</p>
-                </div>
-              </div>
+        {/* Traffic-Based Pricing Preview */}
+        <div className='mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200'>
+          <h2 className='text-xl font-semibold text-gray-900 mb-4 flex items-center'>
+            <TrendingUp className='w-6 h-6 mr-2 text-blue-600' />
+            Traffic-Based Pricing
+          </h2>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+            <div className='bg-white p-4 rounded-lg'>
+              <div className='text-sm text-gray-600'>Current Tier</div>
+              <div className='text-2xl font-bold text-blue-600'>{user?.trafficTier || 'GOLD'}</div>
+              <div className='text-sm text-green-600'>+50% traffic boost</div>
+            </div>
+            <div className='bg-white p-4 rounded-lg'>
+              <div className='text-sm text-gray-600'>Impressions Today</div>
+              <div className='text-2xl font-bold text-purple-600'>1,247</div>
+              <div className='text-sm text-green-600'>+12% from yesterday</div>
+            </div>
+            <div className='bg-white p-4 rounded-lg'>
+              <div className='text-sm text-gray-600'>Revenue Impact</div>
+              <div className='text-2xl font-bold text-green-600'>₹45,230</div>
+              <div className='text-sm text-green-600'>+8% from traffic pricing</div>
             </div>
           </div>
         </div>
 
-        {/* TESTING SECTION */}
-        <div className='mt-8 bg-blue-50 rounded-xl p-6 border border-blue-200'>
-          <h3 className='text-lg font-semibold text-blue-900 mb-4'>🧪 Testing Results</h3>
-          <div className='space-y-2 text-sm text-blue-800'>
-            <p>
-              ✅ <strong>307 Redirect Loop:</strong> FIXED - Dashboard now loads without redirecting
-              back to login
-            </p>
-            <p>
-              ✅ <strong>Login Flow:</strong> Working - API returns 200 OK with proper token
-            </p>
-            <p>
-              ✅ <strong>Middleware:</strong> Active - Allows dashboard access
-            </p>
-            <p>
-              ✅ <strong>localStorage:</strong> Compatible - Supports both old and new key formats
-            </p>
-            <p>
-              ✅ <strong>Manual Redirect:</strong> Available - "Go to Dashboard Now" button works
-            </p>
+        {/* Recent Activity */}
+        <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
+          <h2 className='text-xl font-semibold text-gray-900 mb-4'>Recent Activity</h2>
+          <div className='space-y-4'>
+            <div className='flex items-center space-x-3 p-3 rounded-lg bg-green-50'>
+              <CheckCircle className='w-5 h-5 text-green-500' />
+              <div>
+                <p className='font-medium text-sm'>Product uploaded successfully</p>
+                <p className='text-xs text-gray-600'>2 hours ago</p>
+              </div>
+            </div>
+            <div className='flex items-center space-x-3 p-3 rounded-lg bg-blue-50'>
+              <MessageSquare className='w-5 h-5 text-blue-500' />
+              <div>
+                <p className='font-medium text-sm'>New RFQ response received</p>
+                <p className='text-xs text-gray-600'>4 hours ago</p>
+              </div>
+            </div>
+            <div className='flex items-center space-x-3 p-3 rounded-lg bg-purple-50'>
+              <TrendingUp className='w-5 h-5 text-purple-500' />
+              <div>
+                <p className='font-medium text-sm'>Traffic tier upgraded to GOLD</p>
+                <p className='text-xs text-gray-600'>1 day ago</p>
+              </div>
+            </div>
           </div>
         </div>
       </main>
