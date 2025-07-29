@@ -90,7 +90,7 @@ function LoginContent() {
               window.location.href = '/dashboard';
             }
           }
-        }, 1500); // Give user time to see success message
+        }, 500); // Reduced from 1500ms to 500ms for faster redirect
       } else {
         console.log('❌ Login failed:', data.error);
         setError(data.error || 'Invalid credentials');

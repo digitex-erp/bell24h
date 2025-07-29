@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 export default function DashboardPage() {
   const [currentMode, setCurrentMode] = useState('buying');
   const [user, setUser] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [liveStats, setLiveStats] = useState({
     activeRFQs: 23,
     pendingQuotes: 8,
@@ -20,21 +21,50 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Check authentication
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('auth-token');
-      const userData = localStorage.getItem('user-data');
+    // Check authentication with retry logic
+    const checkAuth = () => {
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('auth-token');
+        const userData = localStorage.getItem('user-data');
 
-      if (!token) {
-        router.push('/auth/login?redirect=/dashboard');
-        return;
-      }
+        if (!token) {
+          console.log('No auth token found, redirecting to login...');
+          router.push('/auth/login?redirect=/dashboard');
+          return;
+        }
 
-      if (userData) {
-        setUser(JSON.parse(userData));
+        if (userData) {
+          try {
+            const parsedUser = JSON.parse(userData);
+            setUser(parsedUser);
+            setIsLoading(false);
+            console.log('User authenticated:', parsedUser.email);
+          } catch (error) {
+            console.error('Error parsing user data:', error);
+            localStorage.removeItem('auth-token');
+            localStorage.removeItem('user-data');
+            router.push('/auth/login?redirect=/dashboard');
+          }
+        } else {
+          console.log('No user data found, redirecting to login...');
+          router.push('/auth/login?redirect=/dashboard');
+        }
       }
-    }
-  }, [router]);
+    };
+
+    // Initial check
+    checkAuth();
+
+    // Retry after a short delay in case localStorage was just set
+    const retryTimer = setTimeout(() => {
+      if (!user && typeof window !== 'undefined') {
+        console.log('Retrying auth check...');
+        checkAuth();
+      }
+    }, 500);
+
+    return () => clearTimeout(retryTimer);
+  }, [router, user]);
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
@@ -44,10 +74,24 @@ export default function DashboardPage() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className='min-h-screen bg-gray-100 flex items-center justify-center'>
+        <div className='text-center'>
+          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto'></div>
+          <p className='mt-4 text-gray-600'>Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <div className='min-h-screen bg-gray-100 flex items-center justify-center'>
-        <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600'></div>
+        <div className='text-center'>
+          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto'></div>
+          <p className='mt-4 text-gray-600'>Checking authentication...</p>
+        </div>
       </div>
     );
   }
@@ -116,89 +160,136 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <div className='p-6'>
-        {/* MODE SWITCHER */}
-        <div className='bg-white rounded-xl shadow-lg p-6 mb-8'>
-          <div className='flex items-center justify-between mb-6'>
-            <h2 className='text-2xl font-bold text-gray-900'>Business Mode</h2>
-            <div className='flex bg-gray-100 rounded-lg p-1'>
-              <button
-                onClick={() => setCurrentMode('buying')}
-                className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                  currentMode === 'buying'
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Buying Mode
-              </button>
-              <button
-                onClick={() => setCurrentMode('selling')}
-                className={`px-6 py-2 rounded-md font-medium transition-colors ${
-                  currentMode === 'selling'
-                    ? 'bg-green-600 text-white'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Selling Mode
-              </button>
-            </div>
+      {/* MAIN CONTENT */}
+      <main className='p-6'>
+        {/* MODE TOGGLE */}
+        <div className='mb-8'>
+          <div className='bg-white rounded-xl p-1 shadow-sm inline-flex'>
+            <button
+              onClick={() => setCurrentMode('buying')}
+              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                currentMode === 'buying'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Buying Mode
+            </button>
+            <button
+              onClick={() => setCurrentMode('selling')}
+              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                currentMode === 'selling'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Selling Mode
+            </button>
           </div>
-
-          <p className='text-gray-600'>
-            {currentMode === 'buying'
-              ? 'Source products and services from verified suppliers'
-              : 'List your products and respond to buyer requirements'}
-          </p>
         </div>
 
         {/* STATS GRID */}
-        <div className='grid grid-cols-1 md:grid-cols-4 gap-6 mb-8'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
           {currentStats.map((stat, index) => (
-            <div key={index} className='bg-white p-6 rounded-xl shadow-lg'>
+            <div
+              key={index}
+              className='bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow'
+            >
               <div className='flex items-center justify-between'>
                 <div>
                   <p className='text-sm font-medium text-gray-600'>{stat.label}</p>
-                  <p className='text-3xl font-bold text-gray-900'>{stat.value}</p>
+                  <p className='text-3xl font-bold text-gray-900 mt-1'>{stat.value}</p>
                 </div>
-                <span className={`text-2xl text-${stat.color}-600`}>{stat.icon}</span>
+                <div className='text-3xl'>{stat.icon}</div>
               </div>
             </div>
           ))}
         </div>
 
         {/* QUICK ACTIONS */}
-        <div className='bg-white rounded-xl shadow-lg p-6'>
-          <h3 className='text-xl font-bold text-gray-900 mb-6'>Quick Actions</h3>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-            {currentMode === 'buying' ? (
-              <>
-                <button className='bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors'>
-                  Post New RFQ
-                </button>
-                <button className='bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors'>
-                  Search Suppliers
-                </button>
-                <button className='bg-purple-600 text-white p-4 rounded-lg hover:bg-purple-700 transition-colors'>
-                  View Analytics
-                </button>
-              </>
-            ) : (
-              <>
-                <button className='bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors'>
-                  Create Listing
-                </button>
-                <button className='bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors'>
-                  Browse RFQs
-                </button>
-                <button className='bg-purple-600 text-white p-4 rounded-lg hover:bg-purple-700 transition-colors'>
-                  Sales Analytics
-                </button>
-              </>
-            )}
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+          <div className='bg-white rounded-xl p-6 shadow-sm border border-gray-100'>
+            <h3 className='text-lg font-semibold text-gray-900 mb-4'>Quick Actions</h3>
+            <div className='space-y-3'>
+              <Link
+                href='/rfq/create'
+                className='flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition-colors'
+              >
+                <span className='text-2xl'>📝</span>
+                <span className='font-medium'>Create RFQ</span>
+              </Link>
+              <Link
+                href='/suppliers'
+                className='flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition-colors'
+              >
+                <span className='text-2xl'>🔍</span>
+                <span className='font-medium'>Find Suppliers</span>
+              </Link>
+              <Link
+                href='/analytics'
+                className='flex items-center space-x-3 p-3 rounded-lg hover:bg-blue-50 transition-colors'
+              >
+                <span className='text-2xl'>📊</span>
+                <span className='font-medium'>View Analytics</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className='bg-white rounded-xl p-6 shadow-sm border border-gray-100'>
+            <h3 className='text-lg font-semibold text-gray-900 mb-4'>Recent Activity</h3>
+            <div className='space-y-3'>
+              <div className='flex items-center space-x-3 p-3 rounded-lg bg-green-50'>
+                <span className='text-2xl'>✅</span>
+                <div>
+                  <p className='font-medium text-sm'>Quote Received</p>
+                  <p className='text-xs text-gray-600'>2 hours ago</p>
+                </div>
+              </div>
+              <div className='flex items-center space-x-3 p-3 rounded-lg bg-blue-50'>
+                <span className='text-2xl'>📦</span>
+                <div>
+                  <p className='font-medium text-sm'>New RFQ Posted</p>
+                  <p className='text-xs text-gray-600'>4 hours ago</p>
+                </div>
+              </div>
+              <div className='flex items-center space-x-3 p-3 rounded-lg bg-yellow-50'>
+                <span className='text-2xl'>⚠️</span>
+                <div>
+                  <p className='font-medium text-sm'>Payment Pending</p>
+                  <p className='text-xs text-gray-600'>1 day ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='bg-white rounded-xl p-6 shadow-sm border border-gray-100'>
+            <h3 className='text-lg font-semibold text-gray-900 mb-4'>Account Info</h3>
+            <div className='space-y-3'>
+              <div className='flex items-center space-x-3 p-3 rounded-lg bg-gray-50'>
+                <span className='text-2xl'>👤</span>
+                <div>
+                  <p className='font-medium text-sm'>{user.name || 'User'}</p>
+                  <p className='text-xs text-gray-600'>{user.email}</p>
+                </div>
+              </div>
+              <div className='flex items-center space-x-3 p-3 rounded-lg bg-gray-50'>
+                <span className='text-2xl'>🏢</span>
+                <div>
+                  <p className='font-medium text-sm'>{user.companyName || 'Company'}</p>
+                  <p className='text-xs text-gray-600'>{user.role}</p>
+                </div>
+              </div>
+              <div className='flex items-center space-x-3 p-3 rounded-lg bg-gray-50'>
+                <span className='text-2xl'>🔐</span>
+                <div>
+                  <p className='font-medium text-sm'>Account Status</p>
+                  <p className='text-xs text-green-600'>Active</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
