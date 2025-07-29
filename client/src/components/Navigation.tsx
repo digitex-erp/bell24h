@@ -25,10 +25,9 @@ export default function Navigation() {
   const [isFeaturesDropdownOpen, setIsFeaturesDropdownOpen] = useState(false);
   const pathname = usePathname();
 
+  // FIXED: Removed duplicate AI Features from main navigation
   const mainNavigation = [
     { name: 'Home', href: '/', icon: Home },
-    { name: 'AI Features', href: '/dashboard/ai-features', icon: Brain },
-    { name: 'Voice RFQ', href: '/dashboard/voice-rfq', icon: Mic },
     { name: 'Supplier Showcase', href: '/supplier/SUP001', icon: Building2 },
     { name: 'Fintech Services', href: '/fintech', icon: CreditCard },
     { name: 'Wallet & Escrow', href: '/wallet', icon: Wallet },
@@ -72,7 +71,7 @@ export default function Navigation() {
           {/* Desktop Navigation - FIXED: Consistent flex usage */}
           <div className="hidden lg:flex items-center space-x-1">
             {/* Main Navigation */}
-            {mainNavigation.slice(0, 2).map((item) => (
+            {mainNavigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -118,22 +117,6 @@ export default function Navigation() {
                 </div>
               )}
             </div>
-
-            {/* Enterprise Features */}
-            {mainNavigation.slice(3).map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
-                  isActive(item.href)
-                    ? 'bg-blue-100 text-blue-700 shadow-md'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.name}</span>
-              </Link>
-            ))}
 
             {/* Login Button - FIXED: Consistent button styling */}
             <Link
