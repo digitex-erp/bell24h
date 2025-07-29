@@ -6,10 +6,10 @@ const prisma = new PrismaClient();
 async function createDemoUsers() {
   try {
     console.log('👥 Creating demo users for Bell24h...');
-    
+
     // Hash passwords
     const hashedPassword = await bcrypt.hash('demo123', 10);
-    
+
     // Demo Buyer
     const buyer = await prisma.user.create({
       data: {
@@ -23,7 +23,7 @@ async function createDemoUsers() {
         hashedPassword: hashedPassword,
         brandName: 'TechCorp',
         about: 'Leading technology procurement company',
-      }
+      },
     });
     console.log(`✅ Demo Buyer created: ${buyer.email}`);
 
@@ -41,7 +41,7 @@ async function createDemoUsers() {
         brandName: 'SteelCorp',
         about: 'Premium steel and alloy manufacturer',
         msmeCertNumber: 'MSME123456',
-      }
+      },
     });
     console.log(`✅ Demo Supplier created: ${supplier.email}`);
 
@@ -59,7 +59,7 @@ async function createDemoUsers() {
         brandName: 'SmallTech',
         about: 'Innovative small-scale technology solutions',
         msmeCertNumber: 'MSME789012',
-      }
+      },
     });
     console.log(`✅ Demo MSME created: ${msme.email}`);
 
@@ -70,22 +70,22 @@ async function createDemoUsers() {
           userId: buyer.id,
           balance: 50000,
           currency: 'INR',
-        }
+        },
       }),
       prisma.wallet.create({
         data: {
           userId: supplier.id,
           balance: 100000,
           currency: 'INR',
-        }
+        },
       }),
       prisma.wallet.create({
         data: {
           userId: msme.id,
           balance: 25000,
           currency: 'INR',
-        }
-      })
+        },
+      }),
     ]);
 
     console.log(`✅ Wallets created for all demo users`);
@@ -107,7 +107,7 @@ async function createDemoUsers() {
           views: 150,
           impressions: 300,
           rfqCount: 8,
-        }
+        },
       }),
       prisma.product.create({
         data: {
@@ -124,8 +124,8 @@ async function createDemoUsers() {
           views: 89,
           impressions: 178,
           rfqCount: 5,
-        }
-      })
+        },
+      }),
     ]);
 
     console.log(`✅ Sample products created for supplier`);
@@ -135,7 +135,6 @@ async function createDemoUsers() {
     console.log('Buyer: demo.buyer@bell24h.com / demo123');
     console.log('Supplier: demo.supplier@bell24h.com / demo123');
     console.log('MSME: demo.msme@bell24h.com / demo123');
-
   } catch (error) {
     console.error('❌ Error creating demo users:', error);
   } finally {
@@ -143,4 +142,4 @@ async function createDemoUsers() {
   }
 }
 
-createDemoUsers(); 
+createDemoUsers();
