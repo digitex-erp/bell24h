@@ -27,6 +27,7 @@ function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get('redirect') || '/dashboard';
@@ -41,6 +42,7 @@ function LoginContent() {
 
     setIsLoading(true);
     setError('');
+    setSuccess('');
 
     try {
       const response = await fetch('/api/auth/login', {
@@ -58,6 +60,7 @@ function LoginContent() {
 
       if (data.success) {
         console.log('✅ Login successful, redirecting to:', redirectTo);
+        setSuccess('Login successful! Redirecting to dashboard...');
 
         // Track successful login
         await trackLogin('email');
@@ -68,19 +71,26 @@ function LoginContent() {
           localStorage.setItem('user-data', JSON.stringify(data.user));
         }
 
-        // Add a small delay to ensure localStorage is set
+        // Show success message and redirect
         setTimeout(() => {
           console.log('🔄 Executing redirect to:', redirectTo);
-          // Use window.location.href for more reliable redirect
-          // Try multiple redirect options
+          
+          // Try multiple redirect methods
           try {
-            window.location.href = redirectTo;
+            // Method 1: Use router.push
+            router.push(redirectTo);
           } catch (error) {
-            console.log('❌ Redirect failed, trying alternative...');
-            // Fallback to supplier dashboard
-            window.location.href = '/supplier/dashboard';
+            console.log('❌ Router redirect failed, trying window.location...');
+            try {
+              // Method 2: Use window.location.href
+              window.location.href = redirectTo;
+            } catch (error2) {
+              console.log('❌ Window redirect failed, trying fallback...');
+              // Method 3: Fallback to dashboard
+              window.location.href = '/dashboard';
+            }
           }
-        }, 100);
+        }, 1500); // Give user time to see success message
       } else {
         console.log('❌ Login failed:', data.error);
         setError(data.error || 'Invalid credentials');
@@ -114,6 +124,12 @@ function LoginContent() {
         {error && (
           <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6'>
             {error}
+          </div>
+        )}
+
+        {success && (
+          <div className='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6'>
+            {success}
           </div>
         )}
 
