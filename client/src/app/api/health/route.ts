@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
-  
+
   try {
     // Check database connection
     let dbStatus = 'UNKNOWN';
     let userCount = 0;
-    
+
     try {
       userCount = await prisma.user.count();
       dbStatus = 'HEALTHY';
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       database: {
         status: dbStatus,
         userCount,
-        connection: dbStatus === 'HEALTHY' ? 'ACTIVE' : 'INACTIVE'
+        connection: dbStatus === 'HEALTHY' ? 'ACTIVE' : 'INACTIVE',
       },
       environment: envStatus,
       features: {
@@ -48,38 +48,40 @@ export async function GET(request: NextRequest) {
         aiFeatures: 'ENABLED',
         trafficPricing: 'ENABLED',
         pdfReports: 'ENABLED',
-        voiceInput: 'ENABLED'
+        voiceInput: 'ENABLED',
       },
       endpoints: {
         total: 50,
         healthy: 50,
-        failed: 0
-      }
+        failed: 0,
+      },
     };
 
     return NextResponse.json(platformStatus, {
       status: dbStatus === 'HEALTHY' ? 200 : 503,
       headers: {
         'Cache-Control': 'no-cache',
-        'X-Platform-Status': platformStatus.status
-      }
+        'X-Platform-Status': platformStatus.status,
+      },
     });
-
   } catch (error) {
     console.error('Health check failed:', error);
-    
-    return NextResponse.json({
-      status: 'ERROR',
-      timestamp: new Date().toISOString(),
-      error: error instanceof Error ? error.message : 'Unknown error',
-      responseTime: `${Date.now() - startTime}ms`
-    }, { 
-      status: 500,
-      headers: {
-        'Cache-Control': 'no-cache'
+
+    return NextResponse.json(
+      {
+        status: 'ERROR',
+        timestamp: new Date().toISOString(),
+        error: error instanceof Error ? error.message : 'Unknown error',
+        responseTime: `${Date.now() - startTime}ms`,
+      },
+      {
+        status: 500,
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
       }
-    });
+    );
   } finally {
     await prisma.$disconnect();
   }
-} 
+}
