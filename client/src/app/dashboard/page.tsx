@@ -153,12 +153,18 @@ export default function DashboardPage() {
           <div className='flex items-center'>
             <div className='text-green-400 mr-3'>
               <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 20 20'>
-                <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clipRule='evenodd' />
+                <path
+                  fillRule='evenodd'
+                  d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
+                  clipRule='evenodd'
+                />
               </svg>
             </div>
             <div>
               <p className='text-green-800 font-medium'>🎉 Dashboard Access Successful!</p>
-              <p className='text-green-700 text-sm'>The 307 redirect loop has been fixed. You can now access the dashboard.</p>
+              <p className='text-green-700 text-sm'>
+                The 307 redirect loop has been fixed. You can now access the dashboard.
+              </p>
             </div>
           </div>
         </div>
@@ -295,11 +301,22 @@ export default function DashboardPage() {
         <div className='mt-8 bg-blue-50 rounded-xl p-6 border border-blue-200'>
           <h3 className='text-lg font-semibold text-blue-900 mb-4'>🧪 Testing Results</h3>
           <div className='space-y-2 text-sm text-blue-800'>
-            <p>✅ <strong>307 Redirect Loop:</strong> FIXED - Dashboard now loads without redirecting back to login</p>
-            <p>✅ <strong>Login Flow:</strong> Working - API returns 200 OK with proper token</p>
-            <p>✅ <strong>Middleware:</strong> Active - Allows dashboard access</p>
-            <p>✅ <strong>localStorage:</strong> Compatible - Supports both old and new key formats</p>
-            <p>✅ <strong>Manual Redirect:</strong> Available - "Go to Dashboard Now" button works</p>
+            <p>
+              ✅ <strong>307 Redirect Loop:</strong> FIXED - Dashboard now loads without redirecting
+              back to login
+            </p>
+            <p>
+              ✅ <strong>Login Flow:</strong> Working - API returns 200 OK with proper token
+            </p>
+            <p>
+              ✅ <strong>Middleware:</strong> Active - Allows dashboard access
+            </p>
+            <p>
+              ✅ <strong>localStorage:</strong> Compatible - Supports both old and new key formats
+            </p>
+            <p>
+              ✅ <strong>Manual Redirect:</strong> Available - "Go to Dashboard Now" button works
+            </p>
           </div>
         </div>
       </main>
