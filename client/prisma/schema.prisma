@@ -11,36 +11,46 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime? @map("emailverified")
-  image         String?
-  password      String?
-  companyname   String?   @map("companyname")
-  role          String?   @default("SUPPLIER")
-  isemailverified Boolean? @default(false) @map("isemailverified")
-  gstin         String?
-  pan           String?
-  phone         String?
-  address       String?
-  city          String?
-  state         String?
-  pincode       String?
-  businesstype  String?   @map("businesstype")
-  annualturnover String?  @map("annualturnover")
-  createdAt     DateTime  @default(now()) @map("createdat")
-  updatedAt     DateTime  @updatedAt @map("updatedat")
+  id              String    @id @default(cuid())
+  name            String?
+  email           String    @unique
+  emailVerified   DateTime? @map("emailverified")
+  image           String?
+  password        String?
+  companyname     String?   @map("companyname")
+  role            String?   @default("SUPPLIER")
+  isemailverified Boolean?  @default(false) @map("isemailverified")
+  gstin           String?
+  pan             String?
+  phone           String?
+  address         String?
+  city            String?
+  state           String?
+  pincode         String?
+  businesstype    String?   @map("businesstype")
+  annualturnover  String?   @map("annualturnover")
+
+  // RazorpayX Integration Fields
+  razorpay_contact_id      String? @map("razorpay_contact_id")
+  razorpay_fund_account_id String? @map("razorpay_fund_account_id")
+  bank_account_number      String? @map("bank_account_number")
+  bank_ifsc_code           String? @map("bank_ifsc_code")
+  bank_account_holder      String? @map("bank_account_holder")
+  bank_account_type        String? @default("savings") @map("bank_account_type")
+
+  createdAt DateTime @default(now()) @map("createdat")
+  updatedAt DateTime @updatedAt @map("updatedat")
 
   // Relations
-  accounts Account[]
-  sessions Session[]
-  profile  Profile?
-  wallet   Wallet?
-  products Product[]
+  accounts  Account[]
+  sessions  Session[]
+  profile   Profile?
+  wallet    Wallet?
+  products  Product[]
   pageViews PageView[]
   events    Event[]
   esgScores ESGScore[]
+
   @@map("user")
 }
 
@@ -71,11 +81,11 @@ model Session {
   expires      DateTime
   createdAt    DateTime @default(now()) @map("createdat")
   lastActivity DateTime @default(now()) @map("lastactivity")
-  
-  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  pageViews    PageView[]
-  events       Event[]
-  
+
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pageViews PageView[]
+  events    Event[]
+
   @@map("session")
 }
 
@@ -89,8 +99,31 @@ model Wallet {
   updatedAt        DateTime @updatedAt @map("updatedat")
 
   // Relations
-  user User @relation(fields: [userid], references: [id])
+  user         User          @relation(fields: [userid], references: [id])
+  transactions Transaction[]
+
   @@map("wallet")
+}
+
+model Transaction {
+  id               String   @id @default(cuid())
+  walletid         String   @map("walletid")
+  transactionid    String   @unique @map("transactionid")
+  amount           Float
+  currency         String   @default("INR")
+  type             String // DEPOSIT, WITHDRAWAL, TRANSFER, REFUND
+  status           String   @default("PENDING") // PENDING, COMPLETED, FAILED, CANCELLED
+  description      String?
+  gateway          String? // RAZORPAY, RAZORPAYX, UPI, NEFT, RTGS
+  reference_id     String?  @map("reference_id")
+  gateway_response String?  @map("gateway_response")
+  createdat        DateTime @default(now()) @map("createdat")
+  updatedat        DateTime @updatedAt @map("updatedat")
+
+  // Relations
+  wallet Wallet @relation(fields: [walletid], references: [id])
+
+  @@map("transaction")
 }
 
 model Profile {
@@ -109,6 +142,7 @@ model Profile {
 
   // Relations
   user User @relation(fields: [userid], references: [id])
+
   @@map("profile")
 }
 
@@ -129,6 +163,7 @@ model Product {
 
   // Relations
   supplier User @relation(fields: [supplierId], references: [id])
+
   @@map("product")
 }
 
@@ -144,6 +179,7 @@ model RFQ {
   status      String?  @default("OPEN")
   createdAt   DateTime @default(now()) @map("createdat")
   updatedAt   DateTime @updatedAt @map("updatedat")
+
   @@map("rfq")
 }
 
@@ -157,6 +193,7 @@ model Quote {
   status       String?  @default("PENDING")
   createdAt    DateTime @default(now()) @map("createdat")
   updatedAt    DateTime @updatedAt @map("updatedat")
+
   @@map("quote")
 }
 
@@ -170,6 +207,7 @@ model Order {
   status      String?  @default("PENDING")
   createdAt   DateTime @default(now()) @map("createdat")
   updatedAt   DateTime @updatedAt @map("updatedat")
+
   @@map("order")
 }
 
@@ -181,9 +219,10 @@ model PageView {
   sessionId String?  @map("sessionid")
   timestamp DateTime @default(now())
   metadata  Json?
-  
+
   session Session? @relation(fields: [sessionId], references: [id])
   user    User?    @relation(fields: [userId], references: [id])
+
   @@map("pageview")
 }
 
@@ -195,28 +234,30 @@ model Event {
   sessionId String?  @map("sessionid")
   timestamp DateTime @default(now())
   metadata  Json?
-  
+
   session Session? @relation(fields: [sessionId], references: [id])
   user    User?    @relation(fields: [userId], references: [id])
+
   @@map("event")
 }
 
 model ESGScore {
-  id                  String   @id @default(cuid())
-  companyId           String?  @map("companyid")
-  userId              String?  @map("userid")
-  industry            String
-  environmentalScore  Float    @map("environmentalscore")
-  socialScore         Float    @map("socialscore")
-  governanceScore     Float    @map("governancescore")
-  overallScore        Float    @map("overallscore")
-  grade               String
-  recommendations     String[]
-  esgData             Json     @map("esgdata")
-  benchmark           Json
-  createdAt           DateTime @default(now()) @map("createdat")
-  updatedAt           DateTime @updatedAt @map("updatedat")
-  
-  user                User?    @relation(fields: [userId], references: [id])
+  id                 String   @id @default(cuid())
+  companyId          String?  @map("companyid")
+  userId             String?  @map("userid")
+  industry           String
+  environmentalScore Float    @map("environmentalscore")
+  socialScore        Float    @map("socialscore")
+  governanceScore    Float    @map("governancescore")
+  overallScore       Float    @map("overallscore")
+  grade              String
+  recommendations    String[]
+  esgData            Json     @map("esgdata")
+  benchmark          Json
+  createdAt          DateTime @default(now()) @map("createdat")
+  updatedAt          DateTime @updatedAt @map("updatedat")
+
+  user User? @relation(fields: [userId], references: [id])
+
   @@map("esgscore")
 }

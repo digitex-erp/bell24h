@@ -10,6 +10,18 @@ process.env.DATABASE_URL = correctDbUrl;
 
 const prisma = new PrismaClient();
 
+// Handle GET requests (prevent 405 errors)
+export async function GET(request: NextRequest) {
+  return NextResponse.json(
+    {
+      error: 'Method not allowed',
+      message: 'Please use POST method for login',
+      allowedMethods: ['POST'],
+    },
+    { status: 405 }
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
