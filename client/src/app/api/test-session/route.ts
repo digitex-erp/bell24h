@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
     const testSession = await prisma.session.create({
       data: {
         sessionToken: `test_session_${Date.now()}`,
-        userId: null,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
       },
     });
@@ -23,7 +22,6 @@ export async function GET(request: NextRequest) {
       },
       create: {
         sessionToken: `test_upsert_${Date.now()}`,
-        userId: null,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
         createdAt: new Date(),
         lastActivity: new Date(),
