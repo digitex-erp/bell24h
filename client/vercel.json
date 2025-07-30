@@ -9,7 +9,7 @@
       "SKIP_DB_MIGRATIONS": "true"
     }
   },
-  "buildCommand": "npm run build:vercel",
+  "buildCommand": "npm run build",
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
