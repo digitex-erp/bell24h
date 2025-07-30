@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 import { NextRequest, NextResponse } from 'next/server';
 
 interface StockData {
@@ -44,18 +47,18 @@ export async function GET(request: NextRequest) {
 
     // Mock stock data (in production, use Alpha Vantage API)
     const mockStockData: { [key: string]: StockData } = {
-      'NIFTY50': {
+      NIFTY50: {
         symbol: 'NIFTY50',
         price: 22450.75,
-        change: 125.50,
+        change: 125.5,
         changePercent: 0.56,
         volume: 125000000,
         marketCap: 1250000000000,
         peRatio: 22.5,
         dividendYield: 1.2,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
-      'SENSEX': {
+      SENSEX: {
         symbol: 'SENSEX',
         price: 73850.25,
         change: 425.75,
@@ -64,85 +67,85 @@ export async function GET(request: NextRequest) {
         marketCap: 1850000000000,
         peRatio: 23.1,
         dividendYield: 1.1,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
-      'TATAMOTORS': {
+      TATAMOTORS: {
         symbol: 'TATAMOTORS',
-        price: 985.50,
+        price: 985.5,
         change: 15.25,
         changePercent: 1.57,
         volume: 8500000,
         marketCap: 325000000000,
         peRatio: 18.5,
         dividendYield: 0.8,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
-      'RELIANCE': {
+      RELIANCE: {
         symbol: 'RELIANCE',
         price: 2850.75,
-        change: -25.50,
+        change: -25.5,
         changePercent: -0.88,
         volume: 6500000,
         marketCap: 1850000000000,
         peRatio: 25.2,
         dividendYield: 0.6,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
-      'TCS': {
+      TCS: {
         symbol: 'TCS',
         price: 3850.25,
         change: 45.75,
-        changePercent: 1.20,
+        changePercent: 1.2,
         volume: 3200000,
         marketCap: 1420000000000,
         peRatio: 28.5,
         dividendYield: 1.5,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     };
 
     const marketTrends: MarketTrends = {
       nifty50: mockStockData['NIFTY50'],
       sensex: mockStockData['SENSEX'],
       sectorPerformance: {
-        'Automotive': {
+        Automotive: {
           change: 1.2,
           topGainers: ['TATAMOTORS', 'MARUTI', 'HEROMOTOCO'],
-          topLosers: ['ASHOKLEY', 'TVSMOTOR']
+          topLosers: ['ASHOKLEY', 'TVSMOTOR'],
         },
-        'Technology': {
+        Technology: {
           change: 0.8,
           topGainers: ['TCS', 'INFY', 'WIPRO'],
-          topLosers: ['HCLTECH', 'TECHM']
+          topLosers: ['HCLTECH', 'TECHM'],
         },
-        'Banking': {
+        Banking: {
           change: 0.5,
           topGainers: ['HDFCBANK', 'ICICIBANK', 'SBIN'],
-          topLosers: ['AXISBANK', 'KOTAKBANK']
+          topLosers: ['AXISBANK', 'KOTAKBANK'],
         },
-        'Energy': {
+        Energy: {
           change: -0.3,
           topGainers: ['ONGC', 'IOC'],
-          topLosers: ['RELIANCE', 'BPCL']
+          topLosers: ['RELIANCE', 'BPCL'],
         },
-        'Pharmaceuticals': {
+        Pharmaceuticals: {
           change: 0.9,
           topGainers: ['SUNPHARMA', 'DRREDDY', 'CIPLA'],
-          topLosers: ['DIVISLAB', 'APOLLOHOSP']
-        }
+          topLosers: ['DIVISLAB', 'APOLLOHOSP'],
+        },
       },
       commodityPrices: {
         gold: 62500, // per 10 grams
         silver: 75000, // per kg
         crudeOil: 6500, // per barrel
-        copper: 850 // per kg
+        copper: 850, // per kg
       },
       currencyRates: {
         usd: 83.25,
-        eur: 90.50,
+        eur: 90.5,
         gbp: 105.75,
-        jpy: 0.55
-      }
+        jpy: 0.55,
+      },
     };
 
     // Get specific stock data if requested
@@ -157,10 +160,9 @@ export async function GET(request: NextRequest) {
         stockData,
         marketTrends,
         insights: marketInsights,
-        lastUpdated: new Date().toISOString()
-      }
+        lastUpdated: new Date().toISOString(),
+      },
     });
-
   } catch (error) {
     console.error('Stock data fetch error:', error);
     return NextResponse.json(
@@ -173,23 +175,25 @@ export async function GET(request: NextRequest) {
 function generateMarketInsights(trends: MarketTrends) {
   const insights = {
     marketSentiment: trends.nifty50.changePercent > 0 ? 'BULLISH' : 'BEARISH',
-    topPerformingSector: Object.entries(trends.sectorPerformance)
-      .sort(([,a], [,b]) => b.change - a.change)[0][0],
-    worstPerformingSector: Object.entries(trends.sectorPerformance)
-      .sort(([,a], [,b]) => a.change - b.change)[0][0],
+    topPerformingSector: Object.entries(trends.sectorPerformance).sort(
+      ([, a], [, b]) => b.change - a.change
+    )[0][0],
+    worstPerformingSector: Object.entries(trends.sectorPerformance).sort(
+      ([, a], [, b]) => a.change - b.change
+    )[0][0],
     commodityTrend: trends.commodityPrices.gold > 62000 ? 'GOLD_BULLISH' : 'GOLD_BEARISH',
     currencyTrend: trends.currencyRates.usd > 83 ? 'USD_STRONG' : 'USD_WEAK',
     recommendations: [
-      "Automotive sector showing strong momentum - good for auto component suppliers",
-      "Technology stocks gaining - positive for IT service providers",
-      "Gold prices stable - good for jewelry manufacturers",
-      "USD strengthening - favorable for export-oriented businesses"
+      'Automotive sector showing strong momentum - good for auto component suppliers',
+      'Technology stocks gaining - positive for IT service providers',
+      'Gold prices stable - good for jewelry manufacturers',
+      'USD strengthening - favorable for export-oriented businesses',
     ],
     riskFactors: [
-      "Global market volatility may impact Indian markets",
-      "Monsoon uncertainty could affect agricultural commodity prices",
-      "Geopolitical tensions may impact crude oil prices"
-    ]
+      'Global market volatility may impact Indian markets',
+      'Monsoon uncertainty could affect agricultural commodity prices',
+      'Geopolitical tensions may impact crude oil prices',
+    ],
   };
 
   return insights;
@@ -199,20 +203,20 @@ function generateMarketInsights(trends: MarketTrends) {
 async function fetchAlphaVantageData(symbol: string, interval: string) {
   const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
   const baseUrl = 'https://www.alphavantage.co/query';
-  
+
   try {
     const response = await fetch(
       `${baseUrl}?function=TIME_SERIES_${interval.toUpperCase()}&symbol=${symbol}&apikey=${apiKey}`
     );
-    
+
     if (!response.ok) {
       throw new Error(`Alpha Vantage API error: ${response.status}`);
     }
-    
+
     const data = await response.json();
     return data;
   } catch (error) {
     console.error('Alpha Vantage API error:', error);
     throw error;
   }
-} 
+}
