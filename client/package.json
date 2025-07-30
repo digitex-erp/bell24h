@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/setup-production-db.js && prisma generate && next build",
+    "build": "prisma generate && next build",
+    "build:vercel": "next build",
     "start": "next start",
     "lint": "echo 'Linting skipped'",
     "deploy": "npm run build && npm run start",
+    "postbuild": "echo 'Build completed successfully'",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
