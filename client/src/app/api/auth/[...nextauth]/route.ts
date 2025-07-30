@@ -36,6 +36,10 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Always redirect to dashboard after successful authentication
+      return `${baseUrl}/dashboard`;
+    },
     async signIn({ user, account, profile }) {
       if (account?.provider === 'google') {
         // Auto-create user and wallet for Google OAuth

@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -5,10 +8,35 @@ const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   try {
+    // Prevent build-time execution
+    if (typeof window !== 'undefined' || !process.env.DATABASE_URL) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Service not available during build',
+          timestamp: new Date().toISOString(),
+        },
+        { status: 503 }
+      );
+    }
+
+    // First, create a test user for the session
+    const testUser = await prisma.user.upsert({
+      where: { email: 'test-session@bell24h.com' },
+      update: {},
+      create: {
+        email: 'test-session@bell24h.com',
+        name: 'Test Session User',
+        hashedPassword: 'test_password',
+        role: 'BUYER',
+      },
+    });
+
     // Test session creation with all required fields
     const testSession = await prisma.session.create({
       data: {
         sessionToken: `test_session_${Date.now()}`,
+        userId: testUser.id,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
       },
     });
@@ -17,14 +45,12 @@ export async function GET(request: NextRequest) {
     const testUpsert = await prisma.session.upsert({
       where: { id: testSession.id },
       update: {
-        lastActivity: new Date(),
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
       },
       create: {
         sessionToken: `test_upsert_${Date.now()}`,
+        userId: testUser.id,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        createdAt: new Date(),
-        lastActivity: new Date(),
       },
     });
 
@@ -34,7 +60,7 @@ export async function GET(request: NextRequest) {
     } catch (error) {
       console.log('Test session already cleaned up');
     }
-    
+
     try {
       await prisma.session.delete({ where: { id: testUpsert.id } });
     } catch (error) {
@@ -50,12 +76,15 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Session test error:', error);
-    return NextResponse.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString(),
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      },
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }
-} 
+}
