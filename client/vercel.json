@@ -1,13 +1,20 @@
 {
-  "buildCommand": "npx prisma generate && npm run build",
-  "installCommand": "npm install",
-  "framework": "nextjs",
   "functions": {
-    "app/api/**/*.ts": {
+    "app/api/*/route.js": {
       "maxDuration": 30
     }
   },
+  "build": {
+    "env": {
+      "SKIP_DB_MIGRATIONS": "true"
+    }
+  },
+  "buildCommand": "npm run build:vercel",
+  "installCommand": "npm install",
+  "framework": "nextjs",
   "env": {
-    "DATABASE_URL": "postgresql://postgres:lTbKChgEtrkiElIkFNhXuXzxbyqECLPC@shortline.proxy.rlwy.net:45776/railway?sslmode=require"
+    "DATABASE_URL": "postgresql://postgres:lTbKChgEtrkiElIkFNhXuXzxbyqECLPC@shortline.proxy.rlwy.net:45776/railway?sslmode=require",
+    "SKIP_DB_PUSH": "true",
+    "NODE_ENV": "production"
   }
 } 

@@ -7,8 +7,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Remove ALL experimental features
-  experimental: {},
+  // Optimize for serverless deployment
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client']
+  },
   // Disable image optimization
   images: {
     unoptimized: true,
@@ -19,6 +21,10 @@ const nextConfig = {
   reactStrictMode: false,
   // Standalone output for deployment
   output: 'standalone',
+  // Environment variables for build optimization
+  env: {
+    SKIP_DB_OPERATIONS: process.env.SKIP_DB_OPERATIONS || 'false'
+  },
   // Disable webpack bundle analyzer
   webpack: config => {
     config.resolve.fallback = {
