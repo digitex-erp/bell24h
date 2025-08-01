@@ -8,7 +8,7 @@ import { mockSuppliers } from '@/data/mock-suppliers';
 import { SmartMatchResults } from '@/components/ui/SmartMatchResults';
 
 export default function SmartMatchingPage() {
-  const { data: session, status } = () => ({ data: { user: { id: "demo", email: "demo@bell24h.com", name: "Demo User" } }, status: "authenticated" });
+  const { data: session, status } = () => ({ data: { user: { id: "user", email: "user@company.com", name: "Business User" } }, status: "authenticated" });
   const router = useRouter();
   const [matches, setMatches] = useState<MatchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);

@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
 import { redirect } from 'next/navigation';
+import { useState } from 'react';
 
 interface FileUpload {
   name: string;
@@ -26,7 +26,7 @@ interface ProductForm {
 }
 
 export default function ProductManagement() {
-  const { data: session, status } = () => ({ data: { user: { id: "demo", email: "demo@bell24h.com", name: "Demo User" } }, status: "authenticated" });
+  const { data: session, status } = () => ({ data: { user: { id: "user", email: "user@company.com", name: "Business User" } }, status: "authenticated" });
   const [activeTab, setActiveTab] = useState('add');
   const [productForm, setProductForm] = useState<ProductForm>({
     name: '',

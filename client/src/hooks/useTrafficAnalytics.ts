@@ -44,7 +44,7 @@ export const useTrafficAnalytics = (timeframe: string = '24h'): UseTrafficAnalyt
   const [error, setError] = useState<string | null>(null);
 
   const pathname = usePathname();
-  const { data: session } = () => ({ data: { user: { id: "demo", email: "demo@bell24h.com", name: "Demo User" } }, status: "authenticated" });
+  const { data: session } = () => ({ data: { user: { id: "user", email: "user@company.com", name: "Business User" } }, status: "authenticated" });
   const pageStartTime = useRef<number>(Date.now());
   const sessionId = useRef<string>(generateSessionId());
 

@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 interface FinanceOption {
   id: string;
@@ -26,7 +26,13 @@ interface Transaction {
 }
 
 export default function FinancePage() {
-  const { data: session, status } = () => ({ data: { user: { id: "demo", email: "demo@bell24h.com", name: "Demo User" } }, status: "authenticated" });
+  const {
+    data: session,
+    status,
+  } = () => ({
+    data: { user: { id: 'user', email: 'user@company.com', name: 'Business User' } },
+    status: 'authenticated',
+  });
   const router = useRouter();
   const [selectedService, setSelectedService] = useState<string>('overview');
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -206,10 +212,10 @@ export default function FinancePage() {
                   {tab === 'overview'
                     ? '🏠 Overview'
                     : tab === 'services'
-                    ? '💳 Services'
-                    : tab === 'transactions'
-                    ? '📊 Transactions'
-                    : '📈 Analytics'}
+                      ? '💳 Services'
+                      : tab === 'transactions'
+                        ? '📊 Transactions'
+                        : '📈 Analytics'}
                 </button>
               ))}
             </nav>
@@ -399,8 +405,8 @@ export default function FinancePage() {
                             transaction.type === 'kredx'
                               ? 'bg-green-100'
                               : transaction.type === 'razorpayx'
-                              ? 'bg-blue-100'
-                              : 'bg-purple-100'
+                                ? 'bg-blue-100'
+                                : 'bg-purple-100'
                           }`}
                         >
                           {transaction.type === 'kredx' ? (
@@ -416,8 +422,8 @@ export default function FinancePage() {
                             {transaction.type === 'kredx'
                               ? 'KredX Invoice Discounting'
                               : transaction.type === 'razorpayx'
-                              ? 'RazorpayX Payment'
-                              : 'Smart Escrow'}
+                                ? 'RazorpayX Payment'
+                                : 'Smart Escrow'}
                           </p>
                           <p className='text-sm text-gray-500'>
                             {transaction.referenceId} • {transaction.date}
@@ -433,10 +439,10 @@ export default function FinancePage() {
                             transaction.status === 'completed'
                               ? 'bg-green-100 text-green-800'
                               : transaction.status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : transaction.status === 'approved'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-red-100 text-red-800'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : transaction.status === 'approved'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : 'bg-red-100 text-red-800'
                           }`}
                         >
                           {transaction.status}

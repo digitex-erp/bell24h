@@ -1,509 +1,542 @@
-'use client';
+'use client'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-import RoleToggle, {
-  BuyerDashboard,
-  MSMEDashboard,
-  ManufacturerDashboard,
-  SupplierDashboard,
-} from '@/components/RoleToggle';
-import {
-  BarChart3,
-  Brain,
-  Building2,
-  CheckCircle,
-  Factory,
-  FileText,
-  LogOut,
-  MessageSquare,
-  Mic,
-  Package,
-  Plus,
-  Search,
-  Shield,
-  ShoppingCart,
-  Star,
-  Target,
-  TrendingUp,
-  Truck,
-  Upload,
-  Users,
-  Wallet,
-} from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+interface UserProfile {
+  id: string
+  email: string
+  company_name?: string
+  company_type?: string
+  is_first_login?: boolean
+  profile_completed?: boolean
+}
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentRole, setCurrentRole] = useState<'buyer' | 'supplier' | 'msme' | 'manufacturer'>(
-    'buyer'
-  );
-  const [availableRoles, setAvailableRoles] = useState<
-    Array<'buyer' | 'supplier' | 'msme' | 'manufacturer'>
-  >(['buyer']);
-  const router = useRouter();
-
-  // Live stats for different roles
-  const [liveStats, setLiveStats] = useState({
-    buyer: {
-      activeRFQs: 23,
-      pendingQuotes: 8,
-      sourcingProjects: 12,
-      savedSuppliers: 156,
-      monthlySpend: 245000,
-      suppliersConnected: 48,
-    },
-    supplier: {
-      activeListings: 15,
-      quoteRequests: 34,
-      salesOpportunities: 7,
-      businessConnections: 89,
-      monthlyRevenue: 520000,
-      productsListed: 24,
-    },
-    msme: {
-      msmeBenefits: 45000,
-      governmentSchemes: 3,
-      certificationStatus: 'Valid',
-      bulkOrders: 8,
-      exportAssistance: 2,
-    },
-    manufacturer: {
-      productionCapacity: 85,
-      customOrders: 12,
-      qualityScore: 98.5,
-      supplyChainPartners: 23,
-      technicalSpecs: 45,
-    },
-  });
+  const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const supabase = createClientComponentClient()
 
   useEffect(() => {
-    // Check authentication with retry logic
-    const checkAuth = () => {
-      if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('auth-token');
-        const userData = localStorage.getItem('bell24h-user') || localStorage.getItem('user-data');
-
-        if (userData) {
-          try {
-            const parsedUser = JSON.parse(userData);
-            setUser(parsedUser);
-
-            // Set available roles based on user data
-            const userRoles = parsedUser.roles || ['buyer'];
-            setAvailableRoles(userRoles);
-            setCurrentRole(userRoles[0]);
-
-            setIsLoading(false);
-            console.log('User authenticated:', parsedUser.email);
-          } catch (error) {
-            console.error('Error parsing user data:', error);
-            localStorage.removeItem('auth-token');
-            localStorage.removeItem('bell24h-user');
-            localStorage.removeItem('user-data');
-          }
-        } else {
-          console.log('No user data found, showing demo dashboard');
-          // Show demo dashboard with all roles available
-          setUser({
-            email: 'demo@bell24h.com',
-            name: 'Demo User',
-            role: 'BUYER',
-            roles: ['buyer', 'supplier', 'msme', 'manufacturer'],
-            trafficTier: 'GOLD',
-          });
-          setAvailableRoles(['buyer', 'supplier', 'msme', 'manufacturer']);
-          setCurrentRole('buyer');
-          setIsLoading(false);
+    const initializeDashboard = async () => {
+      try {
+        // Get current session
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (!session) {
+          router.push('/login')
+          return
         }
+
+        setUser(session.user)
+
+        // Check if user profile exists and is complete
+        const { data: profileData, error } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .single()
+
+        if (error || !profileData) {
+          // New user - show onboarding
+          setShowOnboarding(true)
+        } else {
+          setProfile(profileData)
+          // Check if profile needs completion
+          if (!profileData.profile_completed) {
+            setShowOnboarding(true)
+          }
+        }
+      } catch (error) {
+        console.error('Dashboard initialization error:', error)
+      } finally {
+        setLoading(false)
       }
-    };
-
-    // Initial check
-    checkAuth();
-
-    // Retry after a short delay in case localStorage was just set
-    const retryTimer = setTimeout(() => {
-      if (isLoading && typeof window !== 'undefined') {
-        console.log('Retrying auth check...');
-        checkAuth();
-      }
-    }, 500);
-
-    return () => clearTimeout(retryTimer);
-  }, [router, isLoading]);
-
-  const handleLogout = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth-token');
-      localStorage.removeItem('bell24h-user');
-      localStorage.removeItem('user-data');
-      router.push('/auth/login');
     }
-  };
+    initializeDashboard()
+  }, [supabase, router])
 
-  const handleRoleChange = (newRole: 'buyer' | 'supplier' | 'msme' | 'manufacturer') => {
-    setCurrentRole(newRole);
-    // In a real app, you might want to update the user's current role in the database
-    console.log(`Switched to ${newRole} role`);
-  };
+  const completeOnboarding = async (profileData: any) => {
+    try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .upsert({
+          user_id: user.id,
+          email: user.email,
+          ...profileData,
+          profile_completed: true,
+          created_at: new Date().toISOString()
+        })
 
-  if (isLoading) {
-    return (
-      <div className='min-h-screen bg-gray-100 flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto'></div>
-          <p className='mt-4 text-gray-600'>Loading Bell24h 2.0 Dashboard...</p>
-        </div>
-      </div>
-    );
+      if (error) throw error
+
+      setShowOnboarding(false)
+      setProfile({ ...profileData, profile_completed: true })
+      
+      // Redirect to main dashboard after successful completion
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Profile completion error:', error)
+    }
   }
 
-  const getCurrentStats = () => {
-    return liveStats[currentRole];
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your Bell24h dashboard...</p>
+        </div>
+      </div>
+    )
+  }
 
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case 'buyer':
-        return <ShoppingCart className='w-5 h-5' />;
-      case 'supplier':
-        return <Building2 className='w-5 h-5' />;
-      case 'msme':
-        return <Users className='w-5 h-5' />;
-      case 'manufacturer':
-        return <Factory className='w-5 h-5' />;
-      default:
-        return <Users className='w-5 h-5' />;
-    }
-  };
-
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'buyer':
-        return 'bg-blue-500';
-      case 'supplier':
-        return 'bg-green-500';
-      case 'msme':
-        return 'bg-purple-500';
-      case 'manufacturer':
-        return 'bg-orange-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
-
-  const quickActions = {
-    buyer: [
-      {
-        title: 'Create RFQ',
-        icon: Plus,
-        action: () => router.push('/rfq/create'),
-        color: 'bg-blue-500',
-      },
-      {
-        title: 'Find Suppliers',
-        icon: Search,
-        action: () => router.push('/suppliers'),
-        color: 'bg-green-500',
-      },
-      {
-        title: 'View Analytics',
-        icon: BarChart3,
-        action: () => router.push('/analytics'),
-        color: 'bg-purple-500',
-      },
-      {
-        title: 'Manage Wallet',
-        icon: Wallet,
-        action: () => router.push('/dashboard/wallet'),
-        color: 'bg-orange-500',
-      },
-    ],
-    supplier: [
-      {
-        title: 'Upload Product',
-        icon: Upload,
-        action: () => router.push('/products/upload'),
-        color: 'bg-green-500',
-      },
-      {
-        title: 'Respond to RFQs',
-        icon: FileText,
-        action: () => router.push('/rfq/responses'),
-        color: 'bg-blue-500',
-      },
-      {
-        title: 'View Analytics',
-        icon: BarChart3,
-        action: () => router.push('/analytics'),
-        color: 'bg-purple-500',
-      },
-      {
-        title: 'Manage Showcase',
-        icon: Star,
-        action: () => router.push('/showcase'),
-        color: 'bg-orange-500',
-      },
-    ],
-    msme: [
-      {
-        title: 'MSME Benefits',
-        icon: Shield,
-        action: () => router.push('/msme/benefits'),
-        color: 'bg-purple-500',
-      },
-      {
-        title: 'Government Schemes',
-        icon: Target,
-        action: () => router.push('/msme/schemes'),
-        color: 'bg-blue-500',
-      },
-      {
-        title: 'Bulk Orders',
-        icon: Package,
-        action: () => router.push('/msme/bulk-orders'),
-        color: 'bg-green-500',
-      },
-      {
-        title: 'Export Assistance',
-        icon: Truck,
-        action: () => router.push('/msme/export'),
-        color: 'bg-orange-500',
-      },
-    ],
-    manufacturer: [
-      {
-        title: 'Production Capacity',
-        icon: Factory,
-        action: () => router.push('/manufacturer/capacity'),
-        color: 'bg-orange-500',
-      },
-      {
-        title: 'Custom Orders',
-        icon: Package,
-        action: () => router.push('/manufacturer/custom'),
-        color: 'bg-blue-500',
-      },
-      {
-        title: 'Quality Control',
-        icon: Shield,
-        action: () => router.push('/manufacturer/quality'),
-        color: 'bg-green-500',
-      },
-      {
-        title: 'Supply Chain',
-        icon: Truck,
-        action: () => router.push('/manufacturer/supply-chain'),
-        color: 'bg-purple-500',
-      },
-    ],
-  };
+  if (showOnboarding) {
+    return <OnboardingFlow onComplete={completeOnboarding} userEmail={user?.email} />
+  }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
-      {/* HEADER */}
-      <header className='bg-white shadow-lg border-b border-gray-200'>
-        <div className='px-6 py-4'>
-          <div className='flex justify-between items-center'>
-            <div className='flex items-center space-x-4'>
-              <Link
-                href='/'
-                className='text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'
+    <div className="min-h-screen bg-gray-50">
+      {/* Main Dashboard Content */}
+      <DashboardContent user={user} profile={profile} />
+    </div>
+  )
+}
+
+// ===============================================
+// ONBOARDING FLOW FOR NEW USERS
+// ===============================================
+function OnboardingFlow({ onComplete, userEmail }: { onComplete: (data: any) => void, userEmail: string }) {
+  const [step, setStep] = useState(1)
+  const [formData, setFormData] = useState({
+    company_name: '',
+    company_type: '',
+    business_category: '',
+    role: '',
+    phone: '',
+    city: '',
+    state: ''
+  })
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleNext = () => {
+    setStep(step + 1)
+  }
+
+  const handleSubmit = () => {
+    onComplete(formData)
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4">
+      <div className="max-w-md w-full">
+        <div className="bg-white rounded-lg shadow-xl p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-gray-900">Welcome to Bell24h! 🚀</h1>
+            <p className="text-gray-600 mt-2">India's First AI-Powered B2B Marketplace</p>
+            <div className="mt-4 flex justify-center space-x-2">
+              {[1, 2, 3].map((num) => (
+                <div
+                  key={num}
+                  className={`w-3 h-3 rounded-full ${
+                    num <= step ? 'bg-blue-500' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {step === 1 && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-gray-900">Company Information</h2>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Company Name *
+                </label>
+                <input
+                  type="text"
+                  value={formData.company_name}
+                  onChange={(e) => handleInputChange('company_name', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter your company name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Company Type *
+                </label>
+                <select
+                  value={formData.company_type}
+                  onChange={(e) => handleInputChange('company_type', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select company type</option>
+                  <option value="manufacturer">Manufacturer</option>
+                  <option value="supplier">Supplier</option>
+                  <option value="trader">Trader</option>
+                  <option value="service_provider">Service Provider</option>
+                  <option value="startup">Startup</option>
+                  <option value="msme">MSME</option>
+                </select>
+              </div>
+              <button
+                onClick={handleNext}
+                disabled={!formData.company_name || !formData.company_type}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                BELL24H 2.0
-              </Link>
-              <div className='border-l border-gray-300 pl-4'>
-                <h1 className='text-2xl font-bold text-gray-900'>Multi-Role Dashboard</h1>
-                <p className='text-sm text-gray-600'>Welcome back, {user?.name || 'Demo User'}</p>
+                Continue
+              </button>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-gray-900">Business Details</h2>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Business Category *
+                </label>
+                <select
+                  value={formData.business_category}
+                  onChange={(e) => handleInputChange('business_category', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select category</option>
+                  <option value="automotive">Automotive</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="textiles">Textiles</option>
+                  <option value="chemicals">Chemicals</option>
+                  <option value="steel_metals">Steel & Metals</option>
+                  <option value="machinery">Machinery</option>
+                  <option value="food_beverage">Food & Beverage</option>
+                  <option value="construction">Construction</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Your Role *
+                </label>
+                <select
+                  value={formData.role}
+                  onChange={(e) => handleInputChange('role', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select your role</option>
+                  <option value="owner">Owner</option>
+                  <option value="director">Director</option>
+                  <option value="manager">Manager</option>
+                  <option value="procurement">Procurement Head</option>
+                  <option value="sales">Sales Head</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  onClick={() => setStep(1)}
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={handleNext}
+                  disabled={!formData.business_category || !formData.role}
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Continue
+                </button>
               </div>
             </div>
+          )}
 
-            <div className='flex items-center space-x-4'>
-              {/* Role Toggle */}
-              <RoleToggle
-                currentRole={currentRole}
-                availableRoles={availableRoles}
-                onRoleChange={handleRoleChange}
-                className='mr-4'
-              />
+          {step === 3 && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-gray-900">Contact Information</h2>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="+91 9876543210"
+                />
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    City *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.city}
+                    onChange={(e) => handleInputChange('city', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Mumbai"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    State *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.state}
+                    onChange={(e) => handleInputChange('state', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Maharashtra"
+                  />
+                </div>
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  onClick={() => setStep(2)}
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={!formData.phone || !formData.city || !formData.state}
+                  className="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Complete Setup 🚀
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
 
-              <button className='p-2 rounded-lg hover:bg-gray-100 transition-colors'>
-                <span className='text-lg'>🔔</span>
-              </button>
-              <button className='p-2 rounded-lg hover:bg-gray-100 transition-colors'>
-                <span className='text-lg'>⚙️</span>
-              </button>
+// ===============================================
+// MAIN DASHBOARD CONTENT
+// ===============================================
+function DashboardContent({ user, profile }: { user: any, profile: any }) {
+  const router = useRouter()
+  const supabase = createClientComponentClient()
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
+  return (
+    <>
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900">Bell24h</h1>
+              <span className="ml-2 text-xs bg-gradient-to-r from-blue-500 to-purple-500 text-white px-2 py-1 rounded-full">
+                AI-Powered
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="text-right">
+                <p className="text-sm font-medium text-gray-900">{profile?.company_name || 'Welcome'}</p>
+                <p className="text-xs text-gray-600">{user?.email}</p>
+              </div>
               <button
-                onClick={handleLogout}
-                className='flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors'
+                onClick={handleSignOut}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
               >
-                <LogOut className='w-4 h-4' />
-                <span>Logout</span>
+                Sign Out
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* MAIN CONTENT */}
-      <main className='p-6'>
-        {/* SUCCESS MESSAGE */}
-        <div className='mb-6 bg-green-50 border border-green-200 rounded-lg p-4'>
-          <div className='flex items-center'>
-            <div className='text-green-400 mr-3'>
-              <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 20 20'>
-                <path
-                  fillRule='evenodd'
-                  d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
-                  clipRule='evenodd'
-                />
-              </svg>
+      {/* Welcome Banner for New Users */}
+      {profile?.is_first_login && (
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-xl font-bold mb-2">🎉 Welcome to Bell24h, {profile?.company_name}!</h2>
+            <p className="text-blue-100">
+              You're now part of India's most advanced AI-powered B2B marketplace. Start exploring our AI features and connect with thousands of suppliers and buyers!
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Main Dashboard */}
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                    <span className="text-white text-sm">📋</span>
+                  </div>
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">Active RFQs</dt>
+                    <dd className="text-lg font-medium text-gray-900">0</dd>
+                  </dl>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className='text-green-800 font-medium'>🎉 Bell24h 2.0 Dashboard Active!</p>
-              <p className='text-green-700 text-sm'>
-                Multi-role system with traffic-based pricing and AI features enabled.
-              </p>
+          </div>
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
+                    <span className="text-white text-sm">🏭</span>
+                  </div>
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">Connected Suppliers</dt>
+                    <dd className="text-lg font-medium text-gray-900">0</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
+                    <span className="text-white text-sm">💬</span>
+                  </div>
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">AI Conversations</dt>
+                    <dd className="text-lg font-medium text-gray-900">0</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
+                    <span className="text-white text-sm">💰</span>
+                  </div>
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">Deals Closed</dt>
+                    <dd className="text-lg font-medium text-gray-900">0</dd>
+                  </dl>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Current Role Display */}
-        <div className='mb-8'>
-          <div
-            className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${getRoleColor(currentRole)} text-white`}
-          >
-            {getRoleIcon(currentRole)}
-            <span className='ml-2 capitalize'>Currently in {currentRole} mode</span>
+        {/* AI Features Showcase */}
+        <div className="bg-white shadow rounded-lg mb-8">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">🤖 Explore Bell24h's AI Features</h3>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 hover:border-blue-400 hover:bg-blue-50 cursor-pointer transition-all">
+                <div className="text-center">
+                  <div className="text-3xl mb-3">🎤</div>
+                  <h4 className="font-medium text-gray-900 mb-2">Voice-to-RFQ</h4>
+                  <p className="text-sm text-gray-600 mb-3">Speak your requirements, get instant structured RFQs</p>
+                  <button className="text-blue-600 text-sm font-medium hover:text-blue-800">
+                    Try Now →
+                  </button>
+                </div>
+              </div>
+              <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 hover:border-green-400 hover:bg-green-50 cursor-pointer transition-all">
+                <div className="text-center">
+                  <div className="text-3xl mb-3">🎯</div>
+                  <h4 className="font-medium text-gray-900 mb-2">Smart Matching</h4>
+                  <p className="text-sm text-gray-600 mb-3">AI finds perfect suppliers for your requirements</p>
+                  <button className="text-green-600 text-sm font-medium hover:text-green-800">
+                    Explore →
+                  </button>
+                </div>
+              </div>
+              <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 hover:border-purple-400 hover:bg-purple-50 cursor-pointer transition-all">
+                <div className="text-center">
+                  <div className="text-3xl mb-3">📊</div>
+                  <h4 className="font-medium text-gray-900 mb-2">Market Intel</h4>
+                  <p className="text-sm text-gray-600 mb-3">AI-powered demand forecasting and price trends</p>
+                  <button className="text-purple-600 text-sm font-medium hover:text-purple-800">
+                    View Insights →
+                  </button>
+                </div>
+              </div>
+              <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 hover:border-orange-400 hover:bg-orange-50 cursor-pointer transition-all">
+                <div className="text-center">
+                  <div className="text-3xl mb-3">🤖</div>
+                  <h4 className="font-medium text-gray-900 mb-2">AI Assistant</h4>
+                  <p className="text-sm text-gray-600 mb-3">24/7 business assistant for all your queries</p>
+                  <button className="text-orange-600 text-sm font-medium hover:text-orange-800">
+                    Chat Now →
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* Role-Specific Dashboard */}
-        <div className='mb-8'>
-          {currentRole === 'buyer' && <BuyerDashboard />}
-          {currentRole === 'supplier' && <SupplierDashboard />}
-          {currentRole === 'msme' && <MSMEDashboard />}
-          {currentRole === 'manufacturer' && <ManufacturerDashboard />}
         </div>
 
         {/* Quick Actions */}
-        <div className='mb-8'>
-          <h2 className='text-xl font-semibold text-gray-900 mb-4'>Quick Actions</h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
-            {quickActions[currentRole].map((action, index) => (
-              <button
-                key={index}
-                onClick={action.action}
-                className={`${action.color} text-white p-4 rounded-xl hover:opacity-90 transition-all duration-200 flex items-center space-x-3`}
-              >
-                <action.icon className='w-6 h-6' />
-                <span className='font-medium'>{action.title}</span>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="bg-white shadow rounded-lg p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+            <div className="space-y-3">
+              <button className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-medium transition-colors">
+                Create New RFQ
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* AI Features Section */}
-        <div className='mb-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-200'>
-          <h2 className='text-xl font-semibold text-gray-900 mb-4 flex items-center'>
-            <Brain className='w-6 h-6 mr-2 text-purple-600' />
-            AI-Powered Features
-          </h2>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-            <Link
-              href='/dashboard/voice-rfq'
-              className='bg-white p-4 rounded-lg border border-purple-200 hover:border-purple-300 transition-colors'
-            >
-              <div className='flex items-center space-x-3'>
-                <Mic className='w-6 h-6 text-purple-600' />
-                <div>
-                  <h3 className='font-medium text-gray-900'>Voice RFQ</h3>
-                  <p className='text-sm text-gray-600'>Create RFQs with voice commands</p>
-                </div>
-              </div>
-            </Link>
-            <Link
-              href='/dashboard/ai-matching'
-              className='bg-white p-4 rounded-lg border border-purple-200 hover:border-purple-300 transition-colors'
-            >
-              <div className='flex items-center space-x-3'>
-                <Brain className='w-6 h-6 text-purple-600' />
-                <div>
-                  <h3 className='font-medium text-gray-900'>AI Matching</h3>
-                  <p className='text-sm text-gray-600'>Smart supplier recommendations</p>
-                </div>
-              </div>
-            </Link>
-            <Link
-              href='/dashboard/analytics'
-              className='bg-white p-4 rounded-lg border border-purple-200 hover:border-purple-300 transition-colors'
-            >
-              <div className='flex items-center space-x-3'>
-                <BarChart3 className='w-6 h-6 text-purple-600' />
-                <div>
-                  <h3 className='font-medium text-gray-900'>Analytics</h3>
-                  <p className='text-sm text-gray-600'>Traffic-based insights</p>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Traffic-Based Pricing Preview */}
-        <div className='mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200'>
-          <h2 className='text-xl font-semibold text-gray-900 mb-4 flex items-center'>
-            <TrendingUp className='w-6 h-6 mr-2 text-blue-600' />
-            Traffic-Based Pricing
-          </h2>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-            <div className='bg-white p-4 rounded-lg'>
-              <div className='text-sm text-gray-600'>Current Tier</div>
-              <div className='text-2xl font-bold text-blue-600'>{user?.trafficTier || 'GOLD'}</div>
-              <div className='text-sm text-green-600'>+50% traffic boost</div>
-            </div>
-            <div className='bg-white p-4 rounded-lg'>
-              <div className='text-sm text-gray-600'>Impressions Today</div>
-              <div className='text-2xl font-bold text-purple-600'>1,247</div>
-              <div className='text-sm text-green-600'>+12% from yesterday</div>
-            </div>
-            <div className='bg-white p-4 rounded-lg'>
-              <div className='text-sm text-gray-600'>Revenue Impact</div>
-              <div className='text-2xl font-bold text-green-600'>₹45,230</div>
-              <div className='text-sm text-green-600'>+8% from traffic pricing</div>
+              <button className="w-full bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 font-medium transition-colors">
+                Browse Suppliers
+              </button>
+              <button className="w-full bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 font-medium transition-colors">
+                View Analytics
+              </button>
             </div>
           </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6'>
-          <h2 className='text-xl font-semibold text-gray-900 mb-4'>Recent Activity</h2>
-          <div className='space-y-4'>
-            <div className='flex items-center space-x-3 p-3 rounded-lg bg-green-50'>
-              <CheckCircle className='w-5 h-5 text-green-500' />
-              <div>
-                <p className='font-medium text-sm'>Product uploaded successfully</p>
-                <p className='text-xs text-gray-600'>2 hours ago</p>
-              </div>
+          <div className="bg-white shadow rounded-lg p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Activity</h3>
+            <div className="text-center py-8">
+              <div className="text-gray-400 text-4xl mb-3">📭</div>
+              <p className="text-gray-500">No recent activity</p>
+              <p className="text-sm text-gray-400 mt-1">Start by creating your first RFQ!</p>
             </div>
-            <div className='flex items-center space-x-3 p-3 rounded-lg bg-blue-50'>
-              <MessageSquare className='w-5 h-5 text-blue-500' />
-              <div>
-                <p className='font-medium text-sm'>New RFQ response received</p>
-                <p className='text-xs text-gray-600'>4 hours ago</p>
-              </div>
-            </div>
-            <div className='flex items-center space-x-3 p-3 rounded-lg bg-purple-50'>
-              <TrendingUp className='w-5 h-5 text-purple-500' />
-              <div>
-                <p className='font-medium text-sm'>Traffic tier upgraded to GOLD</p>
-                <p className='text-xs text-gray-600'>1 day ago</p>
-              </div>
+          </div>
+          <div className="bg-white shadow rounded-lg p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Help & Support</h3>
+            <div className="space-y-3">
+              <a href="#" className="block text-blue-600 hover:text-blue-800 text-sm">
+                📖 Getting Started Guide
+              </a>
+              <a href="#" className="block text-blue-600 hover:text-blue-800 text-sm">
+                🎥 Video Tutorials
+              </a>
+              <a href="#" className="block text-blue-600 hover:text-blue-800 text-sm">
+                💬 Contact Support
+              </a>
+              <a href="#" className="block text-blue-600 hover:text-blue-800 text-sm">
+                🤝 Schedule Demo
+              </a>
             </div>
           </div>
         </div>
       </main>
-    </div>
-  );
+    </>
+  )
 }

@@ -25,7 +25,7 @@ export default function AIInsightsPage() {
     data: session,
     status,
   } = () => ({
-    data: { user: { id: 'demo', email: 'demo@bell24h.com', name: 'Demo User' } },
+    data: { user: { id: 'user', email: 'user@company.com', name: 'Business User' } },
     status: 'authenticated',
   });
   const router = useRouter();

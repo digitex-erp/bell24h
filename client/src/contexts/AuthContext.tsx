@@ -1,140 +1,128 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { supabase, getCurrentUser } from '@/lib/supabase';
 
 interface User {
   id: string;
-  name: string;
   email: string;
-  role: 'user' | 'admin' | 'enterprise';
-  avatar?: string;
-  companyName?: string;
-  jobTitle?: string;
-  department?: string;
+  role?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
-  register: (userData: Partial<User>) => Promise<boolean>;
+  loading: boolean;
+  signIn: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  signUp: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isClient, setIsClient] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mark as client-side
-    setIsClient(true);
-
-    // Check for existing session only on client-side
-    if (typeof window !== 'undefined') {
+    // Check for existing session on mount
+    const checkUser = async () => {
       try {
-        const savedUser = localStorage.getItem('bell24h_user');
-        if (savedUser) {
-          setUser(JSON.parse(savedUser));
+        const user = await getCurrentUser();
+        if (user) {
+          setUser({
+            id: user.id,
+            email: user.email || '',
+            role: 'buyer' // Default role
+          });
         }
       } catch (error) {
-        console.error('Error loading saved user:', error);
+        console.error('Error checking user:', error);
+      } finally {
+        setLoading(false);
       }
-    }
-    setIsLoading(false);
+    };
+
+    checkUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email || '',
+            role: 'buyer' // Default role
+          });
+        } else {
+          setUser(null);
+        }
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    setIsLoading(true);
+  const signIn = async (email: string, password: string) => {
     try {
-      // Mock authentication - in production, this would call your API
-      const mockUser: User = {
-        id: '1',
-        name: 'John Doe',
-        email,
-        role: email.includes('admin') ? 'admin' : 'user',
-        companyName: 'Tech Solutions Pvt Ltd',
-        jobTitle: 'Procurement Manager',
-        department: 'Operations',
-      };
+      const response = await fetch('/api/auth/supabase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, action: 'login' }),
+      });
 
-      setUser(mockUser);
+      const data = await response.json();
 
-      // Only use localStorage on client-side
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.setItem('bell24h_user', JSON.stringify(mockUser));
-        } catch (error) {
-          console.error('Error saving user to localStorage:', error);
-        }
+      if (data.success) {
+        setUser(data.user);
+        return { success: true, message: 'Login successful' };
+      } else {
+        return { success: false, message: data.message };
       }
-
-      return true;
     } catch (error) {
-      console.error('Login failed:', error);
-      return false;
-    } finally {
-      setIsLoading(false);
+      return { success: false, message: 'Network error' };
     }
   };
 
-  const logout = () => {
-    setUser(null);
-
-    // Only remove from localStorage on client-side
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.removeItem('bell24h_user');
-      } catch (error) {
-        console.error('Error removing user from localStorage:', error);
-      }
-    }
-  };
-
-  const register = async (userData: Partial<User>): Promise<boolean> => {
-    setIsLoading(true);
+  const signUp = async (email: string, password: string) => {
     try {
-      // Mock registration
-      const newUser: User = {
-        id: Date.now().toString(),
-        name: userData.name || '',
-        email: userData.email || '',
-        role: 'user',
-        ...userData,
-      };
+      const response = await fetch('/api/auth/supabase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, action: 'register' }),
+      });
 
-      setUser(newUser);
+      const data = await response.json();
 
-      // Only use localStorage on client-side
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.setItem('bell24h_user', JSON.stringify(newUser));
-        } catch (error) {
-          console.error('Error saving new user to localStorage:', error);
-        }
+      if (data.success) {
+        setUser(data.user);
+        return { success: true, message: 'Registration successful' };
+      } else {
+        return { success: false, message: data.message };
       }
-
-      return true;
     } catch (error) {
-      console.error('Registration failed:', error);
-      return false;
-    } finally {
-      setIsLoading(false);
+      return { success: false, message: 'Network error' };
     }
   };
 
-  // Provide fallback values during SSR
-  const contextValue = {
-    user: isClient ? user : null,
-    isLoading: isClient ? isLoading : true,
-    login,
-    logout,
-    register,
+  const signOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+  const value = {
+    user,
+    loading,
+    signIn,
+    signUp,
+    signOut,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

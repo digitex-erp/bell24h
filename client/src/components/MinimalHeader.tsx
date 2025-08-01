@@ -9,7 +9,7 @@ interface MinimalHeaderProps {
 }
 
 export default function MinimalHeader({ className = '' }: MinimalHeaderProps) {
-  const { data: session, status } = () => ({ data: { user: { id: "demo", email: "demo@bell24h.com", name: "Demo User" } }, status: "authenticated" });
+  const { data: session, status } = () => ({ data: { user: { id: "user", email: "user@company.com", name: "Business User" } }, status: "authenticated" });
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
