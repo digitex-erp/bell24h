@@ -11,6 +11,9 @@ export default function ForgotPasswordPage() {
   const [success, setSuccess] = useState('');
   const [supabase, setSupabase] = useState<any>(null);
   const [configError, setConfigError] = useState('');
+  const [showManualReset, setShowManualReset] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [isManualLoading, setIsManualLoading] = useState(false);
 
   useEffect(() => {
     try {
@@ -28,31 +31,68 @@ export default function ForgotPasswordPage() {
       return;
     }
 
-    if (!supabase) {
-      setError('Authentication service is not available. Please check your configuration.');
-      return;
-    }
-
     setIsLoading(true);
     setError('');
     setSuccess('');
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
+      const response = await fetch('/api/auth/send-reset-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
       });
 
-      if (error) {
-        setError(error.message);
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Failed to send reset email');
         return;
       }
 
-      setSuccess('Password reset email sent! Please check your inbox and follow the instructions.');
+      setSuccess(`Password reset email sent to ${email}! Please check your inbox and spam folder. If you don't receive it within 5 minutes, please try again.`);
     } catch (error) {
       setError('Network error. Please check your connection and try again.');
       console.error('❌ Network error:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleManualReset = async () => {
+    if (!email || !newPassword) {
+      setError('Please enter both email and new password');
+      return;
+    }
+
+    setIsManualLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/auth/manual-reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, newPassword }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Failed to reset password');
+        return;
+      }
+
+      setSuccess(`Password reset successfully! You can now login with your new password.`);
+      setShowManualReset(false);
+      setNewPassword('');
+    } catch (error) {
+      setError('Network error. Please check your connection and try again.');
+      console.error('❌ Manual reset error:', error);
+    } finally {
+      setIsManualLoading(false);
     }
   };
 
@@ -236,6 +276,49 @@ export default function ForgotPasswordPage() {
               )}
             </button>
           </form>
+
+          {/* Manual Reset Option */}
+          <div className='mt-6 pt-6 border-t border-gray-200'>
+            <div className='text-center'>
+              <p className='text-gray-600 text-sm mb-3'>
+                Didn't receive the email?
+              </p>
+              <button
+                onClick={() => setShowManualReset(!showManualReset)}
+                className='text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors'
+              >
+                Try Manual Reset
+              </button>
+            </div>
+          </div>
+
+          {/* Manual Reset Form */}
+          {showManualReset && (
+            <div className='mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg'>
+              <h3 className='text-sm font-semibold text-yellow-800 mb-3'>🔧 Manual Password Reset</h3>
+              <div className='space-y-3'>
+                <input
+                  type='password'
+                  value={newPassword}
+                  onChange={e => setNewPassword(e.target.value)}
+                  className='w-full px-3 py-2 border border-yellow-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
+                  placeholder='Enter new password'
+                  disabled={isManualLoading}
+                />
+                <button
+                  onClick={handleManualReset}
+                  disabled={isManualLoading || !email || !newPassword}
+                  className={`w-full py-2 px-4 rounded-md font-medium text-sm ${
+                    isManualLoading || !email || !newPassword
+                      ? 'bg-gray-300 cursor-not-allowed'
+                      : 'bg-yellow-600 hover:bg-yellow-700 text-white'
+                  }`}
+                >
+                  {isManualLoading ? 'Resetting...' : 'Reset Password'}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Back to Login */}
           <div className='mt-6 pt-6 border-t border-gray-200'>
