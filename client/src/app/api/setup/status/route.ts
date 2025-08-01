@@ -16,31 +16,18 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Mock wallet data (replace with actual database query)
-    const walletData = {
-      balance: 1500.00,
-      currency: 'INR',
-      transactions: [
-        {
-          id: 1,
-          type: 'credit',
-          amount: 500.00,
-          description: 'Payment received',
-          date: '2024-01-15'
-        },
-        {
-          id: 2,
-          type: 'debit',
-          amount: 200.00,
-          description: 'Service fee',
-          date: '2024-01-14'
-        }
-      ]
-    };
+    // Check if user has completed setup
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('setup_completed')
+      .eq('user_id', session.user.id)
+      .single();
 
-    return NextResponse.json(walletData);
+    const completed = profile?.setup_completed || false;
+
+    return NextResponse.json({ completed });
   } catch (error) {
-    console.error('Wallet API error:', error);
+    console.error('Setup status API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
