@@ -45,6 +45,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.263.1",
     "next": "14.2.30",
+    "next-auth": "^4.24.11",
     "next-i18next": "^15.4.2",
     "node-2fa": "^2.0.3",
     "nodemailer": "^6.10.1",
