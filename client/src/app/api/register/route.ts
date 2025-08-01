@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       email,
       password,
       options: {
-        emailRedirectTo: `https://bell24h-v1.vercel.app/dashboard`,
+        emailRedirectTo: `https://bell24h-v1.vercel.app/auth/callback`,
         data: {
           company_name: companyName,
           business_type: businessType,

@@ -68,7 +68,7 @@ function LoginPageContent() {
           email,
           password,
           options: {
-            emailRedirectTo: `https://bell24h-v1.vercel.app${redirectTo}`,
+            emailRedirectTo: `https://bell24h-v1.vercel.app/auth/callback`,
             data: {
               role: 'buyer',
               name: email.split('@')[0],
