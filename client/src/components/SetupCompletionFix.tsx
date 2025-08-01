@@ -43,7 +43,7 @@ export default function SetupCompletionFix() {
         const data = await response.json();
         if (data.completed) {
           // Setup already completed, redirect to dashboard
-          router.push('/admin/launch-metrics');
+          router.push('/dashboard');
         }
       }
     } catch (error) {
@@ -84,8 +84,8 @@ export default function SetupCompletionFix() {
         // Show success message
         alert('Setup completed successfully! Redirecting to dashboard...');
         
-        // Redirect to metrics dashboard
-        router.push('/admin/launch-metrics');
+        // Redirect to main dashboard
+        router.push('/dashboard');
       } else {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to complete setup');

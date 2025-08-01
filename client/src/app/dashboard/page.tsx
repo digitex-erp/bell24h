@@ -2,6 +2,7 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import SetupCompletionFix from '@/components/SetupCompletionFix'
 
 interface UserProfile {
   id: string
@@ -95,7 +96,7 @@ export default function DashboardPage() {
   }
 
   if (showOnboarding) {
-    return <OnboardingFlow onComplete={completeOnboarding} userEmail={user?.email} />
+    return <SetupCompletionFix />
   }
 
   return (
