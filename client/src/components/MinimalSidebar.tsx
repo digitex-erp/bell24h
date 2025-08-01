@@ -112,14 +112,11 @@ export default function MinimalSidebar({ className = '' }: MinimalSidebarProps) 
 
   const SidebarContent = () => (
     <div className='h-full bg-gray-900 text-white flex flex-col'>
-      {/* Logo Section - Fixed at top */}
+      {/* Header Section - No duplicate logo */}
       <div className='flex-shrink-0 p-4 border-b border-gray-800'>
-        <Link href='/' className='flex items-center space-x-2'>
-          <div className='w-8 h-8 bg-white rounded-md flex items-center justify-center'>
-            <span className='text-gray-900 font-bold text-sm'>🔔</span>
-          </div>
-          <span className='text-lg font-semibold'>Bell24H</span>
-        </Link>
+        <div className='flex items-center justify-center'>
+          <span className='text-lg font-semibold text-gray-300'>Dashboard</span>
+        </div>
       </div>
 
       {/* **FIXED: Scrollable Navigation Container** */}

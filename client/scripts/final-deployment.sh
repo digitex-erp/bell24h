@@ -130,8 +130,8 @@ test_deployment() {
             log_message "✅ $description is accessible (Status: $status_code)"
         else
             log_message "⚠️ $description may need attention (Status: $status_code)"
-        fi
-    done
+    fi
+done
 }
 
 # Step 7: Generate final report
@@ -276,20 +276,20 @@ main() {
     echo "   - Application built successfully"
     echo "   - Deployment initiated to Vercel"
     echo "   - All endpoints tested"
-    echo ""
+echo ""
     echo "📄 View report at: $LOG_DIR/final-deployment-report-$TIMESTAMP.md"
-    echo ""
+echo ""
     echo "🚀 Bell24h is now ready to dominate the Indian B2B marketplace!"
-    echo ""
+echo ""
     echo "Production URL: https://bell24h-v1.vercel.app"
     echo "Dashboard: https://bell24h-v1.vercel.app/admin/launch-metrics"
-    echo ""
+echo ""
     echo "Next Steps:"
     echo "1. Execute automation scripts"
     echo "2. Monitor progress dashboard"
     echo "3. Scale successful strategies"
     echo "4. Achieve market domination"
-    echo ""
+echo ""
     echo "Target: Outrank IndiaMART within 30 days! 🚀"
     
     log_message "🎉 Bell24h final deployment completed successfully"
