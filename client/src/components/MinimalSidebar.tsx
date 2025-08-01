@@ -89,7 +89,7 @@ export default function MinimalSidebar({ className = '' }: MinimalSidebarProps) 
   const {
     data: session,
   } = () => ({
-    data: { user: { id: 'demo', email: 'demo@bell24h.com', name: 'Demo User' } },
+    data: { user: { id: 'user', email: 'user@company.com', name: 'Business User' } },
     status: 'authenticated',
   });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -224,10 +224,10 @@ export default function MinimalSidebar({ className = '' }: MinimalSidebarProps) 
             </div>
             <div className='flex-1 min-w-0'>
               <div className='text-sm font-medium text-white truncate'>
-                {session?.user?.name || 'Demo User'}
+                {session?.user?.name || 'Business User'}
               </div>
               <div className='text-xs text-gray-400 truncate'>
-                {session?.user?.email || 'demo@bell24h.com'}
+                {session?.user?.email || 'user@company.com'}
               </div>
             </div>
           </div>

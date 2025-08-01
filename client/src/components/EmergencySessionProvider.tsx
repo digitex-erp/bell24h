@@ -25,7 +25,7 @@ export function useSession() {
   if (!context) {
     // Return safe fallback instead of crashing
     return {
-      data: { user: { id: 'demo', email: 'demo@bell24h.com', name: 'Demo User' } },
+      data: { user: { id: 'user', email: 'user@company.com', name: 'Business User' } },
       status: 'authenticated' as const,
     };
   }
@@ -64,8 +64,8 @@ export function EmergencySessionProvider({ children }: { children: React.ReactNo
 export async function signIn() {
   const mockSession = {
     user: {
-      name: 'Demo User',
-      email: 'demo@bell24h.com',
+      name: 'Business User',
+      email: 'user@company.com',
       image: '/avatar-placeholder.png',
     },
   };

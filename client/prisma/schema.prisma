@@ -36,6 +36,7 @@ model User {
   sessions                 Session[]
   trafficAnalytics         TrafficAnalytics[]
   wallet                   Wallet?
+  crmLeads                 CrmLead[]          // CRM relation
 }
 
 model Wallet {
@@ -98,8 +99,6 @@ model RFQ {
   category           String
   subcategory        String?
   quantity           Int
-  unit               String
-  budget             Float?
   deadline           DateTime?
   status             RFQStatus     @default(OPEN)
   priority           Priority      @default(MEDIUM)
@@ -163,6 +162,92 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+// CRM Models for Marketing Campaign Tracking
+model CrmLead {
+  id              Int         @id @default(autoincrement())
+  name            String
+  email           String
+  company         String?
+  phone           String?
+  source          String      // 'linkedin', 'gst-scraping', 'medium', 'whatsapp', 'reddit'
+  status          LeadStatus  @default(NEW)
+  priority        Priority    @default(MEDIUM)
+  assignedTo      String?
+  notes           String?
+  utmSource       String?     @map("utm_source")
+  utmCampaign     String?     @map("utm_campaign")
+  utmMedium       String?     @map("utm_medium")
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  // Link to your existing user if they convert
+  convertedUserId String?
+  convertedUser   User?       @relation(fields: [convertedUserId], references: [id])
+  
+  // CRM relations
+  activities      LeadActivity[]
+  
+  @@map("crm_leads")
+}
+
+model MarketingCampaign {
+  id                Int             @id @default(autoincrement())
+  name              String
+  type              String          // 'gst-scraping', 'linkedin', 'whatsapp', 'email', 'sms'
+  status            CampaignStatus  @default(ACTIVE)
+  targetCount       Int             @default(0)
+  completedCount    Int             @default(0)
+  responseCount     Int             @default(0)
+  signupCount       Int             @default(0)
+  costSpent         Float           @default(0)
+  revenueGenerated  Float           @default(0)
+  startedAt         DateTime        @default(now())
+  endedAt           DateTime?
+  
+  @@map("marketing_campaigns")
+}
+
+model LeadActivity {
+  id        Int         @id @default(autoincrement())
+  leadId    Int
+  lead      CrmLead     @relation(fields: [leadId], references: [id])
+  activity  String      // 'email_sent', 'demo_booked', 'followed_up', 'converted'
+  details   String?
+  createdAt DateTime    @default(now())
+  
+  @@map("lead_activities")
+}
+
+model PressInquiry {
+  id            Int       @id @default(autoincrement())
+  journalistName String   @map("journalist_name")
+  publication   String
+  email         String
+  subject       String
+  message       String?
+  status        String    @default("pending") // 'pending', 'responded', 'published'
+  priority      String    @default("medium")  // 'high', 'medium', 'low'
+  receivedAt    DateTime  @default(now())
+  respondedAt   DateTime?
+  
+  @@map("press_inquiries")
+}
+
+model ContentPerformance {
+  id          Int      @id @default(autoincrement())
+  title       String
+  platform    String   // 'medium', 'linkedin', 'reddit', 'twitter'
+  url         String
+  publishedAt DateTime @default(now())
+  views       Int      @default(0)
+  clicks      Int      @default(0)
+  signups     Int      @default(0)
+  ctr         Float    @default(0)
+  conversion  Float    @default(0)
+  
+  @@map("content_performance")
+}
+
 enum UserRole {
   BUYER
   SUPPLIER
@@ -198,4 +283,22 @@ enum ResponseStatus {
   ACCEPTED
   REJECTED
   NEGOTIATING
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  DEMO_SCHEDULED
+  PROPOSAL_SENT
+  NEGOTIATING
+  CONVERTED
+  LOST
+}
+
+enum CampaignStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  DRAFT
 }

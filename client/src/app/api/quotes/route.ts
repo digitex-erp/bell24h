@@ -1,27 +1,28 @@
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    // Get Supabase session
+    const { data: { session } } = await supabase.auth.getSession();
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
-    const { rfqId, productId, price, quantity, deliveryDays, description, attachments = [] } = body;
+    const { rfqId, productId, price, quantity, deliveryTime, notes } = body;
 
     // Validate required fields
-    if (!rfqId || !price || !quantity) {
+    if (!rfqId || !productId || !price || !quantity) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Check if RFQ exists and is open
-    const rfq = await prisma.rFQ.findUnique({
+    // Check if RFQ exists and is still open
+    const rfq = await prisma.rfq.findUnique({
       where: { id: rfqId },
+      include: { buyer: true },
     });
 
     if (!rfq) {
@@ -29,24 +30,28 @@ export async function POST(request: NextRequest) {
     }
 
     if (rfq.status !== 'OPEN') {
-      return NextResponse.json({ error: 'RFQ is not open for quotes' }, { status: 400 });
+      return NextResponse.json({ error: 'RFQ is no longer accepting quotes' }, { status: 400 });
     }
 
-    // Check if supplier already submitted a quote for this RFQ
-    const existingQuote = await prisma.quote.findUnique({
+    // Check if user is a supplier
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (user?.role !== 'SUPPLIER') {
+      return NextResponse.json({ error: 'Only suppliers can submit quotes' }, { status: 403 });
+    }
+
+    // Check if supplier has already quoted for this RFQ
+    const existingQuote = await prisma.quote.findFirst({
       where: {
-        rfqId_supplierId: {
-          rfqId,
-          supplierId: session.user.id,
-        },
+        rfqId,
+        supplierId: session.user.id,
       },
     });
 
     if (existingQuote) {
-      return NextResponse.json(
-        { error: 'You have already submitted a quote for this RFQ' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'You have already submitted a quote for this RFQ' }, { status: 400 });
     }
 
     // Create quote
@@ -55,30 +60,21 @@ export async function POST(request: NextRequest) {
         rfqId,
         supplierId: session.user.id,
         productId,
-        price: parseFloat(price),
-        quantity: parseInt(quantity),
-        deliveryDays: deliveryDays ? parseInt(deliveryDays) : null,
-        description,
-        attachments,
+        price,
+        quantity,
+        deliveryTime,
+        notes,
+        status: 'SUBMITTED',
         validUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       },
       include: {
+        rfq: true,
         supplier: {
           select: {
             id: true,
             name: true,
             email: true,
-          },
-        },
-        rfq: {
-          include: {
-            buyer: {
-              select: {
-                id: true,
-                name: true,
-                email: true,
-              },
-            },
+            companyName: true,
           },
         },
         product: true,
@@ -94,7 +90,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    // Get Supabase session
+    const { data: { session } } = await supabase.auth.getSession();
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -117,31 +114,25 @@ export async function GET(request: NextRequest) {
       where.status = status;
     }
 
-    // If user is a supplier, show their quotes
-    // If user is a buyer, show quotes for their RFQs
+    // Get user role to filter quotes
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
     });
 
-    if (user?.role === 'SUPPLIER') {
-      where.supplierId = session.user.id;
-    } else if (user?.role === 'BUYER') {
+    if (user?.role === 'BUYER') {
+      // Buyers can see quotes for their RFQs
       where.rfq = {
         buyerId: session.user.id,
       };
+    } else if (user?.role === 'SUPPLIER') {
+      // Suppliers can see their own quotes
+      where.supplierId = session.user.id;
     }
 
     const [quotes, total] = await Promise.all([
       prisma.quote.findMany({
         where,
         include: {
-          supplier: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
           rfq: {
             include: {
               buyer: {
@@ -151,6 +142,14 @@ export async function GET(request: NextRequest) {
                   email: true,
                 },
               },
+            },
+          },
+          supplier: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              companyName: true,
             },
           },
           product: true,

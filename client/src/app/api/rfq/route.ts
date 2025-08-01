@@ -1,50 +1,51 @@
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    // Get Supabase session
+    const { data: { session } } = await supabase.auth.getSession();
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
-    const {
-      title,
-      description,
-      quantity,
-      unit,
-      budget,
-      deliveryDate,
-      deliveryLocation,
-      specifications,
-      categoryId,
-      attachments = [],
-    } = body;
+    const { title, description, category, quantity, unit, budget, deliveryLocation, deadline, requirements } = body;
 
     // Validate required fields
-    if (!title || !description || !quantity || !categoryId) {
+    if (!title || !description || !category || !quantity || !unit) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Check if user is a buyer
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (user?.role !== 'BUYER') {
+      return NextResponse.json({ error: 'Only buyers can create RFQs' }, { status: 403 });
+    }
+
+    // Generate RFQ number
+    const rfqNumber = `RFQ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
     // Create RFQ
-    const rfq = await prisma.rFQ.create({
+    const rfq = await prisma.rfq.create({
       data: {
+        rfqNumber,
         title,
         description,
-        quantity: parseInt(quantity),
+        category,
+        quantity,
         unit,
-        budget: budget ? parseFloat(budget) : null,
-        deliveryDate: deliveryDate ? new Date(deliveryDate) : null,
+        budget,
         deliveryLocation,
-        specifications: specifications ? JSON.parse(JSON.stringify(specifications)) : null,
-        attachments,
+        deadline: deadline ? new Date(deadline) : null,
+        requirements,
         buyerId: session.user.id,
-        categoryId,
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        status: 'OPEN',
       },
       include: {
         buyer: {
@@ -52,9 +53,9 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             email: true,
+            companyName: true,
           },
         },
-        category: true,
       },
     });
 
@@ -67,9 +68,17 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    // Get Supabase session
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
-    const categoryId = searchParams.get('categoryId');
+    const category = searchParams.get('category');
+    const location = searchParams.get('location');
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const skip = (page - 1) * limit;
@@ -80,12 +89,31 @@ export async function GET(request: NextRequest) {
       where.status = status;
     }
 
-    if (categoryId) {
-      where.categoryId = categoryId;
+    if (category) {
+      where.category = category;
+    }
+
+    if (location) {
+      where.deliveryLocation = location;
+    }
+
+    // Get user role to filter RFQs
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (user?.role === 'BUYER') {
+      // Buyers can see their own RFQs
+      where.buyerId = session.user.id;
+    } else if (user?.role === 'SUPPLIER') {
+      // Suppliers can see open RFQs in their category
+      where.status = 'OPEN';
+      // Add category filtering based on supplier's categories
+      // This would need to be implemented based on supplier profile
     }
 
     const [rfqs, total] = await Promise.all([
-      prisma.rFQ.findMany({
+      prisma.rfq.findMany({
         where,
         include: {
           buyer: {
@@ -93,9 +121,9 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
+              companyName: true,
             },
           },
-          category: true,
           quotes: {
             include: {
               supplier: {
@@ -103,6 +131,7 @@ export async function GET(request: NextRequest) {
                   id: true,
                   name: true,
                   email: true,
+                  companyName: true,
                 },
               },
             },
@@ -112,7 +141,7 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
       }),
-      prisma.rFQ.count({ where }),
+      prisma.rfq.count({ where }),
     ]);
 
     return NextResponse.json({

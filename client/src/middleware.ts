@@ -1,33 +1,33 @@
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req, res })
 
-  // Admin routes protection
-  if (pathname.startsWith('/admin')) {
-    const adminSession = request.cookies.get('admin_session')?.value;
-    if (!adminSession && pathname !== '/admin/login') {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  // Handle dashboard access
+  if (req.nextUrl.pathname.startsWith('/dashboard')) {
+    if (!session) {
+      // Not authenticated - redirect to login with proper redirect param
+      const redirectUrl = new URL('/auth/login', req.url)
+      redirectUrl.searchParams.set('redirect', req.nextUrl.pathname)
+      return NextResponse.redirect(redirectUrl)
     }
   }
 
-  // Regular protected routes
-  const protectedRoutes = ['/dashboard'];
-  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
-
-  if (isProtectedRoute) {
-    const token = request.cookies.get('auth-token')?.value;
-    if (!token) {
-      const loginUrl = new URL('/auth/login', request.url);
-      loginUrl.searchParams.set('redirect', pathname);
-      return NextResponse.redirect(loginUrl);
-    }
+  // Redirect authenticated users away from login page
+  if (session && req.nextUrl.pathname === '/auth/login') {
+    return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
-  return NextResponse.next();
+  return res
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-};
+  matcher: ['/dashboard/:path*', '/auth/login']
+}

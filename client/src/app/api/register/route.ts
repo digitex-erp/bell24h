@@ -15,12 +15,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, companyName, businessType } = await request.json();
+    const { email, password, companyName, businessType, name, phone, gstin, pan } =
+      await request.json();
 
     // Validate input
     if (!email || !password || !companyName || !businessType) {
       return NextResponse.json(
-        { success: false, error: 'All fields are required' },
+        { success: false, error: 'Email, password, and company name are required' },
         { status: 400 }
       );
     }
@@ -30,9 +31,14 @@ export async function POST(request: NextRequest) {
       email,
       password,
       options: {
+        emailRedirectTo: `https://bell24h-v1.vercel.app/dashboard`,
         data: {
           company_name: companyName,
           business_type: businessType,
+          name: name || '',
+          phone: phone || '',
+          gstin: gstin || '',
+          pan: pan || '',
         },
       },
     });
@@ -52,6 +58,10 @@ export async function POST(request: NextRequest) {
       company_name: companyName,
       business_type: businessType,
       contact_email: email,
+      contact_name: name || '',
+      phone: phone || '',
+      gstin: gstin || '',
+      pan: pan || '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     });

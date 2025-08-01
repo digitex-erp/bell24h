@@ -23,23 +23,34 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          companyName: formData.companyName,
+          businessType: 'supplier', // Default to supplier for this form
+          name: formData.name,
+          phone: formData.phone,
+          gstin: formData.gstin,
+          pan: formData.pan
+        }),
       });
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.success) {
         // Registration successful
-        router.push('/supplier/dashboard');
+        alert('✅ Registration successful! Please check your email and click the confirmation link.');
+        router.push('/auth/login');
       } else {
         setError(data.error || 'Registration failed');
       }
     } catch (err) {
+      console.error('Registration error:', err);
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);

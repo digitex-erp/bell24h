@@ -1,24 +1,46 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://bell24h.com';
-
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: [
-        '/dashboard/',
-        '/auth/',
-        '/api/',
-        '/admin/',
-        '/_next/',
-        '/private/',
-        '/*.json$',
-        '/*.xml$',
-      ],
-    },
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/dashboard/',
+          '/auth/',
+          '/_next/',
+          '/private/',
+        ],
+      },
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/dashboard/',
+          '/auth/',
+          '/_next/',
+          '/private/',
+        ],
+      },
+      {
+        userAgent: 'Bingbot',
+        allow: '/',
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/dashboard/',
+          '/auth/',
+          '/_next/',
+          '/private/',
+        ],
+      },
+    ],
+    sitemap: 'https://bell24h-v1.vercel.app/sitemap.xml',
+    host: 'https://bell24h-v1.vercel.app',
   };
 }
