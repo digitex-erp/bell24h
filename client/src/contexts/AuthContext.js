@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect, createContext, useContext } from 'react';
 
 // Authentication Context
