@@ -16,31 +16,21 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Mock wallet data (replace with actual database query)
-    const walletData = {
-      balance: 1500.00,
-      currency: 'INR',
-      transactions: [
-        {
-          id: 1,
-          type: 'credit',
-          amount: 500.00,
-          description: 'Payment received',
-          date: '2024-01-15'
-        },
-        {
-          id: 2,
-          type: 'debit',
-          amount: 200.00,
-          description: 'Service fee',
-          date: '2024-01-14'
-        }
-      ]
+    // Mock dashboard data (replace with actual database queries)
+    const dashboardData = {
+      organicTraffic: 2500,
+      domainRating: 25,
+      backlinks: 150,
+      indexedPages: 200,
+      keywords: 500,
+      conversions: 45,
+      revenue: 15000,
+      growth: 15.5
     };
 
-    return NextResponse.json(walletData);
+    return NextResponse.json(dashboardData);
   } catch (error) {
-    console.error('Wallet API error:', error);
+    console.error('Dashboard API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

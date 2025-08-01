@@ -1,7 +1,7 @@
 'use client';
-
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase, getCurrentUser } from '@/lib/supabase';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 
 interface User {
   id: string;
@@ -12,9 +12,9 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
-  signUp: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,27 +22,24 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
-    // Check for existing session on mount
-    const checkUser = async () => {
-      try {
-        const user = await getCurrentUser();
-        if (user) {
-          setUser({
-            id: user.id,
-            email: user.email || '',
-            role: 'buyer' // Default role
-          });
-        }
-      } catch (error) {
-        console.error('Error checking user:', error);
-      } finally {
-        setLoading(false);
+    // Get initial session
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser({
+          id: session.user.id,
+          email: session.user.email || '',
+          role: session.user.user_metadata?.role
+        });
       }
+      setLoading(false);
     };
 
-    checkUser();
+    getSession();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -51,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser({
             id: session.user.id,
             email: session.user.email || '',
-            role: 'buyer' // Default role
+            role: session.user.user_metadata?.role
           });
         } else {
           setUser(null);
@@ -61,56 +58,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [supabase.auth]);
 
   const signIn = async (email: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/supabase', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, action: 'login' }),
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
       });
 
-      const data = await response.json();
-
-      if (data.success) {
-        setUser(data.user);
-        return { success: true, message: 'Login successful' };
-      } else {
-        return { success: false, message: data.message };
+      if (error) {
+        throw error;
       }
+
+      router.push('/dashboard');
     } catch (error) {
-      return { success: false, message: 'Network error' };
-    }
-  };
-
-  const signUp = async (email: string, password: string) => {
-    try {
-      const response = await fetch('/api/auth/supabase', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, action: 'register' }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setUser(data.user);
-        return { success: true, message: 'Registration successful' };
-      } else {
-        return { success: false, message: data.message };
-      }
-    } catch (error) {
-      return { success: false, message: 'Network error' };
+      console.error('Sign in error:', error);
+      throw error;
     }
   };
 
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
-      setUser(null);
+      router.push('/');
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Sign out error:', error);
     }
   };
 
@@ -118,11 +91,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     loading,
     signIn,
-    signUp,
     signOut,
+    isAuthenticated: !!user
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
