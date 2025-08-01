@@ -1,0 +1,93 @@
+
+> bell24h-client@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to .\node_modules\@prisma\client in 625ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+
+┌─────────────────────────────────────────────────────────┐
+│  Update available 5.22.0 -> 6.13.0                      │
+│                                                         │
+│  This is a major update - please follow the guide at    │
+│  https://pris.ly/d/major-version-upgrade                │
+│                                                         │
+│  Run the following to update                            │
+│    npm i --save-dev prisma@latest                       │
+│    npm i @prisma/client@latest                          │
+└─────────────────────────────────────────────────────────┘
+ ⚠ Disabling SWC Minifer will not be an option in the next major version. Please report any issues you may be experiencing to https://github.com/vercel/next.js/issues
+  ▲ Next.js 14.2.30
+  - Environments: .env.local, .env.production, .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+STRIPE_SECRET_KEY is not set. Stripe payments will not work.
+STRIPE_SECRET_KEY is not set. Stripe payments will not work.
+No categories/subcategories found for static generation
+Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore (C:\Users\Sanika\Projects\bell24h\client\node_modules\next\dist\client\components\request-async-storage.external.js:28:11)
+    at Object.p [as cookies] (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\958.js:1:10005)
+    at v.getCookie (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\958.js:1:4657)
+    at v.getItem (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\958.js:1:21067)
+    at fa (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:77000)
+    at Qa.__loadSession (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:109168)
+    at Qa._useSession (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:108895)
+    at Qa._emitInitialSession (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:117141)
+    at C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:117040
+    at C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:108448
+No categories found for static generation
+Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore (C:\Users\Sanika\Projects\bell24h\client\node_modules\next\dist\client\components\request-async-storage.external.js:28:11)
+    at Object.p [as cookies] (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\958.js:1:10005)
+    at v.getCookie (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\958.js:1:4657)
+    at v.getItem (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\958.js:1:21067)
+    at fa (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:77000)
+    at Qa.__loadSession (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:109168)
+    at Qa._useSession (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:108895)
+    at Qa._emitInitialSession (C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:117141)
+    at C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:117040
+    at C:\Users\Sanika\Projects\bell24h\client\.next\server\chunks\2438.js:1:108448
+
+
+#
+# Fatal error in , line 0
+# Fatal process out of memory: Zone
+#
+#
+#
+#FailureMessage Object: 0000003F4BDF5DC0
+----- Native stack trace -----
+
+ 1: 00007FF7B00071AB 
+ 2: 00007FF7AFF0649F 
+ 3: 00007FF7B0DD2E72 
+ 4: 00007FF7B09D8603 
+ 5: 00007FF7B04BAF54 
+ 6: 00007FF7B0F0FB85 
+ 7: 00007FF7B0F10129 
+ 8: 00007FF7B0F0F01B 
+ 9: 00007FF7B0F0ECD0 
+10: 00007FF7B0EE4BC7 
+11: 00007FF7B0E99C11 
+12: 00007FF7B0EE47D4 
+13: 00007FF7B0EE4F46 
+14: 00007FF7B0EE4C52 
+15: 00007FF7B0E9B9ED 
+16: 00007FF7B0E97EA5 
+17: 00007FF7B0E9394A 
+18: 00007FF7B0946E11 
+19: 00007FF7B0913D31 
+20: 00007FF7AFF08F4D 
+21: 00007FF7B0059B6D 
+22: 00007FF7B11F5180 
+23: 00007FFA8E50E8D7 BaseThreadInitThunk+23
+24: 00007FFA8FEDC34C RtlUserThreadStart+44
