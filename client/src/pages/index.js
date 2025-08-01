@@ -1,3 +1,4 @@
+"use client";
 import { useAuth } from '../contexts/AuthContext';
 import Link from 'next/link';
 import { ArrowRight, Users, Database, Eye } from 'lucide-react';

@@ -1,656 +1,455 @@
-'use client';
-
-import Link from 'next/link';
-import { useState } from 'react';
+"use client";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Mail, Lock, User, Building, Phone, MapPin, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
-  const [marketplaceRole, setMarketplaceRole] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
     companyName: '',
-    gstin: '',
-    pan: '',
+    businessType: 'supplier',
+    name: '',
     phone: '',
-    address: '',
     city: '',
-    state: '',
-    pincode: '',
-    businessType: '',
-    annualTurnover: ''
+    state: ''
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { register } = useAuth();
 
-  const categories = [
-    // Electronics & Technology
-    'Electronics & Components',
-    'Semiconductors & ICs',
-    'PCB & Circuit Boards',
-    'LED & Lighting',
-    'Telecommunications',
-    'Computer Hardware',
-    'Software & IT Services',
-    'IoT & Smart Devices',
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+    setError(''); // Clear error when user types
+  };
 
-    // Manufacturing & Machinery
-    'Industrial Machinery',
-    'CNC Machines & Tools',
-    'Manufacturing Equipment',
-    'Automation & Robotics',
-    'Heavy Machinery',
-    'Machine Tools',
-    'Welding Equipment',
-    'Packaging Machinery',
+  const validateStep1 = () => {
+    if (!formData.email || !formData.password || !formData.confirmPassword) {
+      setError('Please fill in all fields');
+      return false;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return false;
+    }
+    return true;
+  };
 
-    // Construction & Building
-    'Construction Materials',
-    'Steel & Metal Products',
-    'Cement & Concrete',
-    'Building Hardware',
-    'Electrical Equipment',
-    'Plumbing & Pipes',
-    'Roofing Materials',
-    'Flooring & Tiles',
-
-    // Textiles & Apparel
-    'Textiles & Fabrics',
-    'Garments & Clothing',
-    'Footwear & Leather',
-    'Home Textiles',
-    'Technical Textiles',
-    'Fashion Accessories',
-    'Yarn & Fibers',
-    'Dyeing & Finishing',
-
-    // Automotive & Transportation
-    'Automotive Parts',
-    'Commercial Vehicles',
-    'Two-Wheelers',
-    'Tires & Rubber',
-    'Auto Electronics',
-    'Lubricants & Oils',
-    'Auto Components',
-    'Transportation Services',
-
-    // Chemicals & Materials
-    'Industrial Chemicals',
-    'Plastics & Polymers',
-    'Paints & Coatings',
-    'Adhesives & Sealants',
-    'Specialty Chemicals',
-    'Petrochemicals',
-    'Fertilizers & Agrochemicals',
-    'Pharmaceutical Ingredients',
-
-    // Agriculture & Food
-    'Agricultural Products',
-    'Food Processing',
-    'Dairy & Beverages',
-    'Grain & Cereals',
-    'Fruits & Vegetables',
-    'Meat & Poultry',
-    'Seafood & Fish',
-    'Organic Products',
-
-    // Healthcare & Medical
-    'Medical Devices',
-    'Pharmaceuticals',
-    'Healthcare Equipment',
-    'Diagnostic Tools',
-    'Surgical Instruments',
-    'Medical Supplies',
-    'Dental Equipment',
-    'Laboratory Equipment',
-
-    // Energy & Utilities
-    'Renewable Energy',
-    'Solar & Wind Power',
-    'Electrical Equipment',
-    'Power Generation',
-    'Energy Storage',
-    'Oil & Gas Equipment',
-    'Nuclear Energy',
-    'Energy Services',
-  ];
-
-  const handleCategoryToggle = (category: string) => {
-    setSelectedCategories(prev =>
-      prev.includes(category)
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
-    );
+  const validateStep2 = () => {
+    if (!formData.companyName || !formData.businessType) {
+      setError('Please fill in all required fields');
+      return false;
+    }
+    return true;
   };
 
   const handleNext = () => {
-    if (step === 1 && marketplaceRole) {
+    if (step === 1 && validateStep1()) {
       setStep(2);
-    } else if (step === 2 && selectedCategories.length > 0) {
+      setError('');
+    } else if (step === 2 && validateStep2()) {
       setStep(3);
-    } else if (step === 3) {
-      handleRegistration();
+      setError('');
     }
   };
 
   const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    }
+    setStep(step - 1);
+    setError('');
   };
 
-  const validateGSTIN = (gstin: string) => {
-    const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$/;
-    return gstinRegex.test(gstin);
-  };
-
-  const validatePAN = (pan: string) => {
-    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-    return panRegex.test(pan);
-  };
-
-  const handleRegistration = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    // Validation
-    if (!formData.email || !formData.password || !formData.companyName) {
-      setError('Please fill in all required fields');
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.gstin && !validateGSTIN(formData.gstin)) {
-      setError('Please enter a valid GSTIN');
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.pan && !validatePAN(formData.pan)) {
-      setError('Please enter a valid PAN number');
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          companyName: formData.companyName,
-          gstin: formData.gstin,
-          pan: formData.pan,
-          phone: formData.phone,
-          address: formData.address,
-          city: formData.city,
-          state: formData.state,
-          pincode: formData.pincode,
-          businessType: formData.businessType,
-          annualTurnover: formData.annualTurnover,
-          role: marketplaceRole,
-          categories: selectedCategories
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setStep(4); // Success step
+      // Remove confirmPassword from userData
+      const { confirmPassword, ...userData } = formData;
+      
+      const result = await register(userData);
+      
+      if (result.success) {
+        console.log('Registration successful:', result.user);
+        router.push('/dashboard');
       } else {
-        setError(data.error || 'Registration failed');
+        setError(result.error);
       }
-    } catch (err) {
-      setError('Registration failed. Please try again.');
+    } catch (error) {
+      setError('An unexpected error occurred. Please try again.');
+      console.error('Registration error:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12'>
-      <div className='container mx-auto px-4'>
-        {/* HEADER */}
-        <div className='text-center mb-8'>
-          <Link
-            href='/'
-            className='inline-flex items-center text-blue-600 hover:text-blue-700 mb-4'
-          >
-            <span className='mr-2'>←</span>
-            Back to Home
-          </Link>
-          <h1 className='text-4xl font-bold text-gray-900 mb-2'>BELL24H</h1>
-          <h2 className='text-2xl font-bold text-gray-800 mb-4'>Join BELL24H Marketplace</h2>
-          <p className='text-gray-600'>
-            One account for buying AND selling • Connect with 534,672+ businesses
-          </p>
-        </div>
-
-        {/* PROGRESS BAR */}
-        <div className='max-w-md mx-auto mb-8'>
-          <div className='flex justify-between items-center mb-2'>
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-              }`}
-            >
-              1
-            </div>
-            <div className={`flex-1 h-1 mx-2 ${step >= 2 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                step >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-              }`}
-            >
-              2
-            </div>
-            <div className={`flex-1 h-1 mx-2 ${step >= 3 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                step >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-              }`}
-            >
-              3
-            </div>
-            <div className={`flex-1 h-1 mx-2 ${step >= 4 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                step >= 4 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-              }`}
-            >
-              4
-            </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex justify-center">
+          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span className="text-white text-xl font-bold">🔔</span>
           </div>
-          <p className='text-center text-sm text-gray-600'>
-            {step === 1 && 'Marketplace Role'}
-            {step === 2 && 'Interested Categories'}
-            {step === 3 && 'Business Information'}
-            {step === 4 && 'Registration Complete'}
-          </p>
         </div>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create your Bell24H account
+        </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Join India's AI-powered B2B marketplace
+        </p>
+      </div>
 
-        {/* STEP 1: MARKETPLACE ROLE */}
-        {step === 1 && (
-          <div className='max-w-4xl mx-auto'>
-            <div className='bg-white rounded-2xl shadow-xl p-8'>
-              <h3 className='text-xl font-bold text-gray-900 mb-6'>
-                What do you plan to do on BELL24H? *
-              </h3>
-
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-                <div
-                  className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
-                    marketplaceRole === 'buying'
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-blue-300'
-                  }`}
-                  onClick={() => setMarketplaceRole('buying')}
-                >
-                  <span className='text-3xl mb-4 block'>🛒</span>
-                  <h4 className='font-semibold text-gray-900 mb-2'>Primarily Buying</h4>
-                  <p className='text-gray-600 text-sm'>Source products & services</p>
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {/* Progress Steps */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between">
+              <div className={`flex items-center ${step >= 1 ? 'text-blue-600' : 'text-gray-400'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                }`}>
+                  1
                 </div>
-
-                <div
-                  className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
-                    marketplaceRole === 'selling'
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-blue-300'
-                  }`}
-                  onClick={() => setMarketplaceRole('selling')}
-                >
-                  <span className='text-3xl mb-4 block'>🏢</span>
-                  <h4 className='font-semibold text-gray-900 mb-2'>Primarily Selling</h4>
-                  <p className='text-gray-600 text-sm'>Offer products & services</p>
-                </div>
-
-                <div
-                  className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
-                    marketplaceRole === 'both'
-                      ? 'border-purple-500 bg-purple-50'
-                      : 'border-gray-200 hover:border-purple-300'
-                  }`}
-                  onClick={() => setMarketplaceRole('both')}
-                >
-                  <span className='text-3xl mb-4 block'>🔄</span>
-                  <h4 className='font-semibold text-gray-900 mb-2'>Both Buying & Selling</h4>
-                  <p className='text-gray-600 text-sm'>Full marketplace access</p>
-                </div>
+                <span className="ml-2 text-sm">Account</span>
               </div>
-
-              <div className='mt-8 flex justify-end'>
-                <button
-                  onClick={handleNext}
-                  disabled={!marketplaceRole}
-                  className='px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed'
-                >
-                  Continue
-                </button>
+              <div className={`flex-1 h-1 mx-4 ${step >= 2 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
+              <div className={`flex items-center ${step >= 2 ? 'text-blue-600' : 'text-gray-400'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  step >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                }`}>
+                  2
+                </div>
+                <span className="ml-2 text-sm">Company</span>
+              </div>
+              <div className={`flex-1 h-1 mx-4 ${step >= 3 ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
+              <div className={`flex items-center ${step >= 3 ? 'text-blue-600' : 'text-gray-400'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  step >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                }`}>
+                  3
+                </div>
+                <span className="ml-2 text-sm">Contact</span>
               </div>
             </div>
           </div>
-        )}
 
-        {/* STEP 2: INTERESTED CATEGORIES */}
-        {step === 2 && (
-          <div className='max-w-6xl mx-auto'>
-            <div className='bg-white rounded-2xl shadow-xl p-8'>
-              <h3 className='text-xl font-bold text-gray-900 mb-6'>
-                Interested Categories (Select all that apply)
-              </h3>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="rounded-md bg-red-50 p-4">
+                <div className="flex">
+                  <AlertCircle className="h-5 w-5 text-red-400" />
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800">
+                      {error}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            )}
 
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8'>
-                {categories.map(category => (
-                  <label
-                    key={category}
-                    className='flex items-center p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer'
-                  >
-                    <input
-                      type='checkbox'
-                      checked={selectedCategories.includes(category)}
-                      onChange={() => handleCategoryToggle(category)}
-                      className='mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'
-                    />
-                    <span className='text-sm text-gray-700'>{category}</span>
+            {/* Step 1: Account Information */}
+            {step === 1 && (
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Email address
                   </label>
-                ))}
-              </div>
-
-              <div className='bg-blue-50 rounded-xl p-6 mb-6'>
-                <div className='flex items-center justify-between mb-4'>
-                  <div className='flex items-center'>
-                    <span className='text-2xl mr-3'>✅</span>
-                    <h4 className='text-lg font-bold text-blue-900'>Complete Marketplace Access</h4>
-                  </div>
-                  <div className='text-2xl'>✨</div>
-                </div>
-                <p className='text-blue-800 mb-4'>With your BELL24H account, you can instantly:</p>
-
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                  <div>
-                    <div className='flex items-center mb-3'>
-                      <span className='text-lg mr-2'>🛒</span>
-                      <h5 className='font-semibold text-blue-900'>As a Buyer</h5>
+                  <div className="mt-1 relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-gray-400" />
                     </div>
-                    <ul className='text-sm text-blue-800 space-y-1'>
-                      <li>• Post RFQs and source from 534,672+ suppliers</li>
-                      <li>• Use AI-powered supplier matching</li>
-                      <li>• Access ECGC protection for purchases</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <div className='flex items-center mb-3'>
-                      <span className='text-lg mr-2'>🏢</span>
-                      <h5 className='font-semibold text-blue-900'>As a Seller</h5>
-                    </div>
-                    <ul className='text-sm text-blue-800 space-y-1'>
-                      <li>• List products and respond to RFQs</li>
-                      <li>• Build your business profile</li>
-                      <li>• Connect with verified buyers</li>
-                    </ul>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Enter your email"
+                    />
                   </div>
                 </div>
-              </div>
 
-              <div className='flex justify-between'>
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <div className="mt-1 relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete="new-password"
+                      required
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="appearance-none block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Create a password"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5 text-gray-400" />
+                      ) : (
+                        <Eye className="h-5 w-5 text-gray-400" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                    Confirm Password
+                  </label>
+                  <div className="mt-1 relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      autoComplete="new-password"
+                      required
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className="appearance-none block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Confirm your password"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-5 w-5 text-gray-400" />
+                      ) : (
+                        <Eye className="h-5 w-5 text-gray-400" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
                 <button
-                  onClick={handleBack}
-                  className='px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50'
-                >
-                  Back
-                </button>
-                <button
+                  type="button"
                   onClick={handleNext}
-                  disabled={selectedCategories.length === 0}
-                  className='px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Continue
                 </button>
               </div>
-            </div>
-          </div>
-        )}
+            )}
 
-        {/* STEP 3: BUSINESS INFORMATION */}
-        {step === 3 && (
-          <div className='max-w-4xl mx-auto'>
-            <div className='bg-white rounded-2xl shadow-xl p-8'>
-              <h3 className='text-xl font-bold text-gray-900 mb-6'>Business Information</h3>
-              
-              {error && (
-                <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6'>
-                  {error}
-                </div>
-              )}
-
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                {/* Account Information */}
-                <div className='space-y-4'>
-                  <h4 className='font-semibold text-gray-900 mb-4'>Account Information</h4>
-                  
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Email Address *</label>
+            {/* Step 2: Company Information */}
+            {step === 2 && (
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
+                    Company Name
+                  </label>
+                  <div className="mt-1 relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Building className="h-5 w-5 text-gray-400" />
+                    </div>
                     <input
-                      type='email'
-                      value={formData.email}
-                      onChange={e => setFormData({ ...formData, email: e.target.value })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='business@company.com'
+                      id="companyName"
+                      name="companyName"
+                      type="text"
                       required
-                    />
-                  </div>
-
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Password *</label>
-                    <input
-                      type='password'
-                      value={formData.password}
-                      onChange={e => setFormData({ ...formData, password: e.target.value })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='Create a strong password'
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Confirm Password *</label>
-                    <input
-                      type='password'
-                      value={formData.confirmPassword}
-                      onChange={e => setFormData({ ...formData, confirmPassword: e.target.value })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='Confirm your password'
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Business Information */}
-                <div className='space-y-4'>
-                  <h4 className='font-semibold text-gray-900 mb-4'>Business Information</h4>
-                  
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Company Name *</label>
-                    <input
-                      type='text'
                       value={formData.companyName}
-                      onChange={e => setFormData({ ...formData, companyName: e.target.value })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='Your company name'
+                      onChange={handleChange}
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Enter your company name"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="businessType" className="block text-sm font-medium text-gray-700">
+                    Business Type
+                  </label>
+                  <select
+                    id="businessType"
+                    name="businessType"
+                    value={formData.businessType}
+                    onChange={handleChange}
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                  >
+                    <option value="supplier">Supplier</option>
+                    <option value="buyer">Buyer</option>
+                    <option value="both">Both</option>
+                  </select>
+                </div>
+
+                <div className="flex space-x-4">
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className="flex-1 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: Contact Information */}
+            {step === 3 && (
+              <div className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    Contact Person Name
+                  </label>
+                  <div className="mt-1 relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <User className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
                       required
-                    />
-                  </div>
-
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>GSTIN</label>
-                    <input
-                      type='text'
-                      value={formData.gstin}
-                      onChange={e => setFormData({ ...formData, gstin: e.target.value.toUpperCase() })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='22AAAAA0000A1Z5'
-                    />
-                  </div>
-
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>PAN Number</label>
-                    <input
-                      type='text'
-                      value={formData.pan}
-                      onChange={e => setFormData({ ...formData, pan: e.target.value.toUpperCase() })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='ABCDE1234F'
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Enter contact person name"
                     />
                   </div>
                 </div>
-              </div>
 
-              {/* Contact Information */}
-              <div className='mt-6'>
-                <h4 className='font-semibold text-gray-900 mb-4'>Contact Information</h4>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Phone Number</label>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                    Phone Number
+                  </label>
+                  <div className="mt-1 relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Phone className="h-5 w-5 text-gray-400" />
+                    </div>
                     <input
-                      type='tel'
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      required
                       value={formData.phone}
-                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='+91 98765 43210'
+                      onChange={handleChange}
+                      className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Enter phone number"
                     />
-                  </div>
-
-                  <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Business Type</label>
-                    <select
-                      value={formData.businessType}
-                      onChange={e => setFormData({ ...formData, businessType: e.target.value })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                    >
-                      <option value=''>Select Business Type</option>
-                      <option value='proprietorship'>Proprietorship</option>
-                      <option value='partnership'>Partnership</option>
-                      <option value='private-limited'>Private Limited</option>
-                      <option value='public-limited'>Public Limited</option>
-                      <option value='llp'>LLP</option>
-                      <option value='other'>Other</option>
-                    </select>
                   </div>
                 </div>
-              </div>
 
-              {/* Address Information */}
-              <div className='mt-6'>
-                <h4 className='font-semibold text-gray-900 mb-4'>Address Information</h4>
-                <div className='space-y-4'>
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Address</label>
-                    <textarea
-                      value={formData.address}
-                      onChange={e => setFormData({ ...formData, address: e.target.value })}
-                      className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                      placeholder='Complete business address'
-                      rows={3}
-                    />
-                  </div>
-
-                  <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>City</label>
+                    <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                      City
+                    </label>
+                    <div className="mt-1 relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <MapPin className="h-5 w-5 text-gray-400" />
+                      </div>
                       <input
-                        type='text'
+                        id="city"
+                        name="city"
+                        type="text"
+                        required
                         value={formData.city}
-                        onChange={e => setFormData({ ...formData, city: e.target.value })}
-                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        placeholder='City'
+                        onChange={handleChange}
+                        className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="City"
                       />
                     </div>
+                  </div>
 
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>State</label>
+                  <div>
+                    <label htmlFor="state" className="block text-sm font-medium text-gray-700">
+                      State
+                    </label>
+                    <div className="mt-1 relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <MapPin className="h-5 w-5 text-gray-400" />
+                      </div>
                       <input
-                        type='text'
+                        id="state"
+                        name="state"
+                        type="text"
+                        required
                         value={formData.state}
-                        onChange={e => setFormData({ ...formData, state: e.target.value })}
-                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        placeholder='State'
-                      />
-                    </div>
-
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>Pincode</label>
-                      <input
-                        type='text'
-                        value={formData.pincode}
-                        onChange={e => setFormData({ ...formData, pincode: e.target.value })}
-                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        placeholder='Pincode'
+                        onChange={handleChange}
+                        className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="State"
                       />
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className='mt-8 flex justify-between'>
-                <button
-                  onClick={handleBack}
-                  className='px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50'
-                >
-                  Back
-                </button>
-                <button
-                  onClick={handleRegistration}
-                  disabled={isLoading}
-                  className='px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50'
-                >
-                  {isLoading ? 'Creating Account...' : 'Create Account'}
-                </button>
+                <div className="flex space-x-4">
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className="flex-1 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isLoading ? 'Creating Account...' : 'Create Account'}
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            )}
+          </form>
 
-        {/* STEP 4: REGISTRATION COMPLETE */}
-        {step === 4 && (
-          <div className='max-w-2xl mx-auto'>
-            <div className='bg-white rounded-2xl shadow-xl p-8 text-center'>
-              <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6'>
-                <span className='text-3xl'>✅</span>
-              </div>
-              <h3 className='text-2xl font-bold text-gray-900 mb-4'>Welcome to BELL24H!</h3>
-              <p className='text-gray-600 mb-6'>
-                Your account has been created successfully. Please check your email for verification.
-              </p>
-              <div className='bg-blue-50 rounded-xl p-6 mb-6'>
-                <h4 className='font-semibold text-blue-900 mb-2'>Next Steps:</h4>
-                <ul className='text-sm text-blue-800 space-y-1 text-left'>
-                  <li>• Check your email for verification link</li>
-                  <li>• Complete your business profile</li>
-                  <li>• Start exploring suppliers and buyers</li>
-                  <li>• Post your first RFQ or listing</li>
-                </ul>
-              </div>
-              <Link
-                href='/auth/login'
-                className='inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700'
-              >
-                Sign In to Your Account
-              </Link>
-            </div>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Already have an account?{' '}
+              <a href="/auth/login" className="font-medium text-blue-600 hover:text-blue-500">
+                Sign in here
+              </a>
+            </p>
           </div>
-        )}
+
+          {/* Demo Instructions */}
+          <div className="mt-6 p-4 bg-blue-50 rounded-md">
+            <h4 className="text-sm font-medium text-blue-800 mb-2">🔧 Authentication Fix Demo:</h4>
+            <p className="text-xs text-blue-700">
+              1. Complete registration with all fields<br/>
+              2. You'll be automatically logged in<br/>
+              3. Try logging out and logging back in<br/>
+              4. The authentication loop is now fixed!
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
+"use client";
 import { AuthProvider } from '../contexts/AuthContext';
-import '../styles/globals.css';
+import '../app/globals.css';
 
 function MyApp({ Component, pageProps }) {
   return (

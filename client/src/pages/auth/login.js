@@ -1,3 +1,4 @@
+"use client";
 import { AlertCircle, Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';

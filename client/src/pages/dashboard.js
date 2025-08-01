@@ -1,3 +1,4 @@
+"use client";
 import { useAuth } from '../contexts/AuthContext';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { LogOut, User, Building, Mail, Phone, MapPin } from 'lucide-react';
