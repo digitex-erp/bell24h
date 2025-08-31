@@ -1,8 +1,8 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import { Metadata } from 'next'
+import { cookies } from 'next/headers'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 interface SubcategoryPageProps {
   params: {
@@ -11,7 +11,9 @@ interface SubcategoryPageProps {
   }
 }
 
-// ✅ CRITICAL: generateStaticParams for all ~350 subcategories
+// ✅ TEMPORARILY DISABLED: generateStaticParams for all ~350 subcategories
+// This will be re-enabled once Supabase environment variables are configured
+/*
 export async function generateStaticParams() {
   const supabase = createServerComponentClient({ cookies })
   
@@ -42,11 +44,12 @@ export async function generateStaticParams() {
   
   return params
 }
+*/
 
 // Metadata generation for SEO
 export async function generateMetadata({ params }: SubcategoryPageProps): Promise<Metadata> {
   const supabase = createServerComponentClient({ cookies })
-  
+
   // Get category and subcategory info
   const { data } = await supabase
     .from('subcategories')
@@ -81,7 +84,7 @@ export async function generateMetadata({ params }: SubcategoryPageProps): Promis
 
 export default async function SubcategoryPage({ params }: SubcategoryPageProps) {
   const supabase = createServerComponentClient({ cookies })
-  
+
   // Fetch category and subcategory details
   const { data: subcategoryData } = await supabase
     .from('subcategories')

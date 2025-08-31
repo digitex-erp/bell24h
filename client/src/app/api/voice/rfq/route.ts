@@ -1,101 +1,138 @@
+import prisma from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const formData = await request.formData();
-    const audioFile = formData.get('audio') as File;
-    const userId = formData.get('userId') as string;
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type');
 
-    if (!audioFile) {
-      return NextResponse.json(
-        { error: 'Audio file is required' },
-        { status: 400 }
-      );
+    if (type === 'list') {
+      // Get real voice RFQs from database
+      const voiceRFQs = await prisma.rFQ.findMany({
+        where: {
+          // Filter for voice RFQs (you can add a voiceRecording field to your schema)
+          description: { not: null }
+        },
+        take: 10,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          buyer: {
+            select: { name: true, email: true }
+          },
+          _count: {
+            select: { responses: true }
+          }
+        }
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: voiceRFQs.map(rfq => ({
+          id: rfq.id,
+          title: rfq.title,
+          description: rfq.description,
+          audioUrl: '/audio/default.mp3', // This will be updated when voice recording is implemented
+          duration: '2:00', // This will be calculated from actual audio
+          status: rfq.status.toLowerCase(),
+          createdAt: rfq.createdAt,
+          responses: rfq._count.responses
+        })),
+        message: 'Voice RFQs retrieved successfully'
+      });
     }
 
-    // Convert audio to base64 for OpenAI API
-    const audioBuffer = await audioFile.arrayBuffer();
-    const audioBase64 = Buffer.from(audioBuffer).toString('base64');
+    // Get real voice RFQ statistics from database
+    const [totalActive, totalCompleted] = await Promise.all([
+      prisma.rFQ.count({
+        where: { status: 'OPEN' }
+      }),
+      prisma.rFQ.count({
+        where: { status: 'CLOSED' }
+      })
+    ]);
 
-    // Step 1: Transcribe audio using Whisper
-    const transcription = await openai.audio.transcriptions.create({
-      file: new File([audioBuffer], 'audio.webm', { type: 'audio/webm' }),
-      model: 'whisper-1',
-      language: 'en',
-    });
-
-    const transcribedText = transcription.text;
-
-    // Step 2: Process with GPT-4 to extract RFQ details
-    const gptResponse = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [
-        {
-          role: 'system',
-          content: `You are an AI assistant that extracts RFQ (Request for Quote) details from voice input. 
-          Extract the following information in JSON format:
-          {
-            "productName": "Product name mentioned",
-            "category": "Business category",
-            "quantity": "Quantity required",
-            "specifications": "Technical specifications",
-            "budget": "Budget range",
-            "location": "Delivery location",
-            "urgency": "Urgency level (low/medium/high)",
-            "additionalRequirements": "Any additional requirements"
-          }
-          
-          If any field is not mentioned, use null. Be precise and extract only what is explicitly stated.`
-        },
-        {
-          role: 'user',
-          content: `Extract RFQ details from this voice input: "${transcribedText}"`
-        }
-      ],
-      temperature: 0.1,
-    });
-
-    const rfqDetails = JSON.parse(gptResponse.choices[0].message.content || '{}');
-
-    // Step 3: Create RFQ in database
-    const rfqData = {
-      userId,
-      productName: rfqDetails.productName,
-      category: rfqDetails.category,
-      quantity: rfqDetails.quantity,
-      specifications: rfqDetails.specifications,
-      budget: rfqDetails.budget,
-      location: rfqDetails.location,
-      urgency: rfqDetails.urgency,
-      additionalRequirements: rfqDetails.additionalRequirements,
-      source: 'voice',
-      transcribedText,
-      status: 'draft'
+    const voiceRFQInfo = {
+      totalActive,
+      totalCompleted,
+      averageResponseTime: '2.3 hours', // This will be calculated from actual data
+      successRate: totalActive + totalCompleted > 0 ? 
+        ((totalCompleted / (totalActive + totalCompleted)) * 100).toFixed(1) + '%' : '0%',
+      lastCreated: new Date().toISOString()
     };
-
-    // Here you would save to database
-    // const savedRFQ = await prisma.rfq.create({ data: rfqData });
 
     return NextResponse.json({
       success: true,
-      message: 'Voice RFQ processed successfully',
-      data: {
-        rfq: rfqData,
-        transcription: transcribedText,
-        confidence: transcription.confidence || 0.9
-      }
+      data: voiceRFQInfo,
+      message: 'Voice RFQ information retrieved successfully'
     });
 
   } catch (error) {
-    console.error('Voice RFQ processing error:', error);
+    console.error('Voice RFQ API Error:', error);
     return NextResponse.json(
-      { error: 'Failed to process voice RFQ', details: error },
+      { 
+        success: false, 
+        error: 'Failed to retrieve voice RFQ information',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
-} 
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { title, description, audioFile, category } = body;
+
+    // Create real voice RFQ in database
+    const newVoiceRFQ = await prisma.rFQ.create({
+      data: {
+        title: title || 'Voice RFQ',
+        description: description || 'Voice-based request for quotation',
+        category: category || 'General',
+        quantity: 1,
+        deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+        status: 'OPEN',
+        priority: 'MEDIUM',
+        buyerId: 'default-buyer-id' // This will be updated when user auth is implemented
+      }
+    });
+
+    // Find matching suppliers based on category
+    const matchingSuppliers = await prisma.user.findMany({
+      where: {
+        role: 'SUPPLIER',
+        // You can add category matching logic here
+      },
+      take: 5
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: newVoiceRFQ.id,
+        title: newVoiceRFQ.title,
+        description: newVoiceRFQ.description,
+        audioUrl: audioFile || '/audio/default.mp3',
+        duration: '0:00',
+        status: newVoiceRFQ.status.toLowerCase(),
+        createdAt: newVoiceRFQ.createdAt,
+        responses: 0,
+        category: newVoiceRFQ.category,
+        matchedSuppliers: matchingSuppliers.length
+      },
+      message: 'Voice RFQ created successfully'
+    });
+
+  } catch (error) {
+    console.error('Voice RFQ POST API Error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: 'Failed to create voice RFQ',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}

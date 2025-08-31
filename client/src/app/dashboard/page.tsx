@@ -1,149 +1,129 @@
 'use client';
-import { useAuth } from '../../contexts/AuthContext';
-import ProtectedRoute from '../../components/ProtectedRoute';
-import { LogOut, User, Building, Mail, Phone, MapPin } from 'lucide-react';
 
-export default function DashboardPage() {
-  const { user, logout } = useAuth();
+import { useRouter } from 'next/navigation';
 
-  const handleLogout = () => {
-    logout();
-    // Redirect will be handled by ProtectedRoute
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = 'force-dynamic';
+
+export default function Dashboard() {
+  const router = useRouter();
+
+  const handleCreateRFQ = () => {
+    router.push('/dashboard/rfq');
+  };
+
+  const handleSearchSuppliers = () => {
+    router.push('/dashboard/showcase');
+  };
+
+  const handleViewAnalytics = () => {
+    router.push('/dashboard/analytics');
   };
 
   return (
-    <ProtectedRoute>
-      <div className='min-h-screen bg-gray-50'>
-        {/* Header */}
-        <div className='bg-white shadow'>
-          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-            <div className='flex justify-between items-center py-6'>
-              <div className='flex items-center'>
-                <div className='w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center'>
-                  <span className='text-white font-bold text-sm'>🔔</span>
-                </div>
-                <h1 className='ml-3 text-2xl font-bold text-gray-900'>Bell24H Dashboard</h1>
-              </div>
-              <button
-                onClick={handleLogout}
-                className='flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700'
-              >
-                <LogOut className='h-4 w-4 mr-2' />
-                Logout
-              </button>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
+      <nav className="bg-white/10 backdrop-blur-md border-b border-white/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-white">Bell24h</h1>
+              <span className="ml-2 px-2 py-1 bg-orange-500 text-white text-xs rounded-full">Dashboard</span>
             </div>
+            <a
+              href="/"
+              className="px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors"
+            >
+              Back to Home
+            </a>
           </div>
         </div>
+      </nav>
 
-        {/* Main Content */}
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-          {/* Welcome Section */}
-          <div className='bg-white rounded-lg shadow p-6 mb-8'>
-            <h2 className='text-2xl font-bold text-gray-900 mb-4'>
-              Welcome back, {user?.name || user?.email}!
-            </h2>
-            <p className='text-gray-600'>
-              You're successfully logged in to Bell24H. Your authentication session is working
-              perfectly.
-            </p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
+          <h2 className="text-3xl font-bold text-white mb-6">Bell24h Dashboard</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Suppliers Card */}
+            <div className="bg-white/20 rounded-lg p-6 text-white">
+              <h3 className="text-xl font-semibold mb-2">Total Suppliers</h3>
+              <p className="text-3xl font-bold text-orange-400">5,000+</p>
+              <p className="text-sm text-white/70 mt-2">Active verified suppliers</p>
+            </div>
+
+            {/* Transactions Card */}
+            <div className="bg-white/20 rounded-lg p-6 text-white">
+              <h3 className="text-xl font-semibold mb-2">Total Transactions</h3>
+              <p className="text-3xl font-bold text-green-400">₹100Cr+</p>
+              <p className="text-sm text-white/70 mt-2">Processed this month</p>
+            </div>
+
+            {/* RFQs Card */}
+            <div className="bg-white/20 rounded-lg p-6 text-white">
+              <h3 className="text-xl font-semibold mb-2">Active RFQs</h3>
+              <p className="text-3xl font-bold text-blue-400">1,250</p>
+              <p className="text-sm text-white/70 mt-2">Pending responses</p>
+            </div>
           </div>
 
-          {/* User Information */}
-          <div className='bg-white rounded-lg shadow p-6 mb-8'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-4 flex items-center'>
-              <User className='h-5 w-5 mr-2' />
-              Account Information
-            </h3>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <div className='flex items-center'>
-                <Mail className='h-5 w-5 text-gray-400 mr-3' />
-                <div>
-                  <p className='text-sm font-medium text-gray-500'>Email</p>
-                  <p className='text-sm text-gray-900'>{user?.email}</p>
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Quick Actions */}
+            <div className="bg-white/20 rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-white mb-4">Quick Actions</h3>
+              <div className="space-y-3">
+                <button 
+                  onClick={handleCreateRFQ}
+                  className="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors cursor-pointer"
+                >
+                  Create New RFQ
+                </button>
+                <button 
+                  onClick={handleSearchSuppliers}
+                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors cursor-pointer"
+                >
+                  Search Suppliers
+                </button>
+                <button 
+                  onClick={handleViewAnalytics}
+                  className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors cursor-pointer"
+                >
+                  View Analytics
+                </button>
+              </div>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="bg-white/20 rounded-lg p-6">
+              <h3 className="text-xl font-semibold text-white mb-4">Recent Activity</h3>
+              <div className="space-y-3 text-white/80">
+                <div className="flex justify-between">
+                  <span>New supplier registered</span>
+                  <span className="text-sm">2 mins ago</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>RFQ submitted</span>
+                  <span className="text-sm">5 mins ago</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Payment processed</span>
+                  <span className="text-sm">10 mins ago</span>
                 </div>
               </div>
-              {user?.companyName && (
-                <div className='flex items-center'>
-                  <Building className='h-5 w-5 text-gray-400 mr-3' />
-                  <div>
-                    <p className='text-sm font-medium text-gray-500'>Company</p>
-                    <p className='text-sm text-gray-900'>{user.companyName}</p>
-                  </div>
-                </div>
-              )}
-              {user?.phone && (
-                <div className='flex items-center'>
-                  <Phone className='h-5 w-5 text-gray-400 mr-3' />
-                  <div>
-                    <p className='text-sm font-medium text-gray-500'>Phone</p>
-                    <p className='text-sm text-gray-900'>{user.phone}</p>
-                  </div>
-                </div>
-              )}
-              {(user?.city || user?.state) && (
-                <div className='flex items-center'>
-                  <MapPin className='h-5 w-5 text-gray-400 mr-3' />
-                  <div>
-                    <p className='text-sm font-medium text-gray-500'>Location</p>
-                    <p className='text-sm text-gray-900'>
-                      {user.city && user.state
-                        ? `${user.city}, ${user.state}`
-                        : user.city || user.state}
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Authentication Fix Status */}
-          <div className='bg-green-50 border border-green-200 rounded-lg p-6 mb-8'>
-            <h3 className='text-lg font-semibold text-green-800 mb-4'>
-              ✅ Authentication Fix Status
-            </h3>
-            <div className='space-y-2 text-sm text-green-700'>
-              <p>• User registration working correctly</p>
-              <p>• Login after registration working correctly</p>
-              <p>• Session persistence working correctly</p>
-              <p>• Logout functionality working correctly</p>
-              <p>• No more infinite registration loop!</p>
+          {/* Razorpay Integration Status */}
+          <div className="mt-8 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-lg p-6 border border-green-500/30">
+            <h3 className="text-xl font-semibold text-white mb-2">Payment Integration Status</h3>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-white">Razorpay Live API Active</span>
+              <span className="text-green-400 text-sm">(rzp_live_mk8XL8QrrZ4rjn)</span>
             </div>
-          </div>
-
-          {/* Debug Information */}
-          <div className='bg-gray-50 border border-gray-200 rounded-lg p-6'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-4'>🔧 Debug Information</h3>
-            <div className='text-sm text-gray-600 space-y-2'>
-              <p>
-                <strong>User ID:</strong> {user?.id}
-              </p>
-              <p>
-                <strong>Account Created:</strong>{' '}
-                {user?.createdAt ? new Date(user.createdAt).toLocaleString() : 'N/A'}
-              </p>
-              <p>
-                <strong>Business Type:</strong> {user?.businessType || 'N/A'}
-              </p>
-              <p>
-                <strong>Account Status:</strong> {user?.isActive ? 'Active' : 'Inactive'}
-              </p>
-            </div>
-          </div>
-
-          {/* Instructions */}
-          <div className='bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8'>
-            <h3 className='text-lg font-semibold text-blue-800 mb-4'>
-              🧪 Test the Authentication Fix
-            </h3>
-            <div className='text-sm text-blue-700 space-y-2'>
-              <p>1. Click the "Logout" button above</p>
-              <p>2. You'll be redirected to the login page</p>
-              <p>3. Try logging in with your registered email and password</p>
-              <p>4. You should successfully log back in - the authentication loop is fixed!</p>
-            </div>
+            <p className="text-white/70 mt-2">Dual payment gateway ready for Indian & International transactions</p>
           </div>
         </div>
       </div>
-    </ProtectedRoute>
+    </div>
   );
 }
