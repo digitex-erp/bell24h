@@ -1,324 +1,293 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Users, TrendingUp, MessageSquare, Target, DollarSign, BarChart3 } from 'lucide-react';
+import {
+    Building2,
+    CheckCircle,
+    Clock,
+    Edit,
+    Eye,
+    Filter,
+    Plus,
+    Search,
+    Star,
+    Trash2,
+    Users
+} from 'lucide-react';
+import { useState } from 'react';
 
-interface MarketingMetrics {
-  totalLeads: number;
-  activeLeads: number;
-  conversions: number;
-  revenue: number;
-  recentLeads: any[];
-  campaignPerformance: any[];
-}
+export default function CRMPage() {
+  const [activeTab, setActiveTab] = useState('suppliers');
+  const [searchTerm, setSearchTerm] = useState('');
 
-export default function CRMDashboard() {
-  const [marketingMetrics, setMarketingMetrics] = useState<MarketingMetrics>({
-    totalLeads: 0,
-    activeLeads: 0,
-    conversions: 0,
-    revenue: 0,
-    recentLeads: [],
-    campaignPerformance: []
-  });
+  // Mock data
+  const suppliers = [
+    {
+      id: 1,
+      name: 'ABC Manufacturing Co.',
+      email: 'contact@abcmanufacturing.com',
+      phone: '+91-98765-43210',
+      category: 'Manufacturing',
+      status: 'verified',
+      rating: 4.8,
+      joinedDate: '2024-01-15',
+      totalOrders: 45,
+      revenue: 2500000
+    },
+    {
+      id: 2,
+      name: 'Tech Solutions Ltd.',
+      email: 'info@techsolutions.com',
+      phone: '+91-98765-43211',
+      category: 'Electronics',
+      status: 'pending',
+      rating: 4.5,
+      joinedDate: '2024-02-20',
+      totalOrders: 23,
+      revenue: 1800000
+    },
+    {
+      id: 3,
+      name: 'Textile Industries',
+      email: 'sales@textileindustries.com',
+      phone: '+91-98765-43212',
+      category: 'Textiles',
+      status: 'verified',
+      rating: 4.7,
+      joinedDate: '2024-01-10',
+      totalOrders: 67,
+      revenue: 3200000
+    }
+  ];
 
-  const [loading, setLoading] = useState(true);
+  const buyers = [
+    {
+      id: 1,
+      name: 'Global Retail Chain',
+      email: 'procurement@globalretail.com',
+      phone: '+91-98765-43213',
+      company: 'Global Retail Ltd.',
+      status: 'active',
+      totalRFQs: 23,
+      completedOrders: 18,
+      totalSpent: 4500000
+    },
+    {
+      id: 2,
+      name: 'Industrial Supplies Co.',
+      email: 'purchasing@industrialsupplies.com',
+      phone: '+91-98765-43214',
+      company: 'Industrial Supplies Inc.',
+      status: 'active',
+      totalRFQs: 15,
+      completedOrders: 12,
+      totalSpent: 2800000
+    }
+  ];
 
-  useEffect(() => {
-    fetchCRMData();
-  }, []);
-
-  const fetchCRMData = async () => {
-    try {
-      const response = await fetch('/api/admin/crm/overview');
-      if (response.ok) {
-        const data = await response.json();
-        setMarketingMetrics(data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch CRM data:', error);
-    } finally {
-      setLoading(false);
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'verified':
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Verified</span>;
+      case 'pending':
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1" />Pending</span>;
+      case 'active':
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"><CheckCircle className="w-3 h-3 mr-1" />Active</span>;
+      default:
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Unknown</span>;
     }
   };
 
-  if (loading) {
-    return (
-      <div className="p-8 bg-gray-50 min-h-screen">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/3 mb-8"></div>
-          <div className="grid grid-cols-4 gap-6 mb-8">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-24 bg-gray-200 rounded"></div>
-            ))}
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">CRM Management</h1>
+              <p className="text-gray-600">Manage suppliers, buyers, and relationships</p>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                <Plus className="w-4 h-4 mr-2" />
+                Add New
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    );
-  }
 
-  return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Bell24h Marketing Command Center</h1>
-        <p className="text-gray-600 mt-2">Track leads, monitor campaigns, and optimize your 5000-supplier strategy</p>
-      </div>
-
-      {/* Key Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <MetricCard
-          title="Total Leads Today"
-          value={marketingMetrics.totalLeads.toLocaleString()}
-          change="+23%"
-          icon={<Users className="h-6 w-6" />}
-          color="blue"
-        />
-        <MetricCard
-          title="Supplier Signups"
-          value={marketingMetrics.conversions.toLocaleString()}
-          change="+45%"
-          icon={<Target className="h-6 w-6" />}
-          color="green"
-        />
-        <MetricCard
-          title="AI Chat Engagements"
-          value="2,156"
-          change="+67%"
-          icon={<MessageSquare className="h-6 w-6" />}
-          color="purple"
-        />
-        <MetricCard
-          title="Revenue Generated"
-          value={`₹${(marketingMetrics.revenue / 100000).toFixed(1)}L`}
-          change="+18%"
-          icon={<DollarSign className="h-6 w-6" />}
-          color="yellow"
-        />
-      </div>
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Lead Sources Breakdown */}
-        <div className="lg:col-span-2">
-          <LeadSourcesChart />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Tab Navigation */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('suppliers')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
+                activeTab === 'suppliers'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Building2 className="w-5 h-5" />
+              <span>Suppliers ({suppliers.length})</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('buyers')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
+                activeTab === 'buyers'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <Users className="w-5 h-5" />
+              <span>Buyers ({buyers.length})</span>
+            </button>
+          </nav>
         </div>
 
-        {/* Quick Actions */}
-        <div className="space-y-6">
-          <QuickActions />
-          <RecentLeadsTable leads={marketingMetrics.recentLeads} />
+        {/* Search and Filters */}
+        <div className="mb-6 flex flex-col sm:flex-row gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search by name, email, or company..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center">
+            <Filter className="w-4 h-4 mr-2" />
+            Filters
+          </button>
         </div>
-      </div>
 
-      {/* Campaign Performance */}
-      <div className="mt-8">
-        <CampaignPerformanceTable campaigns={marketingMetrics.campaignPerformance} />
+        {/* Suppliers Tab */}
+        {activeTab === 'suppliers' && (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h3 className="text-lg font-medium text-gray-900">Supplier Directory</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {suppliers.map((supplier) => (
+                    <tr key={supplier.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">{supplier.name}</div>
+                          <div className="text-sm text-gray-500">{supplier.email}</div>
+                          <div className="text-sm text-gray-500">{supplier.phone}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{supplier.category}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(supplier.status)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <Star className="w-4 h-4 text-yellow-400 mr-1" />
+                          <span className="text-sm text-gray-900">{supplier.rating}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{supplier.totalOrders}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatCurrency(supplier.revenue)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button className="text-blue-600 hover:text-blue-900">
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button className="text-green-600 hover:text-green-900">
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button className="text-red-600 hover:text-red-900">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Buyers Tab */}
+        {activeTab === 'buyers' && (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h3 className="text-lg font-medium text-gray-900">Buyer Directory</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buyer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RFQs</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {buyers.map((buyer) => (
+                    <tr key={buyer.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">{buyer.name}</div>
+                          <div className="text-sm text-gray-500">{buyer.email}</div>
+                          <div className="text-sm text-gray-500">{buyer.phone}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{buyer.company}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{getStatusBadge(buyer.status)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{buyer.totalRFQs}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{buyer.completedOrders}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatCurrency(buyer.totalSpent)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button className="text-blue-600 hover:text-blue-900">
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button className="text-green-600 hover:text-green-900">
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button className="text-red-600 hover:text-red-900">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
-// Metric Card Component
-const MetricCard = ({ title, value, change, icon, color }: {
-  title: string;
-  value: string;
-  change: string;
-  icon: React.ReactNode;
-  color: string;
-}) => {
-  const colorClasses = {
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    purple: 'bg-purple-500',
-    yellow: 'bg-yellow-500'
-  };
-
-  return (
-    <div className="bg-white rounded-lg p-6 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
-          <p className="text-sm text-green-600 mt-1">{change} vs last month</p>
-        </div>
-        <div className={`p-3 rounded-full ${colorClasses[color]} text-white`}>
-          {icon}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Lead Sources Chart Component
-const LeadSourcesChart = () => {
-  const leadSources = [
-    { source: 'LinkedIn Outreach', leads: 450, conversion: '18%', status: 'active' },
-    { source: 'GST Scraping', leads: 320, conversion: '12%', status: 'active' },
-    { source: 'WhatsApp Blast', leads: 280, conversion: '8%', status: 'paused' },
-    { source: 'Medium Article', leads: 180, conversion: '25%', status: 'active' },
-    { source: 'Reddit Posts', leads: 95, conversion: '35%', status: 'active' },
-    { source: 'SMS Campaign', leads: 75, conversion: '5%', status: 'testing' }
-  ];
-
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-xl font-semibold mb-4">Lead Sources Performance</h2>
-      <div className="space-y-4">
-        {leadSources.map((source, index) => (
-          <div key={index} className="flex justify-between items-center p-3 border rounded">
-            <div>
-              <span className="font-medium">{source.source}</span>
-              <span className={`ml-2 px-2 py-1 text-xs rounded ${
-                source.status === 'active' ? 'bg-green-100 text-green-800' :
-                source.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
-                'bg-blue-100 text-blue-800'
-              }`}>
-                {source.status}
-              </span>
-            </div>
-            <div className="text-right">
-              <div className="font-semibold">{source.leads} leads</div>
-              <div className="text-sm text-gray-600">{source.conversion} conversion</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Quick Actions Component
-const QuickActions = () => {
-  const actions = [
-    { icon: <Users className="h-4 w-4" />, label: 'Add Lead', action: 'add-lead', color: 'bg-blue-600' },
-    { icon: <MessageSquare className="h-4 w-4" />, label: 'Send Email', action: 'send-email', color: 'bg-green-600' },
-    { icon: <BarChart3 className="h-4 w-4" />, label: 'View Analytics', action: 'analytics', color: 'bg-purple-600' },
-    { icon: <Target className="h-4 w-4" />, label: 'Create Campaign', action: 'create-campaign', color: 'bg-orange-600' }
-  ];
-
-  return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-      <div className="grid grid-cols-1 gap-3">
-        {actions.map((action, index) => (
-          <button
-            key={index}
-            className={`${action.color} text-white p-3 rounded-lg flex items-center space-x-3 hover:opacity-90 transition-opacity`}
-          >
-            {action.icon}
-            <span className="font-medium">{action.label}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Recent Leads Table Component
-const RecentLeadsTable = ({ leads }: { leads: any[] }) => {
-  const mockLeads = [
-    { id: 1, name: 'Rajesh Kumar', company: 'SteelCorp Industries', source: 'LinkedIn', status: 'NEW', createdAt: '2024-01-30' },
-    { id: 2, name: 'Priya Sharma', company: 'Textile Solutions', source: 'GST Scraping', status: 'CONTACTED', createdAt: '2024-01-30' },
-    { id: 3, name: 'Amit Patel', company: 'Manufacturing Hub', source: 'Medium', status: 'QUALIFIED', createdAt: '2024-01-29' }
-  ];
-
-  const displayLeads = leads.length > 0 ? leads : mockLeads;
-
-  return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <h3 className="text-lg font-semibold mb-4">Recent Leads</h3>
-      <div className="space-y-3">
-        {displayLeads.slice(0, 5).map((lead) => (
-          <div key={lead.id} className="flex justify-between items-center p-3 border rounded">
-            <div>
-              <p className="font-medium">{lead.name}</p>
-              <p className="text-sm text-gray-600">{lead.company}</p>
-            </div>
-            <div className="text-right">
-              <span className={`px-2 py-1 rounded-full text-xs ${
-                lead.status === 'NEW' ? 'bg-blue-100 text-blue-800' :
-                lead.status === 'CONTACTED' ? 'bg-yellow-100 text-yellow-800' :
-                'bg-green-100 text-green-800'
-              }`}>
-                {lead.status}
-              </span>
-              <p className="text-xs text-gray-500 mt-1">{lead.source}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Campaign Performance Table Component
-const CampaignPerformanceTable = ({ campaigns }: { campaigns: any[] }) => {
-  const mockCampaigns = [
-    { id: 1, name: 'GST Directory Outreach', type: 'gst-scraping', status: 'ACTIVE', targetCount: 1500, completedCount: 847, responseCount: 152, signupCount: 89 },
-    { id: 2, name: 'LinkedIn Factory Owners', type: 'linkedin', status: 'ACTIVE', targetCount: 800, completedCount: 623, responseCount: 112, signupCount: 67 },
-    { id: 3, name: 'WhatsApp Business API', type: 'whatsapp', status: 'PAUSED', targetCount: 500000, completedCount: 150000, responseCount: 4500, signupCount: 340 }
-  ];
-
-  const displayCampaigns = campaigns.length > 0 ? campaigns : mockCampaigns;
-
-  return (
-    <div className="bg-white rounded-lg shadow-lg">
-      <div className="p-6 border-b">
-        <h2 className="text-xl font-semibold">Marketing Campaigns</h2>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Campaign</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progress</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Responses</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Signups</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {displayCampaigns.map((campaign) => (
-              <tr key={campaign.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{campaign.name}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-900 capitalize">{campaign.type.replace('-', ' ')}</span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 py-1 text-xs rounded-full ${
-                    campaign.status === 'ACTIVE' ? 'bg-green-100 text-green-800' :
-                    campaign.status === 'PAUSED' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {campaign.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {campaign.completedCount}/{campaign.targetCount}
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full"
-                      style={{ width: `${(campaign.completedCount / campaign.targetCount) * 100}%` }}
-                    ></div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {campaign.responseCount}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {campaign.signupCount}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}; 

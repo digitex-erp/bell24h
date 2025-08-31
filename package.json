@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "cd client && next start",
-    "dev": "cd client && next dev",
-    "build": "cd client && next build",
+    "start": "next start -p ${PORT:-3000}",
+    "dev": "next dev",
+    "build": "next build",
     "test": "jest",
     "test:unit": "jest --coverage --passWithNoTests",
     "test:integration": "jest --config=jest.integration.config.js",
@@ -15,7 +15,8 @@
     "test:ci": "npm run test:unit && npm run test:integration && npm run test:e2e",
     "test:watch": "jest --watch",
     "test:update": "jest --updateSnapshot",
-    "db:seed": "node --loader ts-node/esm prisma/seed-simple.ts"
+    "db:seed": "node --loader ts-node/esm prisma/seed-simple.ts",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "node --loader ts-node/esm prisma/seed-simple.ts"

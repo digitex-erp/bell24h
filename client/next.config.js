@@ -1,40 +1,46 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Disable all problematic features
-  eslint: {
-    ignoreDuringBuilds: true,
+  // Clean configuration - no problematic experimental features
+  reactStrictMode: true,
+  swcMinify: true,
+  
+  // Important for Railway deployment
+  output: 'standalone',
+  
+  // Handle images for deployment
+  images: {
+    domains: ['localhost', 'bell24h.vercel.app', '*.up.railway.app'],
+    unoptimized: true
   },
+  
+  // Environment variables for Razorpay
+  env: {
+    NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
+  },
+  
+  // Ignore build errors temporarily for deployment
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Optimize for serverless deployment
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client']
+  
+  eslint: {
+    ignoreDuringBuilds: true,
   },
-  // Disable image optimization
-  images: {
-    unoptimized: true,
+  
+  // Allow Railway domain
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+        ],
+      },
+    ];
   },
-  // Disable SWC minification
-  swcMinify: false,
-  // Disable strict mode
-  reactStrictMode: false,
-  // Standalone output for deployment
-  output: 'standalone',
-  // Environment variables for build optimization
-  env: {
-    SKIP_DB_OPERATIONS: process.env.SKIP_DB_OPERATIONS || 'false'
-  },
-  // Disable webpack bundle analyzer
-  webpack: config => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      net: false,
-      tls: false,
-    };
-    return config;
-  },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
