@@ -1,9 +1,11 @@
 {
-  "extends": ["eslint:recommended"],
-  "env": {
-    "node": true,
-    "es2021": true
+  "extends": ["next/core-web-vitals"],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
-  "ignorePatterns": ["node_modules/", "dist/", "build/", "client/"],
-  "root": false
+  "ignorePatterns": ["client/", "src/", "*.config.js", "*.config.ts"],
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  }
 }

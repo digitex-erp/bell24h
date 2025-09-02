@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
 import {
-  Container,
+  Alert,
   Box,
-  Typography,
-  Tabs,
-  Tab,
-  useTheme,
-  useMediaQuery,
+  Container,
   Snackbar,
-  Alert
+  Tab,
+  Tabs,
+  Typography,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
+import React, { useState } from 'react';
 import { ShippingForm } from '../../components/mobile/ShippingForm';
 import { ShippingOptions } from '../../components/mobile/ShippingOptions';
 import { TrackingDisplay } from '../../components/mobile/TrackingDisplay';
@@ -34,7 +34,7 @@ const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => (
   </div>
 );
 
-export const ShippingPage: React.FC = () => {
+const ShippingPage: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [activeTab, setActiveTab] = useState(0);
@@ -160,4 +160,6 @@ export const ShippingPage: React.FC = () => {
       </Snackbar>
     </Container>
   );
-}; 
+};
+
+export default ShippingPage; 
