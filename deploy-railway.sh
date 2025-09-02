@@ -1,8 +1,6 @@
 #!/bin/bash
-# Railway Deployment Script for Bell24h
-
-echo "🚀 Railway Deployment Script"
-echo "============================="
+echo "🚀 Railway Deployment Script for Bell24h"
+echo "========================================"
 
 # Check if Railway CLI is installed
 if ! command -v railway &> /dev/null; then

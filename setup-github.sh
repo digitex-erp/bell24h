@@ -1,7 +1,6 @@
 #!/bin/bash
-# Automated GitHub Repository Setup for Bell24h
-
-echo "🚀 Setting up GitHub repository for Bell24h..."
+echo "🚀 Automated GitHub Setup for Bell24h"
+echo "====================================="
 
 # Check if git is initialized
 if [ ! -d ".git" ]; then
@@ -9,12 +8,9 @@ if [ ! -d ".git" ]; then
     exit 1
 fi
 
-# Get current directory name
-REPO_NAME=$(basename "$PWD")
+echo "📦 Current repository status:"
+git status --short
 
-echo "📦 Repository name: $REPO_NAME"
-
-# Instructions for user
 echo ""
 echo "🔗 MANUAL STEPS REQUIRED:"
 echo "1. Go to: https://github.com/new"
