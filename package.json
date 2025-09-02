@@ -19,7 +19,12 @@
     "verify": "node scripts/protect-files.cjs verify",
     "predeploy": "npm run verify && npm run backup",
     "deploy:staging": "npm run predeploy && vercel --env preview",
-    "deploy:production": "npm run predeploy && npm test && vercel --prod"
+    "deploy:production": "npm run predeploy && npm test && vercel --prod",
+    "audit": "node scripts/audit-pages.cjs",
+    "audit:visual": "open admin/audit-dashboard.html",
+    "migrate:missing": "node scripts/migrate-missing-pages.cjs",
+    "migrate:test": "node scripts/migrate-missing-pages.cjs --dry-run",
+    "compare": "npm run audit && npm run audit:visual"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
