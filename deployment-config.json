@@ -1,0 +1,55 @@
+{
+  "environments": {
+    "development": {
+      "url": "http://localhost:3000",
+      "branch": "develop",
+      "autoBackup": true,
+      "requiresApproval": false
+    },
+    "staging": {
+      "url": "https://staging.bell24h.vercel.app",
+      "branch": "staging",
+      "requiresApproval": true,
+      "autoBackup": true,
+      "requiresTests": true
+    },
+    "production": {
+      "url": "https://bell24h.vercel.app",
+      "branch": "main",
+      "requiresApproval": true,
+      "requiresTests": true,
+      "autoBackup": true,
+      "rollbackEnabled": true,
+      "healthCheck": true
+    }
+  },
+  "backup": {
+    "enabled": true,
+    "location": "./backups",
+    "maxBackups": 10,
+    "autoBackupBeforeDeploy": true,
+    "includeFiles": [
+      ".env",
+      ".env.local",
+      ".env.production",
+      "package.json",
+      "package-lock.json",
+      "next.config.js",
+      "vercel.json",
+      "railway.json",
+      "prisma/schema.prisma"
+    ]
+  },
+  "protection": {
+    "preventForceCommit": true,
+    "requireTestsBeforeDeploy": true,
+    "blockDirectProduction": true,
+    "verifyChecksums": true,
+    "autoRestoreOnFailure": true
+  },
+  "notifications": {
+    "slack": false,
+    "email": false,
+    "webhook": false
+  }
+}

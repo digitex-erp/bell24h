@@ -1,0 +1,21 @@
+{
+  "locked": false,
+  "environment": "development",
+  "lastDeployment": null,
+  "protectedFiles": [
+    "vercel.json",
+    "railway.json",
+    ".env.production",
+    "next.config.js",
+    "package-lock.json",
+    "prisma/schema.prisma"
+  ],
+  "deploymentHistory": [],
+  "backupLocation": "./backups",
+  "autoBackup": true,
+  "requiresApproval": {
+    "production": true,
+    "staging": true,
+    "development": false
+  }
+}
