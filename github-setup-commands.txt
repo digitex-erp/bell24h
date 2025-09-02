@@ -1,0 +1,38 @@
+# GitHub Setup Commands for Bell24h Deployment
+
+## Quick Setup Commands
+
+# 1. Create GitHub repository first at: https://github.com/new
+#    - Name: bell24h
+#    - Public repository
+#    - Don't initialize with README
+
+# 2. Run these commands after creating the repository:
+
+git remote add origin https://github.com/YOUR_USERNAME/bell24h.git
+git branch -M main
+git push -u origin main
+
+# 3. Then go to Railway.app and connect the repository
+
+## Alternative: Railway CLI Commands
+
+# If you prefer using Railway CLI directly:
+railway login
+railway link
+railway up
+
+## Environment Variables for Railway
+
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+NODE_ENV=production
+JWT_SECRET=your-32-character-secret-key-here
+NEXTAUTH_URL=https://your-app.railway.app
+NEXT_PUBLIC_API_URL=https://your-app.railway.app
+
+## Important Notes
+
+- Replace YOUR_USERNAME with your actual GitHub username
+- Make sure JWT_SECRET is at least 32 characters long
+- Railway will automatically set DATABASE_URL from your PostgreSQL service
+- Your app will be live at: https://your-app.railway.app
