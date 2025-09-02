@@ -8,6 +8,8 @@
 ✅ 2. Build successful 
 ✅ 3. Backups created
 ✅ 4. Files protected
+✅ 5. Git repository ready
+✅ 6. Railway config prepared
 
 🚀 NEXT STEPS TO GO LIVE:
 
@@ -16,6 +18,7 @@
    • Name: bell24h
    • Keep it public
    • DON'T initialize with README
+   • Click "Create repository"
 
 2️⃣  PUSH YOUR CODE:
    git remote add origin https://github.com/YOUR_USERNAME/bell24h.git
