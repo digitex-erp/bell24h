@@ -91,7 +91,7 @@ NODE_ENV=production
 NEXTAUTH_URL=https://your-app.railway.app
 NEXT_PUBLIC_API_URL=https://your-app.railway.app`;
 
-fs.writeFileSync('.env.production.example', envTemplate);
+fs.writeFileSync('env.production.example', envTemplate);
 console.log('✅ Environment template created');
 
 // Step 6: Show deployment status
@@ -122,4 +122,4 @@ console.log('   railway up');
 console.log('\n📁 Deployment files created:');
 console.log('   • DEPLOY-NOW.txt - Full instructions');
 console.log('   • quick-deploy.sh - Quick commands');
-console.log('   • .env.production.example - Environment template');
+console.log('   • env.production.example - Environment template');
