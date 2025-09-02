@@ -1,12 +1,8 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
 function createBackup() {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -62,9 +58,8 @@ function createBackup() {
   return backupDir;
 }
 
-// Run if called directly
-if (process.argv[1] && process.argv[1].endsWith('backup.js')) {
+if (require.main === module) {
   createBackup();
 }
 
-export { createBackup };
+module.exports = { createBackup };
