@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MarketingDashboard from './MarketingDashboard';
+import AnalyticsDashboard from './AnalyticsDashboard';
 import TransactionsTab from './TransactionsTab';
 import UGCTab from './UGCTab';
 import SubscriptionsTab from './SubscriptionsTab';
@@ -23,6 +24,12 @@ const tabs: Tab[] = [
     component: MarketingDashboard,
   },
   {
+    id: 'analytics',
+    name: 'Analytics',
+    icon: '📊',
+    component: AnalyticsDashboard,
+  },
+  {
     id: 'transactions',
     name: 'Transactions',
     icon: '💰',
@@ -37,7 +44,7 @@ const tabs: Tab[] = [
   {
     id: 'subscriptions',
     name: 'Subscriptions',
-    icon: '📊',
+    icon: '📈',
     component: SubscriptionsTab,
   },
   {
@@ -56,6 +63,15 @@ const tabs: Tab[] = [
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('marketing');
+  const [lastUpdated, setLastUpdated] = useState<string>('');
+
+  useEffect(() => {
+    setLastUpdated(new Date().toLocaleString());
+  }, []);
+
+  const handleRefresh = () => {
+    setLastUpdated(new Date().toLocaleString());
+  };
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || MarketingDashboard;
 
@@ -73,9 +89,12 @@ export default function AdminDashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-500">
-                Last updated: {new Date().toLocaleString()}
+                Last updated: {lastUpdated}
               </div>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button 
+                onClick={handleRefresh}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
                 Refresh Data
               </button>
             </div>
