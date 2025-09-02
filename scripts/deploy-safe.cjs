@@ -1,13 +1,9 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
-import readline from 'readline';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+const readline = require('readline');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -76,7 +72,7 @@ async function safeDeployment() {
   
   // Create backup
   console.log('\n💾 Creating backup...');
-  const { createBackup } = await import('./backup.js');
+  const { createBackup } = require('./backup.js');
   const backupPath = createBackup();
   console.log('✅ Backup created at:', backupPath);
   
