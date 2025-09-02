@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-09-02T07-18-36-540Z",
+  "files": [
+    ".env",
+    ".env.local",
+    ".env.production",
+    "package.json",
+    "package-lock.json",
+    "next.config.js",
+    "vercel.json",
+    "railway.json",
+    "prisma/schema.prisma"
+  ],
+  "gitCommit": "5bb37579ff38c7a1600a7cee290ce21f3de66f7c",
+  "branch": "main"
+}
