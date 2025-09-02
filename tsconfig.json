@@ -12,6 +12,9 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "./*"
+      ],
       "@shared/*": [
         "../shared/*"
       ]

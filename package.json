@@ -28,7 +28,8 @@
     "recovery:pull": "node scripts/pull-vercel-source.cjs",
     "recovery:verify": "node scripts/verify-pages.cjs",
     "recovery:test": "node scripts/test-all-pages.cjs",
-    "recovery:full": "npm run recovery:pull && npm run recovery:verify && npm run recovery:test"
+    "recovery:full": "npm run recovery:pull && npm run recovery:verify && npm run recovery:test",
+    "recovery:backup": "node scripts/backup-current.cjs"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
