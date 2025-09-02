@@ -29,7 +29,16 @@
     "recovery:verify": "node scripts/verify-pages.cjs",
     "recovery:test": "node scripts/test-all-pages.cjs",
     "recovery:full": "npm run recovery:pull && npm run recovery:verify && npm run recovery:test",
-    "recovery:backup": "node scripts/backup-current.cjs"
+    "recovery:backup": "node scripts/backup-current.cjs",
+    "workflow:pre": "node scripts/dev-workflow.cjs pre",
+    "workflow:post": "node scripts/dev-workflow.cjs post",
+    "workflow:branch": "node scripts/dev-workflow.cjs branch",
+    "workflow:staging": "node scripts/dev-workflow.cjs staging",
+    "workflow:production": "node scripts/dev-workflow.cjs production",
+    "workflow:show": "node scripts/dev-workflow.cjs show",
+    "env:setup": "node scripts/setup-env.cjs create",
+    "env:validate": "node scripts/setup-env.cjs validate",
+    "env:status": "node scripts/setup-env.cjs status"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
