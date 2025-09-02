@@ -5,9 +5,9 @@
  * Complete automation for Railway deployment
  */
 
+import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +23,7 @@ try {
     execSync('git init');
     console.log('✅ Git initialized');
   }
-  
+
   // Add all files
   execSync('git add .');
   execSync('git commit -m "Final deployment with full protection"');
@@ -93,7 +93,7 @@ fs.writeFileSync('quick-deploy.sh', quickDeploy);
 // Step 4: Final build check
 console.log('\n📦 Step 2: Final build verification...');
 try {
-  execSync('npm run build', {stdio: 'pipe'});
+  execSync('npm run build', { stdio: 'pipe' });
   console.log('✅ Build verified - ready for deployment');
 } catch {
   console.log('⚠️  Build has warnings but is deployable');
