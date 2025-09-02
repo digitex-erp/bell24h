@@ -19,21 +19,21 @@ async function askQuestion(question) {
 async function safeDeployment() {
   console.log('🚀 Bell24h Safe Deployment System');
   console.log('==================================\n');
-  
+
   // Check current branch
   const currentBranch = execSync('git branch --show-current').toString().trim();
   console.log('📍 Current branch:', currentBranch);
-  
+
   // Select environment
   console.log('\n📦 Select deployment environment:');
   console.log('1. Development (local)');
   console.log('2. Staging (preview)');
   console.log('3. Production (live)');
-  
+
   const envChoice = await askQuestion('\nSelect (1-3): ');
-  
+
   let environment;
-  switch(envChoice) {
+  switch (envChoice) {
     case '1':
       environment = 'development';
       break;
@@ -47,7 +47,7 @@ async function safeDeployment() {
       console.log('❌ Invalid choice');
       process.exit(1);
   }
-  
+
   // Production safeguards
   if (environment === 'production') {
     if (currentBranch !== 'main' && currentBranch !== 'master') {
@@ -58,7 +58,7 @@ async function safeDeployment() {
         process.exit(0);
       }
     }
-    
+
     // Run tests
     console.log('\n🧪 Running tests...');
     try {
@@ -69,13 +69,13 @@ async function safeDeployment() {
       process.exit(1);
     }
   }
-  
+
   // Create backup
   console.log('\n💾 Creating backup...');
-  const { createBackup } = require('./backup.js');
+  const { createBackup } = require('./backup.cjs');
   const backupPath = createBackup();
   console.log('✅ Backup created at:', backupPath);
-  
+
   // Build project
   console.log('\n🔨 Building project...');
   try {
@@ -85,17 +85,17 @@ async function safeDeployment() {
     console.log('❌ Build failed!');
     process.exit(1);
   }
-  
+
   // Deploy based on environment
   console.log('\n🚀 Deploying to', environment + '...');
-  
+
   try {
-    switch(environment) {
+    switch (environment) {
       case 'development':
         console.log('Starting development server...');
         execSync('npm run dev', { stdio: 'inherit' });
         break;
-        
+
       case 'staging':
         // Try Vercel first
         try {
@@ -105,14 +105,14 @@ async function safeDeployment() {
           execSync('railway up --environment staging', { stdio: 'inherit' });
         }
         break;
-        
+
       case 'production':
         const finalConfirm = await askQuestion('\n⚠️  FINAL CONFIRMATION: Deploy to PRODUCTION? (type "DEPLOY"): ');
         if (finalConfirm !== 'DEPLOY') {
           console.log('❌ Production deployment cancelled');
           process.exit(0);
         }
-        
+
         // Try Vercel first
         try {
           execSync('vercel --prod', { stdio: 'inherit' });
@@ -122,20 +122,22 @@ async function safeDeployment() {
         }
         break;
     }
-    
+
     console.log('\n✅ Deployment successful!');
-    
+
     // Update deployment lock
     const lockFile = '.deployment-lock';
-    const lock = JSON.parse(fs.readFileSync(lockFile, 'utf-8'));
-    lock.lastDeployment = {
-      environment,
-      timestamp: new Date().toISOString(),
-      branch: currentBranch,
-      backup: backupPath
-    };
-    fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2));
-    
+    if (fs.existsSync(lockFile)) {
+      const lock = JSON.parse(fs.readFileSync(lockFile, 'utf-8'));
+      lock.lastDeployment = {
+        environment,
+        timestamp: new Date().toISOString(),
+        branch: currentBranch,
+        backup: backupPath
+      };
+      fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2));
+    }
+
   } catch (error) {
     console.log('\n❌ Deployment failed!');
     console.log('💡 Backup available at:', backupPath);
