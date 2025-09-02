@@ -24,7 +24,11 @@
     "audit:visual": "open admin/audit-dashboard.html",
     "migrate:missing": "node scripts/migrate-missing-pages.cjs",
     "migrate:test": "node scripts/migrate-missing-pages.cjs --dry-run",
-    "compare": "npm run audit && npm run audit:visual"
+    "compare": "npm run audit && npm run audit:visual",
+    "recovery:pull": "node scripts/pull-vercel-source.cjs",
+    "recovery:verify": "node scripts/verify-pages.cjs",
+    "recovery:test": "node scripts/test-all-pages.cjs",
+    "recovery:full": "npm run recovery:pull && npm run recovery:verify && npm run recovery:test"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
