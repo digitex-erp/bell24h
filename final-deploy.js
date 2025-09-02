@@ -1,17 +1,5 @@
-#!/usr/bin/env node
-
-/**
- * Bell24h Final Deployment Automation
- * This script prepares everything for Railway deployment
- */
-
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const { execSync } = require('child_process');
+const fs = require('fs');
 
 console.log('🚀 FINAL DEPLOYMENT AUTOMATION STARTING...\n');
 
@@ -33,8 +21,7 @@ try {
 }
 
 // Step 2: Create deployment helper
-const deployHelper = `
-======================================
+const deployHelper = `======================================
     BELL24H RAILWAY DEPLOYMENT
 ======================================
 
@@ -71,8 +58,7 @@ const deployHelper = `
    • Railway will build and deploy
    • Your app will be live!
 
-======================================
-`;
+======================================`;
 
 fs.writeFileSync('DEPLOY-NOW.txt', deployHelper);
 console.log('✅ Deployment instructions created: DEPLOY-NOW.txt');
@@ -85,8 +71,7 @@ git remote add origin https://github.com/YOUR_USERNAME/bell24h.git
 git branch -M main  
 git push -u origin main
 
-# Then go to railway.app/dashboard and connect the repo
-`;
+# Then go to railway.app/dashboard and connect the repo`;
 
 fs.writeFileSync('quick-deploy.sh', quickDeploy);
 
