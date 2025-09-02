@@ -116,19 +116,19 @@ class DeploymentProtector {
   async setup() {
     console.log('🛡️  Bell24h Deployment Protection Setup');
     console.log('========================================\n');
-    
+
     // Create necessary directories
     this.createDirectories();
-    
+
     // Create protection files
     this.createProtectionFiles();
-    
+
     // Setup git hooks
     this.setupGitHooks();
-    
+
     // Update package.json scripts
     this.updatePackageScripts();
-    
+
     console.log('\n✅ Deployment protection setup complete!');
     console.log('\n📚 Available commands:');
     console.log('  npm run deploy:safe    - Safe deployment with checks');
@@ -139,7 +139,7 @@ class DeploymentProtector {
 
   createDirectories() {
     const dirs = ['scripts', 'backups', '.github/workflows'];
-    
+
     dirs.forEach(dir => {
       const dirPath = path.join(this.projectRoot, dir);
       if (!fs.existsSync(dirPath)) {
@@ -152,13 +152,13 @@ class DeploymentProtector {
   createProtectionFiles() {
     Object.entries(DEPLOYMENT_CONFIGS).forEach(([fileName, content]) => {
       const filePath = path.join(this.projectRoot, fileName);
-      
+
       // Create directory if needed
       const dir = path.dirname(filePath);
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
-      
+
       // Write file
       fs.writeFileSync(filePath, content);
       console.log('📄 Created:', fileName);
@@ -167,16 +167,16 @@ class DeploymentProtector {
 
   setupGitHooks() {
     const hookDir = path.join(this.projectRoot, '.git', 'hooks');
-    
+
     if (!fs.existsSync(hookDir)) {
       console.log('⚠️  Git not initialized. Skipping hooks setup.');
       return;
     }
-    
+
     // Pre-commit hook
     const preCommitHook = `#!/bin/sh
 # Verify protected files before commit
-node scripts/protect-files.js verify
+node scripts/protect-files.cjs verify
 
 # Check for sensitive data
 if git diff --cached | grep -E "(JWT_SECRET|DATABASE_URL|API_KEY)" > /dev/null; then
@@ -188,33 +188,33 @@ if git diff --cached | grep -E "(JWT_SECRET|DATABASE_URL|API_KEY)" > /dev/null; 
     exit 1
   fi
 fi`;
-    
+
     fs.writeFileSync(path.join(hookDir, 'pre-commit'), preCommitHook);
-    
+
     // Make executable (Unix-like systems)
     try {
       execSync(`chmod +x ${path.join(hookDir, 'pre-commit')}`);
-    } catch {}
-    
+    } catch { }
+
     console.log('🪝 Git hooks configured');
   }
 
   updatePackageScripts() {
     const packagePath = path.join(this.projectRoot, 'package.json');
     const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf-8'));
-    
+
     // Add protection scripts
     packageJson.scripts = {
       ...packageJson.scripts,
-      'deploy:safe': 'node scripts/deploy-safe.js',
-      'backup': 'node scripts/backup.js',
-      'protect': 'node scripts/protect-files.js',
-      'verify': 'node scripts/protect-files.js verify',
+      'deploy:safe': 'node scripts/deploy-safe.cjs',
+      'backup': 'node scripts/backup.cjs',
+      'protect': 'node scripts/protect-files.cjs',
+      'verify': 'node scripts/protect-files.cjs verify',
       'predeploy': 'npm run verify && npm run backup',
       'deploy:staging': 'npm run predeploy && vercel --env preview',
       'deploy:production': 'npm run predeploy && npm test && vercel --prod'
     };
-    
+
     fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2));
     console.log('📦 Updated package.json scripts');
   }
