@@ -37,6 +37,37 @@ export default function MarketingDashboard() {
   // Fetch campaigns from database
   useEffect(() => {
     fetchCampaigns();
+    
+    // Set initial insights
+    setInsights([
+      {
+        id: '1',
+        type: 'optimization',
+        title: 'Budget Reallocation Opportunity',
+        description: 'Campaign 2 shows 40% higher ROAS. Consider reallocating budget from Campaign 3.',
+        impact: 'high',
+        action: 'Reallocate $1000 from Campaign 3 to Campaign 2',
+        timestamp: '2024-01-20T10:30:00Z',
+      },
+      {
+        id: '2',
+        type: 'trend',
+        title: 'Peak Performance Hours',
+        description: 'CTR increases by 35% between 9-11 AM and 2-4 PM. Consider scheduling ads during these hours.',
+        impact: 'medium',
+        action: 'Adjust ad scheduling to peak hours',
+        timestamp: '2024-01-20T09:15:00Z',
+      },
+      {
+        id: '3',
+        type: 'alert',
+        title: 'Budget Alert',
+        description: 'Campaign 1 has spent 32.5% of budget in 20 days. At current pace, budget will be exhausted before end date.',
+        impact: 'high',
+        action: 'Review and adjust daily spend limit',
+        timestamp: '2024-01-20T08:45:00Z',
+      },
+    ]);
   }, []);
 
   const fetchCampaigns = async () => {
@@ -135,37 +166,6 @@ export default function MarketingDashboard() {
       ]);
     }
   };
-
-  setInsights([
-    {
-      id: '1',
-      type: 'optimization',
-      title: 'Budget Reallocation Opportunity',
-      description: 'Campaign 2 shows 40% higher ROAS. Consider reallocating budget from Campaign 3.',
-      impact: 'high',
-      action: 'Reallocate $1000 from Campaign 3 to Campaign 2',
-      timestamp: '2024-01-20T10:30:00Z',
-    },
-    {
-      id: '2',
-      type: 'trend',
-      title: 'Peak Performance Hours',
-      description: 'CTR increases by 35% between 9-11 AM and 2-4 PM. Consider scheduling ads during these hours.',
-      impact: 'medium',
-      action: 'Adjust ad scheduling to peak hours',
-      timestamp: '2024-01-20T09:15:00Z',
-    },
-    {
-      id: '3',
-      type: 'alert',
-      title: 'Budget Alert',
-      description: 'Campaign 1 has spent 32.5% of budget in 20 days. At current pace, budget will be exhausted before end date.',
-      impact: 'high',
-      action: 'Review and adjust daily spend limit',
-      timestamp: '2024-01-20T08:45:00Z',
-    },
-  ]);
-}, []);
 
 const generateAIInsights = async () => {
   setIsGenerating(true);
