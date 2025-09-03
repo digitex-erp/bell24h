@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-09-02T18:31:52.187Z",
+  "timestamp": "2025-09-02T20:25:24.899Z",
   "expectedPages": 34,
-  "foundPages": 204,
+  "foundPages": 209,
   "missingPages": [
     "/categories/textiles-garments",
     "/categories/pharmaceuticals",
@@ -24,6 +24,11 @@
     "/categories/leather"
   ],
   "extraPages": [
+    "/admin",
+    "/api/agents/auth/route",
+    "/api/agents/verify/route",
+    "/api/campaigns/route",
+    "/api/campaigns/:id/route",
     "/categories/:category",
     "/layout",
     "/sitemap",
@@ -219,6 +224,31 @@
     {
       "route": "/about",
       "file": "about\\page.tsx",
+      "directory": "app"
+    },
+    {
+      "route": "/admin",
+      "file": "admin\\page.tsx",
+      "directory": "app"
+    },
+    {
+      "route": "/api/agents/auth/route",
+      "file": "api\\agents\\auth\\route.ts",
+      "directory": "app"
+    },
+    {
+      "route": "/api/agents/verify/route",
+      "file": "api\\agents\\verify\\route.ts",
+      "directory": "app"
+    },
+    {
+      "route": "/api/campaigns/route",
+      "file": "api\\campaigns\\route.ts",
+      "directory": "app"
+    },
+    {
+      "route": "/api/campaigns/:id/route",
+      "file": "api\\campaigns\\[id]\\route.ts",
       "directory": "app"
     },
     {

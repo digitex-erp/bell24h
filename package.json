@@ -40,7 +40,9 @@
     "env:validate": "node scripts/setup-env.cjs validate",
     "env:status": "node scripts/setup-env.cjs status",
     "api:setup": "node scripts/setup-api-integrations.cjs",
-    "api:test": "node scripts/test-api-integrations.cjs"
+    "api:test": "node scripts/test-api-integrations.cjs",
+    "db:setup": "node scripts/setup-database.cjs setup",
+    "db:status": "node scripts/setup-database.cjs status"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -55,10 +57,11 @@
     "@mui/material": "^7.1.1",
     "@openzeppelin/contracts": "^4.9.5",
     "@openzeppelin/contracts-upgradeable": "^4.9.5",
-    "@prisma/client": "^6.12.0",
+    "@prisma/client": "^6.15.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@supabase/supabase-js": "^2.38.4",
     "@types/formidable": "^3.4.5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^1.4.13",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
@@ -89,7 +92,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pdfkit": "^0.17.1",
-    "prisma": "^6.12.0",
+    "prisma": "^6.15.0",
     "qrcode.react": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
