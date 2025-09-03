@@ -15,7 +15,7 @@ class APIIntegrationSetup {
 
   async createAPIDirectory() {
     console.log('📁 Creating API integration directory structure...');
-    
+
     const directories = [
       'lib/api',
       'lib/api/analytics',
@@ -37,7 +37,7 @@ class APIIntegrationSetup {
 
   async createAnalyticsAPI() {
     console.log('📊 Creating Analytics API integration...');
-    
+
     const analyticsAPI = `// Analytics API Integration
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -151,7 +151,7 @@ export async function GET(request: NextRequest) {
 
   async createAIIntegration() {
     console.log('🤖 Creating AI Integration...');
-    
+
     const aiIntegration = `// AI Integration for Bell24h
 import OpenAI from 'openai';
 
@@ -308,7 +308,7 @@ export const aiIntegration = new AIIntegration();
 
   async createPaymentIntegration() {
     console.log('💳 Creating Payment Integration...');
-    
+
     const paymentIntegration = `// Payment Integration for Bell24h
 import Stripe from 'stripe';
 
@@ -450,7 +450,7 @@ export const paymentIntegration = new PaymentIntegration();
 
   async createAPIConfig() {
     console.log('⚙️ Creating API configuration...');
-    
+
     const apiConfig = `// API Configuration
 export const API_CONFIG = {
   // Analytics
@@ -518,7 +518,7 @@ export const validateAPIConfig = () => {
 
   async createAPIEndpoints() {
     console.log('🔗 Creating API endpoints...');
-    
+
     const endpoints = [
       {
         path: 'app/api/analytics/route.ts',
@@ -614,13 +614,13 @@ export async function POST(request: NextRequest) {
     endpoints.forEach(endpoint => {
       const fullPath = path.join(this.projectRoot, endpoint.path);
       const dir = path.dirname(fullPath);
-      
+
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
-      
+
       fs.writeFileSync(fullPath, endpoint.content);
-      console.log(\`✅ Created API endpoint: \${endpoint.path}\`);
+      console.log(`✅ Created API endpoint: ${endpoint.path}`);
     });
   }
 
@@ -644,7 +644,7 @@ export async function POST(request: NextRequest) {
 // CLI Interface
 async function main() {
   const setup = new APIIntegrationSetup();
-  
+
   try {
     await setup.createAPIDirectory();
     await setup.createAnalyticsAPI();

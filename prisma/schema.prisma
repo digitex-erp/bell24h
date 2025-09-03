@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -17,6 +17,22 @@ enum UserRole {
   BUYER
   SUPPLIER
   ADMIN
+  AGENT
+}
+
+enum CampaignStatus {
+  DRAFT
+  APPROVED
+  PUBLISHED
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum AgentRole {
+  AGENT
+  ADMIN
+  MANAGER
 }
 
 model Account {
@@ -39,13 +55,13 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
+  id           String     @id @default(cuid())
+  sessionToken String     @unique
   userId       String?
   expires      DateTime?
-  createdAt    DateTime @default(now())
-  lastActivity DateTime @default(now())
-  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  lastActivity DateTime   @default(now())
+  user         User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   pageViews    PageView[]
   events       Event[]
 }
@@ -59,45 +75,45 @@ model User {
   password      String?
   accounts      Account[]
   sessions      Session[]
-  
+
   // Enterprise-specific fields
   role          UserRole  @default(BUYER)
   phone         String?   @unique
   phoneVerified DateTime?
   companyId     String?
   company       Company?  @relation(fields: [companyId], references: [id])
-  
+
   // Analytics relations
-  pageViews     PageView[]
-  events        Event[]
-  
+  pageViews PageView[]
+  events    Event[]
+
   // Business relations
-  rfqs          RFQ[]
-  quotes        Quote[]
-  buyerTransactions Transaction[] @relation("BuyerTransactions")
-  supplierTransactions Transaction[] @relation("SupplierTransactions")
-  notifications Notification[]
-  preferences   UserPreferences?
-  mfaSetup      MFASetup?
-  devices       Device[]
-  riskScores    SupplierRiskScore[]
+  rfqs                   RFQ[]
+  quotes                 Quote[]
+  buyerTransactions      Transaction[]           @relation("BuyerTransactions")
+  supplierTransactions   Transaction[]           @relation("SupplierTransactions")
+  notifications          Notification[]
+  preferences            UserPreferences?
+  mfaSetup               MFASetup?
+  devices                Device[]
+  riskScores             SupplierRiskScore[]
   suspiciousTransactions SuspiciousTransaction[]
 }
 
 model Company {
-    id String @id @default(cuid())
-    name String
-    industry String?
-    companySize String? // e.g., "startup", "SME", "enterprise"
-    gstNumber String? @unique
-    address String?
-    users User[]
-    products Product[]
-    rfqs RFQ[]
-    quotes Quote[]
-    documents Document[]
-    verifications CompanyVerification[]
-    riskScores SupplierRiskScore[]
+  id            String                @id @default(cuid())
+  name          String
+  industry      String?
+  companySize   String? // e.g., "startup", "SME", "enterprise"
+  gstNumber     String?               @unique
+  address       String?
+  users         User[]
+  products      Product[]
+  rfqs          RFQ[]
+  quotes        Quote[]
+  documents     Document[]
+  verifications CompanyVerification[]
+  riskScores    SupplierRiskScore[]
 }
 
 model VerificationToken {
@@ -109,39 +125,39 @@ model VerificationToken {
 }
 
 model Product {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
   description String?
   unit        String
   companyId   String
-  company     Company  @relation(fields: [companyId], references: [id])
+  company     Company   @relation(fields: [companyId], references: [id])
   rfqs        RFQ[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id])
 }
 
 model RFQ {
-  id             String      @id @default(cuid())
+  id             String     @id @default(cuid())
   title          String
   description    String
   categoryId     String
-  category       Category    @relation(fields: [categoryId], references: [id])
+  category       Category   @relation(fields: [categoryId], references: [id])
   quantity       Int
   unit           String
   budget         Float?
-  currency       String      @default("USD")
+  currency       String     @default("USD")
   deadline       DateTime?
-  status         RFQStatus   @default(OPEN)
-  buyer          User        @relation(fields: [buyerId], references: [id])
+  status         RFQStatus  @default(OPEN)
+  buyer          User       @relation(fields: [buyerId], references: [id])
   buyerId        String
-  company        Company     @relation(fields: [companyId], references: [id])
+  company        Company    @relation(fields: [companyId], references: [id])
   companyId      String
   quotes         Quote[]
   documents      Document[]
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
   tags           Json?
   location       String?
   specifications Json?
@@ -149,59 +165,59 @@ model RFQ {
 }
 
 model Quote {
-  id            String    @id @default(cuid())
-  price         Float
-  currency      String    @default("USD")
-  deliveryTime  Int       // in days
-  validity      Int       // in days
-  status        QuoteStatus @default(PENDING)
-  description   String?
-  rfq           RFQ       @relation(fields: [rfqId], references: [id])
-  rfqId         String
-  supplier      User      @relation(fields: [supplierId], references: [id])
-  supplierId    String
-  company       Company   @relation(fields: [companyId], references: [id])
-  companyId     String
-  documents     Document[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  transactions  Transaction[]
+  id           String        @id @default(cuid())
+  price        Float
+  currency     String        @default("USD")
+  deliveryTime Int // in days
+  validity     Int // in days
+  status       QuoteStatus   @default(PENDING)
+  description  String?
+  rfq          RFQ           @relation(fields: [rfqId], references: [id])
+  rfqId        String
+  supplier     User          @relation(fields: [supplierId], references: [id])
+  supplierId   String
+  company      Company       @relation(fields: [companyId], references: [id])
+  companyId    String
+  documents    Document[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
 }
 
 model Transaction {
-  id            String    @id @default(cuid())
+  id            String            @id @default(cuid())
   amount        Float
-  currency      String    @default("USD")
+  currency      String            @default("USD")
   status        TransactionStatus @default(PENDING)
   type          TransactionType
-  quote         Quote     @relation(fields: [quoteId], references: [id])
+  quote         Quote             @relation(fields: [quoteId], references: [id])
   quoteId       String
-  buyer         User      @relation("BuyerTransactions", fields: [buyerId], references: [id])
+  buyer         User              @relation("BuyerTransactions", fields: [buyerId], references: [id])
   buyerId       String
-  supplier      User      @relation("SupplierTransactions", fields: [supplierId], references: [id])
+  supplier      User              @relation("SupplierTransactions", fields: [supplierId], references: [id])
   supplierId    String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
   escrowId      String?
   paymentMethod String?
   metadata      Json?
 }
 
 model Document {
-  id          String   @id @default(cuid())
-  name        String
-  type        String
-  url         String
-  size        Int
-  mimeType    String
-  company     Company  @relation(fields: [companyId], references: [id])
-  companyId   String
-  rfq         RFQ?     @relation(fields: [rfqId], references: [id])
-  rfqId       String?
-  quote       Quote?   @relation(fields: [quoteId], references: [id])
-  quoteId     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  type      String
+  url       String
+  size      Int
+  mimeType  String
+  company   Company  @relation(fields: [companyId], references: [id])
+  companyId String
+  rfq       RFQ?     @relation(fields: [rfqId], references: [id])
+  rfqId     String?
+  quote     Quote?   @relation(fields: [quoteId], references: [id])
+  quoteId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Notification {
@@ -229,16 +245,16 @@ model UserPreferences {
 }
 
 model CompanyVerification {
-  id          String             @id @default(cuid())
-  company     Company            @relation(fields: [companyId], references: [id])
-  companyId   String             @unique
-  status      VerificationStatus @default(PENDING)
-  documents   Json?
-  notes       String?
-  verifiedBy  String?
-  verifiedAt  DateTime?
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  id         String             @id @default(cuid())
+  company    Company            @relation(fields: [companyId], references: [id])
+  companyId  String             @unique
+  status     VerificationStatus @default(PENDING)
+  documents  Json?
+  notes      String?
+  verifiedBy String?
+  verifiedAt DateTime?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
 }
 
 model SupplierRiskScore {
@@ -284,16 +300,16 @@ model MFASetup {
 }
 
 model Device {
-  id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  userAgent   String
-  ipAddress   String
-  isVerified  Boolean  @default(false)
-  riskScore   Float    @default(0.5)
-  lastActive  DateTime @default(now())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  userAgent  String
+  ipAddress  String
+  isVerified Boolean  @default(false)
+  riskScore  Float    @default(0.5)
+  lastActive DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@index([userId])
   @@index([lastActive])
@@ -374,7 +390,7 @@ model PageView {
   sessionId String?
   timestamp DateTime @default(now())
   metadata  Json?
-  
+
   session Session? @relation(fields: [sessionId], references: [id])
   user    User?    @relation(fields: [userId], references: [id])
 }
@@ -387,7 +403,76 @@ model Event {
   sessionId String?
   timestamp DateTime @default(now())
   metadata  Json?
-  
+
   session Session? @relation(fields: [sessionId], references: [id])
   user    User?    @relation(fields: [userId], references: [id])
+}
+
+// Marketing Campaign Models
+model Agent {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      AgentRole @default(AGENT)
+  isActive  Boolean   @default(true)
+  lastLogin DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
+  campaigns Campaign[]
+  sessions  AgentSession[]
+
+  @@map("agents")
+}
+
+model Campaign {
+  id           String         @id @default(cuid())
+  name         String
+  description  String?
+  supplierId   String?
+  productName  String?
+  targetMarket String?
+  channels     String[] // Array of marketing channels
+  budget       Float?
+  spent        Float          @default(0)
+  status       CampaignStatus @default(DRAFT)
+  startDate    DateTime?
+  endDate      DateTime?
+  content      Json? // AI-generated content
+  metrics      Json? // Performance metrics
+  aiInsights   Json? // AI-generated insights
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // Relations
+  agent   Agent?          @relation(fields: [agentId], references: [id])
+  agentId String?
+  events  CampaignEvent[]
+
+  @@map("campaigns")
+}
+
+model CampaignEvent {
+  id         String   @id @default(cuid())
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+  campaignId String
+  eventType  String // 'impression', 'click', 'conversion', etc.
+  eventData  Json?
+  timestamp  DateTime @default(now())
+
+  @@map("campaign_events")
+}
+
+model AgentSession {
+  id        String   @id @default(cuid())
+  agent     Agent    @relation(fields: [agentId], references: [id])
+  agentId   String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  lastUsed  DateTime @default(now())
+
+  @@map("agent_sessions")
 }
