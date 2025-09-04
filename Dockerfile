@@ -7,14 +7,17 @@ COPY package*.json ./
 # Faster, quieter, and avoids audit/fund network calls
 ENV NPM_CONFIG_FUND=false \
     NPM_CONFIG_AUDIT=false
-RUN npm ci
+RUN npm ci --omit=dev --no-audit --no-fund
 
 # ---------- builder ----------
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# Generate Prisma client (no DB connection needed)
+RUN npx prisma generate
 # Build Next.js
+ENV NODE_OPTIONS=--max_old_space_size=512
 RUN npm run build
 
 # ---------- runner ----------
