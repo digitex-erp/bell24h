@@ -1,1 +1,0 @@
-﻿const express = require('express'); const cors = require('cors'); const app = express(); app.use(cors()); app.get('/health', (req,res) => res.json({status:'ok'})); app.get('/api/categories', (req,res) => res.json([{id:1,name:'Electronics'},{id:2,name:'Fashion'}])); app.listen(5000, () => console.log('Emergency server running on port 5000'));
