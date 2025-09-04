@@ -1,0 +1,16 @@
+# ignore heavy or unsafe stuff
+node_modules/
+.next/
+backups/
+backup-working-code/
+client-backup/
+contracts_backup/
+BELL24H_*/
+BELL24H-WORKING-SITE-BACKUP-*/
+*.backup*
+*.protected-backup
+*.bak
+*.zip
+*.7z
+*.rar
+.env*.backup
