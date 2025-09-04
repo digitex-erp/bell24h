@@ -119,6 +119,7 @@
     "@faker-js/faker": "^9.3.1",
     "@nomicfoundation/hardhat-toolbox": "^6.0.0",
     "@playwright/test": "^1.53.0",
+    "@tailwindcss/postcss": "^4.1.12",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
     "@types/bcryptjs": "^3.0.0",
