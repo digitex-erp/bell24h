@@ -1,24 +1,9 @@
-# build artifacts & deps
-node_modules/
-.next/
-dist/
-out/
-
-# backups / old trees
-backups/
-backup-working-code/
-client-backup/
-contracts_backup/
-BELL24H_*/
-BELL24H-WORKING-SITE-BACKUP-*/
-**/*.backup*
-**/*.protected-backup
-**/*.bak
-**/*.zip
-**/*.7z
-**/*.rar
-
-# misc
-*.log
-*.DS_Store
-.env*.backup
+tests/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+**/*.test.js
+**/*.test.jsx
+**/*.spec.js
+**/*.spec.jsx
