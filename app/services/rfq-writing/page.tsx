@@ -293,7 +293,7 @@ export default function RFQWritingServicePage() {
                 Pay ₹500 & Get Professional RFQ
               </button>
               <p className="text-sm text-gray-500 mt-2">
-                Payment processed securely via Razorpay
+                Payment processed securely via Razorpay • GST extra as applicable
               </p>
             </div>
           </form>
