@@ -97,11 +97,11 @@ The Bell24h Lead Monetization System has been **FULLY IMPLEMENTED** and is ready
 ## 💰 **REVENUE MODEL IMPLEMENTATION**
 
 ### **Credit Packages**
-| Package | Credits | Price | Price per Credit |
-|---------|---------|-------|------------------|
-| Starter | 2 | ₹1,000 | ₹500 |
-| Pro | 12 | ₹5,000 | ₹417 |
-| Enterprise | 30 | ₹10,000 | ₹333 |
+| Package    | Credits | Price   | Price per Credit |
+| ---------- | ------- | ------- | ---------------- |
+| Starter    | 2       | ₹1,000  | ₹500             |
+| Pro        | 12      | ₹5,000  | ₹417             |
+| Enterprise | 30      | ₹10,000 | ₹333             |
 
 ### **Revenue Streams**
 1. **Credit Sales**: Direct revenue from credit purchases
