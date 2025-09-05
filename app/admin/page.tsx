@@ -43,12 +43,20 @@ export default function AdminIndexPage() {
       stats: '847 Suppliers'
     },
     {
+      title: 'Lead Management',
+      description: 'Monitor and manage buyer leads',
+      icon: FileText,
+      href: '/admin/leads',
+      color: 'bg-orange-500',
+      stats: '156 Leads'
+    },
+    {
       title: 'RFQ Management',
       description: 'Review and moderate RFQs',
-      icon: FileText,
+      icon: MessageSquare,
       href: '/admin/rfqs',
-      color: 'bg-orange-500',
-      stats: '156 Active RFQs'
+      color: 'bg-indigo-500',
+      stats: '89 Active RFQs'
     },
     {
       title: 'Analytics',
