@@ -476,3 +476,75 @@ model AgentSession {
 
   @@map("agent_sessions")
 }
+
+// Lead Monetization Models
+model Lead {
+  id            String   @id @default(cuid())
+  category      String
+  product       String
+  quantity      String?
+  budget        Float?
+  buyerName     String
+  buyerCompany  String?
+  buyerEmail    String?
+  buyerPhone    String?
+  contactHidden Boolean  @default(true)
+  description   String?
+  urgency       String? // immediate/30days/60days
+  location      String?
+  status        String   @default("new") // new/verified/spam/closed
+  source        String? // website/whatsapp/manual
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  suppliers    LeadSupplier[]
+  transactions LeadTransaction[]
+}
+
+model LeadSupplier {
+  id         String    @id @default(cuid())
+  leadId     String
+  supplierId String
+  unlocked   Boolean   @default(false)
+  unlockedAt DateTime?
+  credits    Int?      @default(1)
+  createdAt  DateTime  @default(now())
+
+  lead Lead @relation(fields: [leadId], references: [id])
+}
+
+model UserCredits {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  credits   Int      @default(0)
+  spent     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  purchases CreditPurchase[]
+}
+
+model CreditPurchase {
+  id         String   @id @default(cuid())
+  userId     String
+  credits    Int
+  amount     Float
+  razorpayId String?
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+
+  user UserCredits @relation(fields: [userId], references: [userId])
+}
+
+model LeadTransaction {
+  id         String   @id @default(cuid())
+  leadId     String
+  supplierId String?
+  dealValue  Float?
+  commission Float?
+  status     String   @default("pending") // pending/won/lost
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  lead Lead @relation(fields: [leadId], references: [id])
+}
