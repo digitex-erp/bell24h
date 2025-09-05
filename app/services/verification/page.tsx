@@ -265,7 +265,7 @@ export default function VerificationServicePage() {
                 Pay ₹2,000 & Order Report
               </button>
               <p className="text-sm text-gray-500 mt-2">
-                Payment processed securely via Razorpay
+                Payment processed securely via Razorpay • GST extra as applicable
               </p>
             </div>
           </form>

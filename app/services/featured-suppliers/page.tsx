@@ -338,7 +338,7 @@ export default function FeaturedSuppliersPage() {
                 Pay ₹1,000 & Get Featured
               </button>
               <p className="text-sm text-gray-500 mt-2">
-                Payment processed securely via Razorpay • Monthly renewal
+                Payment processed securely via Razorpay • GST extra as applicable • Monthly renewal
               </p>
             </div>
           </form>
