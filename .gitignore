@@ -42,3 +42,4 @@ backups/
 # Deployment locks
 .deployment-lock
 deployment-state.json
+.vercel

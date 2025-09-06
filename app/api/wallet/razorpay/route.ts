@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // Mock Razorpay integration (replace with actual Razorpay SDK)
 class RazorpayService {
   private keyId: string;

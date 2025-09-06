@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import crypto from 'crypto';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 const prisma = new PrismaClient();
 
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;

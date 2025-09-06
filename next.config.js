@@ -15,6 +15,10 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   },
+  // Disable static optimization for API routes
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client'],
+  },
   async headers() {
     return [
       {

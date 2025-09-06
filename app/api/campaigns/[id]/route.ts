@@ -2,6 +2,9 @@ import { AgentAuthService } from '@/lib/auth/agent-auth'
 import { CampaignService } from '@/lib/services/campaign-service'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 // Helper function to get agent from request
 async function getAgentFromRequest(request: NextRequest) {
   const authHeader = request.headers.get('authorization')

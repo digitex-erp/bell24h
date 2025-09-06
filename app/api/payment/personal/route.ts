@@ -1,6 +1,9 @@
 // TEMPORARY: Personal account payment until GST ready
 import { NextResponse } from 'next/server';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const data = await req.json();
