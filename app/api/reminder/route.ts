@@ -1,3 +1,6 @@
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
 export async function GET() {
   const reminders = [
     "Railway is still costing you ₹800/month",
