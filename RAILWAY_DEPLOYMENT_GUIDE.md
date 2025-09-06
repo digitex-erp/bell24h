@@ -11,7 +11,7 @@ Your Bell24h platform is **100% ready** for Railway deployment with all API keys
 Since the automated script had issues, here's the **manual deployment process**:
 
 ### **Step 1: Install Railway CLI**
-```bash
+   ```bash
 # Install Railway CLI globally
 npm install -g @railway/cli
 
