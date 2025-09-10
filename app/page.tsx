@@ -1,17 +1,27 @@
 // app/page.tsx – Bell24h Strategic Redesign (Trust + Verification Focus)
 'use client';
-import { useState, useEffect } from 'react';
-import { CheckCircle, Shield, Globe, Zap, ArrowRight, Star, Users, TrendingUp } from 'lucide-react';
+import { ArrowRight, CheckCircle, Globe, Phone, Shield, TrendingUp, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import PhoneOTPModal from '../components/PhoneOTPModal';
 import SearchInterface from '../components/SearchInterface';
 
 export default function HomePage() {
   const [geo, setGeo] = useState('Global');
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetch('//ipapi.co/json')
       .then(r => r.json())
       .then(d => setGeo(d.country_name === 'India' ? 'India' : 'Global'));
   }, []);
+
+  const handleAuthSuccess = (userData) => {
+    setUser(userData);
+    setShowAuthModal(false);
+    // Redirect to dashboard or show success message
+    window.location.href = '/dashboard';
+  };
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-[#0A0A1B] to-[#1A1A2E] text-white'>
@@ -21,7 +31,7 @@ export default function HomePage() {
           <div className='w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center'>
             <span className='text-white text-lg font-bold'>🔔</span>
           </div>
-        <h1 className='text-2xl font-bold'>Bell<span className='text-amber-400'>24h</span></h1>
+          <h1 className='text-2xl font-bold'>Bell<span className='text-amber-400'>24h</span></h1>
         </div>
         <nav className='hidden md:flex items-center space-x-4'>
           <a href='/leads' className='text-white hover:text-amber-400 transition-colors'>Submit RFQ</a>
@@ -29,6 +39,13 @@ export default function HomePage() {
           <a href='/services/verification' className='text-white hover:text-amber-400 transition-colors'>Verification</a>
           <a href='/services/rfq-writing' className='text-white hover:text-amber-400 transition-colors'>RFQ Writing</a>
           <a href='/services/featured-suppliers' className='text-white hover:text-amber-400 transition-colors'>Get Featured</a>
+          <button
+            onClick={() => setShowAuthModal(true)}
+            className='text-white hover:text-amber-400 transition-colors flex items-center space-x-1'
+          >
+            <Phone className='h-4 w-4' />
+            <span>Login</span>
+          </button>
           <a href='/pricing' className='bg-amber-500 text-black px-4 py-1 rounded'>Pricing</a>
         </nav>
         <div className='md:hidden'>
@@ -44,31 +61,31 @@ export default function HomePage() {
             Verified Business Deals.<br />
             <span className='text-4xl md:text-5xl'>Powered by AI.</span><br />
             <span className='text-3xl md:text-4xl'>Trusted by SMEs & Exporters.</span>
-        </h1>
-          
+          </h1>
+
           {/* Sub-Text - Focus on Trust + Escrow */}
           <p className='text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed'>
-            Bell24h connects Indian SMEs with global buyers through AI-matched leads, 
-            <span className='text-amber-400 font-semibold'> supplier risk verification</span>, and 
+            Bell24h connects Indian SMEs with global buyers through AI-matched leads,
+            <span className='text-amber-400 font-semibold'> supplier risk verification</span>, and
             <span className='text-blue-400 font-semibold'> milestone-secure escrow payments</span>.
           </p>
 
           {/* Call-to-Action Buttons */}
           <div className='flex flex-col sm:flex-row gap-4 justify-center mb-12'>
-            <a 
-              href='/supplier/leads' 
+            <button
+              onClick={() => setShowAuthModal(true)}
               className='inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-lg transition-all duration-200 hover:scale-105 shadow-lg'
+            >
+              <Phone className='h-6 w-6 mr-2' />
+              Join Free with Phone OTP
+              <ArrowRight className='h-5 w-5 ml-2' />
+            </button>
+            <a
+              href='/supplier/leads'
+              className='inline-flex items-center justify-center px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-lg transition-all duration-200 hover:scale-105 shadow-lg'
             >
               <Shield className='h-6 w-6 mr-2' />
               Find Verified Suppliers
-              <ArrowRight className='h-5 w-5 ml-2' />
-            </a>
-            <a 
-              href='/contact' 
-              className='inline-flex items-center justify-center px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-lg transition-all duration-200 hover:scale-105 shadow-lg'
-            >
-              <Star className='h-6 w-6 mr-2' />
-              Claim Your Company Free
               <ArrowRight className='h-5 w-5 ml-2' />
             </a>
           </div>
@@ -111,7 +128,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        
+
         {/* Services Section - Enhanced with Trust Focus */}
         <div className='w-full max-w-6xl'>
           <h2 className='text-3xl font-bold text-center mb-4'>Trust-First B2B Services</h2>
@@ -131,7 +148,7 @@ export default function HomePage() {
                 <ArrowRight className='h-4 w-4 ml-2' />
               </a>
             </div>
-            
+
             <div className='bg-white/10 backdrop-blur rounded-lg p-6 text-center hover:bg-white/20 transition-colors border border-blue-500/30'>
               <div className='w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4'>
                 <Shield className='h-8 w-8 text-blue-600' />
@@ -144,7 +161,7 @@ export default function HomePage() {
                 <ArrowRight className='h-4 w-4 ml-2' />
               </a>
             </div>
-            
+
             <div className='bg-white/10 backdrop-blur rounded-lg p-6 text-center hover:bg-white/20 transition-colors border border-purple-500/30'>
               <div className='w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4'>
                 <TrendingUp className='h-8 w-8 text-purple-600' />
@@ -160,7 +177,7 @@ export default function HomePage() {
           </div>
         </div>
 
-          {/* Search Interface - Thomasnet Inspired */}
+        {/* Search Interface - Thomasnet Inspired */}
         <div className='mt-16 w-full'>
           <SearchInterface />
         </div>
@@ -170,7 +187,7 @@ export default function HomePage() {
           <div className='bg-white/5 backdrop-blur rounded-2xl p-8 border border-amber-500/30'>
             <h3 className='text-2xl font-bold mb-4 text-amber-400'>Why Choose Bell24h?</h3>
             <p className='text-lg text-gray-300 mb-6'>
-              Unlike generic B2B platforms, Bell24h focuses on <span className='text-amber-400 font-semibold'>verified, secure, and trustworthy</span> business connections. 
+              Unlike generic B2B platforms, Bell24h focuses on <span className='text-amber-400 font-semibold'>verified, secure, and trustworthy</span> business connections.
               Every supplier is verified, every transaction is escrow-protected, and every deal is backed by our AI-powered risk assessment.
             </p>
             <div className='flex flex-col sm:flex-row gap-4 justify-center'>
@@ -184,6 +201,13 @@ export default function HomePage() {
           </div>
         </div>
       </main>
+
+      {/* Phone OTP Authentication Modal */}
+      <PhoneOTPModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+      />
     </div>
   );
 }

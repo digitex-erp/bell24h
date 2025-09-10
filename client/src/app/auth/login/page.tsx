@@ -1,133 +1,195 @@
 "use client";
-import React from 'react';
-import { Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
+import { CheckCircle, Phone, Shield } from 'lucide-react';
+import { useState } from 'react';
 
 export default function LoginPage() {
+  const [step, setStep] = useState('phone'); // 'phone' or 'otp'
+  const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [demoOTP, setDemoOTP] = useState('');
+
+  const sendOTP = async () => {
+    setLoading(true);
+    setError('');
+
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+      setError('Please enter a valid 10-digit mobile number');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Generate demo OTP for testing
+      const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+      setDemoOTP(generatedOTP);
+
+      // In production, call API here
+      // const response = await fetch('/api/auth/send-phone-otp', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ phone })
+      // });
+
+      console.log(`📱 OTP for +91${phone}: ${generatedOTP}`);
+      setStep('otp');
+    } catch (err) {
+      setError('Failed to send OTP. Please try again.');
+    }
+
+    setLoading(false);
+  };
+
+  const verifyOTP = async () => {
+    setLoading(true);
+    setError('');
+
+    if (otp !== demoOTP) {
+      setError('Invalid OTP. Please try again.');
+      setLoading(false);
+      return;
+    }
+
+    // Success - redirect to dashboard
+    window.location.href = '/dashboard';
+  };
+
+  const resendOTP = () => {
+    sendOTP();
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-2xl">
-        <div className="flex justify-center">
-          <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white text-2xl font-bold">🔔</span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+            <Shield className="w-8 h-8 text-blue-600" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900">Bell24h Login</h1>
+          <p className="text-gray-600 mt-2">
+            {step === 'phone' ? 'Enter your mobile number to continue' : 'Enter the OTP sent to your phone'}
+          </p>
+        </div>
+
+        {/* Demo OTP Display */}
+        {demoOTP && step === 'otp' && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <div className="text-center">
+              <h3 className="text-sm font-medium text-yellow-800">Demo OTP</h3>
+              <p className="text-2xl font-bold text-yellow-900 mt-1">{demoOTP}</p>
+              <p className="text-xs text-yellow-700 mt-1">Use this code for testing</p>
+            </div>
+          </div>
+        )}
+
+        {/* Phone Input Step */}
+        {step === 'phone' && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mobile Number
+              </label>
+              <div className="flex">
+                <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500">
+                  +91
+                </span>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                  placeholder="9876543210"
+                  className="flex-1 rounded-r-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            </div>
+
+            <button
+              onClick={sendOTP}
+              disabled={loading || phone.length !== 10}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
+            >
+              {loading ? 'Sending...' : 'Send OTP'}
+            </button>
+          </div>
+        )}
+
+        {/* OTP Verification Step */}
+        {step === 'otp' && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Enter OTP sent to +91 {phone}
+              </label>
+              <input
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="000000"
+                className="w-full text-center text-2xl tracking-widest border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                maxLength="6"
+              />
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            </div>
+
+            <button
+              onClick={verifyOTP}
+              disabled={loading || otp.length !== 6}
+              className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 disabled:bg-gray-400 transition-colors"
+            >
+              {loading ? 'Verifying...' : 'Verify OTP'}
+            </button>
+
+            <div className="flex justify-between">
+              <button
+                onClick={() => setStep('phone')}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                Change Number
+              </button>
+              <button
+                onClick={resendOTP}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                Resend OTP
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Service Information */}
+        <div className="mt-8 bg-gray-50 rounded-lg p-4">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Our Services</h3>
+          <div className="space-y-1 text-sm text-gray-600">
+            <div className="flex items-center">
+              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+              <span>Supplier Verification - ₹2,000</span>
+            </div>
+            <div className="flex items-center">
+              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+              <span>RFQ Writing Service - ₹500</span>
+            </div>
+            <div className="flex items-center">
+              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+              <span>Featured Listing - ₹1,000/month</span>
+            </div>
           </div>
         </div>
-        <h1 className="mt-6 text-center text-4xl font-extrabold text-gray-900">
-          BELL24H
-        </h1>
-        <p className="mt-2 text-center text-xl text-blue-600 font-semibold">
-          India's First AI-Powered B2B Marketplace
-        </p>
-        <p className="mt-4 text-center text-lg text-gray-600">
-          Welcome Back! Contact us for access to your AI-powered dashboard
-        </p>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
-        <div className="bg-white py-8 px-6 shadow-lg sm:rounded-lg">
-          
-          {/* Contact Information */}
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Get In Touch</h2>
-            <p className="text-gray-600 mb-6">
-              We're currently accepting service orders and business inquiries. 
-              Contact us directly for immediate assistance.
-            </p>
-          </div>
-
-          {/* Contact Methods */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <div className="flex items-center p-4 bg-blue-50 rounded-lg">
-              <Mail className="h-6 w-6 text-blue-600 mr-3" />
-              <div>
-                <h3 className="font-semibold text-gray-900">Email</h3>
-                <p className="text-blue-600">digitex.studio@gmail.com</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center p-4 bg-green-50 rounded-lg">
-              <Phone className="h-6 w-6 text-green-600 mr-3" />
-              <div>
-                <h3 className="font-semibold text-gray-900">Phone</h3>
-                <p className="text-green-600">+91 [Your Number]</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center p-4 bg-purple-50 rounded-lg">
-              <MapPin className="h-6 w-6 text-purple-600 mr-3" />
-              <div>
-                <h3 className="font-semibold text-gray-900">Location</h3>
-                <p className="text-purple-600">Mumbai, Maharashtra</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center p-4 bg-orange-50 rounded-lg">
-              <CheckCircle className="h-6 w-6 text-orange-600 mr-3" />
-              <div>
-                <h3 className="font-semibold text-gray-900">GST Number</h3>
-                <p className="text-orange-600">27AAAPP9753F2ZF</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Services */}
-          <div className="bg-yellow-50 p-6 rounded-lg mb-6">
-            <h3 className="text-lg font-semibold text-yellow-800 mb-4">Our Services</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                <span className="text-yellow-700">Supplier Verification Reports (₹2,000)</span>
-              </div>
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                <span className="text-yellow-700">GST/PAN Authentication</span>
-              </div>
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                <span className="text-yellow-700">Business History Check</span>
-              </div>
-              <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                <span className="text-yellow-700">Risk Assessment Score</span>
-              </div>
-            </div>
-          </div>
-
-          {/* LinkedIn Outreach */}
-          <div className="bg-blue-50 p-6 rounded-lg">
-            <h3 className="text-lg font-semibold text-blue-800 mb-4">LinkedIn Outreach</h3>
-            <p className="text-blue-700 mb-4">
-              Connect with us on LinkedIn for business inquiries and supplier verification services.
-            </p>
-            <div className="bg-white p-4 rounded border-l-4 border-blue-500">
-              <p className="text-sm text-gray-700 italic">
-                "Hi [Name], I run Digitex Studio (GST: 27AAAPP9753F2ZF). 
-                We help businesses verify suppliers before large orders. 
-                Our verification report includes GST/PAN authentication, business history check, 
-                and risk assessment score for ₹2,000 per report. 
-                Many businesses lose lakhs to fake suppliers. Our report helps avoid that. 
-                Interested? Let's connect."
-              </p>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="mailto:digitex.studio@gmail.com"
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <Mail className="h-5 w-5 mr-2" />
-              Send Email
-            </a>
-            <a 
-              href="https://linkedin.com/in/vishal-pendharkar-28387b19/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Connect on LinkedIn
-            </a>
-          </div>
+        {/* WhatsApp Contact */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600 mb-3">Need help? Contact us on WhatsApp</p>
+          <a
+            href="https://wa.me/919876543210?text=Hi, I need supplier verification service"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            <Phone className="w-4 h-4 mr-2" />
+            WhatsApp Us
+          </a>
         </div>
       </div>
     </div>

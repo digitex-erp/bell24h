@@ -77,11 +77,15 @@ model User {
   sessions      Session[]
 
   // Enterprise-specific fields
-  role          UserRole  @default(BUYER)
-  phone         String?   @unique
-  phoneVerified DateTime?
-  companyId     String?
-  company       Company?  @relation(fields: [companyId], references: [id])
+  role               UserRole  @default(BUYER)
+  phone              String?   @unique
+  phoneVerified      Boolean   @default(false)
+  emailVerified      Boolean   @default(false)
+  trustScore         Int       @default(0)
+  lastLoginAt        DateTime?
+  verificationMethod String?
+  companyId          String?
+  company            Company?  @relation(fields: [companyId], references: [id])
 
   // Analytics relations
   pageViews PageView[]
@@ -547,4 +551,17 @@ model LeadTransaction {
   createdAt  DateTime @default(now())
 
   lead Lead @relation(fields: [leadId], references: [id])
+}
+
+// OTP Model for Phone/Email Verification
+model OTP {
+  id        String   @id @default(cuid())
+  phone     String?
+  email     String?
+  otp       String
+  type      String // 'phone' or 'email'
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("otp")
 }

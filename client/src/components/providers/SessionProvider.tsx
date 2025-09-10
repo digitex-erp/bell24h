@@ -16,8 +16,6 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 }
 
 export function useSession() {
-  return { data: { user: { id: "user", email: "user@company.com", name: "Business User" } }, status: "authenticated" };
-}
   const context = useContext(SessionContext);
   if (context === null) {
     throw new Error('useSession must be used within a SessionProvider');

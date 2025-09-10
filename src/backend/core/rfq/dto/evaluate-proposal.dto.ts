@@ -1,19 +1,14 @@
-import { IsNumber, IsObject, IsString, IsOptional } from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class EvaluateProposalDto {
   @IsNumber()
   score: number;
 
   @IsObject()
-  criteria: {
-    [key: string]: {
-      @IsNumber()
-      score: number;
-
-      @IsString()
-      comments: string;
-    };
-  };
+  criteria: Record<string, {
+    score: number;
+    comments: string;
+  }>;
 
   @IsOptional()
   @IsString()

@@ -1,35 +1,34 @@
 @echo off
-echo ========================================
-echo    BELL24H VERCEL DEPLOYMENT
-echo ========================================
-echo.
+echo 🚀 Deploying Bell24h to Production...
 
-echo Step 1: Building project...
-call npm run build
-if %errorlevel% neq 0 (
-    echo Build failed!
-    pause
-    exit /b 1
-)
-echo Build successful!
 echo.
+echo 1. Adding all changes...
+git add .
 
-echo Step 2: Deploying to Vercel...
-call npx vercel deploy --prod --yes
-if %errorlevel% neq 0 (
-    echo Deployment failed, trying alternative method...
-    call npx vercel --prod --yes
-)
 echo.
+echo 2. Committing changes...
+git commit -m "Phone OTP authentication integrated - Ready for customers"
 
-echo Step 3: Getting deployment URL...
-call npx vercel ls
 echo.
+echo 3. Creating GitHub repository...
+echo Note: You need to create the repository manually at https://github.com/new
+echo Repository name: bell24h-production
+echo Then run: git remote add origin https://github.com/[your-username]/bell24h-production.git
 
-echo ========================================
-echo    DEPLOYMENT COMPLETE!
-echo ========================================
 echo.
-echo Your site should be live at: https://bell24h-v1.vercel.app
+echo 4. Pushing to GitHub...
+git push -u origin main
+
 echo.
-pause
+echo 5. Deploy to Vercel...
+echo Go to https://vercel.com/new
+echo Import from GitHub: bell24h-production
+echo Add environment variables:
+echo - DATABASE_URL=postgresql://[neon-connection-string]
+echo - NEXTAUTH_SECRET=your-secret-key-here
+echo - MSG91_AUTH_KEY=your-msg91-key
+
+echo.
+echo ✅ Deployment complete! Now focus on customers!
+echo.
+echo NEXT: Send WhatsApp messages to get your first ₹2,000 customer!
