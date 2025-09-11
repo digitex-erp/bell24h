@@ -29,7 +29,7 @@ export default function SearchInterface() {
           Search the largest network of <span className="text-amber-400">verified suppliers</span>
         </h3>
         
-        <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
           {/* Category Dropdown */}
           <div className="relative flex-1">
             <div className="relative">
@@ -62,15 +62,15 @@ export default function SearchInterface() {
           {/* Search Button */}
           <button
             type="submit"
-            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-r-lg transition-colors duration-200 flex items-center justify-center"
+            className="px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg sm:rounded-r-lg transition-colors duration-200 flex items-center justify-center min-h-[44px]"
           >
-            <Search className="h-5 w-5 mr-2" />
+            <Search className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
             Search
           </button>
         </form>
 
         {/* Trust Indicators */}
-        <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-300">
+        <div className="mt-6 flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-300">
           <div className="flex items-center">
             <CheckCircle className="h-4 w-4 text-green-400 mr-1" />
             <span>534,672+ Verified Suppliers</span>
@@ -85,7 +85,7 @@ export default function SearchInterface() {
           </div>
           <div className="flex items-center">
             <Zap className="h-4 w-4 text-amber-400 mr-1" />
-            <span>AI-Powered Matching</span>
+            <span>Smart Matching</span>
           </div>
         </div>
 

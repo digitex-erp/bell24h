@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckCircle, FileText, Shield, Clock, Star } from 'lucide-react';
+import { CheckCircle, FileText, Shield, Clock, Star, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function VerificationServicePage() {
   const [formData, setFormData] = useState({
@@ -15,27 +15,45 @@ export default function VerificationServicePage() {
     requirements: ''
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
     
-    // Create Razorpay payment link for ₹2,000
-    const response = await fetch('/api/payment/create-link', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: 200000, // ₹2,000 in paise
-        description: 'Supplier Verification Report',
-        customer: {
-          name: formData.contactPerson,
-          email: formData.email,
-          phone: formData.phone
-        }
-      })
-    });
+    try {
+      // Create Razorpay payment link for ₹2,000
+      const response = await fetch('/api/payment/create-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: 200000, // ₹2,000 in paise
+          description: 'Supplier Verification Report',
+          customer: {
+            name: formData.contactPerson,
+            email: formData.email,
+            phone: formData.phone
+          }
+        })
+      });
 
-    if (response.ok) {
-      const { paymentLink } = await response.json();
-      window.open(paymentLink, '_blank');
+      if (response.ok) {
+        const { paymentLink } = await response.json();
+        window.open(paymentLink, '_blank');
+        setSuccess(true);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || 'Payment link creation failed');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+      console.error('Payment error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,6 +157,22 @@ export default function VerificationServicePage() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Order Verification Report
           </h2>
+          
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
+              <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
+              <span className="text-red-700">{error}</span>
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center">
+              <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+              <span className="text-green-700">Payment link opened! Complete payment to proceed.</span>
+            </div>
+          )}
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -260,9 +294,17 @@ export default function VerificationServicePage() {
             <div className="text-center">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
+                disabled={loading}
+                className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mx-auto"
               >
-                Pay ₹2,000 & Order Report
+                {loading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Creating Payment Link...
+                  </>
+                ) : (
+                  'Pay ₹2,000 & Order Report'
+                )}
               </button>
               <p className="text-sm text-gray-500 mt-2">
                 Payment processed securely via Razorpay • GST extra as applicable

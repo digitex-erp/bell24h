@@ -48,8 +48,15 @@ export default function HomePage() {
           </button>
           <a href='/pricing' className='bg-amber-500 text-black px-4 py-1 rounded'>Pricing</a>
         </nav>
-        <div className='md:hidden'>
-          <a href='/pricing' className='bg-amber-500 text-black px-4 py-1 rounded'>Pricing</a>
+        <div className='md:hidden flex items-center space-x-2'>
+          <button
+            onClick={() => setShowAuthModal(true)}
+            className='text-white hover:text-amber-400 transition-colors flex items-center space-x-1'
+          >
+            <Phone className='h-4 w-4' />
+            <span className='hidden sm:inline'>Login</span>
+          </button>
+          <a href='/pricing' className='bg-amber-500 text-black px-3 py-1 rounded text-sm'>Pricing</a>
         </div>
       </header>
 
@@ -57,41 +64,43 @@ export default function HomePage() {
       <main className='flex flex-col items-center justify-center min-h-[calc(100vh-80px)] px-6'>
         {/* Main Headline - Trust + Global Focus */}
         <div className='text-center max-w-5xl'>
-          <h1 className='text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-blue-100 to-amber-400 bg-clip-text text-transparent leading-tight mb-6'>
+          <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white via-blue-100 to-amber-400 bg-clip-text text-transparent leading-tight mb-6'>
             Verified Business Deals.<br />
-            <span className='text-4xl md:text-5xl'>Powered by AI.</span><br />
-            <span className='text-3xl md:text-4xl'>Trusted by SMEs & Exporters.</span>
+            <span className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl'>Powered by Technology.</span><br />
+            <span className='text-xl sm:text-2xl md:text-3xl lg:text-4xl'>Trusted by SMEs & Exporters.</span>
           </h1>
 
           {/* Sub-Text - Focus on Trust + Escrow */}
-          <p className='text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed'>
-            Bell24h connects Indian SMEs with global buyers through AI-matched leads,
+          <p className='text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed'>
+            Bell24h connects Indian SMEs with global buyers through smart matching,
             <span className='text-amber-400 font-semibold'> supplier risk verification</span>, and
-            <span className='text-blue-400 font-semibold'> milestone-secure escrow payments</span>.
+            <span className='text-blue-400 font-semibold'> secure payment processing</span>.
           </p>
 
           {/* Call-to-Action Buttons */}
           <div className='flex flex-col sm:flex-row gap-4 justify-center mb-12'>
             <button
               onClick={() => setShowAuthModal(true)}
-              className='inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-lg transition-all duration-200 hover:scale-105 shadow-lg'
+              className='inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-base sm:text-lg transition-all duration-200 hover:scale-105 shadow-lg min-h-[44px]'
             >
-              <Phone className='h-6 w-6 mr-2' />
-              Join Free with Phone OTP
-              <ArrowRight className='h-5 w-5 ml-2' />
+              <Phone className='h-5 w-5 sm:h-6 sm:w-6 mr-2' />
+              <span className='hidden sm:inline'>Join Free with Phone OTP</span>
+              <span className='sm:hidden'>Join Free</span>
+              <ArrowRight className='h-4 w-4 sm:h-5 sm:w-5 ml-2' />
             </button>
             <a
               href='/supplier/leads'
-              className='inline-flex items-center justify-center px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-lg transition-all duration-200 hover:scale-105 shadow-lg'
+              className='inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg text-base sm:text-lg transition-all duration-200 hover:scale-105 shadow-lg min-h-[44px]'
             >
-              <Shield className='h-6 w-6 mr-2' />
-              Find Verified Suppliers
-              <ArrowRight className='h-5 w-5 ml-2' />
+              <Shield className='h-5 w-5 sm:h-6 sm:w-6 mr-2' />
+              <span className='hidden sm:inline'>Find Verified Suppliers</span>
+              <span className='sm:hidden'>Find Suppliers</span>
+              <ArrowRight className='h-4 w-4 sm:h-5 sm:w-5 ml-2' />
             </a>
           </div>
 
           {/* Trust Badges - Reorganized for Trust Focus */}
-          <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-12'>
+          <div className='grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-12'>
             <div className='bg-white/10 backdrop-blur rounded-lg p-4 text-center hover:bg-white/20 transition-colors border border-green-500/30'>
               <CheckCircle className='h-8 w-8 text-green-400 mx-auto mb-2' />
               <div className='text-sm font-semibold text-green-400'>Supplier Risk Verified</div>
@@ -106,12 +115,12 @@ export default function HomePage() {
             </div>
             <div className='bg-white/10 backdrop-blur rounded-lg p-4 text-center hover:bg-white/20 transition-colors border border-amber-500/30'>
               <Zap className='h-8 w-8 text-amber-400 mx-auto mb-2' />
-              <div className='text-sm font-semibold text-amber-400'>AI-Powered Matching</div>
+              <div className='text-sm font-semibold text-amber-400'>Smart Matching</div>
             </div>
           </div>
 
           {/* Trust Metrics - Differentiated from IndiaMART/Udaan */}
-          <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mb-16'>
+          <div className='grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-16'>
             <div className='bg-white/10 backdrop-blur rounded-lg p-6 text-center'>
               <div className='text-3xl font-bold text-amber-400 mb-2'>534,672</div>
               <div className='text-gray-300'>Verified Suppliers</div>
@@ -120,8 +129,10 @@ export default function HomePage() {
               <div className='text-3xl font-bold text-blue-400 mb-2'>12,500</div>
               <div className='text-gray-300'>Secure RFQs</div>
             </div>
-            <div className='text-3xl font-bold text-green-400 mb-2'>₹100Cr</div>
-            <div className='text-gray-300'>Escrow Protected</div>
+            <div className='bg-white/10 backdrop-blur rounded-lg p-6 text-center'>
+              <div className='text-3xl font-bold text-green-400 mb-2'>₹100Cr</div>
+              <div className='text-gray-300'>Secure Transactions</div>
+            </div>
             <div className='bg-white/10 backdrop-blur rounded-lg p-6 text-center'>
               <div className='text-3xl font-bold text-purple-400 mb-2'>98.5%</div>
               <div className='text-gray-300'>Trust Score</div>
@@ -135,7 +146,7 @@ export default function HomePage() {
           <p className='text-center text-gray-400 mb-8 max-w-2xl mx-auto'>
             Every service designed to build trust and reduce risk in B2B transactions
           </p>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             <div className='bg-white/10 backdrop-blur rounded-lg p-6 text-center hover:bg-white/20 transition-colors border border-green-500/30'>
               <div className='w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4'>
                 <CheckCircle className='h-8 w-8 text-green-600' />
@@ -143,8 +154,9 @@ export default function HomePage() {
               <h3 className='text-xl font-semibold mb-2'>Supplier Verification</h3>
               <p className='text-gray-300 mb-4'>Comprehensive verification reports with GST/PAN authentication, business history check, and risk assessment</p>
               <div className='text-2xl font-bold text-amber-400 mb-4'>₹2,000</div>
-              <a href='/services/verification' className='bg-amber-500 text-black px-6 py-2 rounded hover:bg-amber-400 transition-colors inline-flex items-center'>
-                Order Verification
+              <a href='/services/verification' className='bg-amber-500 text-black px-4 sm:px-6 py-2 rounded hover:bg-amber-400 transition-colors inline-flex items-center justify-center min-h-[44px] text-sm sm:text-base'>
+                <span className='hidden sm:inline'>Order Verification</span>
+                <span className='sm:hidden'>Order</span>
                 <ArrowRight className='h-4 w-4 ml-2' />
               </a>
             </div>
@@ -156,7 +168,7 @@ export default function HomePage() {
               <h3 className='text-xl font-semibold mb-2'>RFQ Writing</h3>
               <p className='text-gray-300 mb-4'>Professional RFQ writing to attract verified suppliers and get competitive quotes</p>
               <div className='text-2xl font-bold text-amber-400 mb-4'>₹500</div>
-              <a href='/services/rfq-writing' className='bg-amber-500 text-black px-6 py-2 rounded hover:bg-amber-400 transition-colors inline-flex items-center'>
+              <a href='/services/rfq-writing' className='bg-amber-500 text-black px-4 sm:px-6 py-2 rounded hover:bg-amber-400 transition-colors inline-flex items-center justify-center min-h-[44px] text-sm sm:text-base'>
                 Get Started
                 <ArrowRight className='h-4 w-4 ml-2' />
               </a>
@@ -169,8 +181,9 @@ export default function HomePage() {
               <h3 className='text-xl font-semibold mb-2'>Featured Suppliers</h3>
               <p className='text-gray-300 mb-4'>Premium visibility on our platform to reach more verified buyers</p>
               <div className='text-2xl font-bold text-amber-400 mb-4'>₹1,000/mo</div>
-              <a href='/services/featured-suppliers' className='bg-amber-500 text-black px-6 py-2 rounded hover:bg-amber-400 transition-colors inline-flex items-center'>
-                Become Featured
+              <a href='/services/featured-suppliers' className='bg-amber-500 text-black px-4 sm:px-6 py-2 rounded hover:bg-amber-400 transition-colors inline-flex items-center justify-center min-h-[44px] text-sm sm:text-base'>
+                <span className='hidden sm:inline'>Become Featured</span>
+                <span className='sm:hidden'>Featured</span>
                 <ArrowRight className='h-4 w-4 ml-2' />
               </a>
             </div>

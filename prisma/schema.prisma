@@ -35,6 +35,17 @@ enum AgentRole {
   MANAGER
 }
 
+model OtpVerification {
+  id         String    @id @default(cuid())
+  phone      String    @unique
+  otp        String
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  verified   Boolean   @default(false)
+
+  @@index([phone, expiresAt])
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String

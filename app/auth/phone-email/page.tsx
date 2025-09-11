@@ -1,7 +1,9 @@
 'use client';
 
+import { ArrowLeft, CheckCircle, Mail, Phone } from 'lucide-react';
 import React, { useState } from 'react';
-import { Phone, Mail, ArrowLeft, CheckCircle } from 'lucide-react';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import PageErrorBoundary from '../../components/PageErrorBoundary';
 
 type AuthStep = 'phone' | 'phoneOtp' | 'email' | 'emailOtp' | 'success';
 
@@ -15,6 +17,13 @@ export default function PhoneEmailAuth() {
   const [error, setError] = useState('');
 
   const handlePhoneSubmit = async (phoneNumber: string, demoOTP?: string) => {
+    // Validate phone number format
+    const phoneRegex = /^\+?[1-9]\d{9,14}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      setError('Please enter a valid 10-digit phone number');
+      return;
+    }
+
     setPhone(phoneNumber);
     setDemoOTP(demoOTP || '');
     setLoading(true);
@@ -28,15 +37,15 @@ export default function PhoneEmailAuth() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         setStep('phoneOtp');
         console.log('Demo OTP:', data.demoOTP);
       } else {
-        setError(data.error || 'Failed to send OTP');
+        setError(data.error || 'Failed to send OTP. Please try again.');
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -54,7 +63,7 @@ export default function PhoneEmailAuth() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         setUser(data.user);
         setStep('email');
@@ -82,9 +91,12 @@ export default function PhoneEmailAuth() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         setStep('emailOtp');
+        if (data.demoOTP) {
+          setDemoOTP(data.demoOTP);
+        }
         console.log('Demo OTP:', data.demoOTP);
       } else {
         setError(data.error || 'Failed to send OTP');
@@ -108,7 +120,7 @@ export default function PhoneEmailAuth() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         setUser(data.user);
         setStep('success');
@@ -138,72 +150,74 @@ export default function PhoneEmailAuth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
-            <span className="text-white text-xl font-bold">🔔</span>
+    <PageErrorBoundary>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full space-y-8">
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
+              <span className="text-white text-xl font-bold">🔔</span>
+            </div>
+            <h2 className="mt-6 text-3xl font-bold text-gray-900">
+              {step === 'phone' && 'Enter Phone Number'}
+              {step === 'phoneOtp' && 'Verify Phone'}
+              {step === 'email' && 'Add Email (Optional)'}
+              {step === 'emailOtp' && 'Verify Email'}
+              {step === 'success' && 'Welcome to Bell24h!'}
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              {step === 'phone' && 'We\'ll send you a verification code'}
+              {step === 'phoneOtp' && 'Enter the code sent to your phone'}
+              {step === 'email' && 'Add your email for better security'}
+              {step === 'emailOtp' && 'Enter the code sent to your email'}
+              {step === 'success' && 'Your account is ready!'}
+            </p>
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            {step === 'phone' && 'Enter Phone Number'}
-            {step === 'phoneOtp' && 'Verify Phone'}
-            {step === 'email' && 'Add Email (Optional)'}
-            {step === 'emailOtp' && 'Verify Email'}
-            {step === 'success' && 'Welcome to Bell24h!'}
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            {step === 'phone' && 'We\'ll send you a verification code'}
-            {step === 'phoneOtp' && 'Enter the code sent to your phone'}
-            {step === 'email' && 'Add your email for better security'}
-            {step === 'emailOtp' && 'Enter the code sent to your email'}
-            {step === 'success' && 'Your account is ready!'}
-          </p>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+              {error}
+            </div>
+          )}
+
+          {step === 'phone' && (
+            <PhoneInput onPhoneSubmit={handlePhoneSubmit} loading={loading} />
+          )}
+
+          {step === 'phoneOtp' && (
+            <OTPVerification
+              phone={phone}
+              onVerified={handlePhoneOTPVerified}
+              onBack={handleBackToPhone}
+              loading={loading}
+              demoOTP={demoOTP}
+            />
+          )}
+
+          {step === 'email' && (
+            <EmailInput
+              phone={phone}
+              onEmailSubmit={handleEmailSubmit}
+              onSkip={handleSkipEmail}
+              loading={loading}
+            />
+          )}
+
+          {step === 'emailOtp' && (
+            <EmailOTPVerification
+              email={email}
+              onVerified={handleEmailVerified}
+              onBack={handleBackToEmail}
+              loading={loading}
+              demoOTP={demoOTP}
+            />
+          )}
+
+          {step === 'success' && (
+            <SuccessPage user={user} />
+          )}
         </div>
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-            {error}
-          </div>
-        )}
-
-        {step === 'phone' && (
-          <PhoneInput onPhoneSubmit={handlePhoneSubmit} loading={loading} />
-        )}
-
-        {step === 'phoneOtp' && (
-          <OTPVerification
-            phone={phone}
-            onVerified={handlePhoneOTPVerified}
-            onBack={handleBackToPhone}
-            loading={loading}
-            demoOTP={demoOTP}
-          />
-        )}
-
-        {step === 'email' && (
-          <EmailInput
-            phone={phone}
-            onEmailSubmit={handleEmailSubmit}
-            onSkip={handleSkipEmail}
-            loading={loading}
-          />
-        )}
-
-        {step === 'emailOtp' && (
-          <EmailOTPVerification
-            email={email}
-            onVerified={handleEmailVerified}
-            onBack={handleBackToEmail}
-            loading={loading}
-            demoOTP={demoOTP}
-          />
-        )}
-
-        {step === 'success' && (
-          <SuccessPage user={user} />
-        )}
       </div>
-    </div>
+    </PageErrorBoundary>
   );
 }
 
@@ -213,8 +227,13 @@ function PhoneInput({ onPhoneSubmit, loading }: { onPhoneSubmit: (phone: string,
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (phone.length >= 10) {
-      onPhoneSubmit(phone, '123456'); // Demo OTP
+    // Clean phone number (remove spaces, dashes, etc.)
+    const cleanPhone = phone.replace(/\D/g, '');
+    if (cleanPhone.length === 10) {
+      onPhoneSubmit(`+91${cleanPhone}`, '123456'); // Demo OTP
+    } else {
+      // Show error for invalid phone
+      alert('Please enter a valid 10-digit phone number');
     }
   };
 
@@ -242,17 +261,17 @@ function PhoneInput({ onPhoneSubmit, loading }: { onPhoneSubmit: (phone: string,
         disabled={loading || phone.length < 10}
         className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
       >
-        {loading ? 'Sending...' : 'Send OTP'}
+        {loading ? <LoadingSpinner size="sm" text="Sending..." /> : 'Send OTP'}
       </button>
     </form>
   );
 }
 
 // OTP Verification Component
-function OTPVerification({ phone, onVerified, onBack, loading, demoOTP }: { 
-  phone: string; 
-  onVerified: (otp: string) => void; 
-  onBack: () => void; 
+function OTPVerification({ phone, onVerified, onBack, loading, demoOTP }: {
+  phone: string;
+  onVerified: (otp: string) => void;
+  onBack: () => void;
   loading: boolean;
   demoOTP: string;
 }) {
@@ -315,10 +334,10 @@ function OTPVerification({ phone, onVerified, onBack, loading, demoOTP }: {
 }
 
 // Email Input Component
-function EmailInput({ phone, onEmailSubmit, onSkip, loading }: { 
-  phone: string; 
-  onEmailSubmit: (email: string, demoOTP?: string) => void; 
-  onSkip: () => void; 
+function EmailInput({ phone, onEmailSubmit, onSkip, loading }: {
+  phone: string;
+  onEmailSubmit: (email: string, demoOTP?: string) => void;
+  onSkip: () => void;
   loading: boolean;
 }) {
   const [email, setEmail] = useState('');
@@ -380,10 +399,10 @@ function EmailInput({ phone, onEmailSubmit, onSkip, loading }: {
 }
 
 // Email OTP Verification Component
-function EmailOTPVerification({ email, onVerified, onBack, loading, demoOTP }: { 
-  email: string; 
-  onVerified: (otp: string) => void; 
-  onBack: () => void; 
+function EmailOTPVerification({ email, onVerified, onBack, loading, demoOTP }: {
+  email: string;
+  onVerified: (otp: string) => void;
+  onBack: () => void;
   loading: boolean;
   demoOTP: string;
 }) {
@@ -452,7 +471,7 @@ function SuccessPage({ user }: { user: any }) {
       <div className="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center">
         <CheckCircle className="h-8 w-8 text-green-600" />
       </div>
-      
+
       <div>
         <h3 className="text-lg font-medium text-gray-900">Welcome to Bell24h!</h3>
         <p className="text-sm text-gray-600 mt-1">
