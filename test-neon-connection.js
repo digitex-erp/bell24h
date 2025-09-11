@@ -1,64 +1,74 @@
+#!/usr/bin/env node
+
 /**
- * Neon PostgreSQL Connection Test
- * 
- * This script verifies connection to your Neon serverless PostgreSQL database.
- * Make sure you have a valid DATABASE_URL in your .env file.
+ * Test Neon.tech Database Connection
+ * This script verifies that your Neon database is working correctly
  */
 
-require('dotenv').config();
-const { neon } = require('@neondatabase/serverless');
+import dotenv from 'dotenv';
+import { Pool } from 'pg';
 
-// Validate environment variable
-if (!process.env.DATABASE_URL) {
-  console.error('\x1b[31mERROR: DATABASE_URL is not set in your .env file\x1b[0m');
-  console.log('Please create a .env file with your Neon database connection string:');
-  console.log('DATABASE_URL=postgres://user:password@hostname/database');
-  process.exit(1);
-}
+// Load environment variables
+dotenv.config();
 
-// Create SQL query function
-const sql = neon(process.env.DATABASE_URL);
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
 async function testConnection() {
-  console.log('Attempting to connect to Neon PostgreSQL...');
-  
+  console.log('🧪 Testing Neon.tech Database Connection...\n');
+
   try {
     // Test basic connection
-    const versionResult = await sql`SELECT version()`;
-    console.log('\x1b[32m✓ Successfully connected to PostgreSQL!\x1b[0m');
-    console.log(`PostgreSQL version: ${versionResult[0].version}`);
-    
-    // Get database size
-    const sizeResult = await sql`
-      SELECT pg_size_pretty(pg_database_size(current_database())) as db_size
-    `;
-    console.log(`Database size: ${sizeResult[0].db_size}`);
-    
-    // List tables (if any)
-    const tablesResult = await sql`
+    console.log('1. Testing basic connection...');
+    const client = await pool.connect();
+    console.log('   ✅ Connected to Neon.tech successfully!');
+
+    // Test query execution
+    console.log('\n2. Testing query execution...');
+    const result = await client.query('SELECT NOW() as current_time, version() as postgres_version');
+    console.log('   ✅ Database query works!');
+    console.log(`   📅 Current time: ${result.rows[0].current_time}`);
+    console.log(`   🐘 PostgreSQL version: ${result.rows[0].postgres_version.split(' ')[0]}`);
+
+    // Test table existence (if any)
+    console.log('\n3. Checking existing tables...');
+    const tablesResult = await client.query(`
       SELECT table_name 
       FROM information_schema.tables 
       WHERE table_schema = 'public'
-      ORDER BY table_name
-    `;
-    
-    if (tablesResult.length > 0) {
-      console.log('\nAvailable tables:');
-      tablesResult.forEach(row => {
-        console.log(`- ${row.table_name}`);
+    `);
+
+    if (tablesResult.rows.length > 0) {
+      console.log('   ✅ Found tables:');
+      tablesResult.rows.forEach(row => {
+        console.log(`      - ${row.table_name}`);
       });
     } else {
-      console.log('\nNo tables found in the public schema.');
+      console.log('   ℹ️  No tables found (this is normal for a new database)');
     }
-    
-    console.log('\n\x1b[32m✓ Connection test completed successfully!\x1b[0m');
-  } catch (err) {
-    console.error('\x1b[31m✗ Connection failed:\x1b[0m', err);
-    console.log('\nPossible issues:');
-    console.log('1. Invalid connection string');
-    console.log('2. Database server is not accessible');
-    console.log('3. Network/firewall restrictions');
-    console.log('4. Invalid credentials');
+
+    client.release();
+
+    console.log('\n🎉 All tests passed! Your Neon.tech database is ready for Bell24h!');
+    console.log('\n📊 Database Status:');
+    console.log('   ✅ Connection: Working');
+    console.log('   ✅ Queries: Working');
+    console.log('   ✅ SSL: Enabled');
+    console.log('   💰 Cost: FREE (within limits)');
+
+  } catch (error) {
+    console.error('\n❌ Connection failed:', error.message);
+    console.log('\n🔧 Troubleshooting:');
+    console.log('   1. Check your DATABASE_URL environment variable');
+    console.log('   2. Verify your Neon.tech connection string');
+    console.log('   3. Ensure your Neon database is active');
+    console.log('   4. Check your internet connection');
+
+    process.exit(1);
+  } finally {
+    await pool.end();
   }
 }
 
