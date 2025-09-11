@@ -74,11 +74,17 @@ export class FileManagementService {
   }
 
   constructor() {
-    // Initialize Supabase client
-    this.supabase = require('@supabase/supabase-js').createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    // Initialize Supabase client only if credentials exist; otherwise create a no-op stub
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (url && key) {
+      this.supabase = require('@supabase/supabase-js').createClient(url, key);
+    } else {
+      this.supabase = {
+        storage: { from: () => ({ upload: async () => ({ data: null, error: { message: 'disabled' } }), getPublicUrl: () => ({ data: { publicUrl: '' } }) }) },
+        from: () => ({ select: async () => ({ data: [], error: null }), insert: async () => ({ error: null }), update: async () => ({ error: null }), delete: async () => ({ error: null }) })
+      };
+    }
   }
 
   async uploadFile(file: File, metadata: Partial<FileMetadata>): Promise<FileMetadata> {
@@ -89,17 +95,20 @@ export class FileManagementService {
       // Calculate file checksum
       const checksum = await this.calculateChecksum(file);
 
-      // Upload to Supabase Storage
-      const { data, error } = await this.supabase.storage
-        .from('files')
-        .upload(`${fileId}/${file.name}`, file);
-
-      if (error) throw error;
-
-      // Get public URL
-      const { data: urlData } = this.supabase.storage
-        .from('files')
-        .getPublicUrl(`${fileId}/${file.name}`);
+      // Upload to Supabase Storage when enabled; otherwise create a temporary blob URL
+      let publicUrl = '';
+      if (!this.supabase?.storage || this.supabase?.__disabled) {
+        publicUrl = URL.createObjectURL(file);
+      } else {
+        const { error } = await this.supabase.storage
+          .from('files')
+          .upload(`${fileId}/${file.name}`, file);
+        if (error) throw error;
+        const { data: urlData } = this.supabase.storage
+          .from('files')
+          .getPublicUrl(`${fileId}/${file.name}`);
+        publicUrl = urlData.publicUrl;
+      }
 
       // Create file metadata
       const fileMetadata: FileMetadata = {
@@ -107,7 +116,7 @@ export class FileManagementService {
         name: file.name,
         size: file.size,
         type: file.type,
-        url: urlData.publicUrl,
+        url: publicUrl,
         uploadedBy: metadata.uploadedBy || 'anonymous',
         uploadedAt: new Date().toISOString(),
         version: 1,

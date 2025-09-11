@@ -1,18 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zxwfvvkdsgmrambmugkz.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key'
+// Only enable Supabase when explicit credentials are provided
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// Check if we have valid Supabase credentials
-if (!supabaseUrl || supabaseUrl === 'https://your-project.supabase.co' || supabaseUrl === 'https://zxwfvvkdsgmrambmugkz.supabase.co') {
-  console.warn('⚠️ NEXT_PUBLIC_SUPABASE_URL is not properly configured. Please set it in your .env.local file.')
+// In development, log a concise note when disabled; stay silent in production
+if (process.env.NODE_ENV !== 'production' && (!supabaseUrl || !supabaseAnonKey)) {
+  console.warn('Supabase is disabled (no credentials found). This is safe if you use OTP-only auth.')
 }
 
-if (!supabaseAnonKey || supabaseAnonKey === 'your-anon-key' || supabaseAnonKey === 'your-anon-key-here') {
-  console.warn('⚠️ NEXT_PUBLIC_SUPABASE_ANON_KEY is not properly configured. Please set it in your .env.local file.')
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase: any = (supabaseUrl && supabaseAnonKey)
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : { __disabled: true, auth: { signInWithPassword: async () => ({ data: null, error: { message: 'Supabase disabled' } }), signUp: async () => ({ data: null, error: { message: 'Supabase disabled' } }), signOut: async () => ({ error: null }), getUser: async () => ({ data: { user: null } }) } }
 
 // Auth helper functions
 export const signInWithEmail = async (email: string, password: string) => {
