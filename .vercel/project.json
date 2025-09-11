@@ -1,1 +1,16 @@
-{"projectId":"prj_H0ZAoMewKqu7fqWznzdYSoZvvlAW","orgId":"team_COE65vdscwE4rITBcp2XyKqm","projectName":"bell24h"}
+{
+  "projectId": "prj_3uWIuP7lowUkoWETAqDdtUrdZFtN",
+  "orgId": "team_NENv5Avo8Zb9Z6UCyOi4qGvY",
+  "projectName": "bell24h",
+  "settings": {
+    "createdAt": 1757592367284,
+    "framework": null,
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "22.x"
+  }
+}

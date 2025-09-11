@@ -1,7 +1,6 @@
-// app/api/auth/send-email-otp/route.ts - Email OTP sending via Resend
+// app/api/auth/send-email-otp/route.ts - Email OTP sending (Demo mode)
 import { NextRequest, NextResponse } from 'next/server';
 import { safeQuery } from '../../../../lib/db';
-import { resendService } from '../../../../lib/resend';
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,32 +32,7 @@ export async function POST(request: NextRequest) {
       // Continue with demo OTP if database fails
     }
 
-    // Send OTP via Resend (Production)
-    if (process.env.RESEND_API_KEY) {
-      try {
-        const resendResult = await resendService.sendOTPEmail({
-          to: email,
-          otp: otp,
-          phone: phone
-        });
-
-        if (resendResult.success) {
-          return NextResponse.json({
-            success: true,
-            message: 'OTP sent successfully to email',
-            demoOTP: process.env.NODE_ENV === 'development' ? otp : undefined
-          });
-        } else {
-          console.error('Resend error:', resendResult.error);
-          // Fallback to demo mode
-        }
-      } catch (resendError) {
-        console.error('Resend error:', resendError);
-        // Fallback to demo mode
-      }
-    }
-
-    // Demo mode (Development or Resend not configured)
+    // Demo mode - no Resend keys required
     return NextResponse.json({
       success: true,
       message: 'OTP sent successfully to email (Demo mode)',

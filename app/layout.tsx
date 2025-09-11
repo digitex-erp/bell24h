@@ -1,6 +1,5 @@
 import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
-import ErrorBoundary from '../components/ErrorBoundary';
 import Footer from '../components/Footer';
 import './globals.css';
 
@@ -19,14 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ErrorBoundary>
-          <div className="min-h-screen flex flex-col">
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </ErrorBoundary>
+        <div className="min-h-screen flex flex-col">
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
