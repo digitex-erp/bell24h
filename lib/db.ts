@@ -1,9 +1,32 @@
-import { PrismaClient } from '@prisma/client'
+// lib/db.ts - Prisma Client with Connection Pooling
+import { PrismaClient } from '@prisma/client';
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+declare global {
+  // Prevent multiple instances of Prisma in development
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
 }
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+// Create Prisma client with optimized configuration
+export const prisma = global.prisma || new PrismaClient({
+  log: ['query', 'error', 'warn'],
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL
+    }
+  }
+});
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+// Prevent multiple instances in development
+if (process.env.NODE_ENV !== 'production') {
+  global.prisma = prisma;
+}
+
+// Graceful shutdown
+process.on('beforeExit', async () => {
+  console.log('🔄 Closing Prisma connection...');
+  await prisma.$disconnect();
+});
+
+// Export for compatibility with existing code
+export default prisma;

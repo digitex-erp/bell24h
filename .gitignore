@@ -146,3 +146,4 @@ pnpm-lock.yaml
 
 # Husky
 .husky/_
+.vercel
