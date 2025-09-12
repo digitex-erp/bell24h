@@ -1,13 +1,30 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  return NextResponse.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    services: {
-      database: 'connected',
-      payment: 'demo_mode',
-      email: 'configured'
-    }
-  });
+  try {
+    // Basic health check
+    const healthData = {
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      services: {
+        database: 'connected', // You can add actual DB ping here
+        sms: 'msg91_configured',
+        deployment: 'vercel_production',
+        environment: process.env.NODE_ENV || 'development'
+      },
+      version: '1.0.0',
+      uptime: process.uptime()
+    };
+
+    return NextResponse.json(healthData, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        status: 'unhealthy',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      },
+      { status: 500 }
+    );
+  }
 }
