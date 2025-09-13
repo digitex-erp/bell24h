@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 
 export default function VerificationOrderPage() {
@@ -25,7 +27,7 @@ Requirements: ${formData.requirements}
 
 Amount: ₹2,000
 Delivery: 48 hours`;
-    
+
     const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -55,7 +57,7 @@ Delivery: 48 hours`;
                 type="text"
                 required
                 value={formData.companyName}
-                onChange={(e) => setFormData({...formData, companyName: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Your company name"
               />
@@ -69,7 +71,7 @@ Delivery: 48 hours`;
                 type="text"
                 required
                 value={formData.supplierName}
-                onChange={(e) => setFormData({...formData, supplierName: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, supplierName: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Supplier to verify"
               />
@@ -83,7 +85,7 @@ Delivery: 48 hours`;
                 type="tel"
                 required
                 value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="+91 9876543210"
               />
@@ -96,7 +98,7 @@ Delivery: 48 hours`;
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="your@email.com"
               />
@@ -110,7 +112,7 @@ Delivery: 48 hours`;
                 type="text"
                 required
                 value={formData.gstNumber}
-                onChange={(e) => setFormData({...formData, gstNumber: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, gstNumber: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="22ABCDE1234F1Z5"
               />
@@ -124,7 +126,7 @@ Delivery: 48 hours`;
                 type="text"
                 required
                 value={formData.panNumber}
-                onChange={(e) => setFormData({...formData, panNumber: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, panNumber: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="ABCDE1234F"
               />
@@ -138,7 +140,7 @@ Delivery: 48 hours`;
             <textarea
               required
               value={formData.address}
-              onChange={(e) => setFormData({...formData, address: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Complete address with PIN code"
@@ -151,7 +153,7 @@ Delivery: 48 hours`;
             </label>
             <textarea
               value={formData.requirements}
-              onChange={(e) => setFormData({...formData, requirements: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Any specific verification requirements..."
@@ -161,8 +163,8 @@ Delivery: 48 hours`;
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h3 className="font-semibold text-blue-900 mb-2">Payment Instructions:</h3>
             <p className="text-blue-800 text-sm">
-              After submitting this form, you'll receive WhatsApp payment instructions.<br/>
-              Payment: UPI/Bank Transfer - ₹2,000<br/>
+              After submitting this form, you'll receive WhatsApp payment instructions.<br />
+              Payment: UPI/Bank Transfer - ₹2,000<br />
               Delivery: 48 hours after payment confirmation
             </p>
           </div>
