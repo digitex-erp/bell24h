@@ -8,7 +8,8 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate",
     "start": "next start -p ${PORT:-3000}",
     "prisma:generate": "prisma generate",
     "start:prod": "node server.js",

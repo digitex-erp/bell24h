@@ -76,3 +76,6 @@ export class AgentAuth {
 }
 
 export const agentAuth = AgentAuth;
+
+// Export for compatibility
+export const AgentAuthService = AgentAuth;
