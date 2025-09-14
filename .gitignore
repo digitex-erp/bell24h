@@ -147,3 +147,6 @@ pnpm-lock.yaml
 # Husky
 .husky/_
 .vercel
+
+# Local Netlify folder
+.netlify
