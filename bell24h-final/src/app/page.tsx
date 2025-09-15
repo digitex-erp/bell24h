@@ -1,13 +1,12 @@
 'use client'
-import { useState } from 'react'
 import Link from 'next/link'
+import { useState } from 'react'
 
 export default function HomePage() {
   const [showAIDropdown, setShowAIDropdown] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Navigation */}
+    <div className="min-h-screen">
       <nav className="bg-white shadow-lg sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
@@ -19,25 +18,26 @@ export default function HomePage() {
                   <div className="text-xs text-gray-600">Enterprise B2B</div>
                 </div>
               </Link>
-
               <div className="hidden md:flex items-center gap-6">
                 <Link href="/" className="text-gray-700 hover:text-blue-600">🏠 Home</Link>
-                <Link href="/suppliers" className="text-gray-700 hover:text-blue-600">🏢 Supplier Showcase</Link>
-                <Link href="/fintech" className="text-gray-700 hover:text-blue-600">💳 Fintech Services</Link>
-                <Link href="/wallet" className="text-gray-700 hover:text-blue-600">💰 Wallet & Escrow</Link>
+                <Link href="/suppliers" className="text-gray-700 hover:text-blue-600">🏢 Suppliers</Link>
+                <Link href="/rfq" className="text-gray-700 hover:text-blue-600">📋 RFQ</Link>
+                <Link href="/admin" className="text-gray-700 hover:text-blue-600">📊 Admin</Link>
                 
                 <div className="relative">
-                  <button onClick={() => setShowAIDropdown(!showAIDropdown)} className="flex items-center gap-2 text-gray-700 hover:text-blue-600 border border-gray-300 px-4 py-2 rounded-lg">
+                  <button 
+                    onClick={() => setShowAIDropdown(!showAIDropdown)}
+                    className="flex items-center gap-2 text-gray-700 hover:text-blue-600 border border-gray-300 px-4 py-2 rounded-lg"
+                  >
                     🤖 AI Features <span className="text-xs">▼</span>
                   </button>
                   {showAIDropdown && (
                     <div className="absolute top-full mt-2 bg-white shadow-xl rounded-lg py-2 w-64">
-                      <Link href="/dashboard" className="block px-4 py-2 hover:bg-gray-100">📊 AI Features Dashboard</Link>
+                      <Link href="/dashboard" className="block px-4 py-2 hover:bg-gray-100">📊 AI Dashboard</Link>
                       <Link href="/voice-rfq" className="block px-4 py-2 hover:bg-gray-100">🎤 Voice RFQ</Link>
                       <Link href="/ai-explainability" className="block px-4 py-2 hover:bg-gray-100">🧠 AI Explainability</Link>
                       <Link href="/risk-scoring" className="block px-4 py-2 hover:bg-gray-100">⚠️ Risk Scoring</Link>
                       <Link href="/market-data" className="block px-4 py-2 hover:bg-gray-100">📈 Market Data</Link>
-                      <Link href="/video-rfq" className="block px-4 py-2 hover:bg-gray-100">📹 Video RFQ</Link>
                     </div>
                   )}
                 </div>
@@ -48,15 +48,13 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-16">
         <div className="text-center max-w-6xl mx-auto">
           <h1 className="text-6xl font-bold mb-8">
-            <span className="text-black">India's Leading</span><br />
+            <span className="text-black">India&apos;s Leading</span><br />
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">AI-Powered B2B Marketplace</span>
           </h1>
 
-          {/* Feature Badges */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">🇮🇳 Made in India</span>
             <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">🏛️ GST Compliant</span>
@@ -71,9 +69,8 @@ export default function HomePage() {
 
           <p className="text-lg text-blue-600 mb-12">📍 Based in Mumbai, Maharashtra - Serving All India</p>
 
-          {/* Search Interface */}
           <div className="bg-white rounded-lg shadow-xl p-2 max-w-4xl mx-auto flex gap-2">
-            <input type="text" placeholder="What are you looking for? (e.g., steel pipes, textiles)" className="flex-1 px-6 py-4 text-lg border-none outline-none" />
+            <input type="text" placeholder="What are you looking for? (e.g., 'steel pipes', 'textiles')" className="flex-1 px-6 py-4 text-lg border-none outline-none" />
             <select className="px-4 py-2 border-l border-gray-200 bg-white text-gray-700">
               <option>All Categories</option>
               <option>Manufacturing</option>
@@ -81,7 +78,9 @@ export default function HomePage() {
               <option>Electronics</option>
               <option>Construction</option>
             </select>
-            <button className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold">🔍 AI Search</button>
+            <button className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold flex items-center gap-2">
+              🔍 AI Search
+            </button>
           </div>
         </div>
       </main>
