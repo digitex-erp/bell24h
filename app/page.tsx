@@ -52,7 +52,7 @@ export default function HomePage() {
       <main className="container mx-auto px-4 py-16">
         <div className="text-center max-w-6xl mx-auto">
           <h1 className="text-6xl font-bold mb-8">
-            <span className="text-black">India's Leading</span><br />
+            <span className="text-black">India&apos;s Leading</span><br />
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">AI-Powered B2B Marketplace</span>
           </h1>
 
