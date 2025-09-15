@@ -1,86 +1,80 @@
-'use client';
+'use client'
+import Link from 'next/link'
+import { useState } from 'react'
 
-import Link from 'next/link';
-import { useState } from 'react';
-
-const Navigation = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+export default function Navigation() {
+  const [showAIDropdown, setShowAIDropdown] = useState(false)
 
   return (
-    <nav className="bg-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-blue-600">Bell24h</span>
+    <nav className="bg-white shadow-lg sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                B
+              </div>
+              <div>
+                <div className="font-bold text-xl">Bell24h</div>
+                <div className="text-xs text-gray-600">Enterprise B2B</div>
+              </div>
             </Link>
-          </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-              Home
-            </Link>
-            <Link href="/about" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-              About
-            </Link>
-            <Link href="/services" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-              Services
-            </Link>
-            <Link href="/contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-              Contact
-            </Link>
-            <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
-              Login
-            </Link>
-          </div>
+            <div className="hidden md:flex items-center gap-6">
+              <Link href="/" className="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                🏠 Home
+              </Link>
+              <Link href="/suppliers" className="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                🏢 Supplier Showcase
+              </Link>
+              <Link href="/fintech" className="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                💳 Fintech Services
+              </Link>
+              <Link href="/wallet" className="flex items-center gap-2 text-gray-700 hover:text-blue-600">
+                💰 Wallet & Escrow
+              </Link>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMenu}
-              className="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600"
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <div className="relative">
+                <button
+                  onClick={() => setShowAIDropdown(!showAIDropdown)}
+                  className="flex items-center gap-2 text-gray-700 hover:text-blue-600 border border-gray-300 px-4 py-2 rounded-lg"
+                >
+                  🤖 AI Features <span className="text-xs">▼</span>
+                </button>
+                {showAIDropdown && (
+                  <div className="absolute top-full mt-2 bg-white shadow-xl rounded-lg py-2 w-64">
+                    <Link href="/dashboard" className="block px-4 py-2 hover:bg-gray-100">
+                      📊 AI Features Dashboard
+                    </Link>
+                    <Link href="/voice-rfq" className="block px-4 py-2 hover:bg-gray-100">
+                      🎤 Voice RFQ
+                    </Link>
+                    <Link href="/ai-explainability" className="block px-4 py-2 hover:bg-gray-100">
+                      🧠 AI Explainability
+                    </Link>
+                    <Link href="/risk-scoring" className="block px-4 py-2 hover:bg-gray-100">
+                      ⚠️ Risk Scoring
+                    </Link>
+                    <Link href="/market-data" className="block px-4 py-2 hover:bg-gray-100">
+                      📈 Market Data
+                    </Link>
+                    <Link href="/video-rfq" className="block px-4 py-2 hover:bg-gray-100">
+                      📹 Video RFQ
+                    </Link>
+                  </div>
                 )}
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">
-                Home
-              </Link>
-              <Link href="/about" className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">
-                About
-              </Link>
-              <Link href="/services" className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">
-                Services
-              </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">
-                Contact
-              </Link>
-              <Link href="/login" className="bg-blue-600 text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">
-                Login
-              </Link>
+              </div>
             </div>
           </div>
-        )}
+
+          <Link
+            href="/login"
+            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+          >
+            Login
+          </Link>
+        </div>
       </div>
     </nav>
-  );
-};
-
-export default Navigation;
+  )
+}

@@ -1,38 +1,36 @@
-# GitHub Setup Commands for Bell24h Deployment
+# 🚀 Bell24h Production Repository Setup Commands
+# Copy and paste these commands in order
 
-## Quick Setup Commands
+# 1. Create GitHub Repository (Web UI)
+# Go to: https://github.com/new
+# Repository name: bell24h-production
+# Description: Bell24h - India's AI-Powered B2B Marketplace (Thomasnet equivalent)
+# Visibility: Public
+# Click: Create repository
 
-# 1. Create GitHub repository first at: https://github.com/new
-#    - Name: bell24h
-#    - Public repository
-#    - Don't initialize with README
-
-# 2. Run these commands after creating the repository:
-
-git remote add origin https://github.com/YOUR_USERNAME/bell24h.git
+# 2. Connect Local Repository to GitHub
+git remote add origin https://github.com/YOUR-USERNAME/bell24h-production.git
 git branch -M main
 git push -u origin main
 
-# 3. Then go to Railway.app and connect the repository
+# 3. Deploy to Vercel Pro
+npx vercel --prod --yes
+# Choose: Link to GitHub → bell24h-production → Production
 
-## Alternative: Railway CLI Commands
+# 4. Add Custom Domain in Vercel
+# Go to: Vercel Dashboard → Settings → Domains
+# Add: www.bell24h.com
+# Copy DNS records to your domain registrar
 
-# If you prefer using Railway CLI directly:
-railway login
-railway link
-railway up
+# 5. Verify Deployment
+# Visit: https://www.bell24h.com
+# Should see: Beautiful blue homepage with AI features
 
-## Environment Variables for Railway
+# 6. Enable Analytics (Optional)
+# Vercel Dashboard → Analytics → Enable
 
-DATABASE_URL=${{Postgres.DATABASE_URL}}
-NODE_ENV=production
-JWT_SECRET=your-32-character-secret-key-here
-NEXTAUTH_URL=https://your-app.railway.app
-NEXT_PUBLIC_API_URL=https://your-app.railway.app
+# 7. Set up Environment Variables (When needed)
+# Vercel Dashboard → Settings → Environment Variables
+# Add: DATABASE_URL, JWT_SECRET, etc.
 
-## Important Notes
-
-- Replace YOUR_USERNAME with your actual GitHub username
-- Make sure JWT_SECRET is at least 32 characters long
-- Railway will automatically set DATABASE_URL from your PostgreSQL service
-- Your app will be live at: https://your-app.railway.app
+# 🎯 RESULT: Clean Bell24h.com live in < 24 hours!

@@ -1,4 +1,16 @@
-'use client'
+@echo off
+echo 🚀 Setting up clean Bell24h production repository...
+echo.
+
+echo 📁 Creating clean directory...
+mkdir bell24h-production
+cd bell24h-production
+
+echo 🔧 Initializing Next.js project...
+npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --yes
+
+echo 📝 Creating clean homepage...
+echo 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
 
@@ -73,7 +85,7 @@ export default function HomePage() {
 
           {/* Search Interface */}
           <div className="bg-white rounded-lg shadow-xl p-2 max-w-4xl mx-auto flex gap-2">
-            <input type="text" placeholder="What are you looking for? (e.g., steel pipes, textiles)" className="flex-1 px-6 py-4 text-lg border-none outline-none" />
+            <input type="text" placeholder="What are you looking for? (e.g., 'steel pipes', 'textiles')" className="flex-1 px-6 py-4 text-lg border-none outline-none" />
             <select className="px-4 py-2 border-l border-gray-200 bg-white text-gray-700">
               <option>All Categories</option>
               <option>Manufacturing</option>
@@ -87,4 +99,14 @@ export default function HomePage() {
       </main>
     </div>
   )
-}
+}' > app/page.tsx
+
+echo 🚀 Deploying to Vercel...
+git add .
+git commit -m "feat: clean Bell24h homepage - India's Thomasnet equivalent"
+git push origin main
+
+echo ✅ Setup complete! Your clean Bell24h repository is ready!
+echo 🌐 Next: Deploy to Vercel Pro and point bell24h.com domain
+echo.
+pause

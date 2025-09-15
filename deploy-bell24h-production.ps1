@@ -1,3 +1,24 @@
+# 🚀 Bell24h Production Deployment Script
+# Zero-contamination repo → Live in < 24 hours
+
+Write-Host "🚀 Bell24h Production Deployment Starting..." -ForegroundColor Green
+Write-Host ""
+
+# Step 1: Create clean directory
+Write-Host "📁 Step 1: Creating clean production directory..." -ForegroundColor Yellow
+if (Test-Path "bell24h-production") {
+  Remove-Item -Recurse -Force "bell24h-production"
+}
+mkdir bell24h-production
+cd bell24h-production
+
+# Step 2: Initialize Next.js project
+Write-Host "🔧 Step 2: Initializing Next.js project..." -ForegroundColor Yellow
+npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --yes
+
+# Step 3: Create clean homepage
+Write-Host "📝 Step 3: Creating clean Bell24h homepage..." -ForegroundColor Yellow
+$homepageContent = @'
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
@@ -73,7 +94,7 @@ export default function HomePage() {
 
           {/* Search Interface */}
           <div className="bg-white rounded-lg shadow-xl p-2 max-w-4xl mx-auto flex gap-2">
-            <input type="text" placeholder="What are you looking for? (e.g., steel pipes, textiles)" className="flex-1 px-6 py-4 text-lg border-none outline-none" />
+            <input type="text" placeholder="What are you looking for? (e.g., 'steel pipes', 'textiles')" className="flex-1 px-6 py-4 text-lg border-none outline-none" />
             <select className="px-4 py-2 border-l border-gray-200 bg-white text-gray-700">
               <option>All Categories</option>
               <option>Manufacturing</option>
@@ -88,3 +109,27 @@ export default function HomePage() {
     </div>
   )
 }
+'@
+
+$homepageContent | Out-File -FilePath "app/page.tsx" -Encoding UTF8
+
+# Step 4: Initialize Git and push
+Write-Host "📦 Step 4: Initializing Git repository..." -ForegroundColor Yellow
+git init
+git add .
+git commit -m "feat: clean Bell24h homepage - India's Thomasnet equivalent"
+
+Write-Host ""
+Write-Host "✅ CLEAN REPOSITORY READY!" -ForegroundColor Green
+Write-Host ""
+Write-Host "📋 NEXT STEPS:" -ForegroundColor Cyan
+Write-Host "1. Create GitHub repository: bell24h-production" -ForegroundColor White
+Write-Host "2. Run: git remote add origin https://github.com/YOUR-USERNAME/bell24h-production.git" -ForegroundColor White
+Write-Host "3. Run: git push -u origin main" -ForegroundColor White
+Write-Host "4. Deploy to Vercel Pro: npx vercel --prod" -ForegroundColor White
+Write-Host "5. Add domain: www.bell24h.com in Vercel dashboard" -ForegroundColor White
+Write-Host ""
+Write-Host "🌐 Your Bell24h homepage will be live in < 24 hours!" -ForegroundColor Magenta
+Write-Host ""
+Write-Host "Press any key to continue..." -ForegroundColor Gray
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
