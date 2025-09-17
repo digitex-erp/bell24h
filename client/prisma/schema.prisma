@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,45 +10,448 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User model for authentication and user management
 model User {
-  id                 String    @id @default(cuid())
-  email              String?   @unique
-  phone              String?   @unique
-  phoneVerified      Boolean   @default(false)
-  emailVerified      Boolean   @default(false)
-  trustScore         Int       @default(0)
-  role               String    @default("BUYER")
-  verificationMethod String?   @default("phone_otp")
-  lastLoginAt        DateTime?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  password      String?   // For credentials provider
+  role          UserRole  @default(BUYER)
+  isActive      Boolean   @default(true)
+  isVerified    Boolean   @default(false)
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
   // Relations
-  sessions Session[]
-  otps     OTP[]
+  accounts      Account[]
+  sessions      Session[]
+  profile       UserProfile?
+  company       Company?  @relation(fields: [companyId], references: [id])
+  companyId     String?
+  
+  // Business relations
+  rfqs          RFQ[]
+  quotes        Quote[]
+  ordersAsBuyer    Order[] @relation("OrderBuyer")
+  ordersAsSupplier Order[] @relation("OrderSupplier")
+  payments      Payment[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+  
+  @@map("users")
 }
 
+// NextAuth Account model
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+// NextAuth Session model
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("sessions")
 }
 
-model OTP {
-  id        String   @id @default(cuid())
-  phone     String?
-  email     String?
-  otp       String
-  type      String // 'phone' or 'email'
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  userId    String?
+// NextAuth Verification Token model
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// User Profile model for extended user information
+model UserProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Personal information
+  firstName   String?
+  lastName    String?
+  phone       String?
+  avatar      String?
+  bio         String?
+  
+  // Business information
+  designation String?
+  department  String?
+  experience  Int?     // Years of experience
+  
+  // Address information
+  address     Json?    // Flexible address structure
+  city        String?
+  state       String?
+  country     String?
+  pincode     String?
+  
+  // Preferences
+  preferences Json?    // User preferences and settings
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("user_profiles")
+}
+
+// Company model for B2B marketplace
+model Company {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logo        String?
+  website     String?
+  
+  // Business details
+  gstNumber   String?  @unique
+  panNumber   String?  @unique
+  cinNumber   String?  @unique
+  
+  // Contact information
+  email       String?
+  phone       String?
+  address     Json?    // Flexible address structure
+  
+  // Business classification
+  category    String?
+  subcategory String?
+  size        CompanySize @default(SMALL)
+  type        CompanyType @default(SUPPLIER)
+  
+  // Verification status
+  isVerified  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  verifiedAt  DateTime?
+  
+  // Trust and rating
+  trustScore  Float    @default(0.0)
+  rating      Float    @default(0.0)
+  reviewCount Int      @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
   // Relations
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  users       User[]
+  products    Product[]
+  rfqs        RFQ[]
+  quotes      Quote[]
+  orders      Order[]
+  
+  @@map("companies")
+}
+
+// Product model for marketplace
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String
+  subcategory String?
+  price       Decimal  @db.Decimal(10, 2)
+  currency    String   @default("INR")
+  
+  // Product details
+  specifications Json?  // Flexible specifications
+  images         String[] // Array of image URLs
+  tags           String[] // Array of tags
+  
+  // Inventory
+  stock          Int     @default(0)
+  minOrderQty    Int     @default(1)
+  maxOrderQty    Int?
+  
+  // Status
+  isActive       Boolean @default(true)
+  isFeatured     Boolean @default(false)
+  
+  // Relations
+  companyId      String
+  company        Company @relation(fields: [companyId], references: [id])
+  
+  // Timestamps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@map("products")
+}
+
+// RFQ (Request for Quote) model
+model RFQ {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String
+  subcategory String?
+  
+  // Requirements
+  quantity    Int
+  unit        String?
+  specifications Json?  // Flexible specifications
+  budget      Decimal?  @db.Decimal(10, 2)
+  currency    String    @default("INR")
+  
+  // Timeline
+  deadline    DateTime?
+  urgency     UrgencyLevel @default(MEDIUM)
+  
+  // Status
+  status      RFQStatus @default(OPEN)
+  
+  // Relations
+  buyerId     String
+  buyer       User     @relation(fields: [buyerId], references: [id])
+  companyId   String?
+  company     Company? @relation(fields: [companyId], references: [id])
+  
+  // Voice/Video RFQ
+  audioFile   String?  // Audio file URL
+  videoFile   String?  // Video file URL
+  transcript  String?  // AI-generated transcript
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  quotes      Quote[]
+  
+  @@map("rfqs")
+}
+
+// Quote model for supplier responses
+model Quote {
+  id          String   @id @default(cuid())
+  price       Decimal  @db.Decimal(10, 2)
+  currency    String   @default("INR")
+  quantity    Int
+  unit        String?
+  
+  // Quote details
+  description String?
+  specifications Json?  // Flexible specifications
+  deliveryTime Int?     // Days
+  validity     Int?     // Days
+  
+  // Status
+  status      QuoteStatus @default(PENDING)
+  isSelected  Boolean     @default(false)
+  
+  // Relations
+  rfqId       String
+  rfq         RFQ     @relation(fields: [rfqId], references: [id])
+  supplierId  String
+  supplier    User    @relation(fields: [supplierId], references: [id])
+  companyId   String?
+  company     Company? @relation(fields: [companyId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  orders      Order[]
+  
+  @@map("quotes")
+}
+
+// Order model for transactions
+model Order {
+  id          String   @id @default(cuid())
+  orderNumber String   @unique
+  
+  // Order details
+  totalAmount Decimal  @db.Decimal(10, 2)
+  currency    String   @default("INR")
+  status      OrderStatus @default(PENDING)
+  
+  // Relations
+  buyerId     String
+  buyer       User     @relation("OrderBuyer", fields: [buyerId], references: [id])
+  supplierId  String
+  supplier    User     @relation("OrderSupplier", fields: [supplierId], references: [id])
+  companyId   String?
+  company     Company? @relation(fields: [companyId], references: [id])
+  quoteId     String?
+  quote       Quote?   @relation(fields: [quoteId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  payments    Payment[]
+  
+  @@map("orders")
+}
+
+// Payment model for financial transactions
+model Payment {
+  id          String   @id @default(cuid())
+  amount      Decimal  @db.Decimal(10, 2)
+  currency    String   @default("INR")
+  status      PaymentStatus @default(PENDING)
+  
+  // Payment details
+  method      PaymentMethod
+  gateway     String?  // Razorpay, Stripe, etc.
+  transactionId String? @unique
+  gatewayResponse Json? // Gateway response data
+  
+  // Relations
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("payments")
+}
+
+// Notification model for user notifications
+model Notification {
+  id          String   @id @default(cuid())
+  title       String
+  message     String
+  type        NotificationType
+  isRead      Boolean  @default(false)
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  
+  @@map("notifications")
+}
+
+// Audit Log model for tracking user actions
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String
+  details     Json?    // Flexible details structure
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  
+  @@map("audit_logs")
+}
+
+// Enums
+enum UserRole {
+  ADMIN
+  BUYER
+  SUPPLIER
+  MODERATOR
+}
+
+enum CompanySize {
+  MICRO
+  SMALL
+  MEDIUM
+  LARGE
+  ENTERPRISE
+}
+
+enum CompanyType {
+  BUYER
+  SUPPLIER
+  BOTH
+}
+
+enum UrgencyLevel {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum RFQStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+  COMPLETED
+}
+
+enum QuoteStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CARD
+  UPI
+  NET_BANKING
+  WALLET
+  EMI
+  CASH_ON_DELIVERY
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+  RFQ_NEW
+  QUOTE_RECEIVED
+  ORDER_UPDATE
+  PAYMENT_UPDATE
 }

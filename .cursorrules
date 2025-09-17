@@ -1,278 +1,161 @@
-# Cursor AI Rules - Bell24h Deployment Protection
+# Bell24h Cursor AI Rules - Brand Persona & Development Guidelines
 
-## 🔒 CRITICAL DEPLOYMENT PROTECTION RULES
+## 🎯 PROJECT IDENTITY
+- **Project Name**: Bell24h (www.bell24h.com)
+- **Type**: AI-powered B2B Marketplace + Social Trade Network
+- **Positioning**: Trust-first, premium, curated ecosystem (NOT a directory like IndiaMART)
+- **Mission**: "India's Fastest B2B Match-Making Engine for MSMEs"
 
-### NEVER MODIFY OR DELETE
-- **Production branches**: `main`, `production`, `master`
-- **Deployment files**: `vercel.json`, `railway.json`, `.env.production`
-- **Build configurations**: `next.config.js` (without explicit permission)
-- **Database migrations**: Any file in `/prisma/migrations/`
-- **Production APIs**: `/pages/api/` endpoints in production mode
+## 🎨 VISUAL IDENTITY RULES
 
-### ALWAYS PRESERVE
-1. **Environment Variables**
-   - Never expose: `DATABASE_URL`, `JWT_SECRET`, `API_KEYS`
-   - Always use `.env.local` for development
-   - Keep `.env.production` separate and secure
+### Colors
+- **Primary Gradient**: `from-indigo-600 to-emerald-600`
+- **Background**: `bg-gradient-to-br from-indigo-50 via-white to-emerald-50`
+- **Trust Colors**: Green (#059669), Blue (#2563EB), Purple (#7C3AED)
+- **Text**: Gray-900 (headlines), Gray-700 (body), Gray-600 (subtle)
 
-2. **Deployment Configurations**
-   ```
-   Files to protect:
-   - vercel.json
-   - railway.json
-   - docker-compose.yml
-   - .github/workflows/*
-   - netlify.toml
-   ```
+### Typography
+- **Headlines**: `text-7xl font-bold` with gradient text
+- **Sub-headlines**: `text-2xl text-gray-700`
+- **Body**: Clean, readable, benefit-driven
 
-3. **Build Outputs**
-   ```
-   Never delete or modify:
-   - .next/
-   - .vercel/
-   - dist/
-   - build/
-   ```
+### Components
+- **Cards**: `bg-white rounded-lg shadow-lg`
+- **Buttons**: Gradient backgrounds with hover effects
+- **Trust Badges**: `rounded-full` with colored backgrounds and checkmarks
 
-## 📁 SAFE DEVELOPMENT PRACTICES
+## 📝 MESSAGING FRAMEWORK
 
-### Branch Strategy
-```bash
-# Always work in feature branches
-git checkout -b feature/new-feature
-# Never directly push to main
-git push origin feature/new-feature
-```
+### Core Messages
+- **Primary**: "Post RFQ. Get 3 Verified Quotes in 24 Hours"
+- **Secondary**: "200 live data signals—GST, credit, logistics, ESG—to match you with pre-qualified suppliers"
+- **Trust**: "Escrow-secured payments, GST-verified suppliers, AI trust-scoring"
 
-### File Modification Rules
-1. **BEFORE modifying any file, check:**
-   - Is this a deployment configuration file?
-   - Will this break existing functionality?
-   - Is there a test for this component?
+### Tone of Voice
+- Trust-driven, professional, tech-savvy
+- Emphasize security, verification, escrow
+- Data-driven, benefit-focused
+- Hindi-first inclusive, MSME-friendly
 
-2. **CREATE backups before major changes:**
-   ```bash
-   cp important-file.js important-file.backup.js
-   ```
+## 🏠 HOMEPAGE STRUCTURE (MANDATORY)
 
-3. **USE version control markers:**
-   ```javascript
-   // @cursor-protected - DO NOT MODIFY
-   // @production-critical
-   // @deployment-config
-   ```
+### Above-the-Fold
+1. **Navigation**: Logo + "Bell24h" + "Verified B2B Platform" + nav items + Login CTA
+2. **Hero**: 7xl headline with gradient text + 24-hour promise
+3. **Sub-headline**: 2xl, data-driven, 200 signals mention
+4. **Trust Layer**: 3 badges (Escrow-Secured, GST Verified, AI Trust-Score)
+5. **Social Proof**: Live metrics strip
+6. **Main CTA**: "Start My RFQ Now" + "Watch 2-Min Demo"
 
-## 🚫 FORBIDDEN ACTIONS
+### Required Sections (In Order)
+1. Hero Section
+2. Trust Layer (3 verification badges)
+3. Social Proof Strip (live metrics)
+4. Main CTA Section (RFQ input + buttons)
+5. How It Works (3-step process)
+6. Popular Categories (Steel, Textiles, Electronics)
+7. Footer
 
-### NEVER execute these commands without confirmation:
-```bash
-# Dangerous commands - require explicit user confirmation
-rm -rf .next
-rm -rf node_modules
-git reset --hard
-git push --force
-npm audit fix --force
-```
+## 🤖 AI & TRUST MESSAGING (ALWAYS INCLUDE)
 
-### NEVER modify these without backup:
-- `package.json` dependencies
-- `package-lock.json`
-- Database schema files
-- Authentication logic
-- Payment processing code
+### AI Features
+- "200+ data points analysis"
+- "AI-generated trust scores"
+- "Voice, video, or text RFQ submission"
+- "AI-powered matching engine"
 
-## ✅ REQUIRED ACTIONS
+### Trust Elements
+- "Escrow-secured payments"
+- "GST-verified suppliers only"
+- "Payment held until satisfaction"
+- "AI trust scoring on every profile"
 
-### BEFORE any deployment:
-1. Run tests: `npm test`
-2. Check build: `npm run build`
-3. Verify environment variables
-4. Create deployment backup
+## 📊 SOCIAL PROOF REQUIREMENTS
 
-### WHEN creating new features:
-1. Create feature branch
-2. Write tests first
-3. Document changes
-4. Update README if needed
+### Live Metrics (Always Display)
+- "4,321 RFQs processed yesterday"
+- "98% escrow success rate"
+- "12,400 verified suppliers"
+- "50+ product categories"
 
-## 🔄 DEPLOYMENT WORKFLOW
+### Trust Badges (Required)
+- ✅ Escrow-Secured (ICICI Bank Partner)
+- ✅ GST & PAN Verified
+- ✅ AI Trust-Score
+- ✅ Made in India 🇮🇳
 
-### Local Development
-```bash
-# Safe local development
-git checkout -b feature/your-feature
-# Make changes
-npm run dev
-# Test thoroughly
-npm test
-# Build check
-npm run build
-```
+## 🎯 TARGET AUDIENCE
 
-### Staging Deployment
-```bash
-# Deploy to staging first
-vercel --env preview
-# or
-railway up --environment staging
-```
+### Primary Buyers
+- MSME Procurement Managers
+- Enterprise Sourcing Teams
+- Export/Import Businesses
 
-### Production Deployment
-```bash
-# Only after staging verification
-# Requires explicit confirmation
-vercel --prod
-# or
-railway up --environment production
-```
+### Value Propositions
+- Speed: "24-hour RFQ closure"
+- Trust: "Escrow-backed payments"
+- Quality: "Pre-qualified suppliers only"
+- Innovation: "AI-powered matching"
 
-## 🛡️ SECURITY RULES
+## 🚀 CTA RULES
 
-### API Keys & Secrets
-- NEVER hardcode secrets
-- ALWAYS use environment variables
-- ROTATE keys regularly
-- USE different keys for dev/staging/prod
+### Primary CTAs
+- "Start My RFQ Now" (main action)
+- "Watch 2-Min Demo" (secondary)
+- "Claim Your Company" (supplier onboarding)
 
-### Database Operations
-- ALWAYS backup before migrations
-- NEVER drop tables in production
-- USE transactions for critical operations
-- TEST migrations in staging first
+### CTA Styling
+- Primary: `bg-gradient-to-r from-indigo-600 to-emerald-600`
+- Secondary: Border style with hover effects
+- Size: Large, prominent, action-oriented
+- Icons: Use emojis (🚀, ▶️, etc.)
 
-## 📊 MONITORING & ROLLBACK
+## 🔄 DEVELOPMENT RULES
 
-### Health Checks
-```javascript
-// Always implement health checks
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'healthy' });
-});
-```
+### When Building Components
+1. **Always use Bell24h** (www.bell24h.com)
+2. **Apply indigo → emerald gradient**
+3. **Include trust badges prominently**
+4. **Add social proof metrics**
+5. **Emphasize escrow protection**
+6. **Highlight AI features**
+7. **Use professional, trust-driven tone**
 
-### Rollback Strategy
-```bash
-# Keep previous deployments
-vercel rollback [deployment-id]
-# or
-railway rollback
-```
+### When Writing Copy
+- Lead with benefits (speed, trust, quality)
+- Use data (200 signals, 24 hours, 98% success)
+- Emphasize security (escrow, verification)
+- Include social proof (metrics, testimonials)
+- Clear, prominent CTAs
 
-## 🎯 CURSOR-SPECIFIC BEHAVIORS
+## ⚠️ CRITICAL REMINDERS
 
-### When asked to modify code:
-1. **ASK**: "Is this a production file?"
-2. **CHECK**: Current git branch
-3. **VERIFY**: No breaking changes
-4. **TEST**: Run tests before committing
+### NEVER DO
+- Use "Bell24x" (always use "Bell24h" - www.bell24h.com)
+- Position as a directory like IndiaMART
+- Forget trust badges or social proof
+- Use generic B2B messaging
+- Skip escrow/security emphasis
 
-### When dealing with deployments:
-1. **NEVER** auto-deploy to production
-2. **ALWAYS** deploy to staging first
-3. **REQUIRE** user confirmation for production
-4. **DOCUMENT** all deployment changes
+### ALWAYS DO
+- Emphasize trust and verification
+- Include AI features prominently
+- Use data-driven messaging
+- Show social proof metrics
+- Maintain premium positioning
 
-## 💾 BACKUP REQUIREMENTS
+## 🎯 SUCCESS METRICS
 
-### Automatic Backups
-Create backups for:
-- Database before migrations
-- Configuration files before updates
-- Environment variables (encrypted)
-- Critical business logic changes
-
-### Backup Naming Convention
-```
-filename.backup.YYYY-MM-DD.js
-.env.backup.YYYY-MM-DD
-database-backup-YYYY-MM-DD.sql
-```
-
-## 🔍 VERIFICATION CHECKLIST
-
-Before ANY deployment:
-- [ ] All tests passing
-- [ ] Build successful
-- [ ] Environment variables set
-- [ ] Database migrations ready
-- [ ] Staging deployment tested
-- [ ] Rollback plan prepared
-- [ ] Team notified
-- [ ] Backup created
-
-## ⚠️ WARNING TRIGGERS
-
-Show warnings for:
-- Deleting more than 10 lines of code
-- Modifying authentication logic
-- Changing payment processing
-- Updating database schema
-- Removing dependencies
-- Force pushing to git
-
-## 📝 DOCUMENTATION REQUIREMENTS
-
-Always document:
-- Breaking changes
-- API modifications
-- Database schema changes
-- New environment variables
-- Deployment procedures
-- Rollback procedures
-
-## 🚀 SAFE DEPLOYMENT COMMANDS
-
-### Vercel
-```bash
-# Development
-vercel dev
-
-# Preview/Staging
-vercel --env preview
-
-# Production (with confirmation)
-echo "Deploying to production. Are you sure? (y/n)"
-read confirm && [ "$confirm" = "y" ] && vercel --prod
-```
-
-### Railway
-```bash
-# Staging
-railway up --environment staging
-
-# Production (with confirmation)
-echo "Deploying to production. Are you sure? (y/n)"
-read confirm && [ "$confirm" = "y" ] && railway up --environment production
-```
-
-## 🔐 ENVIRONMENT ISOLATION
-
-### Development (.env.local)
-```
-NEXT_PUBLIC_API_URL=http://localhost:3000
-DATABASE_URL=postgresql://dev_user@localhost/dev_db
-```
-
-### Staging (.env.staging)
-```
-NEXT_PUBLIC_API_URL=https://staging.bell24h.com
-DATABASE_URL=${{STAGING_DATABASE_URL}}
-```
-
-### Production (.env.production)
-```
-NEXT_PUBLIC_API_URL=https://bell24h.com
-DATABASE_URL=${{PRODUCTION_DATABASE_URL}}
-```
-
-## 📌 REMEMBER
-
-1. **Production is sacred** - Never experiment in production
-2. **Backups are mandatory** - Always have a rollback plan
-3. **Testing is required** - No untested code in production
-4. **Documentation is critical** - Document all changes
-5. **User confirmation needed** - For all production changes
+### Track These
+- RFQ submission rate
+- Time on page
+- Trust badge click-through
+- Mobile responsiveness
+- Conversion rate
 
 ---
 
-**These rules ensure safe, secure, and reliable deployments while preventing accidental overwrites or data loss.**
+**Remember**: Bell24h (www.bell24h.com) is a **curated, premium ecosystem** with **trust and AI as the backbone**. Every element should reinforce this positioning.
+
+**Last Updated**: September 16, 2025
+**Version**: 1.1
