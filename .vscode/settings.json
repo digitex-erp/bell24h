@@ -1,4 +1,9 @@
 {
+  "terminal.integrated.defaultProfile.windows": "Command Prompt",
+  "terminal.integrated.windowsEnableConpty": false,
+  "terminal.integrated.enablePersistentSessions": false
+}
+{
     "git.ignoreLimitWarning": true,
     // Editor Settings
     "editor.formatOnSave": true,
