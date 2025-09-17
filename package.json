@@ -66,8 +66,7 @@
     "load-test": "node scripts/load-test.js",
     "test:auth": "curl -X POST http://localhost:3000/api/auth/send-phone-otp -H 'Content-Type: application/json' -d '{\"phone\": \"+919876543210\"}'",
     "test:payment": "curl -X POST http://localhost:3000/api/payments/create-order -H 'Content-Type: application/json' -d '{\"amount\": 1000, \"currency\": \"INR\"}'",
-    "health-check": "node scripts/health-check.js",
-    "deploy:vercel": "deploy-to-vercel.bat"
+    "health-check": "node scripts/health-check.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -140,6 +139,7 @@
     "@tailwindcss/postcss": "^4.1.13",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
+    "@tsconfig/node16": "^16.1.4",
     "@types/bcryptjs": "^3.0.0",
     "@types/jest": "^30.0.0",
     "@types/jest-axe": "^3.5.9",
