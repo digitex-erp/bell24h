@@ -89,6 +89,7 @@
     "@types/multer": "^1.4.13",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "autoprefixer": "^10.4.21",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
@@ -147,7 +148,6 @@
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.34.0",
     "@typescript-eslint/parser": "^8.34.0",
-    "autoprefixer": "^10.4.21",
     "eslint": "^8.56.0",
     "eslint-config-next": "^15.3.3",
     "eslint-plugin-security": "^3.0.1",
@@ -159,7 +159,6 @@
     "node-mocks-http": "^1.17.2",
     "postcss": "^8.5.6",
     "supertest": "^7.1.1",
-    "tailwindcss": "^4.1.12",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
