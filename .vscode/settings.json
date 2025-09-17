@@ -77,5 +77,11 @@
     "workbench.iconTheme": "material-icon-theme",
     "workbench.startupEditor": "newUntitledFile",
     "extensions.ignoreRecommendations": false,
-    "extensions.autoUpdate": true
+    "extensions.autoUpdate": true,
+    "http.timeout": 30000,
+    "http.proxyStrictSSL": false,
+    "http.systemCertificates": false,
+    "cursor.general.enableAIFeatures": true,
+    "cursor.general.enableCodeActions": true,
+    "cursor.general.enableInlineCompletion": true
 }
