@@ -126,6 +126,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.0",
+    "react-hot-toast": "^2.6.0",
     "react-redux": "^9.2.0",
     "resend": "^6.0.3",
     "sharp": "^0.34.2",
