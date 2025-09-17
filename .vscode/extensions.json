@@ -1,39 +1,28 @@
 {
   "recommendations": [
-    // Core Development
     "bradlc.vscode-tailwindcss",
     "dsznajder.es7-react-js-snippets",
     "formulahendry.auto-rename-tag",
     "ms-vscode.vscode-typescript-next",
-    // Testing & Quality
     "orta.vscode-jest",
     "ms-playwright.playwright",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    // Database & ORM
     "prisma.prisma",
     "qwtel.sqlite-viewer",
-    // API Development
     "humao.rest-client",
     "rangav.vscode-thunder-client",
-    // Git & Version Control
     "eamodio.gitlens",
     "mhutchie.git-graph",
-    // Productivity
     "christian-kohler.path-intellisense",
     "oderwat.indent-rainbow",
     "ms-vscode.vscode-json",
-    // Project-Specific
     "ms-vscode.vscode-python",
     "ms-vscode.vscode-yaml",
     "yzhang.markdown-all-in-one",
     "mechatroner.rainbow-csv",
-    // Themes & Icons
     "zhuangtongfa.material-theme",
     "pkief.material-icon-theme",
-    // Additional Helpers
-    "ms-vscode.vscode-json",
-    "bradlc.vscode-tailwindcss",
     "ms-vscode.vscode-css-peek",
     "formulahendry.code-runner",
     "ms-vscode.vscode-npm-script",

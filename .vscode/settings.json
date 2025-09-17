@@ -1,11 +1,5 @@
 {
-  "terminal.integrated.defaultProfile.windows": "Command Prompt",
-  "terminal.integrated.windowsEnableConpty": false,
-  "terminal.integrated.enablePersistentSessions": false
-}
-{
     "git.ignoreLimitWarning": true,
-    // Editor Settings
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit",
@@ -19,11 +13,9 @@
     ],
     "editor.wordWrap": "on",
     "editor.minimap.enabled": true,
-    // TypeScript Settings
     "typescript.preferences.importModuleSpecifier": "relative",
     "typescript.suggest.autoImports": true,
     "typescript.updateImportsOnFileMove.enabled": "always",
-    // Tailwind CSS Settings
     "tailwindCSS.includeLanguages": {
         "typescript": "javascript",
         "typescriptreact": "javascript"
@@ -38,12 +30,10 @@
             "(?:'|\"|`)([^']*)(?:'|\"|`)"
         ]
     ],
-    // File Associations
     "files.associations": {
         "*.prisma": "prisma",
         "*.env*": "dotenv"
     },
-    // Search Settings
     "search.exclude": {
         "**/node_modules": true,
         "**/dist": true,
@@ -52,7 +42,6 @@
         "**/coverage": true,
         "**/test-results": true
     },
-    // File Explorer Settings
     "files.exclude": {
         "**/node_modules": true,
         "**/dist": true,
@@ -62,40 +51,37 @@
         "**/test-results": true,
         "**/.git": true
     },
-    // Emmet Settings
     "emmet.includeLanguages": {
         "typescript": "html",
         "typescriptreact": "html"
     },
-    // Jest Settings
     "jest.autoRun": {
         "watch": false,
         "onSave": "test-file"
     },
-    // ESLint Settings
     "eslint.validate": [
         "javascript",
         "javascriptreact",
         "typescript",
         "typescriptreact"
     ],
-    // Prettier Settings
     "prettier.singleQuote": true,
     "prettier.trailingComma": "es5",
     "prettier.printWidth": 80,
-    // Git Settings
     "git.enableSmartCommit": true,
     "git.confirmSync": false,
-    // Terminal Settings
     "terminal.integrated.defaultProfile.windows": "PowerShell",
     "terminal.integrated.cwd": "${workspaceFolder}",
-    // Debug Settings
     "debug.allowBreakpointsEverywhere": true,
-    // Workbench Settings
-    "workbench.colorTheme": "PowerShell ISE",
+    "workbench.colorTheme": "One Dark Pro",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.startupEditor": "newUntitledFile",
-    // Extensions Settings
     "extensions.ignoreRecommendations": false,
-    "extensions.autoUpdate": true
+    "extensions.autoUpdate": true,
+    "http.timeout": 30000,
+    "http.proxyStrictSSL": false,
+    "http.systemCertificates": false,
+    "cursor.general.enableAIFeatures": true,
+    "cursor.general.enableCodeActions": true,
+    "cursor.general.enableInlineCompletion": true
 }

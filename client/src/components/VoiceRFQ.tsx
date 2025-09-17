@@ -96,52 +96,25 @@ export default function VoiceRFQ({ onRFQCreated, userId }: VoiceRFQProps) {
     try {
       const formData = new FormData();
       formData.append('audio', audioBlob, 'voice-rfq.webm');
-      formData.append('language', 'en');
+      formData.append('userId', userId);
 
-      const response = await fetch('/api/voice-rfq', {
+      const response = await fetch('/api/voice/rfq', {
         method: 'POST',
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       const result = await response.json();
 
       if (result.success) {
-        setTranscription(result.transcription.text);
-        setRfqData(result.extractedInfo);
-        onRFQCreated(result.extractedInfo);
+        setTranscription(result.data.transcription);
+        setRfqData(result.data.rfq);
+        onRFQCreated(result.data.rfq);
       } else {
         setError(result.error || 'Failed to process voice RFQ');
       }
     } catch (error) {
+      setError('Failed to process voice RFQ. Please try again.');
       console.error('Voice RFQ processing error:', error);
-      
-      // Provide fallback mock data for testing
-      const mockTranscription = "I need 100 units of steel pipes, 5 inches in diameter, delivered to Mumbai by next week. Budget is around 50,000 rupees.";
-      const mockRfqData = {
-        title: "Steel Pipes - 100 units",
-        description: mockTranscription,
-        category: "Steel & Metals",
-        subcategory: "Steel Pipes",
-        quantity: 100,
-        unit: "units",
-        budget: 50000,
-        currency: "INR",
-        location: "Mumbai",
-        deliveryDeadline: "1 week",
-        priority: "medium",
-        specifications: ["5 inches diameter", "Steel material"],
-        requirements: ["Quality certification", "On-time delivery"]
-      };
-
-      setTranscription(mockTranscription);
-      setRfqData(mockRfqData);
-      onRFQCreated(mockRfqData);
-      
-      setError('Using demo data - API connection failed. This is normal for testing.');
     } finally {
       setIsProcessing(false);
     }
@@ -222,17 +195,8 @@ export default function VoiceRFQ({ onRFQCreated, userId }: VoiceRFQProps) {
 
       {/* Error Display */}
       {error && (
-        <div className={`px-4 py-3 rounded mb-4 ${
-          error.includes('demo data') 
-            ? 'bg-yellow-100 border border-yellow-400 text-yellow-700' 
-            : 'bg-red-100 border border-red-400 text-red-700'
-        }`}>
-          <div className="flex items-center">
-            <span className="mr-2">
-              {error.includes('demo data') ? '⚠️' : '❌'}
-            </span>
-            <span>{error}</span>
-          </div>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
         </div>
       )}
 
