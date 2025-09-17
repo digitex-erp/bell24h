@@ -1,4 +1,9 @@
 {
+  "terminal.integrated.defaultProfile.windows": "Command Prompt",
+  "terminal.integrated.windowsEnableConpty": false,
+  "terminal.integrated.enablePersistentSessions": false
+}
+{
     "git.ignoreLimitWarning": true,
     // Editor Settings
     "editor.formatOnSave": true,
@@ -87,7 +92,7 @@
     // Debug Settings
     "debug.allowBreakpointsEverywhere": true,
     // Workbench Settings
-    "workbench.colorTheme": "One Dark Pro",
+    "workbench.colorTheme": "PowerShell ISE",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.startupEditor": "newUntitledFile",
     // Extensions Settings

@@ -1,373 +1,214 @@
-// Business metrics tracking
-export const trackBusinessEvent = (event: string, properties?: Record<string, any>) => {
-  if (typeof window !== 'undefined') {
-    // Google Analytics 4
-    window.gtag?.('event', event, properties);
+/**
+ * Production Performance Monitoring System
+ * Tracks metrics for 1000+ concurrent users
+ */
 
-    // Custom analytics
-    fetch('/api/analytics/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event, properties, timestamp: Date.now() }),
-    }).catch(console.error);
-  }
-};
+import { NextRequest, NextResponse } from 'next/server'
 
-// Error tracking
-export const trackError = (error: Error, context?: Record<string, any>) => {
-  console.error('Application Error:', error, context);
-
-  fetch('/api/analytics/error', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message: error.message,
-      stack: error.stack,
-      context,
-      timestamp: Date.now(),
-    }),
-  }).catch(console.error);
-};
-
-// Performance tracking
-export const trackPerformance = (metric: string, value: number) => {
-  if (typeof window !== 'undefined') {
-    // Web Vitals tracking
-    window.gtag?.('event', 'web_vitals', {
-      metric_name: metric,
-      value: value,
-      event_category: 'Web Vitals',
-    });
-  }
-};
-
-// User engagement tracking
-export const trackUserEngagement = (action: string, details?: Record<string, any>) => {
-  trackBusinessEvent('user_engagement', {
-    action,
-    ...details,
-    timestamp: Date.now(),
-  });
-};
-
-// Monitoring and logging utilities for Bell24H
-// In production, integrate with services like Sentry, DataDog, or CloudWatch
-
-interface LogEvent {
-  event: string;
-  userId?: string;
-  timestamp: string;
-  data?: any;
-  error?: string;
-  level: 'info' | 'warn' | 'error' | 'audit';
+// Performance metrics interface
+interface PerformanceMetrics {
+  timestamp: number
+  requestId: string
+  method: string
+  url: string
+  statusCode: number
+  responseTime: number
+  memoryUsage: NodeJS.MemoryUsage
+  cpuUsage: NodeJS.CpuUsage
+  userAgent: string
+  ip: string
 }
 
-interface ErrorLog {
-  error: string;
-  userId?: string;
-  timestamp: string;
-  context?: any;
-  stack?: string;
+// Monitoring configuration
+const MONITORING_CONFIG = {
+  enabled: process.env.NODE_ENV === 'production',
+  sampleRate: 0.1, // Sample 10% of requests
+  maxMetrics: 10000, // Keep last 10k metrics in memory
+  alertThresholds: {
+    responseTime: 5000, // 5 seconds
+    memoryUsage: 0.9, // 90% of available memory
+    errorRate: 0.05, // 5% error rate
+  },
 }
 
-interface AuditLog {
-  userId: string;
-  action: string;
-  resource: string;
-  resourceId?: string;
-  timestamp: string;
-  metadata?: any;
+// In-memory metrics storage (in production, use Redis or database)
+let metrics: PerformanceMetrics[] = []
+let errorCount = 0
+let totalRequests = 0
+
+/**
+ * Generate unique request ID
+ */
+function generateRequestId(): string {
+  return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
 }
 
-export class SystemMonitoring {
-  // Real-time system metrics
-  static async getSystemMetrics() {
+/**
+ * Get client IP address
+ */
+function getClientIP(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for')
+  const realIp = request.headers.get('x-real-ip')
+  const cfConnectingIp = request.headers.get('cf-connecting-ip')
+  
+  return forwarded?.split(',')[0] || realIp || cfConnectingIp || 'unknown'
+}
+
+/**
+ * Record performance metrics
+ */
+export function recordMetrics(
+  request: NextRequest,
+  response: NextResponse,
+  startTime: number
+) {
+  if (!MONITORING_CONFIG.enabled) return
+
+  // Sample rate check
+  if (Math.random() > MONITORING_CONFIG.sampleRate) return
+
+  const endTime = Date.now()
+  const responseTime = endTime - startTime
+
+  const metric: PerformanceMetrics = {
+    timestamp: endTime,
+    requestId: generateRequestId(),
+    method: request.method,
+    url: request.nextUrl.pathname,
+    statusCode: response.status,
+    responseTime,
+    memoryUsage: process.memoryUsage(),
+    cpuUsage: process.cpuUsage(),
+    userAgent: request.headers.get('user-agent') || 'unknown',
+    ip: getClientIP(request),
+  }
+
+  // Add to metrics array
+  metrics.push(metric)
+
+  // Keep only recent metrics
+  if (metrics.length > MONITORING_CONFIG.maxMetrics) {
+    metrics = metrics.slice(-MONITORING_CONFIG.maxMetrics)
+  }
+
+  // Update counters
+  totalRequests++
+  if (response.status >= 400) {
+    errorCount++
+  }
+
+  // Check for alerts
+  checkAlerts(metric)
+}
+
+/**
+ * Check for performance alerts
+ */
+function checkAlerts(metric: PerformanceMetrics) {
+  const alerts = []
+
+  // Response time alert
+  if (metric.responseTime > MONITORING_CONFIG.alertThresholds.responseTime) {
+    alerts.push({
+      type: 'slow_response',
+      message: `Slow response detected: ${metric.responseTime}ms for ${metric.url}`,
+      severity: 'warning',
+      metric,
+    })
+  }
+
+  // Memory usage alert
+  const memoryUsagePercent = metric.memoryUsage.heapUsed / metric.memoryUsage.heapTotal
+  if (memoryUsagePercent > MONITORING_CONFIG.alertThresholds.memoryUsage) {
+    alerts.push({
+      type: 'high_memory',
+      message: `High memory usage: ${(memoryUsagePercent * 100).toFixed(2)}%`,
+      severity: 'critical',
+      metric,
+    })
+  }
+
+  // Error rate alert
+  const errorRate = errorCount / totalRequests
+  if (errorRate > MONITORING_CONFIG.alertThresholds.errorRate) {
+    alerts.push({
+      type: 'high_error_rate',
+      message: `High error rate: ${(errorRate * 100).toFixed(2)}%`,
+      severity: 'critical',
+      metric,
+    })
+  }
+
+  // Send alerts (in production, send to monitoring service)
+  alerts.forEach(alert => {
+    console.warn(`[ALERT] ${alert.severity.toUpperCase()}: ${alert.message}`)
+    // TODO: Send to Sentry, DataDog, or other monitoring service
+  })
+}
+
+/**
+ * Get performance statistics
+ */
+export function getPerformanceStats() {
+  if (metrics.length === 0) {
     return {
-      timestamp: new Date().toISOString(),
-      server: {
-        uptime: process.uptime ? Math.floor(process.uptime()) : 0,
-        memory: this.getMemoryUsage(),
-        cpu: await this.getCPUUsage(),
-        loadAverage: this.getLoadAverage()
-      },
-      database: {
-        connections: this.getDBConnections(),
-        queryTime: this.getAvgQueryTime(),
-        size: this.getDBSize()
-      },
-      application: {
-        activeUsers: await this.getActiveUsers(),
-        totalRequests: this.getTotalRequests(),
-        errorRate: this.getErrorRate(),
-        responseTime: this.getAvgResponseTime()
-      },
-      security: {
-        failedLogins: await this.getFailedLogins(),
-        blockedIPs: this.getBlockedIPs(),
-        activeThreats: this.getActiveThreats()
-      }
-    };
-  }
-
-  // User activity monitoring
-  static async getUserActivity() {
-    return {
-      onlineUsers: 8934,
-      newRegistrations: 156,
-      activeRFQs: 1247,
-      completedTransactions: 89,
-      topCategories: [
-        { name: 'Electronics', users: 2341 },
-        { name: 'Textiles', users: 1876 },
-        { name: 'Machinery', users: 1523 }
-      ],
-      geographicDistribution: {
-        'Mumbai': 2456,
-        'Delhi': 1897,
-        'Bangalore': 1634,
-        'Chennai': 1221,
-        'Others': 1726
-      }
-    };
-  }
-
-  // Security monitoring
-  static async getSecurityEvents() {
-    const securityLogs = typeof window !== 'undefined' 
-      ? JSON.parse(localStorage.getItem('admin_security_logs') || '[]')
-      : [];
-
-    return {
-      recentEvents: securityLogs.slice(-50).reverse(),
-      threatLevel: this.calculateThreatLevel(securityLogs),
-      blockedAttacks: this.getBlockedAttacks(),
-      suspiciousActivity: this.getSuspiciousActivity(),
-      recommendations: this.getSecurityRecommendations()
-    };
-  }
-
-  // Financial monitoring
-  static async getFinancialMetrics() {
-    return {
-      revenue: {
-        today: 2.4,
-        thisWeek: 16.8,
-        thisMonth: 124.6,
-        thisYear: 1247.3
-      },
-      transactions: {
-        completed: 15647,
-        pending: 234,
-        failed: 67,
-        refunded: 23
-      },
-      subscriptions: {
-        basic: 5673,
-        pro: 1245,
-        enterprise: 234,
-        churnRate: 2.3
-      },
-      topRevenueSources: [
-        { source: 'Subscription Fees', amount: 45.6 },
-        { source: 'Transaction Fees', amount: 34.2 },
-        { source: 'Premium Features', amount: 28.9 },
-        { source: 'ECGC Services', amount: 15.9 }
-      ]
-    };
-  }
-
-  // Performance monitoring
-  static async getPerformanceMetrics() {
-    return {
-      pageLoadTimes: {
-        homepage: 1.2,
-        dashboard: 2.1,
-        marketplace: 1.8,
-        categories: 1.5
-      },
-      apiResponseTimes: {
-        authentication: 120,
-        userQueries: 89,
-        searchQueries: 156,
-        fileUploads: 2340
-      },
-      errorRates: {
-        clientErrors: 0.8,
-        serverErrors: 0.2,
-        timeouts: 0.1
-      },
-      cacheHitRates: {
-        redis: 94.5,
-        cdn: 87.3,
-        database: 76.8
-      }
-    };
-  }
-
-  // Alert system
-  static async checkAlerts() {
-    const alerts = [];
-    const metrics = await this.getSystemMetrics();
-
-    // Check critical thresholds
-    if (metrics.server.memory.usage > 90) {
-      alerts.push({
-        severity: 'CRITICAL',
-        type: 'MEMORY',
-        message: `High memory usage: ${metrics.server.memory.usage}%`,
-        timestamp: new Date().toISOString()
-      });
+      totalRequests: 0,
+      averageResponseTime: 0,
+      errorRate: 0,
+      memoryUsage: process.memoryUsage(),
+      uptime: process.uptime(),
     }
-
-    if (metrics.application.errorRate > 5) {
-      alerts.push({
-        severity: 'HIGH',
-        type: 'ERROR_RATE',
-        message: `High error rate: ${metrics.application.errorRate}%`,
-        timestamp: new Date().toISOString()
-      });
-    }
-
-    if (metrics.security.failedLogins > 100) {
-      alerts.push({
-        severity: 'HIGH',
-        type: 'SECURITY',
-        message: `High failed login attempts: ${metrics.security.failedLogins}`,
-        timestamp: new Date().toISOString()
-      });
-    }
-
-    return alerts;
   }
 
-  // Helper methods
-  private static getMemoryUsage() {
-    if (typeof process !== 'undefined' && process.memoryUsage) {
-      const usage = process.memoryUsage();
-      return {
-        used: Math.round(usage.heapUsed / 1024 / 1024),
-        total: Math.round(usage.heapTotal / 1024 / 1024),
-        usage: Math.round((usage.heapUsed / usage.heapTotal) * 100)
-      };
-    }
-    return { used: 456, total: 1024, usage: 44.5 };
-  }
+  const recentMetrics = metrics.slice(-1000) // Last 1000 requests
+  const responseTimes = recentMetrics.map(m => m.responseTime)
+  const averageResponseTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length
 
-  private static async getCPUUsage() {
-    // In production, implement actual CPU monitoring
-    return Math.round(Math.random() * 30 + 20); // 20-50%
-  }
-
-  private static getLoadAverage() {
-    if (typeof process !== 'undefined' && process.loadavg) {
-      return process.loadavg();
-    }
-    return [0.5, 0.8, 1.2];
-  }
-
-  private static getDBConnections() {
-    return Math.floor(Math.random() * 50 + 10); // 10-60 connections
-  }
-
-  private static getAvgQueryTime() {
-    return Math.round(Math.random() * 20 + 5); // 5-25ms
-  }
-
-  private static getDBSize() {
-    return '2.4GB';
-  }
-
-  private static async getActiveUsers() {
-    return Math.floor(Math.random() * 1000 + 8000); // 8000-9000 users
-  }
-
-  private static getTotalRequests() {
-    return Math.floor(Math.random() * 10000 + 50000); // 50k-60k requests
-  }
-
-  private static getErrorRate() {
-    return Math.round((Math.random() * 2 + 0.5) * 100) / 100; // 0.5-2.5%
-  }
-
-  private static getAvgResponseTime() {
-    return Math.round(Math.random() * 100 + 150); // 150-250ms
-  }
-
-  private static async getFailedLogins() {
-    return Math.floor(Math.random() * 50 + 10); // 10-60 failed attempts
-  }
-
-  private static getBlockedIPs() {
-    return ['192.168.1.100', '10.0.0.55', '172.16.0.23'];
-  }
-
-  private static getActiveThreats() {
-    return 2;
-  }
-
-  private static calculateThreatLevel(logs: any[]) {
-    const criticalEvents = logs.filter(log => log.severity === 'CRITICAL').length;
-    const highEvents = logs.filter(log => log.severity === 'HIGH').length;
-    
-    if (criticalEvents > 5 || highEvents > 20) return 'HIGH';
-    if (criticalEvents > 2 || highEvents > 10) return 'MEDIUM';
-    return 'LOW';
-  }
-
-  private static getBlockedAttacks() {
-    return [
-      { type: 'SQL Injection', count: 15, lastAttempt: '2 hours ago' },
-      { type: 'XSS Attempt', count: 8, lastAttempt: '4 hours ago' },
-      { type: 'Brute Force', count: 23, lastAttempt: '1 hour ago' }
-    ];
-  }
-
-  private static getSuspiciousActivity() {
-    return [
-      { ip: '192.168.1.100', activity: 'Multiple failed logins', risk: 'HIGH' },
-      { ip: '10.0.0.55', activity: 'Unusual API usage pattern', risk: 'MEDIUM' },
-      { ip: '172.16.0.23', activity: 'Geographic anomaly', risk: 'LOW' }
-    ];
-  }
-
-  private static getSecurityRecommendations() {
-    return [
-      'Enable rate limiting for login endpoints',
-      'Update security patches for server',
-      'Review admin access permissions',
-      'Implement additional 2FA for all admins'
-    ];
+  return {
+    totalRequests,
+    averageResponseTime: Math.round(averageResponseTime),
+    errorRate: totalRequests > 0 ? errorCount / totalRequests : 0,
+    memoryUsage: process.memoryUsage(),
+    uptime: process.uptime(),
+    recentMetrics: recentMetrics.length,
   }
 }
 
-// Export singleton instance
-export const monitoringService = new MonitoringService();
+/**
+ * Get detailed metrics for analysis
+ */
+export function getDetailedMetrics() {
+  return {
+    metrics: metrics.slice(-100), // Last 100 metrics
+    stats: getPerformanceStats(),
+    config: MONITORING_CONFIG,
+  }
+}
 
-// Export convenience functions
-export const logEvent = (
-  event: string,
-  data?: any,
-  userId?: string,
-  level?: 'info' | 'warn' | 'error'
-) => monitoringService.logEvent(event, data, userId, level);
+/**
+ * Clear old metrics
+ */
+export function clearOldMetrics() {
+  const oneHourAgo = Date.now() - (60 * 60 * 1000)
+  metrics = metrics.filter(m => m.timestamp > oneHourAgo)
+}
 
-export const logError = (event: string, data?: any) => monitoringService.logError(event, data);
+/**
+ * Health check endpoint
+ */
+export function healthCheck() {
+  const stats = getPerformanceStats()
+  
+  const isHealthy = 
+    stats.averageResponseTime < MONITORING_CONFIG.alertThresholds.responseTime &&
+    stats.errorRate < MONITORING_CONFIG.alertThresholds.errorRate
 
-export const logAuditEvent = (event: string, data: any) =>
-  monitoringService.logAuditEvent(event, data);
+  return {
+    status: isHealthy ? 'healthy' : 'unhealthy',
+    timestamp: new Date().toISOString(),
+    stats,
+  }
+}
 
-export const trackAPIMetrics = (
-  endpoint: string,
-  duration: number,
-  statusCode: number,
-  userId?: string
-) => monitoringService.trackAPIMetrics(endpoint, duration, statusCode, userId);
-
-export const trackBusinessMetrics = (metric: string, value: number, userId?: string) =>
-  monitoringService.trackBusinessMetrics(metric, value, userId);
-
-export const trackSecurityEvent = (event: string, data: any, userId?: string) =>
-  monitoringService.trackSecurityEvent(event, data, userId);
-
-// Export class for testing
-export { MonitoringService };
+// Clear old metrics every hour
+setInterval(clearOldMetrics, 60 * 60 * 1000)

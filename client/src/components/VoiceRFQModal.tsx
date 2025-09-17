@@ -126,7 +126,7 @@ export default function VoiceRFQModal({ isOpen, onClose, onRFQCreated }: VoiceRF
       formData.append('audio', blob, 'voice_rfq.webm');
       formData.append('language', language);
 
-      const response = await fetch('/api/rfqs/voice', {
+      const response = await fetch('/api/voice-rfq', {
         method: 'POST',
         body: formData,
       });
