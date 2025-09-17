@@ -67,7 +67,10 @@
     "test:auth": "curl -X POST http://localhost:3000/api/auth/send-phone-otp -H 'Content-Type: application/json' -d '{\"phone\": \"+919876543210\"}'",
     "test:payment": "curl -X POST http://localhost:3000/api/payments/create-order -H 'Content-Type: application/json' -d '{\"amount\": 1000, \"currency\": \"INR\"}'",
     "health-check": "node scripts/health-check.js",
-    "deploy:vercel": "deploy-to-vercel.bat"
+    "deploy:vercel": "deploy-to-vercel.bat",
+    "dns:verify": "node scripts/dns-verification.js",
+    "dns:fix": "node scripts/quick-dns-fix.js",
+    "dns:check": "nslookup bell24h.com && nslookup www.bell24h.com"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
