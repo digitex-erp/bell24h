@@ -1,197 +1,237 @@
-"use client";
-import { CheckCircle, Phone, Shield } from 'lucide-react';
-import { useState } from 'react';
+'use client'
+
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function LoginPage() {
-  const [step, setStep] = useState('phone'); // 'phone' or 'otp'
-  const [phone, setPhone] = useState('');
-  const [otp, setOtp] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [demoOTP, setDemoOTP] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
+  const [otp, setOtp] = useState('')
+  const [isOtpSent, setIsOtpSent] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const router = useRouter()
 
-  const sendOTP = async () => {
-    setLoading(true);
-    setError('');
-
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      setError('Please enter a valid 10-digit mobile number');
-      setLoading(false);
-      return;
-    }
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
 
     try {
-      // Generate demo OTP for testing
-      const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-      setDemoOTP(generatedOTP);
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      })
 
-      // In production, call API here
-      // const response = await fetch('/api/auth/send-phone-otp', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ phone })
-      // });
-
-      console.log(`📱 OTP for +91${phone}: ${generatedOTP}`);
-      setStep('otp');
-    } catch (err) {
-      setError('Failed to send OTP. Please try again.');
+      if (result?.error) {
+        setError('Invalid email or password')
+      } else {
+        router.push('/dashboard')
+      }
+    } catch (error) {
+      setError('Login failed. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
+  }
 
-    setLoading(false);
-  };
+  const handleSendOtp = async () => {
+    setIsLoading(true)
+    setError('')
 
-  const verifyOTP = async () => {
-    setLoading(true);
-    setError('');
+    try {
+      const response = await fetch('/api/auth/otp/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone }),
+      })
 
-    if (otp !== demoOTP) {
-      setError('Invalid OTP. Please try again.');
-      setLoading(false);
-      return;
+      if (response.ok) {
+        setIsOtpSent(true)
+      } else {
+        setError('Failed to send OTP. Please try again.')
+      }
+    } catch (error) {
+      setError('Failed to send OTP. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
+  }
 
-    // Success - redirect to dashboard
-    window.location.href = '/dashboard';
-  };
+  const handleOtpLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
 
-  const resendOTP = () => {
-    sendOTP();
-  };
+    try {
+      const response = await fetch('/api/auth/otp/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, otp }),
+      })
+
+      if (response.ok) {
+        router.push('/dashboard')
+      } else {
+        setError('Invalid OTP. Please try again.')
+      }
+    } catch (error) {
+      setError('OTP verification failed. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-            <Shield className="w-8 h-8 text-blue-600" />
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">B</div>
+            <span className="text-3xl font-bold">Bell24h</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Bell24h Login</h1>
-          <p className="text-gray-600 mt-2">
-            {step === 'phone' ? 'Enter your mobile number to continue' : 'Enter the OTP sent to your phone'}
-          </p>
+          <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
+          <p className="mt-2 text-gray-600">Sign in to your account</p>
         </div>
 
-        {/* Demo OTP Display */}
-        {demoOTP && step === 'otp' && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-            <div className="text-center">
-              <h3 className="text-sm font-medium text-yellow-800">Demo OTP</h3>
-              <p className="text-2xl font-bold text-yellow-900 mt-1">{demoOTP}</p>
-              <p className="text-xs text-yellow-700 mt-1">Use this code for testing</p>
+        <div className="bg-white py-8 px-6 shadow-xl rounded-lg">
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Phone Input Step */}
-        {step === 'phone' && (
-          <div className="space-y-4">
+          {/* Email/Password Login */}
+          <form onSubmit={handleEmailLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Mobile Number
-              </label>
-              <div className="flex">
-                <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500">
-                  +91
-                </span>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                  placeholder="9876543210"
-                  className="flex-1 rounded-r-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-            </div>
-
-            <button
-              onClick={sendOTP}
-              disabled={loading || phone.length !== 10}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
-            >
-              {loading ? 'Sending...' : 'Send OTP'}
-            </button>
-          </div>
-        )}
-
-        {/* OTP Verification Step */}
-        {step === 'otp' && (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Enter OTP sent to +91 {phone}
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email Address
               </label>
               <input
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                placeholder="000000"
-                className="w-full text-center text-2xl tracking-widest border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                maxLength="6"
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Enter your email"
               />
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Enter your password"
+              />
             </div>
 
             <button
-              onClick={verifyOTP}
-              disabled={loading || otp.length !== 6}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 disabled:bg-gray-400 transition-colors"
+              type="submit"
+              disabled={isLoading}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {loading ? 'Verifying...' : 'Verify OTP'}
+              {isLoading ? 'Signing in...' : 'Sign In with Email'}
             </button>
+          </form>
 
-            <div className="flex justify-between">
-              <button
-                onClick={() => setStep('phone')}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-              >
-                Change Number
-              </button>
-              <button
-                onClick={resendOTP}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-              >
-                Resend OTP
-              </button>
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Or continue with</span>
+              </div>
             </div>
           </div>
-        )}
 
-        {/* Service Information */}
-        <div className="mt-8 bg-gray-50 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-gray-900 mb-2">Our Services</h3>
-          <div className="space-y-1 text-sm text-gray-600">
-            <div className="flex items-center">
-              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-              <span>Supplier Verification - ₹2,000</span>
-            </div>
-            <div className="flex items-center">
-              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-              <span>RFQ Writing Service - ₹500</span>
-            </div>
-            <div className="flex items-center">
-              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-              <span>Featured Listing - ₹1,000/month</span>
-            </div>
+          {/* Phone OTP Login */}
+          <div className="mt-6">
+            {!isOtpSent ? (
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                    Phone Number
+                  </label>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="+91 9876543210"
+                  />
+                </div>
+                <button
+                  onClick={handleSendOtp}
+                  disabled={isLoading || !phone}
+                  className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                >
+                  {isLoading ? 'Sending OTP...' : 'Send OTP'}
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleOtpLogin} className="space-y-4">
+                <div>
+                  <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
+                    Enter OTP
+                  </label>
+                  <input
+                    id="otp"
+                    name="otp"
+                    type="text"
+                    required
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Enter 6-digit OTP"
+                    maxLength={6}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                >
+                  {isLoading ? 'Verifying...' : 'Verify OTP'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsOtpSent(false)}
+                  className="w-full text-sm text-indigo-600 hover:text-indigo-500"
+                >
+                  Change Phone Number
+                </button>
+              </form>
+            )}
           </div>
-        </div>
 
-        {/* WhatsApp Contact */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600 mb-3">Need help? Contact us on WhatsApp</p>
-          <a
-            href="https://wa.me/919876543210?text=Hi, I need supplier verification service"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            <Phone className="w-4 h-4 mr-2" />
-            WhatsApp Us
-          </a>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link href="/auth/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+                Sign up here
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

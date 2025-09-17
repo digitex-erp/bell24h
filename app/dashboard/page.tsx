@@ -1,125 +1,264 @@
-export default function SalesDashboard() {
-  const todaysTasks = [
-    { task: "Shut down Railway", status: "URGENT", value: "₹800/month saved", completed: false },
-    { task: "Send 10 WhatsApp messages", status: "PENDING", value: "₹2000 potential", completed: false },
-    { task: "Apply for GST", status: "PENDING", value: "Legal requirement", completed: false },
-    { task: "Make 5 phone calls", status: "PENDING", value: "₹1000 potential", completed: false },
-    { task: "Post in 3 business groups", status: "PENDING", value: "₹500 potential", completed: false }
-  ];
+'use client'
 
-  const revenueStats = {
-    current: 0,
-    target: 3000,
-    wasted: 800,
-    daysWasted: 7
-  };
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+export default function DashboardPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [rfqs, setRfqs] = useState([])
+  const [stats, setStats] = useState({
+    totalRfqs: 0,
+    activeRfqs: 0,
+    completedRfqs: 0,
+    totalQuotes: 0
+  })
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login')
+    }
+  }, [status, router])
+
+  useEffect(() => {
+    if (session) {
+      // Fetch user's RFQs and stats
+      fetchRfqs()
+      fetchStats()
+    }
+  }, [session])
+
+  const fetchRfqs = async () => {
+    try {
+      const response = await fetch('/api/rfq/list')
+      if (response.ok) {
+        const data = await response.json()
+        setRfqs(data.rfqs || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch RFQs:', error)
+    }
+  }
+
+  const fetchStats = async () => {
+    // Mock stats for now
+    setStats({
+      totalRfqs: 12,
+      activeRfqs: 3,
+      completedRfqs: 9,
+      totalQuotes: 36
+    })
+  }
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!session) {
+    return null
+  }
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-red-600">🚨 STOP BUILDING, START SELLING</h1>
-
-      <div className="bg-red-100 border-l-4 border-red-500 p-4 rounded mb-6">
-        <p className="font-bold text-lg">⚠️ Railway still running - losing ₹26.67/day</p>
-        <p className="text-sm">Total wasted so far: ₹{revenueStats.wasted * revenueStats.daysWasted}</p>
-        <a
-          href="https://railway.app"
-          className="text-blue-600 underline font-bold text-lg"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          SHUT IT DOWN NOW →
-        </a>
-      </div>
-
-      <div className="grid grid-cols-2 gap-6 mb-6">
-        <div className="bg-yellow-100 p-4 rounded">
-          <h2 className="font-bold text-lg">Revenue Status</h2>
-          <p className="text-2xl font-bold text-red-600">₹{revenueStats.current}</p>
-          <p className="text-sm">Target: ₹{revenueStats.target}</p>
-          <p className="text-sm">Days wasted: {revenueStats.daysWasted}</p>
-        </div>
-
-        <div className="bg-green-100 p-4 rounded">
-          <h2 className="font-bold text-lg">Potential Revenue</h2>
-          <p className="text-2xl font-bold text-green-600">₹5,500</p>
-          <p className="text-sm">If you take action today</p>
-          <p className="text-sm">Stop procrastinating!</p>
-        </div>
-      </div>
-
-      <h2 className="text-xl font-bold mb-4">Today's Revenue Actions</h2>
-      <div className="space-y-3">
-        {todaysTasks.map((task, index) => (
-          <div key={index} className="border p-4 rounded bg-white shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="mr-3 w-5 h-5"
-                  disabled
-                />
-                <span className="font-medium">{task.task}</span>
-                <span className={`ml-2 px-2 py-1 rounded text-xs ${task.status === 'URGENT' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                  {task.status}
-                </span>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
+      {/* Navigation */}
+      <nav className="bg-white shadow-lg">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
+                <div>
+                  <div className="font-bold text-xl">Bell24h</div>
+                  <div className="text-xs text-gray-600">Verified B2B Platform</div>
+                </div>
               </div>
-              <span className="text-green-600 font-bold">{task.value}</span>
+              <div className="hidden md:flex items-center gap-6">
+                <Link href="/dashboard" className="text-indigo-600 font-semibold">Dashboard</Link>
+                <Link href="/rfq" className="text-gray-700 hover:text-indigo-600">My RFQs</Link>
+                <Link href="/rfq/new" className="text-gray-700 hover:text-indigo-600">New RFQ</Link>
+                <Link href="#" className="text-gray-700 hover:text-indigo-600">Suppliers</Link>
+                <Link href="#" className="text-gray-700 hover:text-indigo-600">Wallet</Link>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-gray-700">Welcome, {session.user?.name}</span>
+              <button className="px-4 py-2 text-gray-700 hover:text-indigo-600">Logout</button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      </nav>
 
-      <div className="mt-8 bg-red-50 border border-red-200 p-6 rounded">
-        <h2 className="text-xl font-bold text-red-800 mb-4">🔥 THE HARD TRUTH</h2>
-        <ul className="space-y-2 text-red-700">
-          <li>✅ You have 52+ pages deployed</li>
-          <li>✅ You have 9 admin panels</li>
-          <li>✅ You have 3 service offerings</li>
-          <li>✅ You have payment integration</li>
-          <li>✅ You have legal documents</li>
-          <li>✅ You have marketing templates</li>
-          <li>❌ You have ₹0 revenue</li>
-          <li>❌ You have 0 customers</li>
-          <li>❌ You have 0 testimonials</li>
-          <li>❌ You're still wasting ₹800/month on Railway</li>
-        </ul>
-      </div>
+      <main className="container mx-auto px-4 py-8">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome back!</h1>
+          <p className="text-xl text-gray-600">Here's what's happening with your RFQs today.</p>
+        </div>
 
-      <div className="mt-6 bg-yellow-100 p-4 rounded">
-        <h3 className="font-bold text-lg">⚡ IMMEDIATE ACTIONS (Not More Code)</h3>
-        <div className="mt-3 space-y-2">
-          <p><strong>RIGHT NOW (Next 5 Minutes):</strong></p>
-          <p>1. Go to railway.app</p>
-          <p>2. Delete bell24h project</p>
-          <p>3. Save ₹800/month</p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="flex items-center">
+              <div className="p-2 bg-indigo-100 rounded-lg">
+                <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Total RFQs</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalRfqs}</p>
+              </div>
+            </div>
+          </div>
 
-          <p className="mt-4"><strong>NEXT 30 MINUTES:</strong></p>
-          <p>1. Open WhatsApp</p>
-          <p>2. Send this message to 10 contacts:</p>
-          <div className="bg-white p-3 rounded mt-2 font-mono text-sm">
-            Hi [Name], I'm offering supplier verification reports for ₹2000.
-            Helps avoid fraud in B2B deals. Interested?
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="flex items-center">
+              <div className="p-2 bg-emerald-100 rounded-lg">
+                <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Active RFQs</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.activeRfqs}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="flex items-center">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Completed</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.completedRfqs}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="flex items-center">
+              <div className="p-2 bg-yellow-100 rounded-lg">
+                <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Total Quotes</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalQuotes}</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-6 bg-green-100 p-4 rounded">
-        <h3 className="font-bold text-lg">🎯 STOP ASKING FOR PROMPTS</h3>
-        <p>You don't need more code. You need:</p>
-        <ul className="mt-2 space-y-1">
-          <li>• <strong>Customers</strong> (send messages)</li>
-          <li>• <strong>Revenue</strong> (close deals)</li>
-          <li>• <strong>Action</strong> (stop procrastinating)</li>
-        </ul>
-        <p className="mt-3 font-bold text-red-600">
-          Next prompt should be: "I shut down Railway and got my first customer"
-        </p>
-        <p className="text-red-600">
-          Not: "Give me another feature to build"
-        </p>
-      </div>
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div className="space-y-4">
+              <Link href="/rfq/new" className="flex items-center p-4 bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-lg hover:from-indigo-100 hover:to-emerald-100 transition-colors">
+                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold mr-4">+</div>
+                <div>
+                  <p className="font-semibold text-gray-900">Create New RFQ</p>
+                  <p className="text-sm text-gray-600">Post a request for quotation</p>
+                </div>
+              </Link>
+              <Link href="/rfq" className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div className="w-10 h-10 bg-gray-600 rounded-lg flex items-center justify-center text-white font-bold mr-4">📋</div>
+                <div>
+                  <p className="font-semibold text-gray-900">View My RFQs</p>
+                  <p className="text-sm text-gray-600">Manage your requests</p>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h3>
+            <div className="space-y-4">
+              <div className="flex items-center p-3 bg-green-50 rounded-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">New quote received</p>
+                  <p className="text-xs text-gray-600">Steel Pipes RFQ - 2 hours ago</p>
+                </div>
+              </div>
+              <div className="flex items-center p-3 bg-blue-50 rounded-lg">
+                <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">RFQ published</p>
+                  <p className="text-xs text-gray-600">Textile Materials - 1 day ago</p>
+                </div>
+              </div>
+              <div className="flex items-center p-3 bg-purple-50 rounded-lg">
+                <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Payment processed</p>
+                  <p className="text-xs text-gray-600">Electronics order - 3 days ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent RFQs */}
+        <div className="bg-white rounded-lg shadow-lg">
+          <div className="p-6 border-b border-gray-200">
+            <h3 className="text-xl font-semibold text-gray-900">Recent RFQs</h3>
+          </div>
+          <div className="p-6">
+            {rfqs.length === 0 ? (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-medium text-gray-900 mb-2">No RFQs yet</h4>
+                <p className="text-gray-600 mb-4">Create your first RFQ to get started with Bell24h</p>
+                <Link href="/rfq/new" className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white rounded-lg hover:from-indigo-700 hover:to-emerald-700">
+                  Create RFQ
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {rfqs.map((rfq: any) => (
+                  <div key={rfq.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <div>
+                      <h4 className="font-semibold text-gray-900">{rfq.title}</h4>
+                      <p className="text-sm text-gray-600">{rfq.description}</p>
+                      <p className="text-xs text-gray-500">Created {new Date(rfq.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-1 text-xs rounded-full ${rfq.status === 'active' ? 'bg-green-100 text-green-800' :
+                          rfq.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                            'bg-gray-100 text-gray-800'
+                        }`}>
+                        {rfq.status}
+                      </span>
+                      <Link href={`/rfq/${rfq.id}`} className="text-indigo-600 hover:text-indigo-800 text-sm">
+                        View
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
     </div>
-  );
+  )
 }
-
