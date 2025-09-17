@@ -22,7 +22,7 @@ export default function TermsPage() {
                 1. Acceptance of Terms
               </h2>
               <p className="text-gray-700">
-                By accessing or using Bell24h.com ("the Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our services. These Terms constitute a legally binding agreement between you and Bell24h Technologies Pvt Ltd.
+                By accessing or using Bell24h.com (&quot;the Platform&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree to these Terms, please do not use our services. These Terms constitute a legally binding agreement between you and Bell24h Technologies Pvt Ltd.
               </p>
             </section>
 
