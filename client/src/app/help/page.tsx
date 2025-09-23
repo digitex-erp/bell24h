@@ -40,7 +40,7 @@ export default function HelpPage() {
     {
       question: 'How do I contact customer support?',
       answer:
-        'You can reach our support team 24/7 through live chat, email at support@bell24h.com, or phone at +1 (555) 123-4567. We typically respond within 2 hours.',
+        'You can reach our support team 24/7 through live chat, email at digitex.studio@gmail.com, or phone at +91 9004962871. We typically respond within 2 hours.',
     },
   ];
 

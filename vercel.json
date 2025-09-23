@@ -1,5 +1,4 @@
 {
-  "name": "bell24h-complete",
   "version": 2,
   "framework": "nextjs",
   "buildCommand": "npm run build",

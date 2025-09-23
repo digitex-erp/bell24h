@@ -1,6 +1,13 @@
 import NextAuth from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+// Required for static export - generate static params for dynamic routes
+export async function generateStaticParams() {
+  // For static export, we'll return an empty array since this is an API route
+  // In production, this would be handled by server-side rendering
+  return []
+}
+
 // Create NextAuth handler with production-grade configuration
 const handler = NextAuth(authOptions)
 

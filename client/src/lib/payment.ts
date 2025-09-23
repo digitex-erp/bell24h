@@ -13,6 +13,13 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET!,
 })
 
+// Razorpay configuration with Merchant ID
+const RAZORPAY_CONFIG = {
+  keyId: process.env.RAZORPAY_KEY_ID!,
+  keySecret: process.env.RAZORPAY_KEY_SECRET!,
+  merchantId: process.env.RAZORPAY_MERCHANT_ID!,
+}
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2023-10-16',
 })
@@ -76,6 +83,8 @@ export async function createRazorpayOrder(
         order_id: orderId,
         customer_id: customerId,
         escrow_enabled: 'true',
+        merchant_id: RAZORPAY_CONFIG.merchantId,
+        platform: 'bell24h',
       },
       customer: {
         id: customerId,

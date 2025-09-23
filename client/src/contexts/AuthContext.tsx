@@ -1,20 +1,24 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 
 interface User {
   id: string;
-  email: string;
+  phoneNumber: string;
+  name?: string;
+  email?: string;
   role?: string;
+  isVerified?: boolean;
+  loginMethod?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (phoneNumber: string, otp: string) => Promise<void>;
   signOut: () => Promise<void>;
   isAuthenticated: boolean;
+  sendOTP: (phoneNumber: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,76 +27,105 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
+  // Check for existing session on mount
   useEffect(() => {
-    // Get initial session
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email || '',
-          role: session.user.user_metadata?.role
-        });
-      }
-      setLoading(false);
-    };
-
-    getSession();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          setUser({
-            id: session.user.id,
-            email: session.user.email || '',
-            role: session.user.user_metadata?.role
-          });
-        } else {
-          setUser(null);
+    const checkAuth = () => {
+      try {
+        const storedUser = localStorage.getItem('bell24h_user');
+        if (storedUser) {
+          const userData = JSON.parse(storedUser);
+          setUser(userData);
         }
+      } catch (error) {
+        console.error('Error checking auth:', error);
+        localStorage.removeItem('bell24h_user');
+      } finally {
         setLoading(false);
       }
-    );
+    };
 
-    return () => subscription.unsubscribe();
-  }, [supabase.auth]);
+    checkAuth();
+  }, []);
 
-  const signIn = async (email: string, password: string) => {
+  const sendOTP = async (phoneNumber: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
+      setLoading(true);
+      const response = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber })
       });
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to send OTP');
       }
 
+      const data = await response.json();
+      console.log('OTP sent successfully:', data);
+    } catch (error) {
+      console.error('Send OTP error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const signIn = async (phoneNumber: string, otp: string) => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber, otp })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Invalid OTP');
+      }
+
+      const data = await response.json();
+      
+      // Store user session
+      localStorage.setItem('bell24h_user', JSON.stringify(data.data.user));
+      setUser(data.data.user);
+      
+      // Redirect to dashboard
       router.push('/dashboard');
     } catch (error) {
       console.error('Sign in error:', error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      setLoading(true);
+      
+      // Remove user session
+      localStorage.removeItem('bell24h_user');
+      setUser(null);
+      
+      // Redirect to home
       router.push('/');
     } catch (error) {
       console.error('Sign out error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const value = {
+  const value: AuthContextType = {
     user,
     loading,
     signIn,
     signOut,
-    isAuthenticated: !!user
+    sendOTP,
+    isAuthenticated: !!user,
   };
 
   return (

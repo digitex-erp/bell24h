@@ -21,11 +21,11 @@ export default function Footer() {
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-gray-300">
                 <Mail className="h-4 w-4" />
-                <span>support@bell24h.com</span>
+                <span>digitex.studio@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-300">
                 <Phone className="h-4 w-4" />
-                <span>+91-XXXX-XXXX-XX</span>
+                <span>+91 9004962871</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-300">
                 <MapPin className="h-4 w-4" />
@@ -34,95 +34,109 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services */}
+          {/* Platform */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Services</h3>
+            <h3 className="text-lg font-semibold mb-4">Platform</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/rfq/create" className="text-gray-300 hover:text-white transition-colors">
-                  RFQ Management
-                </Link>
-              </li>
-              <li>
                 <Link href="/suppliers" className="text-gray-300 hover:text-white transition-colors">
-                  Supplier Directory
+                  Browse Suppliers
                 </Link>
               </li>
               <li>
-                <Link href="/escrow" className="text-gray-300 hover:text-white transition-colors">
-                  Escrow Services
+                <Link href="/rfq" className="text-gray-300 hover:text-white transition-colors">
+                  Post RFQ
                 </Link>
               </li>
               <li>
-                <Link href="/wallet" className="text-gray-300 hover:text-white transition-colors">
-                  Digital Wallet
+                <Link href="/services" className="text-gray-300 hover:text-white transition-colors">
+                  Services
                 </Link>
               </li>
               <li>
-                <Link href="/verification" className="text-gray-300 hover:text-white transition-colors">
-                  Supplier Verification
+                <Link href="/pricing" className="text-gray-300 hover:text-white transition-colors">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="text-gray-300 hover:text-white transition-colors">
+                  About Us
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Legal & Support */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Legal</h3>
+            <h3 className="text-lg font-semibold mb-4">Legal & Support</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/privacy" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                <Link href="/legal/privacy-policy" className="text-gray-300 hover:text-white transition-colors flex items-center">
                   <Shield className="h-4 w-4 mr-2" />
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                <Link href="/legal/terms-of-service" className="text-gray-300 hover:text-white transition-colors flex items-center">
                   <FileText className="h-4 w-4 mr-2" />
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/refund-policy" className="text-gray-300 hover:text-white transition-colors">
-                  Refund Policy
+                <Link href="/legal/cancellation-refund-policy" className="text-gray-300 hover:text-white transition-colors">
+                  Cancellation & Refund Policy
                 </Link>
               </li>
               <li>
-                <Link href="/shipping-policy" className="text-gray-300 hover:text-white transition-colors">
-                  Shipping Policy
+                <Link href="/legal/escrow-terms" className="text-gray-300 hover:text-white transition-colors">
+                  Escrow Terms
                 </Link>
               </li>
               <li>
-                <Link href="/cancellation-policy" className="text-gray-300 hover:text-white transition-colors">
-                  Cancellation Policy
+                <Link href="/legal/wallet-terms" className="text-gray-300 hover:text-white transition-colors">
+                  Wallet Terms
+                </Link>
+              </li>
+              <li>
+                <Link href="/help" className="text-gray-300 hover:text-white transition-colors">
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors">
+                  Contact Us
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Payment & Security */}
+          {/* Additional Legal */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Payment & Security</h3>
+            <h3 className="text-lg font-semibold mb-4">Additional Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/payment-methods" className="text-gray-300 hover:text-white transition-colors flex items-center">
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  Payment Methods
+                <Link href="/legal/shipping-policy" className="text-gray-300 hover:text-white transition-colors">
+                  Shipping Policy
                 </Link>
               </li>
               <li>
-                <Link href="/security" className="text-gray-300 hover:text-white transition-colors">
-                  Security Features
+                <Link href="/legal/pricing-policy" className="text-gray-300 hover:text-white transition-colors">
+                  Pricing Policy
                 </Link>
               </li>
               <li>
-                <Link href="/fraud-protection" className="text-gray-300 hover:text-white transition-colors">
-                  Fraud Protection
+                <Link href="/legal/aml-policy" className="text-gray-300 hover:text-white transition-colors">
+                  AML Policy
                 </Link>
               </li>
               <li>
-                <Link href="/dispute-resolution" className="text-gray-300 hover:text-white transition-colors">
-                  Dispute Resolution
+                <Link href="/legal/escrow-services" className="text-gray-300 hover:text-white transition-colors">
+                  Escrow Services
+                </Link>
+              </li>
+              <li>
+                <Link href="/upload-invoice" className="text-gray-300 hover:text-white transition-colors">
+                  Upload Invoice
                 </Link>
               </li>
             </ul>
@@ -135,17 +149,20 @@ export default function Footer() {
             <div className="text-gray-300 text-sm">
               © 2025 Bell24h Technologies Pvt Ltd. All rights reserved.
             </div>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-gray-300 hover:text-white text-sm transition-colors">
-                Privacy
+            <div className="flex flex-wrap gap-4 mt-4 md:mt-0">
+              <Link href="/legal/privacy-policy" className="text-gray-300 hover:text-white text-sm transition-colors" rel="noopener">
+                Privacy Policy
               </Link>
-              <Link href="/terms" className="text-gray-300 hover:text-white text-sm transition-colors">
-                Terms
+              <Link href="/legal/terms-of-service" className="text-gray-300 hover:text-white text-sm transition-colors" rel="noopener">
+                Terms of Service
               </Link>
-              <Link href="/cookies" className="text-gray-300 hover:text-white text-sm transition-colors">
-                Cookies
+              <Link href="/legal/cancellation-refund-policy" className="text-gray-300 hover:text-white text-sm transition-colors" rel="noopener">
+                Refund Policy
               </Link>
-              <Link href="/sitemap" className="text-gray-300 hover:text-white text-sm transition-colors">
+              <Link href="/legal/escrow-terms" className="text-gray-300 hover:text-white text-sm transition-colors" rel="noopener">
+                Escrow Terms
+              </Link>
+              <Link href="/sitemap.xml" className="text-gray-300 hover:text-white text-sm transition-colors" rel="noopener">
                 Sitemap
               </Link>
             </div>

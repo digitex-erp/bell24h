@@ -1,21 +1,25 @@
-# Bell24x Automatic Deployment Script
-Write-Host "🚀 Starting Bell24x Deployment..." -ForegroundColor Green
+# Deploy Bell24h with new homepage sections
+Write-Host "Deploying Bell24h with updated homepage..." -ForegroundColor Green
 
-# Step 1: Install dependencies
-Write-Host "📦 Installing dependencies..." -ForegroundColor Yellow
-npm install
+# Navigate to client directory
+Set-Location "C:\Users\Sanika\Projects\bell24h\client"
 
-# Step 2: Build the project
-Write-Host "🔨 Building project..." -ForegroundColor Yellow
+# Build the project
+Write-Host "Building project..." -ForegroundColor Yellow
 npm run build
 
-# Step 3: Install Vercel CLI globally
-Write-Host "🌐 Installing Vercel CLI..." -ForegroundColor Yellow
-npm install -g vercel
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Build failed!" -ForegroundColor Red
+    Read-Host "Press Enter to continue"
+    exit 1
+}
 
-# Step 4: Deploy to Vercel
-Write-Host "🚀 Deploying to Vercel..." -ForegroundColor Yellow
-vercel --prod --yes
+Write-Host "Build successful! Deploying to Vercel..." -ForegroundColor Green
 
-Write-Host "✅ Deployment completed!" -ForegroundColor Green
-Write-Host "🌐 Your Bell24x platform is now live!" -ForegroundColor Cyan
+# Deploy to Vercel
+npx vercel --prod --yes
+
+Write-Host "Deployment complete!" -ForegroundColor Green
+Write-Host "Your updated site is live at: https://bell24h-v1.vercel.app" -ForegroundColor Cyan
+
+Read-Host "Press Enter to continue"
