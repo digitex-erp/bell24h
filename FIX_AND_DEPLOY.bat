@@ -1,38 +1,23 @@
 @echo off
-echo =====================================
-echo BELL24H COMPLETE FIX & DEPLOY
-echo =====================================
-echo.
+echo Fixing Bell24h deployment issues...
 
-echo [STEP 1] Cleaning old files...
-if exist ".vercel" rmdir /s /q ".vercel"
-if exist ".next" rmdir /s /q ".next"
-echo Cleaned successfully!
-echo.
+cd /d "C:\Users\Sanika\Projects\bell24h\client"
 
-echo [STEP 2] Fixing all problematic pages...
-echo export default function Page() { return ^<div^>Bell24h - Loading...^</div^> } > app\_not-found\page.tsx
-echo export default function Page() { return ^<div^>Bell24h - Loading...^</div^> } > app\admin\customers\page.tsx
-echo export default function Page() { return ^<div^>Bell24h - Loading...^</div^> } > app\about\page.tsx
-echo export default function Page() { return ^<div^>Bell24h - Loading...^</div^> } > app\admin\analytics\page.tsx
-echo All problematic pages fixed!
-echo.
-
-echo [STEP 3] Building project...
+echo Step 1: Building project with fixes...
 call npm run build
-if %errorlevel% neq 0 (
-    echo WARNING: Build had issues, but continuing...
+
+if %ERRORLEVEL% NEQ 0 (
+    echo Build failed! Check the errors above.
+    pause
+    exit /b 1
 )
-echo Build completed!
-echo.
 
-echo [STEP 4] Deploying to Vercel...
-call npx vercel --prod
-echo.
+echo Step 2: Build successful! Now deploying to Vercel...
+echo You may need to login to Vercel first...
 
-echo =====================================
-echo DEPLOYMENT COMPLETE!
-echo =====================================
-echo Your app should be live at the URL shown above
-echo Your domain bell24h.com will work automatically
+call npx vercel login
+call npx vercel --prod --yes
+
+echo Deployment complete!
+echo Your site should be live at: https://bell24h-v1.vercel.app
 pause

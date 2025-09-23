@@ -173,11 +173,13 @@ function RFQCreationContent() {
     // In a real app, implement voice recording and transcription
     setTimeout(() => {
       setVoiceRecording(false);
-      // Simulate voice transcription
+      // Simulate voice transcription - REPLACE instead of APPEND
+      const voiceText = 'Need high-quality steel for construction project';
       setForm(prev => ({
         ...prev,
-        description:
-          prev.description + ' [Voice input: Need high-quality steel for construction project]',
+        description: prev.description.trim() === '' 
+          ? voiceText 
+          : prev.description + ' ' + voiceText,
       }));
     }, 3000);
   };

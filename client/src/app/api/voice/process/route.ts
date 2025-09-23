@@ -24,9 +24,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Parse request body
-    const body = await request.json()
-    const { audioFile, videoFile, language = 'en' } = body
+    // Parse request body (FormData for file uploads)
+    const formData = await request.formData()
+    const audioFile = formData.get('audioFile') as File
+    const videoFile = formData.get('videoFile') as File
+    const language = formData.get('language') as string || 'en'
 
     if (!audioFile && !videoFile) {
       return NextResponse.json(
@@ -42,8 +44,12 @@ export async function POST(request: NextRequest) {
     try {
       // Process audio file
       if (audioFile) {
+        // Convert File to proper format for OpenAI
+        const audioBuffer = await audioFile.arrayBuffer()
+        const audioBlob = new Blob([audioBuffer], { type: audioFile.type })
+        
         const audioResponse = await openai.audio.transcriptions.create({
-          file: audioFile,
+          file: audioBlob as any,
           model: 'whisper-1',
           language: language,
           response_format: 'verbose_json',

@@ -1,4 +1,4 @@
-import { AgentAuthService } from '@/lib/auth/agent-auth'
+import { AgentAuth } from '@/lib/auth/agent-auth'
 import { NextRequest, NextResponse } from 'next/server'
 
 // Force dynamic rendering
@@ -15,17 +15,22 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const result = await AgentAuthService.verifyToken(token)
+    // Use AgentAuth.verifyToken which returns null on failure
+    const authToken = AgentAuth.verifyToken(token)
 
-    if (result.success) {
+    if (authToken) {
       return NextResponse.json({
         success: true,
-        agent: result.agent
+        agent: {
+          id: authToken.agentId,
+          email: authToken.email,
+          role: authToken.role
+        }
       })
     } else {
       return NextResponse.json({
         success: false,
-        error: result.error
+        error: 'Invalid or expired token'
       }, { status: 401 })
     }
 

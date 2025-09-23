@@ -1,46 +1,35 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Clean configuration - no problematic experimental features
-  reactStrictMode: true,
-  swcMinify: true,
-  
-  // Important for Railway deployment
-  output: 'standalone',
-  
-  // Handle images for deployment
+  // Normal Next.js deployment (not static export)
+  output: undefined, // Remove static export
+  trailingSlash: false,
+
+  // Enable image optimization for Next.js
   images: {
-    domains: ['localhost', 'bell24h.vercel.app', '*.up.railway.app'],
-    unoptimized: true
+    unoptimized: false,
   },
-  
-  // Environment variables for Razorpay
-  env: {
-    NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-    RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
-  },
-  
-  // Ignore build errors temporarily for deployment
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  
+
+  // Skip problematic features during build
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
-  // Allow Railway domain
-  async headers() {
-    return [
-      {
-        source: '/api/:path*',
-        headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
-          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
-        ],
-      },
-    ];
+
+  typescript: {
+    ignoreBuildErrors: true,
   },
+
+  // Disable features that cause build issues
+  experimental: {
+    esmExternals: false,
+  },
+
+  // API routes are allowed in normal Next.js
+  async rewrites() {
+    return [
+      // No rewrites needed for normal deployment
+    ]
+  },
+
 }
 
 module.exports = nextConfig
