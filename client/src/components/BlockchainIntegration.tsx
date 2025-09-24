@@ -273,7 +273,7 @@ export default function BlockchainIntegration() {
           {/* Demo Button */}
           <motion.button
             onClick={() => setShowDemo(true)}
-            className='inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold hover:shadow-xl transition-all group'
+            className='inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold hover:shadow-xl transition-all group'
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

@@ -49,7 +49,7 @@ export default function BetaLaunchPage() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-5xl font-bold text-gray-900 mb-4">
-              Welcome to <span className="bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">Bell24h</span> Beta
+              Welcome to <span className="bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">Bell24h</span> Beta
             </h1>
             <p className="text-xl text-gray-600 mb-8">
               India's AI-powered B2B marketplace is launching in phases. You're part of our exclusive beta group!
@@ -242,7 +242,7 @@ export default function BetaLaunchPage() {
           {/* Action Buttons */}
           <div className="text-center mt-12 space-x-4">
             <Link href="/auth/login">
-              <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-emerald-600">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-emerald-600">
                 Start Beta Testing
               </Button>
             </Link>

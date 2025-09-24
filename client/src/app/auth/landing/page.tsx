@@ -82,7 +82,7 @@ export default function AuthLandingPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-20 h-20 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-full flex items-center justify-center">
+            <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full flex items-center justify-center">
               <Star className="h-10 w-10 text-white" />
             </div>
           </div>
@@ -155,7 +155,7 @@ export default function AuthLandingPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
                   onClick={() => router.push('/auth/register')}
-                  className="bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700 text-white px-8 py-3 text-lg"
+                  className="bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700 text-white px-8 py-3 text-lg"
                 >
                   <User className="h-5 w-5 mr-2" />
                   Start Registration
@@ -242,7 +242,7 @@ export default function AuthLandingPage() {
 
         {/* Final CTA */}
         <div className="text-center">
-          <div className="p-6 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg text-white">
+          <div className="p-6 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-lg text-white">
             <h3 className="text-2xl font-bold mb-4">
               🎉 Limited Time Offer - Join Now!
             </h3>

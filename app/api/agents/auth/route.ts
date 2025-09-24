@@ -57,8 +57,20 @@ export async function POST(request: NextRequest) {
       }
 
       return AgentAuth.createAuthResponse(newAgent)
+    } else if (action === 'login') {
+      // Use the proper authenticateAgent method
+      const result = await AgentAuth.authenticateAgent(email, password)
+      
+      if (result.success && result.agent) {
+        return AgentAuth.createAuthResponse(result.agent)
+      } else {
+        return NextResponse.json({
+          success: false,
+          error: result.message || 'Authentication failed'
+        }, { status: 401 })
+      }
     } else {
-      // Login logic
+      // Default login logic (fallback)
       const agent = MOCK_AGENTS.find(a => a.email === email && a.password === password)
       
       if (!agent) {

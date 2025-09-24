@@ -21,7 +21,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white">
+      <section className="relative py-20 bg-gradient-to-r from-blue-600 to-emerald-600 text-white">
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-5xl font-bold mb-6">
             About Bell24h
@@ -194,7 +194,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white">
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-emerald-600 text-white">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-6">
             Ready to Transform Your B2B Procurement?
