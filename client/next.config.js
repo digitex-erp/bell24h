@@ -23,10 +23,41 @@ const nextConfig = {
     esmExternals: false,
   },
 
-  // API routes are allowed in normal Next.js
+  // Block problematic routes during build
   async rewrites() {
     return [
-      // No rewrites needed for normal deployment
+      {
+        source: '/upload-invoice',
+        destination: '/404'
+      },
+      {
+        source: '/admin/audit/video',
+        destination: '/404'
+      },
+      {
+        source: '/legal/msme-registration',
+        destination: '/404'
+      },
+      {
+        source: '/dashboard/video-rfq',
+        destination: '/404'
+      },
+      {
+        source: '/claim-company/:slug*',
+        destination: '/404'
+      },
+      {
+        source: '/claim/:companyId*',
+        destination: '/404'
+      },
+      {
+        source: '/business-categories',
+        destination: '/404'
+      },
+      {
+        source: '/legal/urd-information',
+        destination: '/404'
+      }
     ]
   },
 
