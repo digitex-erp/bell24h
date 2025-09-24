@@ -16,7 +16,7 @@ export default function UploadInvoicePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
       {/* Hero Section */}
-      <section className="relative py-16 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white">
+      <section className="relative py-16 bg-gradient-to-r from-blue-600 to-emerald-600 text-white">
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl font-bold mb-4">
             Upload Invoice

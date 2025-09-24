@@ -31,11 +31,11 @@ export default function EnterpriseHeader({ title, showUserMenu = true }: Enterpr
           {/* Logo & Brand */}
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full flex items-center justify-center">
                 <Bell className="h-6 w-6 text-white" />
               </div>
               <div className="hidden sm:block">
-                <div className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
+                <div className="text-xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
                   Bell24h
                 </div>
                 <div className="text-xs text-gray-500 -mt-1">
@@ -131,7 +131,7 @@ export default function EnterpriseHeader({ title, showUserMenu = true }: Enterpr
                 </Button>
               </Link>
               <Link href="/auth/landing">
-                <Button size="sm" className="bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700">
+                <Button size="sm" className="bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700">
                   Get Started
                 </Button>
               </Link>
