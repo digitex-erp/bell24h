@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/n8n/analytics/dashboard - Get N8N scraping and marketing analytics
  */

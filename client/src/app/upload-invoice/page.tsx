@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,12 +11,6 @@ import {
   Eye,
   Trash2
 } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'Upload Invoice - Bell24h | Invoice Management System',
-  description: 'Upload and manage your invoices securely. Support for JPG, PDF, and PNG files. Track invoice status and download receipts.',
-  keywords: 'upload invoice, invoice management, document upload, bell24h invoices',
-};
 
 export default function UploadInvoicePage() {
   return (
