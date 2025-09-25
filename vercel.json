@@ -1,10 +1,10 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install && npx prisma generate",
+  "buildCommand": "cd client && npm run build",
+  "outputDirectory": "client/.next",
+  "devCommand": "cd client && npm run dev",
+  "installCommand": "cd client && npm install && npx prisma generate",
   "env": {
     "NEXTAUTH_URL": "https://bell24h.com",
     "NEXTAUTH_SECRET": "your-secret-key-here"
