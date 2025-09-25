@@ -65,3 +65,4 @@ credentials/
 api-keys/
 .env.*
 !.env.example
+bell24h-production/
