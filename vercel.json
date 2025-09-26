@@ -1,10 +1,10 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "cd client && npm run build",
-  "outputDirectory": "client/.next",
-  "devCommand": "cd client && npm run dev",
-  "installCommand": "cd client && npm install && npx prisma generate",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
   "env": {
     "NEXTAUTH_URL": "https://bell24h.com",
     "NEXTAUTH_SECRET": "your-secret-key-here"
@@ -34,25 +34,15 @@
   ],
   "redirects": [
     {
-      "source": "https://bell24h.com/(.*)",
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "bell24h.com"
+        }
+      ],
       "destination": "https://www.bell24h.com/$1",
       "permanent": true
-    },
-    {
-      "source": "http://bell24h.com/(.*)",
-      "destination": "https://www.bell24h.com/$1",
-      "permanent": true
-    },
-    {
-      "source": "http://www.bell24h.com/(.*)",
-      "destination": "https://www.bell24h.com/$1",
-      "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
     }
   ]
 }
