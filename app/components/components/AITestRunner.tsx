@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { AlertCircle, Brain, Target } from 'lucide-react';
 
 interface TestResult {
   testName: string;

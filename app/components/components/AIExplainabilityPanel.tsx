@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { Brain, Loader, AlertCircle } from 'lucide-react';
 
 interface Feature {
   name: string;
