@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { RFQCategorizer, NLPAnalysis } from '@/ai/nlp-categorization';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, Brain, Target, Award, Info, TestTube, AlertTriangle, LineChart } from 'lucide-react';
 import { SupplierMatcher, SupplierRecommendation } from '@/ai/supplier-matching';
 import AITestRunner from '@/components/AITestRunner';
 import AILoadingStates, {
