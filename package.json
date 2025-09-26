@@ -8,7 +8,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "build:memory": "cross-env NODE_OPTIONS=--max-old-space-size=4096 prisma generate && next build",
     "build:safe": "cross-env NODE_OPTIONS=--max-old-space-size=8192 prisma generate && next build",
     "build:production": "cross-env NODE_OPTIONS=--max-old-space-size=8192 NODE_ENV=production prisma generate && next build",
