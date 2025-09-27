@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { 
-  ArrowUp, 
+  ChevronUp, 
   Users, 
   Building, 
   DollarSign, 
   Activity, 
-  ArrowDown,
+  ChevronDown,
   Minus,
   RefreshCw,
   Maximize2,
@@ -76,8 +76,8 @@ export default function DashboardPage() {
   };
 
   const getTrendIcon = (value: number, threshold: number = 0) => {
-    if (value > threshold) return <ArrowUp className="w-4 h-4 text-green-500" />;
-    if (value < threshold) return <ArrowDown className="w-4 h-4 text-red-500" />;
+    if (value > threshold) return <ChevronUp className="w-4 h-4 text-green-500" />;
+    if (value < threshold) return <ChevronDown className="w-4 h-4 text-red-500" />;
     return <Minus className="w-4 h-4 text-gray-500" />;
   };
 
