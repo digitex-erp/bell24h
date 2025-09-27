@@ -2,18 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { RFQCategorizer, NLPAnalysis } from '@/ai/nlp-categorization';
-import { BarChart3, Brain, Target, Award, Info, TestTube, AlertTriangle, LineChart } from 'lucide-react';
+import { , Activity, AlertTriangle, Award, BarChart3, Brain, Eye, Info, LineChart, Target, TestTube, TrendingUp } from 'lucide-react';
 import { SupplierMatcher, SupplierRecommendation } from '@/ai/supplier-matching';
-import AITestRunner from '@/components/AITestRunner';
-import AILoadingStates, {
-  AIErrorState,
-  AISuccessState,
-  AICardSkeleton,
-} from '@/components/AILoadingStates';
-import InteractiveSHAPCharts from '@/components/InteractiveSHAPCharts';
-import TensorFlowPerformanceMonitor from '@/components/TensorFlowPerformanceMonitor';
-import TensorFlowPreloader from '@/components/TensorFlowPreloader';
-import PredictiveAnalyticsDashboard from '@/components/PredictiveAnalyticsDashboard';
+import AITestRunner from './AITestRunner';
+import AILoadingStates, { AIErrorState, AICardSkeleton } from './AILoadingStates';
+import InteractiveSHAPCharts from './InteractiveSHAPCharts';
+import TensorFlowPerformanceMonitor from '@/app/components/components/TensorFlowPerformanceMonitor';
+import TensorFlowPreloader from '@/app/components/components/TensorFlowPreloader';
+import PredictiveAnalyticsDashboard from '@/app/components/components/PredictiveAnalyticsDashboard';
 
 interface AIInsightsDashboardProps {
   rfqId?: string;
