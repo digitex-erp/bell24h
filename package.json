@@ -91,12 +91,14 @@
     "@prisma/client": "^6.15.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@supabase/supabase-js": "^2.38.4",
+    "@tensorflow/tfjs": "^4.15.0",
     "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^1.4.13",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/three": "^0.180.0",
+    "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
@@ -141,8 +143,7 @@
     "stylis-plugin-rtl": "^2.1.1",
     "three": "^0.180.0",
     "ua-parser-js": "^2.0.3",
-    "whatwg-url": "^15.0.0",
-    "@tensorflow/tfjs": "^4.15.0"
+    "whatwg-url": "^15.0.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",

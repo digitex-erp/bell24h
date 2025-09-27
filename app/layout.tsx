@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers/session-provider'
 import Script from 'next/script'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -92,6 +93,9 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        
+        {/* Vercel Speed Insights */}
+        <SpeedInsights />
         
         {/* Analytics Scripts */}
         {process.env.NEXT_PUBLIC_GA_ID && (
