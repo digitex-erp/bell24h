@@ -1,161 +1,33 @@
-# Bell24h Cursor AI Rules - Brand Persona & Development Guidelines
+# Cursor IDE Terminal Command Rules
 
-## 🎯 PROJECT IDENTITY
-- **Project Name**: Bell24h (www.bell24h.com)
-- **Type**: AI-powered B2B Marketplace + Social Trade Network
-- **Positioning**: Trust-first, premium, curated ecosystem (NOT a directory like IndiaMART)
-- **Mission**: "India's Fastest B2B Match-Making Engine for MSMEs"
+## CRITICAL: Terminal Command Execution
+When executing terminal commands:
+1. NEVER add quotes around batch file names
+2. Write commands as: filename.bat
+3. DO NOT write: "filename.bat" or 'filename.bat'
+4. Use direct execution: .\filename.bat
+5. For git commands, execute them directly without quotes
+6. NEVER add "q" prefix to any commands
 
-## 🎨 VISUAL IDENTITY RULES
+## Alternative Execution Method
+If terminal execution fails due to prefix issues:
+- Create PowerShell scripts instead of direct execution
+- Use: powershell -ExecutionPolicy Bypass -File script.ps1
+- Never wrap commands in quotes
 
-### Colors
-- **Primary Gradient**: `from-indigo-600 to-emerald-600`
-- **Background**: `bg-gradient-to-br from-indigo-50 via-white to-emerald-50`
-- **Trust Colors**: Green (#059669), Blue (#2563EB), Purple (#7C3AED)
-- **Text**: Gray-900 (headlines), Gray-700 (body), Gray-600 (subtle)
+## Git Commands
+Execute git commands as:
+- git add -A
+- git commit -m "message"
+- git push origin main
 
-### Typography
-- **Headlines**: `text-7xl font-bold` with gradient text
-- **Sub-headlines**: `text-2xl text-gray-700`
-- **Body**: Clean, readable, benefit-driven
+## Batch File Execution
+Execute batch files as:
+- .\filename.bat
+- NOT: "q"filename.bat
 
-### Components
-- **Cards**: `bg-white rounded-lg shadow-lg`
-- **Buttons**: Gradient backgrounds with hover effects
-- **Trust Badges**: `rounded-full` with colored backgrounds and checkmarks
-
-## 📝 MESSAGING FRAMEWORK
-
-### Core Messages
-- **Primary**: "Post RFQ. Get 3 Verified Quotes in 24 Hours"
-- **Secondary**: "200 live data signals—GST, credit, logistics, ESG—to match you with pre-qualified suppliers"
-- **Trust**: "Escrow-secured payments, GST-verified suppliers, AI trust-scoring"
-
-### Tone of Voice
-- Trust-driven, professional, tech-savvy
-- Emphasize security, verification, escrow
-- Data-driven, benefit-focused
-- Hindi-first inclusive, MSME-friendly
-
-## 🏠 HOMEPAGE STRUCTURE (MANDATORY)
-
-### Above-the-Fold
-1. **Navigation**: Logo + "Bell24h" + "Verified B2B Platform" + nav items + Login CTA
-2. **Hero**: 7xl headline with gradient text + 24-hour promise
-3. **Sub-headline**: 2xl, data-driven, 200 signals mention
-4. **Trust Layer**: 3 badges (Escrow-Secured, GST Verified, AI Trust-Score)
-5. **Social Proof**: Live metrics strip
-6. **Main CTA**: "Start My RFQ Now" + "Watch 2-Min Demo"
-
-### Required Sections (In Order)
-1. Hero Section
-2. Trust Layer (3 verification badges)
-3. Social Proof Strip (live metrics)
-4. Main CTA Section (RFQ input + buttons)
-5. How It Works (3-step process)
-6. Popular Categories (Steel, Textiles, Electronics)
-7. Footer
-
-## 🤖 AI & TRUST MESSAGING (ALWAYS INCLUDE)
-
-### AI Features
-- "200+ data points analysis"
-- "AI-generated trust scores"
-- "Voice, video, or text RFQ submission"
-- "AI-powered matching engine"
-
-### Trust Elements
-- "Escrow-secured payments"
-- "GST-verified suppliers only"
-- "Payment held until satisfaction"
-- "AI trust scoring on every profile"
-
-## 📊 SOCIAL PROOF REQUIREMENTS
-
-### Live Metrics (Always Display)
-- "4,321 RFQs processed yesterday"
-- "98% escrow success rate"
-- "12,400 verified suppliers"
-- "50+ product categories"
-
-### Trust Badges (Required)
-- ✅ Escrow-Secured (ICICI Bank Partner)
-- ✅ GST & PAN Verified
-- ✅ AI Trust-Score
-- ✅ Made in India 🇮🇳
-
-## 🎯 TARGET AUDIENCE
-
-### Primary Buyers
-- MSME Procurement Managers
-- Enterprise Sourcing Teams
-- Export/Import Businesses
-
-### Value Propositions
-- Speed: "24-hour RFQ closure"
-- Trust: "Escrow-backed payments"
-- Quality: "Pre-qualified suppliers only"
-- Innovation: "AI-powered matching"
-
-## 🚀 CTA RULES
-
-### Primary CTAs
-- "Start My RFQ Now" (main action)
-- "Watch 2-Min Demo" (secondary)
-- "Claim Your Company" (supplier onboarding)
-
-### CTA Styling
-- Primary: `bg-gradient-to-r from-indigo-600 to-emerald-600`
-- Secondary: Border style with hover effects
-- Size: Large, prominent, action-oriented
-- Icons: Use emojis (🚀, ▶️, etc.)
-
-## 🔄 DEVELOPMENT RULES
-
-### When Building Components
-1. **Always use Bell24h** (www.bell24h.com)
-2. **Apply indigo → emerald gradient**
-3. **Include trust badges prominently**
-4. **Add social proof metrics**
-5. **Emphasize escrow protection**
-6. **Highlight AI features**
-7. **Use professional, trust-driven tone**
-
-### When Writing Copy
-- Lead with benefits (speed, trust, quality)
-- Use data (200 signals, 24 hours, 98% success)
-- Emphasize security (escrow, verification)
-- Include social proof (metrics, testimonials)
-- Clear, prominent CTAs
-
-## ⚠️ CRITICAL REMINDERS
-
-### NEVER DO
-- Use "Bell24x" (always use "Bell24h" - www.bell24h.com)
-- Position as a directory like IndiaMART
-- Forget trust badges or social proof
-- Use generic B2B messaging
-- Skip escrow/security emphasis
-
-### ALWAYS DO
-- Emphasize trust and verification
-- Include AI features prominently
-- Use data-driven messaging
-- Show social proof metrics
-- Maintain premium positioning
-
-## 🎯 SUCCESS METRICS
-
-### Track These
-- RFQ submission rate
-- Time on page
-- Trust badge click-through
-- Mobile responsiveness
-- Conversion rate
-
----
-
-**Remember**: Bell24h (www.bell24h.com) is a **curated, premium ecosystem** with **trust and AI as the backbone**. Every element should reinforce this positioning.
-
-**Last Updated**: September 16, 2025
-**Version**: 1.1
+## Project-Specific Rules
+- Use existing components (Header.tsx, Footer.tsx, AuthModal.tsx)
+- Mobile OTP only - no email authentication
+- Solid colors only - no gradients
+- Deploy to Vercel via git push
