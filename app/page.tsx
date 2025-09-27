@@ -9,6 +9,7 @@ import AuthModal from '@/components/AuthModal';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const router = useRouter();
   
