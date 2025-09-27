@@ -7,7 +7,6 @@ import {
   Building, 
   DollarSign, 
   Activity, 
-  ArrowUp,
   ArrowDown,
   Minus,
   RefreshCw,
@@ -314,6 +313,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-
-
