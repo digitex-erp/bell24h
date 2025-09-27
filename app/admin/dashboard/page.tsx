@@ -1,12 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Users, 
-  Building, 
-  DollarSign, 
-  RefreshCw
-} from 'lucide-react';
+// All lucide-react icons removed - using emojis instead
 
 interface DashboardMetrics {
   totalUsers: number;
@@ -104,7 +99,7 @@ export default function DashboardPage() {
                 disabled={isRefreshing}
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
               >
-                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span className={`text-lg ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
                 Refresh
               </button>
             </div>
@@ -127,7 +122,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
-                <Users className="w-6 h-6 text-blue-600" />
+                <span className="text-2xl">👥</span>
               </div>
             </div>
           </div>
@@ -144,7 +139,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
-                <Building className="w-6 h-6 text-green-600" />
+                <span className="text-2xl">🏢</span>
               </div>
             </div>
           </div>
@@ -161,7 +156,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="p-3 bg-yellow-100 rounded-lg">
-                <DollarSign className="w-6 h-6 text-yellow-600" />
+                <span className="text-2xl">💰</span>
               </div>
             </div>
           </div>
