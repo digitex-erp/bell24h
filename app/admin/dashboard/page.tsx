@@ -6,8 +6,6 @@ import {
   Users, 
   Building, 
   DollarSign, 
-  Activity, 
-  Activity,
   Minus,
   RefreshCw,
   Maximize2,
