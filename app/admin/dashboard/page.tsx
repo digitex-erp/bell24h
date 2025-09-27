@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { 
-  Activity, 
+  Home, 
   Users, 
   Building, 
   DollarSign, 
@@ -74,8 +74,8 @@ export default function DashboardPage() {
   };
 
   const getTrendIcon = (value: number, threshold: number = 0) => {
-    if (value > threshold) return <Activity className="w-4 h-4 text-green-500" />;
-    if (value < threshold) return <Activity className="w-4 h-4 text-red-500" />;
+    if (value > threshold) return <Home className="w-4 h-4 text-green-500" />;
+    if (value < threshold) return <Home className="w-4 h-4 text-red-500" />;
     return <Minus className="w-4 h-4 text-gray-500" />;
   };
 
@@ -185,7 +185,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
-                <Activity className="w-6 h-6 text-green-600" />
+                <Home className="w-6 h-6 text-green-600" />
               </div>
             </div>
           </div>
