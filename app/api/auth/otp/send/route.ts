@@ -1,49 +1,51 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { phone } = await request.json()
+    const { phone } = await request.json();
 
-    if (!phone) {
+    // Validate phone number
+    if (!phone || phone.length < 10) {
       return NextResponse.json(
-        { message: 'Phone number is required' },
+        { success: false, error: 'Invalid phone number' },
         { status: 400 }
-      )
+      );
     }
 
-    // Validate phone number format
-    const phoneRegex = /^\+?[1-9]\d{1,14}$/
-    if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
-      return NextResponse.json(
-        { message: 'Invalid phone number format' },
-        { status: 400 }
-      )
-    }
+    // Generate demo OTP for testing
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // In production, you would send this OTP via SMS service
+    console.log(`📱 OTP for ${phone}: ${otp}`);
+    
+    // Store OTP in session/database for verification
+    // For demo purposes, we'll use a simple approach
+    const response = NextResponse.json({
+      success: true,
+      message: 'OTP sent successfully',
+      demoOTP: otp, // Only for development
+      phone: phone
+    });
 
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString()
+    // Set OTP in cookie for demo (in production, use proper session management)
+    response.cookies.set('demo_otp', otp, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 300, // 5 minutes
+      path: '/'
+    });
 
-    // In production, send OTP via SMS service (Twilio, AWS SNS, etc.)
-    // For now, just log it (in development)
-    console.log(`OTP for ${phone}: ${otp}`)
-
-    // Store OTP in session/database with expiration
-    // For now, we'll just return success
-
-    return NextResponse.json(
-      { 
-        message: 'OTP sent successfully',
-        // In development, include OTP for testing
-        ...(process.env.NODE_ENV === 'development' && { otp })
-      },
-      { status: 200 }
-    )
+    return response;
 
   } catch (error) {
-    console.error('OTP send error:', error)
+    console.error('OTP Send Error:', error);
     return NextResponse.json(
-      { message: 'Failed to send OTP' },
+      { 
+        success: false, 
+        error: 'Failed to send OTP',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
-    )
+    );
   }
 }
