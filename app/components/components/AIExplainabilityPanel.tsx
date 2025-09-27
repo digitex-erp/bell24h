@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AlertCircle, Brain, Loader, Target, TrendingUp, Zap } from 'lucide-react';
+import { AlertCircle, Brain, Loader, Target, ArrowUpRight, Zap } from 'lucide-react';
 
 interface Feature {
   name: string;
@@ -188,7 +188,7 @@ export default function AIExplainabilityPanel({
       <div className='px-4 pt-4'>
         <div className='flex space-x-1 bg-gray-100 p-1 rounded-lg'>
           {[
-            { id: 'overview', label: 'Overview', icon: TrendingUp },
+            { id: 'overview', label: 'Overview', icon: ArrowUpRight },
             { id: 'shap', label: 'SHAP', icon: Target },
             { id: 'lime', label: 'LIME', icon: Zap },
             { id: 'perplexity', label: 'Perplexity', icon: AlertCircle },

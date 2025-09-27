@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Info, TrendingUp, TrendingDown, Shield, Clock, Star, Award, AlertTriangle } from 'lucide-react';
+import { Info, ArrowUpRight, ArrowDownRight, Shield, Clock, Star, Award, AlertTriangle } from 'lucide-react';
 
 interface ExplainabilityData {
   matchScore: number;
@@ -207,7 +207,7 @@ export default function AIExplainability({ rfqId, supplierId, matchScore, onClos
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           <div className="bg-white border rounded-lg p-4">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <TrendingUp className="w-5 h-5 mr-2 text-green-600" />
+              <ArrowUpRight className="w-5 h-5 mr-2 text-green-600" />
               Strengths
             </h3>
             <div className="space-y-3">

@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity, BarChart3, DollarSign, Eye, MessageSquare, Share2, Target, TrendingUp } from 'lucide-react';
+import { Activity, BarChart3, DollarSign, Eye, MessageSquare, Share2, Target, ArrowUpRight } from 'lucide-react';
 import { useState } from 'react';
 
 interface Campaign {
@@ -63,7 +63,7 @@ export default function LaunchMetricsPage() {
       value: '3.2%',
       change: -2.1,
       trend: 'down',
-      icon: TrendingUp,
+      icon: ArrowUpRight,
       color: 'text-orange-600'
     },
     {
@@ -182,9 +182,9 @@ export default function LaunchMetricsPage() {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up':
-        return <TrendingUp className="h-4 w-4 text-green-600" />;
+        return <ArrowUpRight className="h-4 w-4 text-green-600" />;
       case 'down':
-        return <TrendingUp className="h-4 w-4 text-red-600 transform rotate-180" />;
+        return <ArrowUpRight className="h-4 w-4 text-red-600 transform rotate-180" />;
       default:
         return <Activity className="h-4 w-4 text-gray-600" />;
     }
@@ -205,7 +205,7 @@ export default function LaunchMetricsPage() {
             {[
               { id: 'overview', name: 'Overview', icon: BarChart3 },
               { id: 'campaigns', name: 'Campaigns', icon: Target },
-              { id: 'analytics', name: 'Analytics', icon: TrendingUp }
+              { id: 'analytics', name: 'Analytics', icon: ArrowUpRight }
             ].map((tab) => (
               <button
                 key={tab.id}

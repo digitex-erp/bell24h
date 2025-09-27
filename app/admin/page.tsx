@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { 
   Users, 
-  Building2, 
-  TrendingUp, 
+  Building, 
+  ArrowUpRight, 
   DollarSign, 
   Activity, 
   Shield, 
@@ -37,7 +37,7 @@ export default function AdminIndexPage() {
     {
       title: 'Supplier Management',
       description: 'Verify and manage supplier accounts',
-      icon: Building2,
+      icon: Building,
       href: '/admin/suppliers',
       color: 'bg-purple-500',
       stats: '847 Suppliers'
@@ -61,7 +61,7 @@ export default function AdminIndexPage() {
     {
       title: 'Analytics',
       description: 'Business intelligence and reports',
-      icon: TrendingUp,
+      icon: ArrowUpRight,
       href: '/admin/analytics',
       color: 'bg-indigo-500',
       stats: 'Real-time'

@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity, BarChart3, DollarSign, TrendingUp, Users } from 'lucide-react';
+import { Activity, BarChart3, DollarSign, ArrowUpRight, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface AnalyticsData {
@@ -64,7 +64,7 @@ const AnalyticsTracker = () => {
     {
       label: 'RFQs Created',
       value: analytics.rfqsCreated,
-      icon: <TrendingUp className='w-5 h-5' />,
+      icon: <ArrowUpRight className='w-5 h-5' />,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
     },
