@@ -517,8 +517,8 @@ export default function Home() {
             <div className="search-bar">
               <select 
                 className="category-select"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                value={selectedCategory || 'all'}
+                onChange={(e) => setSelectedCategory(e.target.value || 'all')}
               >
                 <option value="">All Categories</option>
                 <option value="steel">Steel & Metals</option>
