@@ -101,10 +101,9 @@ export default function Home() {
         }
         
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          line-height: 1.6;
+          font-family: 'Inter', sans-serif;
+          background-color: #ffffff;
           color: #212121;
-          background: #ffffff;
         }
         
         .container {
@@ -113,18 +112,19 @@ export default function Home() {
           padding: 0 20px;
         }
         
+        /* Hero Section - Exact Match to Reference */
         .hero {
-          background: #f5f5f5;
-          padding: 60px 0;
+          background-color: #ffffff;
+          padding: 80px 0;
           text-align: center;
         }
         
         .hero h1 {
-          font-size: 42px;
-          margin-bottom: 20px;
+          font-size: 56px;
           color: #212121;
           line-height: 1.2;
           font-weight: bold;
+          margin-bottom: 20px;
         }
         
         .hero h1 .highlight {
@@ -145,7 +145,7 @@ export default function Home() {
           font-weight: 600;
         }
 
-        /* Trust Badges */
+        /* Trust Badges - Exact Match */
         .trust-badges {
           display: flex;
           justify-content: center;
@@ -171,322 +171,310 @@ export default function Home() {
           background: white;
           padding: 30px;
           border-radius: 12px;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+          box-shadow: 0 10px 40px rgba(0,0,0,0.1);
           max-width: 800px;
-          margin: 0 auto 30px;
+          margin: 0 auto 40px;
         }
-        
+
         .search-bar {
           display: flex;
-          gap: 10px;
-          margin-bottom: 20px;
+          border-radius: 8px;
+          overflow: hidden;
+          border: 1px solid #e0e0e0;
         }
-        
+
         .category-select {
-          padding: 15px;
-          border: 2px solid #e1e5e9;
-          border-radius: 8px;
-          background: white;
+          padding: 12px 15px;
+          border: none;
+          background-color: #f5f5f5;
           font-size: 16px;
-          min-width: 200px;
+          outline: none;
           cursor: pointer;
+          border-right: 1px solid #e0e0e0;
         }
-        
+
         .search-input {
-          flex: 1;
-          padding: 15px 20px;
-          border: 2px solid #e1e5e9;
-          border-radius: 8px;
+          flex-grow: 1;
+          padding: 12px 15px;
+          border: none;
           font-size: 16px;
           outline: none;
         }
-        
-        .search-input:focus {
-          border-color: #1a237e;
-        }
-        
+
         .search-button {
-          background: #ff6f00;
+          background-color: #ff6f00;
           color: white;
           border: none;
-          padding: 15px 30px;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
+          padding: 12px 25px;
           font-size: 16px;
-          transition: background 0.3s;
+          cursor: pointer;
+          transition: background-color 0.3s;
         }
-        
+
         .search-button:hover {
-          background: #e65100;
+          background-color: #e65100;
         }
-        
+
         .popular-searches {
+          margin-top: 20px;
           display: flex;
+          justify-content: center;
           flex-wrap: wrap;
           gap: 10px;
-          justify-content: center;
         }
-        
+
         .popular-search {
-          background: #f5f5f5;
-          padding: 8px 16px;
+          background-color: #e0e0e0;
+          color: #424242;
+          padding: 8px 15px;
           border-radius: 20px;
           font-size: 14px;
-          color: #666;
           cursor: pointer;
-          transition: background 0.3s;
+          transition: background-color 0.3s;
         }
-        
+
         .popular-search:hover {
-          background: #e1e5e9;
+          background-color: #bdbdbd;
         }
-        
-        .trust-badges {
-          display: flex;
-          justify-content: center;
-          gap: 20px;
-          margin: 30px 0;
-          flex-wrap: wrap;
-        }
-        
-        .badge {
-          background: white;
-          padding: 15px 25px;
-          border-radius: 8px;
-          font-size: 14px;
-          font-weight: 600;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-          border: 1px solid #e1e5e9;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        
-        .badge.green {
-          background: #e8f5e8;
-          color: #2e7d32;
-          border-color: #c8e6c9;
-        }
-        
-        .badge.blue {
-          background: #e3f2fd;
-          color: #1565c0;
-          border-color: #bbdefb;
-        }
-        
-        .badge.orange {
-          background: #fff3e0;
-          color: #ef6c00;
-          border-color: #ffcc02;
-        }
-        
-        .live-rfq-ticker {
-          background: #1a237e;
+
+        /* Live RFQ Ticker */
+        .rfq-ticker {
+          background-color: #1a237e;
           color: white;
           padding: 15px 0;
           overflow: hidden;
+          white-space: nowrap;
           position: relative;
         }
-        
-        .live-rfq-content {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 20px;
+
+        .rfq-ticker-content {
+          display: inline-block;
+          padding-left: 100%;
+          animation: marquee 30s linear infinite;
         }
-        
-        .live-indicator {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-weight: bold;
-        }
-        
-        .live-dot {
-          width: 8px;
-          height: 8px;
-          background: #ff6f00;
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-          0% { opacity: 1; }
-          50% { opacity: 0.5; }
-          100% { opacity: 1; }
-        }
-        
-        .rfq-text {
+
+        .rfq-ticker-item {
+          display: inline-block;
+          margin-right: 50px;
           font-size: 16px;
-          animation: slideIn 3s infinite;
         }
-        
-        @keyframes slideIn {
-          0% { transform: translateX(100%); }
+
+        @keyframes marquee {
+          0% { transform: translateX(0); }
           100% { transform: translateX(-100%); }
         }
-        
+
+        /* Stats Section */
         .stats-section {
+          background-color: #f5f5f5;
           padding: 60px 0;
-          background: white;
+          text-align: center;
         }
-        
+
         .stats-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 40px;
-          text-align: center;
-        }
-        
-        .stat-item {
-          padding: 30px;
-          background: #f5f5f5;
-          border-radius: 12px;
-          transition: transform 0.3s;
-        }
-        
-        .stat-item:hover {
-          transform: translateY(-5px);
-        }
-        
-        .stat-number {
-          font-size: 48px;
-          font-weight: bold;
-          color: #1a237e;
-          margin-bottom: 10px;
-        }
-        
-        .stat-label {
-          font-size: 18px;
-          color: #666;
-          font-weight: 500;
-        }
-        
-        .categories-section {
-          padding: 80px 0;
-          background: #f5f5f5;
-        }
-        
-        .categories-section h2 {
-          text-align: center;
-          font-size: 42px;
-          margin-bottom: 50px;
-          color: #212121;
-          font-weight: bold;
-        }
-        
-        .category-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 30px;
         }
-        
-        .category-card {
-          background: white;
-          padding: 30px;
-          border-radius: 12px;
-          text-align: center;
-          box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-          transition: all 0.3s;
-          cursor: pointer;
-          border: 2px solid transparent;
+
+        .stat-item h3 {
+          font-size: 42px;
+          color: #1a237e;
+          margin-bottom: 5px;
         }
-        
+
+        .stat-item p {
+          font-size: 16px;
+          color: #757575;
+        }
+
+        /* Categories Section */
+        .categories-section {
+          background-color: #ffffff;
+          padding: 80px 0;
+          text-align: center;
+        }
+
+        .categories-section h2 {
+          font-size: 36px;
+          color: #212121;
+          margin-bottom: 50px;
+        }
+
+        .category-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 25px;
+        }
+
+        .category-card {
+          background-color: #f5f5f5;
+          padding: 30px 20px;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+          transition: transform 0.3s, box-shadow 0.3s;
+        }
+
         .category-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 10px 40px rgba(0,0,0,0.12);
-          border-color: #1a237e;
+          box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
-        
+
         .category-icon {
           font-size: 48px;
           margin-bottom: 15px;
         }
-        
+
         .category-card h3 {
-          font-size: 20px;
-          margin-bottom: 8px;
+          font-size: 18px;
           color: #212121;
-          font-weight: 600;
+          margin-bottom: 5px;
         }
-        
+
         .category-card p {
-          color: #666;
-          font-size: 14px;
-          font-weight: 500;
+          font-size: 13px;
+          color: #757575;
         }
-        
-        .how-it-works {
+
+        /* How It Works Section */
+        .how-it-works-section {
+          background-color: #ffffff;
           padding: 80px 0;
-          background: white;
-        }
-        
-        .how-it-works h2 {
           text-align: center;
-          font-size: 42px;
-          margin-bottom: 60px;
-          color: #212121;
-          font-weight: bold;
         }
-        
-        .steps {
+
+        .how-it-works-section h2 {
+          font-size: 36px;
+          color: #212121;
+          margin-bottom: 60px;
+        }
+
+        .steps-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 40px;
         }
-        
-        .step {
+
+        .step-item .icon {
+          font-size: 60px;
+          margin-bottom: 20px;
+          color: #ff6f00;
+        }
+
+        .step-item h3 {
+          font-size: 24px;
+          color: #212121;
+          margin-bottom: 10px;
+        }
+
+        .step-item p {
+          font-size: 16px;
+          color: #757575;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+          background-color: #f5f5f5;
+          padding: 80px 0;
           text-align: center;
         }
-        
-        .step-number {
-          width: 80px;
-          height: 80px;
-          background: #1a237e;
-          color: white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 32px;
-          font-weight: bold;
-          margin: 0 auto 25px;
-        }
-        
-        .step h3 {
-          font-size: 22px;
-          margin-bottom: 15px;
+
+        .testimonials-section h2 {
+          font-size: 36px;
           color: #212121;
-          font-weight: 600;
+          margin-bottom: 50px;
         }
-        
-        .step p {
-          color: #666;
+
+        .testimonial-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 30px;
+        }
+
+        .testimonial-card {
+          background-color: white;
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+          text-align: left;
+        }
+
+        .testimonial-card p {
           font-size: 16px;
+          color: #212121;
+          margin-bottom: 20px;
           line-height: 1.6;
         }
-        
+
+        .testimonial-author {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+
+        .testimonial-author img {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .author-info h4 {
+          font-size: 18px;
+          color: #1a237e;
+          margin: 0;
+        }
+
+        .author-info p {
+          font-size: 14px;
+          color: #757575;
+          margin: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+          .hero h1 {
+            font-size: 48px;
+          }
+        }
+
         @media (max-width: 768px) {
           .hero h1 {
-            font-size: 32px;
+            font-size: 36px;
           }
-          
+          .search-section {
+            flex-direction: column;
+            padding: 15px;
+          }
           .search-bar {
             flex-direction: column;
+            border: none;
           }
-          
+          .category-select,
+          .search-input,
+          .search-button {
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 10px;
+            border-radius: 8px;
+          }
           .category-select {
-            min-width: auto;
+            margin-bottom: 15px;
           }
-          
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+          .stats-grid, .category-grid, .steps-grid, .testimonial-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           }
-          
-          .stat-number {
-            font-size: 36px;
+        }
+
+        @media (max-width: 480px) {
+          .hero h1 {
+            font-size: 28px;
+          }
+          .trust-badges {
+            flex-direction: column;
+          }
+          .stats-grid, .category-grid, .steps-grid, .testimonial-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
@@ -520,13 +508,19 @@ export default function Home() {
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                <option value="">All Categories</option>
+                <option value="all">All Categories</option>
                 <option value="steel">Steel & Metals</option>
                 <option value="textiles">Textiles & Fabrics</option>
-                <option value="electronics">Electronics</option>
+                <option value="electronics">Electronics & IT</option>
                 <option value="chemicals">Chemicals</option>
                 <option value="machinery">Machinery</option>
                 <option value="packaging">Packaging</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="construction">Construction</option>
+                <option value="auto">Auto Parts</option>
+                <option value="pharmaceuticals">Pharmaceuticals</option>
+                <option value="food">Food & Beverages</option>
+                <option value="services">Business Services</option>
               </select>
               <input
                 type="text"
@@ -547,57 +541,44 @@ export default function Home() {
               <span className="popular-search">Chemical Raw Materials</span>
               <span className="popular-search">Packaging Materials</span>
             </div>
-            </div>
-
-          <div className="trust-badges">
-            <span className="badge green">
-              ✅ Escrow-Secured (ICICI Bank Partner)
-            </span>
-            <span className="badge blue">
-              ✅ GST & PAN Verified
-            </span>
-            <span className="badge orange">
-              ✅ AI Trust-Score
-            </span>
           </div>
         </div>
       </section>
 
       {/* Live RFQ Ticker */}
-      <section className="live-rfq-ticker">
-        <div className="container">
-          <div className="live-rfq-content">
-            <div className="live-indicator">
-              <div className="live-dot"></div>
-              <span>LIVE RFQs</span>
-            </div>
-            <div className="rfq-text">
-              {liveRFQs[currentRFQIndex]}
-            </div>
-          </div>
+      <section className="rfq-ticker">
+        <div className="rfq-ticker-content">
+          {liveRFQs.map((rfq, index) => (
+            <span key={index} className="rfq-ticker-item">
+              {rfq}
+            </span>
+          ))}
+          {liveRFQs.map((rfq, index) => (
+            <span key={`dup-${index}`} className="rfq-ticker-item">
+              {rfq}
+            </span>
+          ))}
         </div>
       </section>
 
       {/* Stats Section */}
       <section className="stats-section">
-        <div className="container">
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">45,000+</div>
-              <div className="stat-label">Verified Suppliers</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">2.5M</div>
-              <div className="stat-label">Products</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">10,000+</div>
-              <div className="stat-label">RFQs Daily</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">24hr</div>
-              <div className="stat-label">Response Time</div>
-            </div>
+        <div className="container stats-grid">
+          <div className="stat-item">
+            <h3>45,000+</h3>
+            <p>Verified Suppliers</p>
+          </div>
+          <div className="stat-item">
+            <h3>2.5 Million+</h3>
+            <p>Products Listed</p>
+          </div>
+          <div className="stat-item">
+            <h3>10,000+</h3>
+            <p>RFQs Daily</p>
+          </div>
+          <div className="stat-item">
+            <h3>24 Hours</h3>
+            <p>Avg. Response Time</p>
           </div>
         </div>
       </section>
@@ -611,37 +592,76 @@ export default function Home() {
               <div key={index} className="category-card">
                 <div className="category-icon">{category.icon}</div>
                 <h3>{category.name}</h3>
-                <p>{category.count} Suppliers</p>
+                <p>{category.count} Products</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="how-it-works">
+      {/* How It Works Section */}
+      <section className="how-it-works-section">
         <div className="container">
           <h2>How Bell24h Works</h2>
-          <div className="steps">
-            <div className="step">
-              <div className="step-number">1</div>
-              <h3>Post Your RFQ</h3>
-              <p>Submit your requirements by voice, video, or text. Our AI understands your needs and matches with verified suppliers.</p>
+          <div className="steps-grid">
+            <div className="step-item">
+              <div className="icon">1️⃣</div>
+              <h3>Post Your Requirement</h3>
+              <p>Submit your RFQ via text, voice, or video. Our AI analyzes and matches you with relevant suppliers.</p>
             </div>
-            <div className="step">
-              <div className="step-number">2</div>
-              <h3>Get 3 Verified Quotes</h3>
-              <p>Receive AI-scored, GST-verified supplier quotes within 24 hours. 200+ data points analyzed for quality matches.</p>
+            <div className="step-item">
+              <div className="icon">2️⃣</div>
+              <h3>Get Verified Quotes</h3>
+              <p>Receive competitive quotes from GST-verified suppliers within 24 hours. Compare and choose the best.</p>
             </div>
-            <div className="step">
-              <div className="step-number">3</div>
-              <h3>Secure Escrow Payment</h3>
-              <p>Payment held in ICICI escrow until goods arrive. Full protection guaranteed with trade assurance.</p>
+            <div className="step-item">
+              <div className="icon">3️⃣</div>
+              <h3>Secure Payments</h3>
+              <p>Transact securely with escrow protection. Funds are released only after you confirm satisfactory delivery.</p>
             </div>
-            <div className="step">
-              <div className="step-number">4</div>
+            <div className="step-item">
+              <div className="icon">4️⃣</div>
               <h3>Track & Manage</h3>
-              <p>Monitor your orders, communicate with suppliers, and manage your business relationships all in one place.</p>
+              <p>Monitor your orders, communicate with suppliers, and manage all your B2B activities from your dashboard.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="testimonials-section">
+        <div className="container">
+          <h2>What Our Customers Say</h2>
+          <div className="testimonial-grid">
+            <div className="testimonial-card">
+              <p>"Bell24h transformed our sourcing process. We found reliable suppliers faster and secured better deals. The escrow service is a game-changer!"</p>
+              <div className="testimonial-author">
+                <img src="/avatars/avatar1.jpg" alt="Client 1" />
+                <div className="author-info">
+                  <h4>Rajesh Kumar</h4>
+                  <p>Procurement Head, SteelCo India</p>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <p>"As an MSME, finding verified buyers was tough. Bell24h connected us with serious buyers and streamlined our sales. Highly recommended!"</p>
+              <div className="testimonial-author">
+                <img src="/avatars/avatar2.jpg" alt="Client 2" />
+                <div className="author-info">
+                  <h4>Priya Sharma</h4>
+                  <p>CEO, Textile Innovations</p>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <p>"The AI matching is incredibly accurate. We save hours every week and have significantly improved our supply chain efficiency. Fantastic platform!"</p>
+              <div className="testimonial-author">
+                <img src="/avatars/avatar3.jpg" alt="Client 3" />
+                <div className="author-info">
+                  <h4>Amit Patel</h4>
+                  <p>Operations Manager, ElectroTech Solutions</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
