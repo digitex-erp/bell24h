@@ -5,22 +5,20 @@ import { useRouter } from 'next/navigation';
 
 interface AuthModalProps {
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (user: any) => void;
 }
 
 export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
-  const [step, setStep] = useState<'mobile' | 'otp' | 'details'>('mobile');
+  const [step, setStep] = useState(1); // 1: Mobile, 2: OTP, 3: Registration
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [isNewUser, setIsNewUser] = useState(false);
   const [userDetails, setUserDetails] = useState({
     name: '',
     companyName: '',
-    gstNumber: ''
+    businessType: 'manufacturer'
   });
-  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSendOTP = async () => {
@@ -42,8 +40,7 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
       const data = await response.json();
 
       if (data.success) {
-        setIsNewUser(data.isNewUser);
-        setStep('otp');
+        setStep(2);
       } else {
         setError(data.error || 'Failed to send OTP');
       }
@@ -67,24 +64,19 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
       const response = await fetch('/api/auth/otp/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mobile,
-          otp,
-          isNewUser,
-          ...userDetails
-        })
+        body: JSON.stringify({ mobile, otp })
       });
 
       const data = await response.json();
 
       if (data.success) {
-        // Store token
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        // Close modal and redirect to dashboard
-        onSuccess();
-        router.push('/dashboard');
+        if (data.isNewUser) {
+          setStep(3); // Show registration form
+        } else {
+          // Existing user - login successful
+          onSuccess(data.user);
+          router.push('/dashboard');
+        }
       } else {
         setError(data.error || 'Invalid OTP');
       }
@@ -95,8 +87,40 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
     }
   };
 
-  const handleResendOTP = async () => {
-    await handleSendOTP();
+  const handleRegister = async () => {
+    if (!userDetails.name || !userDetails.companyName) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mobile,
+          name: userDetails.name,
+          companyName: userDetails.companyName,
+          businessType: userDetails.businessType
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        onSuccess(data.user);
+        router.push('/dashboard');
+      } else {
+        setError(data.error || 'Registration failed');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -120,39 +144,85 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
           background: white;
           border-radius: 12px;
           padding: 40px;
-          max-width: 400px;
+          max-width: 450px;
           width: 100%;
           max-height: 90vh;
           overflow-y: auto;
           position: relative;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
         
-        .close-btn {
+        .modal-close {
           position: absolute;
           top: 15px;
-          right: 15px;
+          right: 20px;
           background: none;
           border: none;
           font-size: 24px;
           cursor: pointer;
           color: #666;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transition: background 0.3s;
         }
         
-        .close-btn:hover {
-          color: #000;
+        .modal-close:hover {
+          background: #f5f5f5;
+        }
+        
+        .modal-header {
+          text-align: center;
+          margin-bottom: 30px;
         }
         
         .modal-title {
-          font-size: 24px;
+          font-size: 28px;
           font-weight: bold;
-          margin-bottom: 10px;
           color: #1a237e;
+          margin-bottom: 10px;
         }
         
         .modal-subtitle {
           color: #666;
+          font-size: 16px;
+        }
+        
+        .step-indicator {
+          display: flex;
+          justify-content: center;
           margin-bottom: 30px;
-          font-size: 14px;
+          gap: 10px;
+        }
+        
+        .step {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 16px;
+          transition: all 0.3s;
+        }
+        
+        .step.active {
+          background: #1a237e;
+          color: white;
+        }
+        
+        .step.completed {
+          background: #4caf50;
+          color: white;
+        }
+        
+        .step.pending {
+          background: #e0e0e0;
+          color: #666;
         }
         
         .form-group {
@@ -162,14 +232,14 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
         .form-label {
           display: block;
           margin-bottom: 8px;
-          font-weight: 500;
+          font-weight: 600;
           color: #333;
         }
         
         .form-input {
           width: 100%;
-          padding: 12px 16px;
-          border: 2px solid #e1e5e9;
+          padding: 12px 15px;
+          border: 2px solid #e0e0e0;
           border-radius: 8px;
           font-size: 16px;
           transition: border-color 0.3s;
@@ -181,84 +251,71 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
           border-color: #1a237e;
         }
         
-        .form-input.error {
-          border-color: #e53e3e;
-        }
-        
-        .otp-container {
-          display: flex;
-          gap: 10px;
-          justify-content: center;
-          margin-bottom: 20px;
-        }
-        
-        .otp-input {
-          width: 45px;
-          height: 45px;
-          text-align: center;
-          font-size: 18px;
-          font-weight: bold;
-          border: 2px solid #e1e5e9;
-          border-radius: 8px;
-        }
-        
-        .otp-input:focus {
-          outline: none;
-          border-color: #1a237e;
-        }
-        
-        .btn {
+        .form-select {
           width: 100%;
-          padding: 14px;
+          padding: 12px 15px;
+          border: 2px solid #e0e0e0;
+          border-radius: 8px;
+          font-size: 16px;
+          background: white;
+          cursor: pointer;
+        }
+        
+        .btn-primary {
+          width: 100%;
+          padding: 15px;
+          background: #1a237e;
+          color: white;
           border: none;
           border-radius: 8px;
           font-size: 16px;
           font-weight: 600;
           cursor: pointer;
           transition: background 0.3s;
-          margin-bottom: 15px;
-        }
-        
-        .btn-primary {
-          background: #1a237e;
-          color: white;
+          margin-top: 10px;
         }
         
         .btn-primary:hover:not(:disabled) {
           background: #0d47a1;
         }
         
-        .btn-secondary {
-          background: #f5f5f5;
-          color: #333;
-          border: 1px solid #ddd;
-        }
-        
-        .btn-secondary:hover {
-          background: #e5e5e5;
-        }
-        
-        .btn:disabled {
-          opacity: 0.6;
+        .btn-primary:disabled {
+          background: #ccc;
           cursor: not-allowed;
         }
         
+        .btn-secondary {
+          width: 100%;
+          padding: 15px;
+          background: transparent;
+          color: #1a237e;
+          border: 2px solid #1a237e;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s;
+          margin-top: 10px;
+        }
+        
+        .btn-secondary:hover {
+          background: #1a237e;
+          color: white;
+        }
+        
         .error-message {
-          background: #fed7d7;
-          color: #c53030;
+          background: #ffebee;
+          color: #c62828;
           padding: 12px;
           border-radius: 8px;
           margin-bottom: 20px;
           font-size: 14px;
         }
         
-        .success-message {
-          background: #c6f6d5;
-          color: #22543d;
-          padding: 12px;
-          border-radius: 8px;
-          margin-bottom: 20px;
-          font-size: 14px;
+        .otp-input {
+          text-align: center;
+          font-size: 20px;
+          letter-spacing: 5px;
         }
         
         .resend-link {
@@ -269,92 +326,71 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
         .resend-link a {
           color: #1a237e;
           text-decoration: none;
-          font-size: 14px;
+          font-weight: 500;
         }
         
         .resend-link a:hover {
           text-decoration: underline;
         }
         
-        .step-indicator {
-          display: flex;
-          justify-content: center;
-          margin-bottom: 30px;
-        }
-        
-        .step {
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          background: #e1e5e9;
-          color: #666;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 10px;
-          font-weight: bold;
-        }
-        
-        .step.active {
-          background: #1a237e;
-          color: white;
-        }
-        
-        .step.completed {
-          background: #38a169;
-          color: white;
-        }
-        
         @media (max-width: 480px) {
           .modal-content {
             padding: 30px 20px;
+            margin: 10px;
           }
           
-          .otp-container {
-            gap: 8px;
-          }
-          
-          .otp-input {
-            width: 40px;
-            height: 40px;
-            font-size: 16px;
+          .modal-title {
+            font-size: 24px;
           }
         }
       `}</style>
 
-      <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-        <div className="modal-content">
-          <button className="close-btn" onClick={onClose}>×</button>
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close" onClick={onClose}>×</button>
           
-          {/* Step Indicator */}
-          <div className="step-indicator">
-            <div className={`step ${step === 'mobile' ? 'active' : step === 'otp' || step === 'details' ? 'completed' : ''}`}>1</div>
-            <div className={`step ${step === 'otp' ? 'active' : step === 'details' ? 'completed' : ''}`}>2</div>
-            <div className={`step ${step === 'details' ? 'active' : ''}`}>3</div>
+          <div className="modal-header">
+            <h2 className="modal-title">Login / Sign Up</h2>
+            <p className="modal-subtitle">
+              {step === 1 && "Enter your mobile number to get started"}
+              {step === 2 && "Enter the OTP sent to your mobile"}
+              {step === 3 && "Complete your registration"}
+            </p>
           </div>
 
-          {/* Mobile Number Step */}
-          {step === 'mobile' && (
+          {/* Step Indicator */}
+          <div className="step-indicator">
+            <div className={`step ${step >= 1 ? (step > 1 ? 'completed' : 'active') : 'pending'}`}>
+              1
+            </div>
+            <div className={`step ${step >= 2 ? (step > 2 ? 'completed' : 'active') : 'pending'}`}>
+              2
+            </div>
+            <div className={`step ${step >= 3 ? (step > 3 ? 'completed' : 'active') : 'pending'}`}>
+              3
+            </div>
+          </div>
+
+          {error && (
+            <div className="error-message">{error}</div>
+          )}
+
+          {/* Step 1: Mobile Number */}
+          {step === 1 && (
             <>
-              <h2 className="modal-title">Login / Sign Up</h2>
-              <p className="modal-subtitle">Enter your mobile number to get started</p>
-              
-              {error && <div className="error-message">{error}</div>}
-              
               <div className="form-group">
                 <label className="form-label">Mobile Number</label>
                 <input
                   type="tel"
                   className="form-input"
-                  placeholder="10 digit mobile number"
-                  maxLength={10}
+                  placeholder="Enter 10-digit mobile number"
                   value={mobile}
-                  onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
+                  onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                  maxLength={10}
                 />
               </div>
-              
-              <button 
-                className="btn btn-primary"
+              <button
+                className="btn-primary"
                 onClick={handleSendOTP}
                 disabled={loading || mobile.length !== 10}
               >
@@ -363,69 +399,49 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
             </>
           )}
 
-          {/* OTP Step */}
-          {step === 'otp' && (
+          {/* Step 2: OTP Verification */}
+          {step === 2 && (
             <>
-              <h2 className="modal-title">Enter OTP</h2>
-              <p className="modal-subtitle">OTP sent to +91 {mobile}</p>
-              
-              {error && <div className="error-message">{error}</div>}
-              
-              <div className="otp-container">
-                {[0, 1, 2, 3, 4, 5].map((index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    className="otp-input"
-                    maxLength={1}
-                    value={otp[index] || ''}
-                    onChange={(e) => {
-                      const newOtp = otp.split('');
-                      newOtp[index] = e.target.value;
-                      setOtp(newOtp.join(''));
-                      
-                      // Auto-focus next input
-                      if (e.target.value && index < 5) {
-                        const nextInput = e.target.parentElement?.children[index + 1] as HTMLInputElement;
-                        nextInput?.focus();
-                      }
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Backspace' && !otp[index] && index > 0) {
-                        const prevInput = e.currentTarget.parentElement?.children[index - 1] as HTMLInputElement;
-                        prevInput?.focus();
-                      }
-                    }}
-                  />
-                ))}
+              <div className="form-group">
+                <label className="form-label">Enter OTP</label>
+                <input
+                  type="text"
+                  className="form-input otp-input"
+                  placeholder="000000"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  maxLength={6}
+                />
+                <p style={{ fontSize: '14px', color: '#666', marginTop: '5px' }}>
+                  OTP sent to +91 {mobile}
+                </p>
               </div>
-              
-              <button 
-                className="btn btn-primary"
+              <button
+                className="btn-primary"
                 onClick={handleVerifyOTP}
                 disabled={loading || otp.length !== 6}
               >
-                {loading ? 'Verifying...' : 'Verify & Login'}
+                {loading ? 'Verifying...' : 'Verify OTP'}
               </button>
-              
               <div className="resend-link">
-                <a href="#" onClick={(e) => { e.preventDefault(); handleResendOTP(); }}>
+                <a href="#" onClick={(e) => { e.preventDefault(); handleSendOTP(); }}>
                   Resend OTP
                 </a>
               </div>
+              <button
+                className="btn-secondary"
+                onClick={() => setStep(1)}
+              >
+                Change Mobile Number
+              </button>
             </>
           )}
 
-          {/* New User Details Step */}
-          {step === 'details' && isNewUser && (
+          {/* Step 3: Registration */}
+          {step === 3 && (
             <>
-              <h2 className="modal-title">Complete Your Profile</h2>
-              <p className="modal-subtitle">Tell us about your business</p>
-              
-              {error && <div className="error-message">{error}</div>}
-              
               <div className="form-group">
-                <label className="form-label">Full Name</label>
+                <label className="form-label">Full Name *</label>
                 <input
                   type="text"
                   className="form-input"
@@ -436,7 +452,7 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
               </div>
               
               <div className="form-group">
-                <label className="form-label">Company Name</label>
+                <label className="form-label">Company Name *</label>
                 <input
                   type="text"
                   className="form-input"
@@ -447,29 +463,27 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
               </div>
               
               <div className="form-group">
-                <label className="form-label">GST Number (Optional)</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="Enter GST number"
-                  value={userDetails.gstNumber}
-                  onChange={(e) => setUserDetails({...userDetails, gstNumber: e.target.value})}
-                />
+                <label className="form-label">Business Type</label>
+                <select
+                  className="form-select"
+                  value={userDetails.businessType}
+                  onChange={(e) => setUserDetails({...userDetails, businessType: e.target.value})}
+                >
+                  <option value="manufacturer">Manufacturer</option>
+                  <option value="supplier">Supplier</option>
+                  <option value="trader">Trader</option>
+                  <option value="buyer">Buyer</option>
+                  <option value="importer">Importer</option>
+                  <option value="exporter">Exporter</option>
+                </select>
               </div>
               
-              <button 
-                className="btn btn-primary"
-                onClick={handleVerifyOTP}
+              <button
+                className="btn-primary"
+                onClick={handleRegister}
                 disabled={loading || !userDetails.name || !userDetails.companyName}
               >
                 {loading ? 'Creating Account...' : 'Complete Registration'}
-              </button>
-              
-              <button 
-                className="btn btn-secondary"
-                onClick={() => setStep('otp')}
-              >
-                Back
               </button>
             </>
           )}

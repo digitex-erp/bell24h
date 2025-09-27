@@ -34,21 +34,6 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [liveRFQs.length]);
 
-  const categories = [
-    { name: 'Steel & Metals', icon: '🏗️', count: '2,340' },
-    { name: 'Textiles & Fabrics', icon: '🧵', count: '1,890' },
-    { name: 'Electronics', icon: '📱', count: '3,210' },
-    { name: 'Chemicals', icon: '🧪', count: '1,567' },
-    { name: 'Machinery', icon: '🏭', count: '2,890' },
-    { name: 'Packaging', icon: '📦', count: '1,234' },
-    { name: 'Automotive', icon: '🚗', count: '1,876' },
-    { name: 'Pharmaceuticals', icon: '💊', count: '987' },
-    { name: 'Food & Beverage', icon: '🍽️', count: '1,543' },
-    { name: 'Construction', icon: '🏢', count: '2,156' },
-    { name: 'Agriculture', icon: '🌾', count: '1,432' },
-    { name: 'Energy', icon: '⚡', count: '756' }
-  ];
-
   return (
     <>
       <Head>
@@ -98,38 +83,39 @@ export default function Home() {
           margin: 0;
           padding: 0;
         }
-        
+
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-family: 'Inter', sans-serif;
           line-height: 1.6;
           color: #212121;
-          background: #ffffff;
+          background-color: #ffffff;
         }
-        
+
         .container {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0 20px;
         }
-        
+
+        /* Hero Section */
         .hero {
-          background: #f5f5f5;
-          padding: 60px 0;
+          background-color: #ffffff;
+          padding: 80px 0;
           text-align: center;
         }
-        
+
         .hero h1 {
-          font-size: 42px;
-          margin-bottom: 20px;
+          font-size: 56px;
           color: #212121;
           line-height: 1.2;
           font-weight: bold;
+          margin-bottom: 20px;
         }
-        
+
         .hero h1 .highlight {
           color: #1a237e;
         }
-        
+
         .hero-subtitle {
           font-size: 18px;
           color: #666;
@@ -138,7 +124,7 @@ export default function Home() {
           margin-left: auto;
           margin-right: auto;
         }
-        
+
         .hero-subtitle .highlight-text {
           color: #1a237e;
           font-weight: 600;
@@ -165,285 +151,205 @@ export default function Home() {
           gap: 8px;
           box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        
+
+        /* Search Section */
         .search-section {
           background: white;
           padding: 30px;
           border-radius: 12px;
           box-shadow: 0 4px 20px rgba(0,0,0,0.1);
           max-width: 800px;
-          margin: 0 auto 30px;
+          margin: 0 auto 40px;
         }
-        
+
         .search-bar {
           display: flex;
           gap: 10px;
           margin-bottom: 20px;
         }
-        
+
         .category-select {
-          padding: 15px;
-          border: 2px solid #e1e5e9;
+          padding: 12px 15px;
+          border: 1px solid #e0e0e0;
           border-radius: 8px;
-          background: white;
           font-size: 16px;
-          min-width: 200px;
-          cursor: pointer;
+          background: white;
+          min-width: 150px;
         }
-        
+
         .search-input {
           flex: 1;
-          padding: 15px 20px;
-          border: 2px solid #e1e5e9;
+          padding: 12px 15px;
+          border: 1px solid #e0e0e0;
           border-radius: 8px;
           font-size: 16px;
-          outline: none;
         }
-        
-        .search-input:focus {
-          border-color: #1a237e;
-        }
-        
-        .search-button {
-          background: #ff6f00;
+
+        .search-btn {
+          background-color: #ff6f00;
           color: white;
           border: none;
-          padding: 15px 30px;
+          padding: 12px 30px;
           border-radius: 8px;
+          font-size: 16px;
           font-weight: 600;
           cursor: pointer;
-          font-size: 16px;
-          transition: background 0.3s;
+          transition: background-color 0.3s;
         }
-        
-        .search-button:hover {
-          background: #e65100;
+
+        .search-btn:hover {
+          background-color: #e65100;
         }
-        
+
         .popular-searches {
           display: flex;
-          flex-wrap: wrap;
           gap: 10px;
+          flex-wrap: wrap;
           justify-content: center;
         }
-        
-        .popular-search {
-          background: #f5f5f5;
+
+        .search-tag {
+          background-color: #f5f5f5;
+          color: #1a237e;
           padding: 8px 16px;
           border-radius: 20px;
           font-size: 14px;
-          color: #666;
-          cursor: pointer;
-          transition: background 0.3s;
+          text-decoration: none;
+          transition: background-color 0.3s;
         }
-        
-        .popular-search:hover {
-          background: #e1e5e9;
+
+        .search-tag:hover {
+          background-color: #e3f2fd;
         }
-        
-        .trust-badges {
-          display: flex;
-          justify-content: center;
-          gap: 20px;
-          margin: 30px 0;
-          flex-wrap: wrap;
-        }
-        
-        .badge {
-          background: white;
-          padding: 15px 25px;
-          border-radius: 8px;
-          font-size: 14px;
-          font-weight: 600;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-          border: 1px solid #e1e5e9;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        
-        .badge.green {
-          background: #e8f5e8;
-          color: #2e7d32;
-          border-color: #c8e6c9;
-        }
-        
-        .badge.blue {
-          background: #e3f2fd;
-          color: #1565c0;
-          border-color: #bbdefb;
-        }
-        
-        .badge.orange {
-          background: #fff3e0;
-          color: #ef6c00;
-          border-color: #ffcc02;
-        }
-        
-        .live-rfq-ticker {
-          background: #1a237e;
+
+        /* Live RFQ Ticker */
+        .rfq-ticker {
+          background-color: #1a237e;
           color: white;
           padding: 15px 0;
           overflow: hidden;
-          position: relative;
+          white-space: nowrap;
         }
-        
-        .live-rfq-content {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 20px;
+
+        .rfq-content {
+          display: inline-block;
+          padding-left: 100%;
+          animation: scroll 30s linear infinite;
         }
-        
-        .live-indicator {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-weight: bold;
-        }
-        
-        .live-dot {
-          width: 8px;
-          height: 8px;
-          background: #ff6f00;
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-          0% { opacity: 1; }
-          50% { opacity: 0.5; }
-          100% { opacity: 1; }
-        }
-        
-        .rfq-text {
+
+        .rfq-item {
+          display: inline-block;
+          margin-right: 50px;
           font-size: 16px;
-          animation: slideIn 3s infinite;
         }
-        
-        @keyframes slideIn {
-          0% { transform: translateX(100%); }
+
+        @keyframes scroll {
+          0% { transform: translateX(0); }
           100% { transform: translateX(-100%); }
         }
-        
+
+        /* Stats Section */
         .stats-section {
+          background-color: #f5f5f5;
           padding: 60px 0;
-          background: white;
         }
-        
+
         .stats-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 40px;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 30px;
           text-align: center;
         }
-        
-        .stat-item {
-          padding: 30px;
-          background: #f5f5f5;
-          border-radius: 12px;
-          transition: transform 0.3s;
-        }
-        
-        .stat-item:hover {
-          transform: translateY(-5px);
-        }
-        
-        .stat-number {
-          font-size: 48px;
-          font-weight: bold;
+
+        .stat-item h3 {
+          font-size: 42px;
           color: #1a237e;
           margin-bottom: 10px;
-        }
-        
-        .stat-label {
-          font-size: 18px;
-          color: #666;
-          font-weight: 500;
-        }
-        
-        .categories-section {
-          padding: 80px 0;
-          background: #f5f5f5;
-        }
-        
-        .categories-section h2 {
-          text-align: center;
-          font-size: 42px;
-          margin-bottom: 50px;
-          color: #212121;
           font-weight: bold;
         }
-        
+
+        .stat-item p {
+          font-size: 16px;
+          color: #666;
+        }
+
+        /* Categories Section */
+        .categories-section {
+          background-color: #ffffff;
+          padding: 80px 0;
+        }
+
+        .categories-section h2 {
+          font-size: 36px;
+          color: #212121;
+          margin-bottom: 50px;
+          text-align: center;
+        }
+
         .category-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 30px;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 25px;
         }
-        
+
         .category-card {
-          background: white;
-          padding: 30px;
-          border-radius: 12px;
+          background-color: #f5f5f5;
+          padding: 30px 20px;
+          border-radius: 8px;
           text-align: center;
-          box-shadow: 0 2px 20px rgba(0,0,0,0.08);
-          transition: all 0.3s;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+          transition: transform 0.3s, box-shadow 0.3s;
           cursor: pointer;
-          border: 2px solid transparent;
         }
-        
+
         .category-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 10px 40px rgba(0,0,0,0.12);
-          border-color: #1a237e;
+          box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
-        
+
         .category-icon {
           font-size: 48px;
           margin-bottom: 15px;
         }
-        
+
         .category-card h3 {
-          font-size: 20px;
-          margin-bottom: 8px;
+          font-size: 18px;
           color: #212121;
-          font-weight: 600;
+          margin-bottom: 5px;
         }
-        
+
         .category-card p {
-          color: #666;
-          font-size: 14px;
-          font-weight: 500;
+          font-size: 13px;
+          color: #757575;
         }
-        
-        .how-it-works {
+
+        /* How It Works Section */
+        .how-it-works-section {
+          background-color: #ffffff;
           padding: 80px 0;
-          background: white;
         }
-        
-        .how-it-works h2 {
-          text-align: center;
-          font-size: 42px;
-          margin-bottom: 60px;
+
+        .how-it-works-section h2 {
+          font-size: 36px;
           color: #212121;
-          font-weight: bold;
+          margin-bottom: 60px;
+          text-align: center;
         }
-        
-        .steps {
+
+        .steps-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 40px;
         }
-        
+
         .step {
           text-align: center;
         }
-        
-        .step-number {
+
+        .step .icon {
           width: 80px;
           height: 80px;
-          background: #1a237e;
-          color: white;
+          background-color: #1a237e;
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -451,41 +357,32 @@ export default function Home() {
           font-size: 32px;
           font-weight: bold;
           margin: 0 auto 25px;
+          color: white;
         }
-        
+
         .step h3 {
           font-size: 22px;
           margin-bottom: 15px;
           color: #212121;
           font-weight: 600;
         }
-        
+
         .step p {
           color: #666;
           font-size: 16px;
           line-height: 1.6;
         }
-        
+
+        /* Responsive */
         @media (max-width: 768px) {
           .hero h1 {
-            font-size: 32px;
+            font-size: 36px;
           }
-          
           .search-bar {
             flex-direction: column;
           }
-          
-          .category-select {
-            min-width: auto;
-          }
-          
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-          }
-          
-          .stat-number {
-            font-size: 36px;
+          .stats-grid, .category-grid, .steps-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           }
         }
       `}</style>
@@ -512,68 +409,59 @@ export default function Home() {
             <span className="trust-badge">⭐ AI Trust-Score</span>
           </div>
 
+          {/* Search Section */}
           <div className="search-section">
             <div className="search-bar">
-              <select 
-                className="category-select"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="">All Categories</option>
+              <select className="category-select">
+                <option value="all">All Categories</option>
                 <option value="steel">Steel & Metals</option>
                 <option value="textiles">Textiles & Fabrics</option>
-                <option value="electronics">Electronics</option>
+                <option value="electronics">Electronics & IT</option>
                 <option value="chemicals">Chemicals</option>
                 <option value="machinery">Machinery</option>
                 <option value="packaging">Packaging</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="construction">Construction</option>
+                <option value="auto">Auto Parts</option>
+                <option value="pharmaceuticals">Pharmaceuticals</option>
+                <option value="food">Food & Beverages</option>
+                <option value="services">Business Services</option>
               </select>
               <input
                 type="text"
                 className="search-input"
-                placeholder="What are you looking for today?"
+                placeholder="What are you looking for today? (e.g., Steel Pipes, Cotton Fabric)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button className="search-button">
-                Post Your RFQ
-              </button>
+              <button className="search-btn">Post Your RFQ</button>
             </div>
-
+            
             <div className="popular-searches">
-              <span className="popular-search">Steel Pipes</span>
-              <span className="popular-search">Cotton Fabric</span>
-              <span className="popular-search">Electronics Components</span>
-              <span className="popular-search">Chemical Raw Materials</span>
-              <span className="popular-search">Packaging Materials</span>
+              <a href="#" className="search-tag">Steel Pipes</a>
+              <a href="#" className="search-tag">Cotton Fabric</a>
+              <a href="#" className="search-tag">Electronics Components</a>
+              <a href="#" className="search-tag">Chemical Raw Materials</a>
+              <a href="#" className="search-tag">Packaging Materials</a>
             </div>
-            </div>
-
-          <div className="trust-badges">
-            <span className="badge green">
-              ✅ Escrow-Secured (ICICI Bank Partner)
-            </span>
-            <span className="badge blue">
-              ✅ GST & PAN Verified
-            </span>
-            <span className="badge orange">
-              ✅ AI Trust-Score
-            </span>
           </div>
         </div>
       </section>
 
       {/* Live RFQ Ticker */}
-      <section className="live-rfq-ticker">
-        <div className="container">
-          <div className="live-rfq-content">
-            <div className="live-indicator">
-              <div className="live-dot"></div>
-              <span>LIVE RFQs</span>
-            </div>
-            <div className="rfq-text">
-              {liveRFQs[currentRFQIndex]}
-            </div>
-          </div>
+      <section className="rfq-ticker">
+        <div className="rfq-content">
+          {liveRFQs.map((rfq, index) => (
+            <span key={index} className="rfq-item">
+              🔔 {rfq}
+            </span>
+          ))}
+          {/* Duplicate for continuous scroll */}
+          {liveRFQs.map((rfq, index) => (
+            <span key={`dup-${index}`} className="rfq-item">
+              🔔 {rfq}
+            </span>
+          ))}
         </div>
       </section>
 
@@ -582,20 +470,20 @@ export default function Home() {
         <div className="container">
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-number">45,000+</div>
-              <div className="stat-label">Verified Suppliers</div>
+              <h3>12,400+</h3>
+              <p>Verified Suppliers</p>
             </div>
             <div className="stat-item">
-              <div className="stat-number">2.5M</div>
-              <div className="stat-label">Products</div>
+              <h3>4,321</h3>
+              <p>RFQs Last Month</p>
             </div>
             <div className="stat-item">
-              <div className="stat-number">10,000+</div>
-              <div className="stat-label">RFQs Daily</div>
+              <h3>98%</h3>
+              <p>Success Rate</p>
             </div>
             <div className="stat-item">
-              <div className="stat-number">24hr</div>
-              <div className="stat-label">Response Time</div>
+              <h3>24hr</h3>
+              <p>Response Time</p>
             </div>
           </div>
         </div>
@@ -606,41 +494,94 @@ export default function Home() {
         <div className="container">
           <h2>Popular Categories</h2>
           <div className="category-grid">
-            {categories.map((category, index) => (
-              <div key={index} className="category-card">
-                <div className="category-icon">{category.icon}</div>
-                <h3>{category.name}</h3>
-                <p>{category.count} Suppliers</p>
-              </div>
-            ))}
+            <div className="category-card">
+              <div className="category-icon">🏗️</div>
+              <h3>Construction Materials</h3>
+              <p>5000+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">⚙️</div>
+              <h3>Industrial Machinery</h3>
+              <p>3200+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">📱</div>
+              <h3>Electronics & IT</h3>
+              <p>7800+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">👗</div>
+              <h3>Textiles & Garments</h3>
+              <p>6100+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">🧪</div>
+              <h3>Chemicals & Dyes</h3>
+              <p>2900+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">📦</div>
+              <h3>Packaging Solutions</h3>
+              <p>4500+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">🌾</div>
+              <h3>Agriculture & Food</h3>
+              <p>3800+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">🚗</div>
+              <h3>Automotive Parts</h3>
+              <p>2100+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">💊</div>
+              <h3>Pharmaceuticals</h3>
+              <p>1500+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">⚡</div>
+              <h3>Electrical Equipment</h3>
+              <p>3000+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">🛠️</div>
+              <h3>Tools & Hardware</h3>
+              <p>2700+ Products</p>
+            </div>
+            <div className="category-card">
+              <div className="category-icon">🛋️</div>
+              <h3>Furniture & Decor</h3>
+              <p>1900+ Products</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="how-it-works">
+      {/* How It Works Section */}
+      <section className="how-it-works-section">
         <div className="container">
           <h2>How Bell24h Works</h2>
-          <div className="steps">
+          <div className="steps-grid">
             <div className="step">
-              <div className="step-number">1</div>
-              <h3>Post Your RFQ</h3>
-              <p>Submit your requirements by voice, video, or text. Our AI understands your needs and matches with verified suppliers.</p>
+              <div className="icon">1</div>
+              <h3>Post Your Requirement</h3>
+              <p>Submit your RFQ via text, voice, or video. Our AI analyzes and matches you with relevant suppliers.</p>
             </div>
             <div className="step">
-              <div className="step-number">2</div>
+              <div className="icon">2</div>
               <h3>Get 3 Verified Quotes</h3>
-              <p>Receive AI-scored, GST-verified supplier quotes within 24 hours. 200+ data points analyzed for quality matches.</p>
+              <p>Receive competitive quotes from GST-verified suppliers within 24 hours. Compare and choose the best.</p>
             </div>
             <div className="step">
-              <div className="step-number">3</div>
-              <h3>Secure Escrow Payment</h3>
-              <p>Payment held in ICICI escrow until goods arrive. Full protection guaranteed with trade assurance.</p>
+              <div className="icon">3</div>
+              <h3>Secure Payments</h3>
+              <p>Transact securely with escrow protection. Funds are released only after you confirm satisfactory delivery.</p>
             </div>
             <div className="step">
-              <div className="step-number">4</div>
+              <div className="icon">4</div>
               <h3>Track & Manage</h3>
-              <p>Monitor your orders, communicate with suppliers, and manage your business relationships all in one place.</p>
+              <p>Monitor your orders, communicate with suppliers, and manage all your B2B activities from your dashboard.</p>
             </div>
           </div>
         </div>

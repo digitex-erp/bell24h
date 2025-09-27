@@ -1,95 +1,103 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+
+// Mock OTP storage (in production, use Redis or database)
+const otpStorage = new Map<string, { otp: string, timestamp: number }>();
+
+// Mock user database (in production, use real database)
+const users = new Map<string, any>([
+  ['9876543210', {
+    id: '1',
+    mobile: '9876543210',
+    name: 'Test User',
+    companyName: 'Test Company',
+    businessType: 'manufacturer',
+    verified: true
+  }]
+]);
 
 export async function POST(request: NextRequest) {
   try {
-    const { phone, otp } = await request.json();
+    const { mobile, otp } = await request.json();
 
     // Validate inputs
-    if (!phone || !otp) {
+    if (!mobile || !otp) {
       return NextResponse.json(
-        { success: false, error: 'Phone number and OTP are required' },
+        { success: false, error: 'Mobile number and OTP are required' },
         { status: 400 }
       );
     }
 
-    if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+    if (!/^\d{10}$/.test(mobile)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid mobile number format' },
+        { status: 400 }
+      );
+    }
+
+    if (!/^\d{6}$/.test(otp)) {
       return NextResponse.json(
         { success: false, error: 'Invalid OTP format' },
         { status: 400 }
       );
     }
 
-    // Get stored OTP from cookie (demo purposes)
-    const cookieStore = cookies();
-    const storedOTP = cookieStore.get('demo_otp')?.value;
-
-    if (!storedOTP) {
+    // Check if OTP exists and is valid
+    const storedOtp = otpStorage.get(mobile);
+    
+    if (!storedOtp) {
       return NextResponse.json(
-        { success: false, error: 'OTP expired or not found' },
+        { success: false, error: 'OTP not found. Please request a new OTP.' },
+        { status: 400 }
+      );
+    }
+
+    // Check if OTP is expired (5 minutes)
+    const isExpired = Date.now() - storedOtp.timestamp > 5 * 60 * 1000;
+    if (isExpired) {
+      otpStorage.delete(mobile);
+      return NextResponse.json(
+        { success: false, error: 'OTP has expired. Please request a new OTP.' },
         { status: 400 }
       );
     }
 
     // Verify OTP
-    if (otp !== storedOTP) {
+    if (storedOtp.otp !== otp) {
       return NextResponse.json(
-        { success: false, error: 'Invalid OTP' },
+        { success: false, error: 'Invalid OTP. Please try again.' },
         { status: 400 }
       );
     }
 
-    // OTP is valid - create user session
-    const user = {
-      id: `user_${Date.now()}`,
-      phone: phone,
-      email: `${phone.replace(/\D/g, '')}@bell24h.com`,
-      name: `User ${phone}`,
-      verified: true,
-      loginMethod: 'otp'
-    };
+    // OTP is valid - remove it
+    otpStorage.delete(mobile);
 
-    console.log('✅ OTP Verified Successfully:', user);
-
-    // Clear OTP cookie
-    const response = NextResponse.json({
-      success: true,
-      message: 'OTP verified successfully',
-      user: {
-        id: user.id,
-        phone: user.phone,
-        name: user.name,
-        email: user.email
-      },
-      redirectUrl: '/dashboard'
-    });
-
-    // Clear OTP cookie
-    response.cookies.set('demo_otp', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 0,
-      path: '/'
-    });
-
-    // Set user session cookie
-    response.cookies.set('user_session', JSON.stringify(user), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 86400, // 24 hours
-      path: '/'
-    });
-
-    return response;
+    // Check if user exists
+    const existingUser = users.get(mobile);
+    
+    if (existingUser) {
+      // Existing user - login successful
+      return NextResponse.json({
+        success: true,
+        message: 'Login successful',
+        isNewUser: false,
+        user: existingUser,
+        redirectUrl: '/dashboard'
+      });
+    } else {
+      // New user - need registration
+      return NextResponse.json({
+        success: true,
+        message: 'OTP verified. Please complete registration.',
+        isNewUser: true,
+        mobile
+      });
+    }
 
   } catch (error) {
-    console.error('OTP Verification Error:', error);
+    console.error('OTP verification error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: 'OTP verification failed',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
+      { success: false, error: 'OTP verification failed' },
       { status: 500 }
     );
   }
