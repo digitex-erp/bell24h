@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { 
   ArrowUp, 
   Users, 
-  Building2, 
+  Building, 
   DollarSign, 
   Activity, 
   ArrowUp,
@@ -154,7 +154,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
-                <Building2 className="w-6 h-6 text-green-600" />
+                <Building className="w-6 h-6 text-green-600" />
               </div>
             </div>
           </div>

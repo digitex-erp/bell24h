@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Filter, ChevronRight, TrendingUp, Star, Eye } from 'lucide-react';
+import { Search, Filter, ChevronRight, ArrowUpRight, Star, Eye } from 'lucide-react';
 
 // Import the existing categories data
 import { ALL_CATEGORIES } from '../data/categories';
@@ -119,7 +119,7 @@ export default function CategoriesSection() {
                     <div className="text-4xl">{category.icon}</div>
                     {category.trending && (
                       <div className="flex items-center gap-1 bg-orange-100 text-orange-600 px-2 py-1 rounded-full text-xs font-medium">
-                        <TrendingUp className="w-3 h-3" />
+                        <ArrowUpRight className="w-3 h-3" />
                         Trending
                       </div>
                     )}

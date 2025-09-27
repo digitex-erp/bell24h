@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { BarChart3, TrendingUp, Users, Globe, Target, Zap } from 'lucide-react';
+import { BarChart3, ArrowUpRight, Users, Globe, Target, Zap } from 'lucide-react';
 
 interface MetricData {
   label: string;
@@ -33,7 +33,7 @@ export default function AdvancedAnalyticsDashboard() {
         value: `${847 + Math.floor(Math.random() * 20)}`,
         change: 12.5 + Math.random() * 5,
         trend: 'up' as const,
-        icon: TrendingUp,
+        icon: ArrowUpRight,
         color: 'from-emerald-500 to-emerald-600',
       },
       {

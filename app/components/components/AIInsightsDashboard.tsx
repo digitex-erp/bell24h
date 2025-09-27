@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { RFQCategorizer, NLPAnalysis } from '@/ai/nlp-categorization';
-import { , Activity, AlertTriangle, Award, BarChart3, Brain, Eye, Info, LineChart, Target, TestTube, TrendingUp } from 'lucide-react';
+import { , Activity, AlertTriangle, Award, BarChart3, Brain, Eye, Info, LineChart, Target, TestTube, ArrowUpRight } from 'lucide-react';
 import { SupplierMatcher, SupplierRecommendation } from '@/ai/supplier-matching';
 import AITestRunner from './AITestRunner';
 import AILoadingStates, { AIErrorState, AICardSkeleton } from './AILoadingStates';
@@ -323,7 +323,7 @@ export function AIInsightsDashboard({
               { id: 'overview', label: 'Overview', icon: Eye },
               { id: 'nlp', label: 'NLP Analysis', icon: Target },
               { id: 'shap', label: 'SHAP Explanations', icon: BarChart3 },
-              { id: 'recommendations', label: 'Recommendations', icon: TrendingUp },
+              { id: 'recommendations', label: 'Recommendations', icon: ArrowUpRight },
               { id: 'predictive', label: 'Predictive Analytics', icon: LineChart },
               { id: 'testing', label: 'AI Testing', icon: TestTube },
               { id: 'performance', label: 'TensorFlow Performance', icon: Activity },
