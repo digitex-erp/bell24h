@@ -4,8 +4,20 @@ import Link from 'next/link';
 import { useState } from 'react';
 import AuthModal from './AuthModal';
 
-export default function Header() {
+interface HeaderProps {
+  onLoginClick?: () => void;
+}
+
+export default function Header({ onLoginClick }: HeaderProps) {
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleLoginClick = () => {
+    if (onLoginClick) {
+      onLoginClick();
+    } else {
+      setShowAuthModal(true);
+    }
+  };
 
   return (
     <>
@@ -282,12 +294,12 @@ export default function Header() {
               <span className="badge">5</span>
             </Link>
             
-            <button 
-              onClick={() => setShowAuthModal(true)}
-              className="login-btn"
-            >
-              Login / Join Free
-            </button>
+                <button
+                  onClick={handleLoginClick}
+                  className="login-btn"
+                >
+                  Login / Join Free
+                </button>
           </div>
         </div>
       </header>
