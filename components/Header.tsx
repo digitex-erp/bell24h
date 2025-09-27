@@ -13,8 +13,8 @@ export default function Header() {
         .top-bar {
           background: #0d47a1;
           color: white;
-          padding: 8px 0;
-          font-size: 14px;
+          padding: 6px 0;
+          font-size: 12px;
         }
         
         .top-bar .container {
@@ -43,7 +43,7 @@ export default function Header() {
         .main-header {
           background: #1a237e;
           color: white;
-          padding: 15px 0;
+          padding: 10px 0;
           position: sticky;
           top: 0;
           z-index: 1000;
@@ -72,13 +72,13 @@ export default function Header() {
         }
         
         .logo h1 {
-          font-size: 28px;
+          font-size: 24px;
           margin: 0;
           font-weight: bold;
         }
         
         .logo p {
-          font-size: 12px;
+          font-size: 10px;
           margin: 0;
           opacity: 0.9;
         }

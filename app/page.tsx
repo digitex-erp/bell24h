@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Head from 'next/head';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -41,6 +42,47 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>Bell24h - India's Fastest B2B Match-Making Engine | Post RFQ Get 3 Verified Quotes in 24 Hours</title>
+        <meta name="description" content="India's fastest B2B marketplace. Post RFQ and get 3 verified quotes in 24 hours. 45,000+ verified suppliers, 2.5M+ products. AI-powered matching with 200+ data signals. Escrow-secured payments." />
+        <meta name="keywords" content="B2B marketplace India, RFQ platform, verified suppliers, B2B procurement, Indian manufacturers, wholesale suppliers, business to business, procurement platform, supplier verification, B2B trading" />
+        <meta property="og:title" content="Bell24h - India's Fastest B2B Match-Making Engine" />
+        <meta property="og:description" content="Post RFQ. Get 3 Verified Quotes in 24 Hours. 45,000+ verified suppliers, 2.5M+ products. AI-powered matching with escrow-secured payments." />
+        <meta property="og:image" content="/og-image.png" />
+        <meta property="og:url" content="https://bell24h.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Bell24h - India's Fastest B2B Match-Making Engine" />
+        <meta name="twitter:description" content="Post RFQ. Get 3 Verified Quotes in 24 Hours. AI-powered B2B marketplace with verified suppliers." />
+        
+        {/* Structured Data for SEO */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Bell24h",
+            "description": "India's fastest B2B match-making engine for MSMEs",
+            "url": "https://bell24h.com",
+            "logo": "https://bell24h.com/logo.png",
+            "sameAs": [
+              "https://www.linkedin.com/company/bell24h",
+              "https://twitter.com/bell24h"
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+91-9876543210",
+              "contactType": "customer service",
+              "email": "support@bell24h.com"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Mumbai",
+              "addressRegion": "Maharashtra",
+              "addressCountry": "IN"
+            }
+          })}
+        </script>
+      </Head>
+
       <style jsx global>{`
         * {
           box-sizing: border-box;
@@ -86,6 +128,11 @@ export default function Home() {
           max-width: 800px;
           margin-left: auto;
           margin-right: auto;
+        }
+        
+        .hero-subtitle .highlight-text {
+          color: #1a237e;
+          font-weight: 600;
         }
         
         .search-section {
@@ -414,7 +461,7 @@ export default function Home() {
 
       <Header />
 
-      {/* Hero Section */}
+      {/* Hero Section - Exact Reference Match */}
       <section className="hero">
         <div className="container">
           <h1>
@@ -424,7 +471,7 @@ export default function Home() {
           
           <p className="hero-subtitle">
             200 live data signals—GST, credit, logistics, ESG—to match you with 3 pre-qualified suppliers. 
-            Escrow-secured payments until goods arrive.
+            <span className="highlight-text">Escrow-secured payments</span> until goods arrive.
           </p>
 
           <div className="search-section">
@@ -453,7 +500,7 @@ export default function Home() {
                 Search
               </button>
             </div>
-            
+
             <div className="popular-searches">
               <span className="popular-search">Steel Pipes</span>
               <span className="popular-search">Cotton Fabric</span>
@@ -461,7 +508,7 @@ export default function Home() {
               <span className="popular-search">Chemical Raw Materials</span>
               <span className="popular-search">Packaging Materials</span>
             </div>
-          </div>
+            </div>
 
           <div className="trust-badges">
             <span className="badge green">
@@ -563,5 +610,5 @@ export default function Home() {
 
       <Footer />
     </>
-  );
-}
+   );
+ }
