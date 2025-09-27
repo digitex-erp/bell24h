@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity, BarChart3, DollarSign, Eye, MessageSquare, Share2, Target, ArrowUpRight } from 'lucide-react';
+// Removed broken lucide-react import - using emojis instead
 import { useState } from 'react';
 
 interface Campaign {
