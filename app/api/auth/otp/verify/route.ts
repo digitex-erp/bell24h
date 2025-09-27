@@ -60,7 +60,8 @@ export async function POST(request: NextRequest) {
         phone: user.phone,
         name: user.name,
         email: user.email
-      }
+      },
+      redirectUrl: '/dashboard'
     });
 
     // Clear OTP cookie
