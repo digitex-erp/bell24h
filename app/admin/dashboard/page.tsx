@@ -2,18 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { 
-  Home, 
   Users, 
   Building, 
   DollarSign, 
-  Minus,
-  RefreshCw,
-  Maximize2,
-  Minimize2,
-  Cpu,
-  Shield,
-  Clock,
-  Zap
+  RefreshCw
 } from 'lucide-react';
 
 interface DashboardMetrics {
@@ -74,9 +66,9 @@ export default function DashboardPage() {
   };
 
   const getTrendIcon = (value: number, threshold: number = 0) => {
-    if (value > threshold) return <Home className="w-4 h-4 text-green-500" />;
-    if (value < threshold) return <Home className="w-4 h-4 text-red-500" />;
-    return <Minus className="w-4 h-4 text-gray-500" />;
+    if (value > threshold) return <span className="text-green-500">↗</span>;
+    if (value < threshold) return <span className="text-red-500">↘</span>;
+    return <span className="text-gray-500">→</span>;
   };
 
   const getTrendColor = (value: number, threshold: number = 0) => {
@@ -100,6 +92,7 @@ export default function DashboardPage() {
                 value={selectedTimeRange}
                 onChange={(e) => setSelectedTimeRange(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                title="Select time range for dashboard data"
               >
                 <option value="1d">Last 24 hours</option>
                 <option value="7d">Last 7 days</option>
@@ -185,7 +178,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="p-3 bg-green-100 rounded-lg">
-                <Home className="w-6 h-6 text-green-600" />
+                <span className="text-2xl">💚</span>
               </div>
             </div>
           </div>
@@ -199,7 +192,7 @@ export default function DashboardPage() {
               onClick={() => toggleCardExpansion('shap')}
               className="p-2 hover:bg-gray-100 rounded-lg"
             >
-              {expandedCards.has('shap') ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              {expandedCards.has('shap') ? '−' : '+'}
             </button>
           </div>
           <div className="space-y-4">
@@ -245,7 +238,7 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium text-gray-600">AI Accuracy</p>
                 <p className="text-2xl font-bold text-gray-900">{metrics.aiAccuracy}%</p>
               </div>
-              <Cpu className="w-8 h-8 text-purple-600" />
+              <span className="text-3xl">🤖</span>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-6">
@@ -254,7 +247,7 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium text-gray-600">Fraud Detection</p>
                 <p className="text-2xl font-bold text-gray-900">{metrics.fraudDetection}%</p>
               </div>
-              <Shield className="w-8 h-8 text-red-600" />
+              <span className="text-3xl">🛡️</span>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-6">
@@ -263,7 +256,7 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium text-gray-600">Uptime</p>
                 <p className="text-2xl font-bold text-gray-900">{metrics.uptime}%</p>
               </div>
-              <Clock className="w-8 h-8 text-green-600" />
+              <span className="text-3xl">⏰</span>
             </div>
           </div>
           <div className="bg-white rounded-xl shadow-lg p-6">
@@ -272,7 +265,7 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium text-gray-600">Performance</p>
                 <p className="text-2xl font-bold text-gray-900">{metrics.performanceScore}%</p>
               </div>
-              <Zap className="w-8 h-8 text-yellow-600" />
+              <span className="text-3xl">⚡</span>
             </div>
           </div>
         </div>
