@@ -31,18 +31,5 @@
         }
       ]
     }
-  ],
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.bell24h.com"
-        }
-      ],
-      "destination": "https://bell24h.com/$1",
-      "permanent": true
-    }
   ]
 }
