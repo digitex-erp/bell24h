@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { featureFlags } from '@/lib/featureFlags';
@@ -14,6 +15,8 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [demoOTP, setDemoOTP] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Mobile OTP Login Functions
   const sendOTP = async () => {
@@ -124,36 +127,26 @@ export default function HomePage() {
       <div className="bg-gradient-to-br from-indigo-50 via-white to-emerald-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Main Headline */}
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
             India's Leading{' '}
             <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               AI-Powered B2B Marketplace
             </span>
           </h1>
 
-          {/* Trust Badges */}
+          {/* Feature Pills */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
-            <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-green-100 text-green-800">
-              <span className="text-sm font-semibold">🇮🇳 Made in India</span>
-            </div>
-            <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-blue-100 text-blue-800">
-              <span className="text-sm font-semibold">✅ GST Compliant</span>
-            </div>
-            <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-orange-100 text-orange-800">
-              <span className="text-sm font-semibold">🏢 MSME Friendly</span>
-            </div>
-            <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-purple-100 text-purple-800">
-              <span className="text-sm font-semibold">💳 UPI Payments</span>
-            </div>
-            <div className="flex items-center space-x-2 px-4 py-2 rounded-full bg-red-100 text-red-800">
-              <span className="text-sm font-semibold">🗣️ Hindi Support</span>
-            </div>
+            <span className="bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold">✅ GST Verified</span>
+            <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold">🛡️ Escrow Protected</span>
+            <span className="bg-purple-100 text-purple-800 px-4 py-2 rounded-full font-semibold">🤖 AI Powered</span>
+            <span className="bg-orange-100 text-orange-800 px-4 py-2 rounded-full font-semibold">🎤 Voice RFQs</span>
+            <span className="bg-pink-100 text-pink-800 px-4 py-2 rounded-full font-semibold">📹 Video RFQs</span>
+            <span className="bg-red-100 text-red-800 px-4 py-2 rounded-full font-semibold">🗣️ Hindi Support</span>
           </div>
 
           {/* Description */}
-          <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-            Connect with verified Indian suppliers and buyers using advanced AI matching, 
-            secure escrow payments, and intelligent analytics for seamless B2B transactions.
+          <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
+            Voice RFQs • Video RFQs • AI Matching • Secure Escrow • Real-time Analytics • Mobile OTP Login
           </p>
 
           {/* Location */}
@@ -162,8 +155,24 @@ export default function HomePage() {
             <span className="text-lg font-medium">Based in Mumbai, Maharashtra - Serving All India</span>
           </div>
 
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <button 
+              onClick={() => setShowLoginModal(true)}
+              className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition"
+            >
+              Login with Mobile OTP
+            </button>
+            <Link href="/rfq/create" className="bg-white text-indigo-600 border-2 border-indigo-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-50 transition">
+              Create RFQ
+            </Link>
+            <Link href="/dashboard" className="bg-gray-800 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-900 transition">
+              View Dashboard
+            </Link>
+          </div>
+
           {/* Search Bar */}
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 mb-8">
+          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
             <div className="flex flex-col md:flex-row gap-4">
               {/* Search Input */}
               <div className="flex-1">
@@ -171,6 +180,8 @@ export default function HomePage() {
                   <input
                     type="text"
                     placeholder="What are you looking for? (e.g., 'steel pipes', 'textiles')"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-lg"
                   />
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -181,13 +192,17 @@ export default function HomePage() {
 
               {/* Category Dropdown */}
               <div className="md:w-64">
-                <select className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-lg">
-                  <option>All Categories</option>
-                  <option>Steel & Metals</option>
-                  <option>Textiles</option>
-                  <option>Electronics</option>
-                  <option>Chemicals</option>
-                  <option>Machinery</option>
+                <select 
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-lg"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="steel">Steel & Metals</option>
+                  <option value="textiles">Textiles</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="chemicals">Chemicals</option>
+                  <option value="machinery">Machinery</option>
                 </select>
               </div>
 
@@ -205,36 +220,122 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Why Choose Bell24h Section */}
+      {/* Stats Section */}
+      <div className="bg-white py-16 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-4xl font-bold text-indigo-600">1,250+</div>
+              <div className="text-gray-600">Active Users</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-green-600">847</div>
+              <div className="text-gray-600">Verified Suppliers</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-purple-600">98%</div>
+              <div className="text-gray-600">AI Accuracy</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-orange-600">24hr</div>
+              <div className="text-gray-600">Quote Time</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Features Grid */}
+      <div className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-4xl font-bold text-center mb-16">Platform Features</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Voice RFQ */}
+            <Link href="/rfq/voice" className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition">
+              <div className="text-4xl mb-4">🎤</div>
+              <h3 className="text-2xl font-bold mb-3">Voice RFQs</h3>
+              <p className="text-gray-600">Create RFQs by speaking. 60-second voice recording with AI transcription.</p>
+            </Link>
+            
+            {/* Video RFQ */}
+            <Link href="/rfq/video" className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition">
+              <div className="text-4xl mb-4">📹</div>
+              <h3 className="text-2xl font-bold mb-3">Video RFQs</h3>
+              <p className="text-gray-600">Show what you need. 120-second video recording with AI analysis.</p>
+            </Link>
+            
+            {/* AI Dashboard */}
+            <Link href="/admin/dashboard" className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition">
+              <div className="text-4xl mb-4">🤖</div>
+              <h3 className="text-2xl font-bold mb-3">AI Analytics</h3>
+              <p className="text-gray-600">Advanced analytics with SHAP explainability and trust scoring.</p>
+            </Link>
+            
+            {/* Mobile OTP */}
+            <Link href="/auth/phone-email" className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition">
+              <div className="text-4xl mb-4">📱</div>
+              <h3 className="text-2xl font-bold mb-3">Mobile OTP Login</h3>
+              <p className="text-gray-600">Secure authentication with instant OTP verification.</p>
+            </Link>
+            
+            {/* Escrow */}
+            <Link href="/escrow" className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition">
+              <div className="text-4xl mb-4">🔒</div>
+              <h3 className="text-2xl font-bold mb-3">Escrow Protection</h3>
+              <p className="text-gray-600">100% payment security with milestone-based releases.</p>
+            </Link>
+            
+            {/* Pricing */}
+            <Link href="/pricing" className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition">
+              <div className="text-4xl mb-4">💎</div>
+              <h3 className="text-2xl font-bold mb-3">Flexible Pricing</h3>
+              <p className="text-gray-600">Plans from Free to Enterprise starting at ₹0/month.</p>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* How It Works */}
       <div className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">
-              Why Choose Bell24h?
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🛡️</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Secure Payments</h3>
-                <p className="text-gray-600">Escrow-protected transactions with GST-verified suppliers</p>
+          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-indigo-600">1</span>
               </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">⏰</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">24-Hour Quotes</h3>
-                <p className="text-gray-600">Get competitive quotes from verified suppliers within 24 hours</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🤖</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">AI-Powered Matching</h3>
-                <p className="text-gray-600">Advanced AI algorithms match you with the best suppliers</p>
-              </div>
+              <h3 className="font-semibold text-xl mb-2">Post Your Requirement</h3>
+              <p className="text-gray-600">Use text, voice, or video to create RFQs and get quotes from verified suppliers</p>
             </div>
+            <div className="text-center">
+              <div className="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-indigo-600">2</span>
+              </div>
+              <h3 className="font-semibold text-xl mb-2">Compare & Choose</h3>
+              <p className="text-gray-600">Compare prices, ratings, and AI trust scores to find the best supplier</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-indigo-600">3</span>
+              </div>
+              <h3 className="font-semibold text-xl mb-2">Secure Transaction</h3>
+              <p className="text-gray-600">Complete your purchase with escrow protection and track delivery</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
+        <div className="max-w-4xl mx-auto text-center px-4">
+          <h2 className="text-3xl font-bold mb-4">Ready to Grow Your Business?</h2>
+          <p className="text-xl mb-8">Join thousands of businesses already using Bell24h</p>
+          <div className="flex gap-4 justify-center">
+            <Link href="/auth/register" className="bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100">
+              Register as Buyer
+            </Link>
+            <Link href="/claim-company" className="bg-transparent border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-600">
+              Become a Supplier
+            </Link>
           </div>
         </div>
       </div>
@@ -250,35 +351,38 @@ export default function HomePage() {
                 </div>
                 <span className="text-xl font-bold">Bell24h</span>
               </div>
-              <p className="text-gray-400">India's fastest B2B marketplace connecting verified suppliers and buyers.</p>
+              <p className="text-gray-400">India's fastest B2B marketplace with AI-powered matching, voice/video RFQs, and secure escrow payments.</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+              <h3 className="text-lg font-semibold mb-4">RFQ Features</h3>
               <ul className="space-y-2">
-                <li><a href="/about" className="text-gray-400 hover:text-white">About Us</a></li>
-                <li><a href="/contact" className="text-gray-400 hover:text-white">Contact</a></li>
-                <li><a href="/help" className="text-gray-400 hover:text-white">Help Center</a></li>
+                <li><Link href="/rfq" className="text-gray-400 hover:text-white">Create Text RFQ</Link></li>
+                <li><Link href="/rfq/voice" className="text-gray-400 hover:text-white">Voice RFQ</Link></li>
+                <li><Link href="/rfq/video" className="text-gray-400 hover:text-white">Video RFQ</Link></li>
+                <li><Link href="/dashboard" className="text-gray-400 hover:text-white">Dashboard</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Legal</h3>
+              <h3 className="text-lg font-semibold mb-4">Platform</h3>
               <ul className="space-y-2">
-                <li><a href="/terms" className="text-gray-400 hover:text-white">Terms of Service</a></li>
-                <li><a href="/privacy" className="text-gray-400 hover:text-white">Privacy Policy</a></li>
-                <li><a href="/refund-policy" className="text-gray-400 hover:text-white">Refund Policy</a></li>
+                <li><Link href="/pricing" className="text-gray-400 hover:text-white">Pricing Plans</Link></li>
+                <li><Link href="/escrow" className="text-gray-400 hover:text-white">Escrow Protection</Link></li>
+                <li><Link href="/wallet" className="text-gray-400 hover:text-white">Wallet</Link></li>
+                <li><Link href="/admin/dashboard" className="text-gray-400 hover:text-white">Admin Panel</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
+              <h3 className="text-lg font-semibold mb-4">Support</h3>
               <div className="space-y-2">
                 <p className="text-gray-400">📞 +91 98765 43210</p>
                 <p className="text-gray-400">✉️ support@bell24h.com</p>
                 <p className="text-gray-400">📍 Mumbai, Maharashtra</p>
+                <Link href="/help" className="text-gray-400 hover:text-white block">Help Center</Link>
               </div>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-            <p className="text-gray-400">&copy; 2024 Bell24h. All rights reserved.</p>
+            <p className="text-gray-400">&copy; 2024 Bell24h. All rights reserved. | Made in India 🇮🇳</p>
           </div>
         </div>
       </footer>
