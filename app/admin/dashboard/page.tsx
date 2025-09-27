@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { 
-  TrendingUp, 
+  ArrowUp, 
   Users, 
   Building2, 
   DollarSign, 
@@ -314,3 +314,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
