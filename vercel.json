@@ -38,10 +38,10 @@
       "has": [
         {
           "type": "host",
-          "value": "bell24h.com"
+          "value": "www.bell24h.com"
         }
       ],
-      "destination": "https://www.bell24h.com/$1",
+      "destination": "https://bell24h.com/$1",
       "permanent": true
     }
   ]
