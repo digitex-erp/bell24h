@@ -10,6 +10,7 @@ interface HeaderProps {
 
 export default function Header({ onLoginClick }: HeaderProps) {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showAIDropdown, setShowAIDropdown] = useState(false);
 
   const handleLoginClick = () => {
     if (onLoginClick) {
@@ -53,8 +54,8 @@ export default function Header({ onLoginClick }: HeaderProps) {
         }
         
         .main-header {
-          background: #1a237e;
-          color: white;
+          background: white;
+          color: #333;
           padding: 10px 0;
           position: sticky;
           top: 0;
@@ -75,11 +76,20 @@ export default function Header({ onLoginClick }: HeaderProps) {
           display: flex;
           align-items: center;
           text-decoration: none;
-          color: white;
+          color: #333;
         }
         
-        .logo img {
-          height: 45px;
+        .logo .logo-icon {
+          width: 40px;
+          height: 40px;
+          background: #2563eb;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 20px;
+          font-weight: bold;
           margin-right: 10px;
         }
         
@@ -87,12 +97,13 @@ export default function Header({ onLoginClick }: HeaderProps) {
           font-size: 24px;
           margin: 0;
           font-weight: bold;
+          color: #1f2937;
         }
         
         .logo p {
           font-size: 10px;
           margin: 0;
-          opacity: 0.9;
+          color: #6b7280;
         }
         
         .main-nav ul {
@@ -104,7 +115,7 @@ export default function Header({ onLoginClick }: HeaderProps) {
         }
         
         .main-nav a {
-          color: white;
+          color: #374151;
           text-decoration: none;
           font-weight: 500;
           transition: color 0.3s;
@@ -114,7 +125,7 @@ export default function Header({ onLoginClick }: HeaderProps) {
         }
         
         .main-nav a:hover {
-          color: #ff6f00;
+          color: #2563eb;
         }
         
         .dropdown {
@@ -152,7 +163,7 @@ export default function Header({ onLoginClick }: HeaderProps) {
         
         .dropdown-menu a:hover {
           background: #f5f5f5;
-          color: #1a237e;
+          color: #2563eb;
         }
         
         .header-actions {
@@ -161,48 +172,23 @@ export default function Header({ onLoginClick }: HeaderProps) {
           align-items: center;
         }
         
-        .messages-link {
-          position: relative;
-          color: white;
-          text-decoration: none;
-          font-weight: 500;
-        }
-        
-        .messages-link:hover {
-          color: #ff6f00;
-        }
-        
-        .badge {
-          position: absolute;
-          top: -5px;
-          right: -5px;
-          background: #ff6f00;
-          color: white;
-          border-radius: 50%;
-          width: 20px;
-          height: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: bold;
-        }
-        
         .login-btn {
-          background: #ff6f00;
+          background: #2563eb;
           color: white;
           padding: 10px 25px;
-          border-radius: 5px;
+          border-radius: 8px;
           border: none;
-          font-weight: bold;
+          font-weight: 600;
           cursor: pointer;
           transition: background 0.3s;
           text-decoration: none;
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
         }
         
         .login-btn:hover {
-          background: #e65100;
+          background: #1d4ed8;
         }
         
         @media (max-width: 768px) {
@@ -211,10 +197,6 @@ export default function Header({ onLoginClick }: HeaderProps) {
           }
           
           .main-nav {
-            display: none;
-          }
-          
-          .header-actions .messages-link {
             display: none;
           }
         }
@@ -240,45 +222,24 @@ export default function Header({ onLoginClick }: HeaderProps) {
         <div className="container">
           {/* Logo */}
           <Link href="/" className="logo">
-            <div style={{
-              width: '45px',
-              height: '45px',
-              background: '#ff6f00',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontSize: '24px',
-              fontWeight: 'bold',
-              marginRight: '10px'
-            }}>
-              B
-            </div>
+            <div className="logo-icon">B</div>
             <div>
               <h1>Bell24h</h1>
-              <p>B2B Marketplace</p>
+              <p>Enterprise B2B</p>
             </div>
           </Link>
 
           {/* Main Navigation */}
           <nav className="main-nav">
             <ul>
-              <li><Link href="/">Home</Link></li>
-              <li className="dropdown">
-                <a>Find Suppliers ▼</a>
-                <div className="dropdown-menu">
-                  <Link href="/suppliers/verified">Verified Suppliers</Link>
-                  <Link href="/suppliers/manufacturers">Manufacturers</Link>
-                  <Link href="/suppliers/exporters">Exporters</Link>
-                  <Link href="/suppliers/wholesalers">Wholesalers</Link>
-                </div>
-              </li>
-              <li><Link href="/products">Products</Link></li>
+              <li><Link href="/">🏠 Home</Link></li>
+              <li><Link href="/suppliers">🏢 Supplier Showcase</Link></li>
+              <li><Link href="/services/finance">📋 Fintech Services</Link></li>
+              <li><Link href="/services/escrow">💳 Wallet & Escrow</Link></li>
               <li className="dropdown">
                 <a>🤖 AI Features ▼</a>
                 <div className="dropdown-menu">
-                  <Link href="/dashboard/ai-features">🧠 AI Dashboard</Link>
+                  <Link href="/dashboard/ai-features">🧠 AI Features Dashboard</Link>
                   <Link href="/voice-rfq">🎤 Voice RFQ</Link>
                   <Link href="/dashboard/ai-features">🔍 AI Explainability</Link>
                   <Link href="/dashboard/ai-features">⚠️ Risk Scoring</Link>
@@ -286,31 +247,17 @@ export default function Header({ onLoginClick }: HeaderProps) {
                   <Link href="/dashboard/ai-features">🎯 Smart Matching</Link>
                 </div>
               </li>
-              <li><Link href="/rfq/post">Post Buy Requirement</Link></li>
-              <li className="dropdown">
-                <a>Services ▼</a>
-                <div className="dropdown-menu">
-                  <Link href="/services/logistics">Logistics</Link>
-                  <Link href="/services/inspection">Inspection</Link>
-                  <Link href="/services/finance">Trade Finance</Link>
-                </div>
-              </li>
             </ul>
           </nav>
 
           {/* Right Actions */}
           <div className="header-actions">
-            <Link href="/messages" className="messages-link">
-              💬 Messages
-              <span className="badge">5</span>
-            </Link>
-            
-                <button
-                  onClick={handleLoginClick}
-                  className="login-btn"
-                >
-                  Login / Join Free
-                </button>
+            <button
+              onClick={handleLoginClick}
+              className="login-btn"
+            >
+              Login <span>→</span>
+            </button>
           </div>
         </div>
       </header>
