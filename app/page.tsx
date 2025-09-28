@@ -129,6 +129,7 @@ export default function Home() {
         
         .hero h1 .highlight {
           color: #1a237e;
+          font-weight: 700;
         }
         
         .hero-subtitle {
@@ -142,7 +143,10 @@ export default function Home() {
         
         .hero-subtitle .highlight-text {
           color: #1a237e;
-          font-weight: 600;
+          font-weight: 700;
+          background-color: rgba(26, 35, 126, 0.1);
+          padding: 2px 6px;
+          border-radius: 4px;
         }
 
         /* Trust Badges - Exact Match */
@@ -207,12 +211,21 @@ export default function Home() {
           border: none;
           padding: 12px 25px;
           font-size: 16px;
+          font-weight: 600;
           cursor: pointer;
-          transition: background-color 0.3s;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 4px rgba(255, 111, 0, 0.3);
         }
 
         .search-button:hover {
           background-color: #e65100;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(255, 111, 0, 0.4);
+        }
+
+        .search-button:active {
+          transform: translateY(0);
+          box-shadow: 0 2px 4px rgba(255, 111, 0, 0.3);
         }
 
         .popular-searches {
@@ -224,17 +237,22 @@ export default function Home() {
         }
 
         .popular-search {
-          background-color: #e0e0e0;
-          color: #424242;
+          background-color: #f0f4ff;
+          color: #1a237e;
           padding: 8px 15px;
           border-radius: 20px;
           font-size: 14px;
+          font-weight: 500;
           cursor: pointer;
-          transition: background-color 0.3s;
+          transition: all 0.3s ease;
+          border: 1px solid rgba(26, 35, 126, 0.2);
         }
 
         .popular-search:hover {
-          background-color: #bdbdbd;
+          background-color: #1a237e;
+          color: white;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(26, 35, 126, 0.3);
         }
 
         /* Live RFQ Ticker */
@@ -531,13 +549,15 @@ export default function Home() {
               />
               <button 
                 className="search-button"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   if (searchQuery.trim()) {
                     router.push(`/rfq/create?query=${encodeURIComponent(searchQuery)}&category=${selectedCategory}`);
                   } else {
                     router.push('/rfq/create');
                   }
                 }}
+                type="button"
               >
                 Post Your RFQ
               </button>
