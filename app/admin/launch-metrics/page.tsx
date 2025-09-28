@@ -71,7 +71,7 @@ export default function LaunchMetricsPage() {
       value: '₹12.50',
       change: 5.4,
       trend: 'up',
-      icon: '📊',
+      icon: '📈',
       color: 'text-red-600'
     },
     {
@@ -79,7 +79,7 @@ export default function LaunchMetricsPage() {
       value: '4.2x',
       change: 18.9,
       trend: 'up',
-      icon: '📊',
+      icon: '📈',
       color: 'text-indigo-600'
     }
   ];
@@ -173,9 +173,9 @@ export default function LaunchMetricsPage() {
       case 'paid':
         return <span className="text-lg">💰</span>;
       case 'content':
-        return <span className="text-lg">📊</span>;
+        return <span className="text-lg">📈</span>;
       default:
-        return <span className="text-lg">📊</span>;
+        return <span className="text-lg">📈</span>;
     }
   };
 
@@ -186,7 +186,7 @@ export default function LaunchMetricsPage() {
       case 'down':
         return <span className="text-red-600">↘️</span>;
       default:
-        return <span className="text-gray-600">📊</span>;
+        return <span className="text-gray-600">📈</span>;
     }
   };
 
@@ -203,7 +203,7 @@ export default function LaunchMetricsPage() {
         <div className="border-b border-gray-200 mb-8">
           <nav className="flex space-x-8">
             {[
-              { id: 'overview', name: 'Overview', icon: '📊' },
+              { id: 'overview', name: 'Overview', icon: '📈' },
               { id: 'campaigns', name: 'Campaigns', icon: '🎯' },
               { id: 'analytics', name: 'Analytics', icon: '📈' }
             ].map((tab) => (
@@ -271,7 +271,7 @@ export default function LaunchMetricsPage() {
               <h3 className="text-lg font-medium text-gray-900 mb-4">Performance Trends</h3>
               <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
                 <div className="text-center">
-                  <span className="text-5xl text-gray-400 mx-auto mb-4">📊</span>
+                  <span className="text-5xl text-gray-400 mx-auto mb-4">📈</span>
                   <p className="text-gray-500">Performance chart would be displayed here</p>
                 </div>
               </div>
