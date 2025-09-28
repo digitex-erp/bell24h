@@ -1,12 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Voice RFQ - Bell24h',
-  description: 'Create RFQs using voice commands and AI'
-};
 
 interface VoiceRFQData {
   id: string;
