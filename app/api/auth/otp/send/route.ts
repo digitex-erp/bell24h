@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { msg91Service } from '@/lib/msg91';
-
-// Mock OTP storage (in production, use Redis or database)
-const otpStorage = new Map<string, { otp: string, timestamp: number }>();
+import { otpStorage } from '@/lib/otp-storage';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,10 +18,7 @@ export async function POST(request: NextRequest) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Store OTP with timestamp (valid for 5 minutes)
-    otpStorage.set(mobile, {
-      otp,
-      timestamp: Date.now()
-    });
+    otpStorage.set(mobile, otp);
 
     // Send OTP via your shared MSG91 API
     let smsResult;

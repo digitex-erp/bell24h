@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { otpStorage } from '@/lib/otp-storage';
 
-// Mock OTP storage (in production, use Redis or database)
-const otpStorage = new Map<string, { otp: string, timestamp: number }>();
+// Initialize with a test OTP for development
+if (process.env.NODE_ENV === 'development') {
+  otpStorage.set('9876543210', '123456');
+}
 
 // Mock user database (in production, use real database)
 const users = new Map<string, any>([
@@ -52,7 +55,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if OTP is expired (5 minutes)
-    const isExpired = Date.now() - storedOtp.timestamp > 5 * 60 * 1000;
+    const isExpired = otpStorage.isExpired(storedOtp.timestamp, 5);
     if (isExpired) {
       otpStorage.delete(mobile);
       return NextResponse.json(

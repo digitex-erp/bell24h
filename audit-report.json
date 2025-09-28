@@ -1,0 +1,429 @@
+{
+  "timestamp": "2025-09-28T16:07:03.818Z",
+  "summary": {
+    "totalPages": 13,
+    "workingPages": 1,
+    "totalAPIs": 0,
+    "workingAPIs": 0,
+    "totalErrors": 5
+  },
+  "pages": [
+    {
+      "url": "http://localhost:3000",
+      "pageName": "Home Page",
+      "status": 200,
+      "hasTitle": true,
+      "hasMetaDescription": true,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 3,
+        "headingsCount": 33,
+        "formLabelsCount": 2,
+        "score": 80
+      },
+      "functionality": {
+        "buttonsCount": 7,
+        "linksCount": 44,
+        "formsCount": 0,
+        "score": 70
+      },
+      "styling": {
+        "inlineStylesCount": 11,
+        "cssClassesCount": 264,
+        "hasProperContrast": false
+      }
+    },
+    {
+      "url": "http://localhost:3000/about",
+      "pageName": "About Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/contact",
+      "pageName": "Contact Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/login",
+      "pageName": "Login Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/register",
+      "pageName": "Register Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/dashboard",
+      "pageName": "Dashboard Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/suppliers",
+      "pageName": "Suppliers Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/products",
+      "pageName": "Products Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/rfq",
+      "pageName": "RFQ Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/pricing",
+      "pageName": "Pricing Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/help",
+      "pageName": "Help Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/terms",
+      "pageName": "Terms Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    },
+    {
+      "url": "http://localhost:3000/privacy",
+      "pageName": "Privacy Page",
+      "status": 500,
+      "hasTitle": false,
+      "hasMetaDescription": false,
+      "hasViewport": true,
+      "hasFavicon": false,
+      "accessibility": {
+        "altTextCount": 0,
+        "headingsCount": 0,
+        "formLabelsCount": 0,
+        "score": 0
+      },
+      "functionality": {
+        "buttonsCount": 0,
+        "linksCount": 0,
+        "formsCount": 0,
+        "score": 0
+      },
+      "styling": {
+        "inlineStylesCount": 0,
+        "cssClassesCount": 0,
+        "hasProperContrast": true
+      }
+    }
+  ],
+  "functionality": [],
+  "errors": [
+    {
+      "api": "/api/auth/otp/send",
+      "method": "POST",
+      "error": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    {
+      "api": "/api/auth/otp/verify",
+      "method": "POST",
+      "error": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    {
+      "api": "/api/rfq/list",
+      "method": "GET",
+      "error": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    {
+      "api": "/api/suppliers",
+      "method": "GET",
+      "error": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    {
+      "api": "/api/categories",
+      "method": "GET",
+      "error": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "SEO",
+      "priority": "HIGH",
+      "issue": "Missing page titles",
+      "affectedPages": [
+        "About Page",
+        "Contact Page",
+        "Login Page",
+        "Register Page",
+        "Dashboard Page",
+        "Suppliers Page",
+        "Products Page",
+        "RFQ Page",
+        "Pricing Page",
+        "Help Page",
+        "Terms Page",
+        "Privacy Page"
+      ],
+      "fix": "Add proper <title> tags to all pages"
+    },
+    {
+      "type": "Accessibility",
+      "priority": "HIGH",
+      "issue": "Low accessibility scores",
+      "affectedPages": [
+        "About Page",
+        "Contact Page",
+        "Login Page",
+        "Register Page",
+        "Dashboard Page",
+        "Suppliers Page",
+        "Products Page",
+        "RFQ Page",
+        "Pricing Page",
+        "Help Page",
+        "Terms Page",
+        "Privacy Page"
+      ],
+      "fix": "Add alt text, proper headings, and form labels"
+    },
+    {
+      "type": "Accessibility",
+      "priority": "HIGH",
+      "issue": "Contrast issues detected",
+      "affectedPages": [
+        "Home Page"
+      ],
+      "fix": "Improve text/background contrast ratios"
+    }
+  ]
+}

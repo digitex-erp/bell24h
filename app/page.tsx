@@ -125,6 +125,18 @@ export default function Home() {
           color: #212121;
         }
         
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+        
         .container {
           max-width: 1200px;
           margin: 0 auto;
@@ -152,11 +164,12 @@ export default function Home() {
         
         .hero-subtitle {
           font-size: 18px;
-          color: #666;
+          color: #424242;
           margin-bottom: 30px;
           max-width: 800px;
           margin-left: auto;
           margin-right: auto;
+          line-height: 1.6;
         }
         
         .hero-subtitle .highlight-text {
@@ -227,11 +240,24 @@ export default function Home() {
           padding: 12px 25px;
           font-size: 16px;
           cursor: pointer;
-          transition: background-color 0.3s;
+          transition: all 0.3s;
+          font-weight: 600;
+          border-radius: 0 8px 8px 0;
         }
 
         .search-button:hover {
           background-color: #e65100;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(255, 111, 0, 0.3);
+        }
+
+        .search-button:focus {
+          outline: 2px solid #1a237e;
+          outline-offset: 2px;
+        }
+
+        .search-button:active {
+          transform: translateY(0);
         }
 
         .popular-searches {
@@ -243,17 +269,27 @@ export default function Home() {
         }
 
         .popular-search {
-          background-color: #e0e0e0;
-          color: #424242;
+          background-color: #f5f5f5;
+          color: #1a237e;
           padding: 8px 15px;
           border-radius: 20px;
           font-size: 14px;
           cursor: pointer;
-          transition: background-color 0.3s;
+          transition: all 0.3s;
+          border: 1px solid #e0e0e0;
+          font-weight: 500;
         }
 
         .popular-search:hover {
-          background-color: #bdbdbd;
+          background-color: #1a237e;
+          color: white;
+          border-color: #1a237e;
+          transform: translateY(-1px);
+        }
+
+        .popular-search:focus {
+          outline: 2px solid #ff6f00;
+          outline-offset: 2px;
         }
 
         /* Live RFQ Ticker */
@@ -304,7 +340,8 @@ export default function Home() {
 
         .stat-item p {
           font-size: 16px;
-          color: #757575;
+          color: #424242;
+          font-weight: 500;
         }
 
         /* Categories Section */
@@ -352,7 +389,8 @@ export default function Home() {
 
         .category-card p {
           font-size: 13px;
-          color: #757575;
+          color: #424242;
+          font-weight: 500;
         }
 
         /* How It Works Section */
@@ -388,7 +426,8 @@ export default function Home() {
 
         .step-item p {
           font-size: 16px;
-          color: #757575;
+          color: #424242;
+          line-height: 1.6;
         }
 
         /* Testimonials Section */
@@ -522,10 +561,13 @@ export default function Home() {
 
           <div className="search-section">
             <div className="search-bar">
+              <label htmlFor="category-select" className="sr-only">Select Category</label>
               <select 
+                id="category-select"
                 className="category-select"
                 value={selectedCategory || 'all'}
                 onChange={(e) => handleCategoryChange(e.target.value || 'all')}
+                aria-label="Select product category"
               >
                 <option value="all">All Categories</option>
                 <option value="steel">Steel & Metals</option>
@@ -541,24 +583,67 @@ export default function Home() {
                 <option value="food">Food & Beverages</option>
                 <option value="services">Business Services</option>
               </select>
+              <label htmlFor="search-input" className="sr-only">Search for products</label>
               <input
+                id="search-input"
                 type="text"
                 className="search-input"
                 placeholder="What are you looking for today?"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search for products or services"
               />
-              <button className="search-button" onClick={handleSearch}>
+              <button 
+                className="search-button" 
+                onClick={handleSearch}
+                type="button"
+                aria-label="Post your RFQ requirement"
+              >
                 Post Your RFQ
               </button>
             </div>
 
             <div className="popular-searches">
-              <span className="popular-search" onClick={() => handlePopularSearch('Steel Pipes')}>Steel Pipes</span>
-              <span className="popular-search" onClick={() => handlePopularSearch('Cotton Fabric')}>Cotton Fabric</span>
-              <span className="popular-search" onClick={() => handlePopularSearch('Electronics Components')}>Electronics Components</span>
-              <span className="popular-search" onClick={() => handlePopularSearch('Chemical Raw Materials')}>Chemical Raw Materials</span>
-              <span className="popular-search" onClick={() => handlePopularSearch('Packaging Materials')}>Packaging Materials</span>
+              <button 
+                className="popular-search" 
+                onClick={() => handlePopularSearch('Steel Pipes')}
+                type="button"
+                aria-label="Search for Steel Pipes"
+              >
+                Steel Pipes
+              </button>
+              <button 
+                className="popular-search" 
+                onClick={() => handlePopularSearch('Cotton Fabric')}
+                type="button"
+                aria-label="Search for Cotton Fabric"
+              >
+                Cotton Fabric
+              </button>
+              <button 
+                className="popular-search" 
+                onClick={() => handlePopularSearch('Electronics Components')}
+                type="button"
+                aria-label="Search for Electronics Components"
+              >
+                Electronics Components
+              </button>
+              <button 
+                className="popular-search" 
+                onClick={() => handlePopularSearch('Chemical Raw Materials')}
+                type="button"
+                aria-label="Search for Chemical Raw Materials"
+              >
+                Chemical Raw Materials
+              </button>
+              <button 
+                className="popular-search" 
+                onClick={() => handlePopularSearch('Packaging Materials')}
+                type="button"
+                aria-label="Search for Packaging Materials"
+              >
+                Packaging Materials
+              </button>
             </div>
           </div>
         </div>

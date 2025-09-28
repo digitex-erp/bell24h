@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -15,80 +12,117 @@ export async function GET(req: NextRequest) {
     const search = searchParams.get('search');
     const verified = searchParams.get('verified');
 
-    const skip = (page - 1) * limit;
+    // Mock suppliers data for demonstration
+    const mockSuppliers = [
+      {
+        id: '1',
+        name: 'Rajesh Kumar',
+        company: 'SteelCo India',
+        email: 'rajesh@steelco.com',
+        phone: '+91-9876543210',
+        location: 'Mumbai, Maharashtra',
+        verified: true,
+        createdAt: '2024-01-15T10:30:00Z',
+        rating: 4.8,
+        products: ['Steel Pipes', 'Steel Sheets', 'Steel Rods', 'Steel Plates'],
+        category: 'steel',
+        rfqCount: 45,
+        leadCount: 23
+      },
+      {
+        id: '2',
+        name: 'Priya Sharma',
+        company: 'Textile Innovations',
+        email: 'priya@textileinnovations.com',
+        phone: '+91-9876543211',
+        location: 'Surat, Gujarat',
+        verified: true,
+        createdAt: '2024-02-20T14:15:00Z',
+        rating: 4.6,
+        products: ['Cotton Fabric', 'Silk Fabric', 'Polyester Fabric', 'Blended Fabric'],
+        category: 'textiles',
+        rfqCount: 32,
+        leadCount: 18
+      },
+      {
+        id: '3',
+        name: 'Amit Patel',
+        company: 'ElectroTech Solutions',
+        email: 'amit@electrotech.com',
+        phone: '+91-9876543212',
+        location: 'Bangalore, Karnataka',
+        verified: true,
+        createdAt: '2024-03-10T09:45:00Z',
+        rating: 4.9,
+        products: ['LED Bulbs', 'Electrical Components', 'Power Supplies', 'Cables & Wires'],
+        category: 'electronics',
+        rfqCount: 67,
+        leadCount: 34
+      },
+      {
+        id: '4',
+        name: 'Suresh Reddy',
+        company: 'ChemPro Industries',
+        email: 'suresh@chempro.com',
+        phone: '+91-9876543213',
+        location: 'Hyderabad, Telangana',
+        verified: false,
+        createdAt: '2024-04-05T16:20:00Z',
+        rating: 4.2,
+        products: ['Chemical Raw Materials', 'Industrial Chemicals', 'Laboratory Chemicals'],
+        category: 'chemicals',
+        rfqCount: 28,
+        leadCount: 12
+      },
+      {
+        id: '5',
+        name: 'Deepak Singh',
+        company: 'Machinery Works',
+        email: 'deepak@machineryworks.com',
+        phone: '+91-9876543214',
+        location: 'Pune, Maharashtra',
+        verified: true,
+        createdAt: '2024-05-12T11:30:00Z',
+        rating: 4.7,
+        products: ['Industrial Machinery', 'Machine Parts', 'Tools & Equipment'],
+        category: 'machinery',
+        rfqCount: 41,
+        leadCount: 25
+      }
+    ];
 
-    // Build where clause
-    const where: any = {
-      role: 'SUPPLIER',
-      isActive: true
-    };
-    
+    // Filter suppliers based on search parameters
+    let filteredSuppliers = mockSuppliers;
+
     if (category) {
-      where.category = category;
+      filteredSuppliers = filteredSuppliers.filter(s => s.category === category);
     }
-    
+
     if (verified === 'true') {
-      where.verified = true;
+      filteredSuppliers = filteredSuppliers.filter(s => s.verified === true);
     }
-    
+
     if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { company: { contains: search, mode: 'insensitive' } },
-        { location: { contains: search, mode: 'insensitive' } }
-      ];
+      const searchLower = search.toLowerCase();
+      filteredSuppliers = filteredSuppliers.filter(s => 
+        s.name.toLowerCase().includes(searchLower) ||
+        s.company.toLowerCase().includes(searchLower) ||
+        s.location.toLowerCase().includes(searchLower) ||
+        s.products.some(p => p.toLowerCase().includes(searchLower))
+      );
     }
 
-    // Fetch suppliers with pagination
-    const [suppliers, totalCount] = await Promise.all([
-      prisma.user.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: {
-          createdAt: 'desc'
-        },
-        select: {
-          id: true,
-          name: true,
-          company: true,
-          email: true,
-          phone: true,
-          location: true,
-          verified: true,
-          createdAt: true,
-          _count: {
-            select: {
-              rfqs: true,
-              leads: true
-            }
-          }
-        }
-      }),
-      prisma.user.count({ where })
-    ]);
-
-    // Add mock data for demonstration
-    const suppliersWithMockData = suppliers.map(supplier => ({
-      ...supplier,
-      rating: Math.round((Math.random() * 2 + 3) * 10) / 10, // 3.0 to 5.0
-      products: [
-        'LED Bulbs',
-        'Electrical Components',
-        'Power Supplies',
-        'Cables & Wires',
-        'Switches & Outlets'
-      ].slice(0, Math.floor(Math.random() * 5) + 1),
-      category: category || 'electronics'
-    }));
+    // Apply pagination
+    const skip = (page - 1) * limit;
+    const paginatedSuppliers = filteredSuppliers.slice(skip, skip + limit);
 
     const response = {
-      suppliers: suppliersWithMockData,
+      suppliers: paginatedSuppliers,
       pagination: {
         page,
         limit,
-        total: totalCount,
-        pages: Math.ceil(totalCount / limit)
+        total: filteredSuppliers.length,
+        pages: Math.ceil(filteredSuppliers.length / limit)
       }
     };
 
@@ -97,7 +131,8 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('Error fetching suppliers:', error);
     return NextResponse.json({ 
-      error: 'Failed to fetch suppliers' 
+      error: 'Failed to fetch suppliers',
+      message: 'Please try again later'
     }, { status: 500 });
   }
 }
