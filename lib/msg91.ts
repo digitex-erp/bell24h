@@ -1,16 +1,17 @@
-// lib/msg91.ts - MSG91 SMS API Integration
-import { NextResponse } from 'next/server';
+// MSG91 SMS Service Integration using Shared API
+// Uses your existing shared MSG91 API
 
 interface MSG91Config {
-  authKey: string;
+  apiUrl: string;
+  apiKey: string;
+  templateId: string;
   senderId: string;
-  templateId?: string;
 }
 
-interface SendOTPParams {
-  phone: string;
-  otp: string;
-  templateId?: string;
+interface SendOTPResponse {
+  success: boolean;
+  messageId?: string;
+  error?: string;
 }
 
 class MSG91Service {
@@ -18,158 +19,120 @@ class MSG91Service {
 
   constructor() {
     this.config = {
-      authKey: process.env.MSG91_AUTH_KEY || '',
-      senderId: process.env.MSG91_SENDER_ID || 'BELL24H',
-      templateId: process.env.MSG91_TEMPLATE_ID || 'default'
+      apiUrl: process.env.MSG91_API_URL || 'https://your-shared-api.com/api/msg91',
+      apiKey: process.env.MSG91_API_KEY || '',
+      templateId: process.env.MSG91_TEMPLATE_ID || 'your_template_id',
+      senderId: process.env.MSG91_SENDER_ID || 'BELL24'
     };
   }
 
-  async sendOTP({ phone, otp, templateId }: SendOTPParams): Promise<{ success: boolean; message: string; error?: string }> {
+  async sendOTP(mobile: string, otp: string): Promise<SendOTPResponse> {
     try {
       // Validate configuration
-      if (!this.config.authKey) {
-        return {
-          success: false,
-          message: 'MSG91 not configured',
-          error: 'MSG91_AUTH_KEY not found in environment variables'
-        };
+      if (!this.config.apiUrl) {
+        throw new Error('MSG91_API_URL is not configured');
       }
 
-      // Clean phone number (remove + and ensure it starts with country code)
-      const cleanPhone = phone.replace(/\D/g, '');
-      const formattedPhone = cleanPhone.startsWith('91') ? cleanPhone : `91${cleanPhone}`;
+      if (!this.config.apiKey) {
+        throw new Error('MSG91_API_KEY is not configured');
+      }
 
-      // MSG91 API endpoint
-      const url = 'https://api.msg91.com/api/v5/otp';
-      
-      const payload = {
-        template_id: templateId || this.config.templateId,
-        mobile: formattedPhone,
-        otp: otp,
-        authkey: this.config.authKey
-      };
+      // Format mobile number (ensure it starts with +91)
+      const formattedMobile = mobile.startsWith('+91') ? mobile : `+91${mobile}`;
 
-      const response = await fetch(url, {
+      // Call your shared MSG91 API
+      const response = await fetch(`${this.config.apiUrl}/send-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'authkey': this.config.authKey
+          'Authorization': `Bearer ${this.config.apiKey}`,
+          'X-API-Key': this.config.apiKey
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          mobile: formattedMobile,
+          otp: otp,
+          template_id: this.config.templateId,
+          sender_id: this.config.senderId,
+          expiry: 300 // 5 minutes
+        })
       });
 
       const data = await response.json();
 
-      if (response.ok && data.type === 'success') {
+      if (response.ok && data.success) {
         return {
           success: true,
-          message: 'OTP sent successfully'
+          messageId: data.messageId || data.request_id
         };
       } else {
         return {
           success: false,
-          message: 'Failed to send OTP',
-          error: data.message || 'Unknown error'
+          error: data.message || data.error || 'Failed to send OTP'
         };
       }
 
     } catch (error) {
-      console.error('MSG91 Error:', error);
+      console.error('MSG91 Send OTP Error:', error);
       return {
         success: false,
-        message: 'Failed to send OTP',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Failed to send OTP'
       };
     }
   }
 
-  async sendSMS({ phone, message }: { phone: string; message: string }): Promise<{ success: boolean; message: string; error?: string }> {
+  async verifyOTP(mobile: string, otp: string): Promise<{ success: boolean; error?: string }> {
     try {
-      if (!this.config.authKey) {
-        return {
-          success: false,
-          message: 'MSG91 not configured',
-          error: 'MSG91_AUTH_KEY not found in environment variables'
-        };
-      }
+      const formattedMobile = mobile.startsWith('+91') ? mobile : `+91${mobile}`;
 
-      const cleanPhone = phone.replace(/\D/g, '');
-      const formattedPhone = cleanPhone.startsWith('91') ? cleanPhone : `91${cleanPhone}`;
-
-      const url = 'https://api.msg91.com/api/sendhttp.php';
-      const params = new URLSearchParams({
-        authkey: this.config.authKey,
-        mobiles: formattedPhone,
-        message: message,
-        sender: this.config.senderId,
-        route: '4'
+      const response = await fetch(`${this.config.apiUrl}/verify-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.config.apiKey}`,
+          'X-API-Key': this.config.apiKey
+        },
+        body: JSON.stringify({
+          mobile: formattedMobile,
+          otp: otp
+        })
       });
 
-      const response = await fetch(`${url}?${params}`);
-      const data = await response.text();
+      const data = await response.json();
 
-      if (data.includes('SMS sent successfully')) {
-        return {
-          success: true,
-          message: 'SMS sent successfully'
-        };
+      if (response.ok && data.success) {
+        return { success: true };
       } else {
         return {
           success: false,
-          message: 'Failed to send SMS',
-          error: data
+          error: data.message || data.error || 'Invalid OTP'
         };
       }
 
     } catch (error) {
-      console.error('MSG91 SMS Error:', error);
+      console.error('MSG91 Verify OTP Error:', error);
       return {
         success: false,
-        message: 'Failed to send SMS',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'OTP verification failed'
       };
     }
   }
 
-  // Health check for MSG91 service
-  async healthCheck(): Promise<{ status: string; message: string }> {
-    try {
-      if (!this.config.authKey) {
-        return {
-          status: 'error',
-          message: 'MSG91 not configured - AUTH_KEY missing'
-        };
-      }
-
-      // Test with a dummy request
-      const testResponse = await this.sendOTP({
-        phone: '9999999999',
-        otp: '123456'
-      });
-
-      if (testResponse.success) {
-        return {
-          status: 'healthy',
-          message: 'MSG91 service is operational'
-        };
-      } else {
-        return {
-          status: 'warning',
-          message: `MSG91 service issue: ${testResponse.error}`
-        };
-      }
-
-    } catch (error) {
-      return {
-        status: 'error',
-        message: `MSG91 service error: ${error instanceof Error ? error.message : 'Unknown error'}`
-      };
-    }
+  // Fallback method for development/testing
+  async sendOTPDev(mobile: string, otp: string): Promise<SendOTPResponse> {
+    console.log(`📱 [DEV MODE] OTP for ${mobile}: ${otp}`);
+    console.log(`📱 [DEV MODE] SMS would be sent via shared MSG91 API to +91${mobile}`);
+    
+    return {
+      success: true,
+      messageId: `dev_${Date.now()}`
+    };
   }
 }
 
-// Export singleton instance
 export const msg91Service = new MSG91Service();
 
-// Export types
-export type { SendOTPParams, MSG91Config };
+// Environment variables needed for your shared API:
+// MSG91_API_URL=https://your-shared-api.com/api/msg91
+// MSG91_API_KEY=your_api_key_here
+// MSG91_TEMPLATE_ID=your_template_id_here  
+// MSG91_SENDER_ID=BELL24

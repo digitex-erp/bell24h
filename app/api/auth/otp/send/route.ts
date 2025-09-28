@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { msg91Service } from '@/lib/msg91';
 
 // Mock OTP storage (in production, use Redis or database)
 const otpStorage = new Map<string, { otp: string, timestamp: number }>();
@@ -24,22 +25,30 @@ export async function POST(request: NextRequest) {
       timestamp: Date.now()
     });
 
-    // In production, send SMS using Twilio, AWS SNS, or similar service
-    console.log(`📱 OTP for ${mobile}: ${otp}`);
+    // Send OTP via your shared MSG91 API
+    let smsResult;
+    if (process.env.MSG91_API_URL && process.env.MSG91_API_KEY) {
+      // Production: Use your shared MSG91 API
+      smsResult = await msg91Service.sendOTP(mobile, otp);
+    } else {
+      // Development: Use mock service
+      smsResult = await msg91Service.sendOTPDev(mobile, otp);
+    }
 
-    // For development, we'll just log the OTP
-    // In production, integrate with SMS service:
-    /*
-    await sendSMS({
-      to: `+91${mobile}`,
-      message: `Your Bell24h verification code is: ${otp}. Valid for 5 minutes.`
-    });
-    */
+    if (!smsResult.success) {
+      return NextResponse.json(
+        { success: false, error: smsResult.error || 'Failed to send OTP' },
+        { status: 500 }
+      );
+    }
+
+    console.log(`📱 OTP sent to +91${mobile} via MSG91`);
 
     return NextResponse.json({
       success: true,
       message: 'OTP sent successfully',
-      // Don't send OTP in production response
+      messageId: smsResult.messageId,
+      // Only include OTP in development
       ...(process.env.NODE_ENV === 'development' && { otp })
     });
 
