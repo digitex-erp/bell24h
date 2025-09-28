@@ -1,4 +1,14 @@
-/* Bell24H - Immediate CSS Fix */
+#!/usr/bin/env node
+
+// QUICK CSS FIX - IMMEDIATE SOLUTION
+// This script creates a working CSS solution immediately
+
+const fs = require('fs');
+
+console.log('🔧 QUICK CSS FIX - Creating immediate solution...');
+
+// Create a simple CSS file that will work immediately
+const simpleCSS = `/* Bell24H - Immediate CSS Fix */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -363,4 +373,38 @@ body {
   .container {
     padding: 0 1rem;
   }
-}
+}`;
+
+// Write the CSS file
+fs.writeFileSync('app/globals.css', simpleCSS);
+console.log('✅ Created working CSS file');
+
+// Create a simple PostCSS config that won't cause issues
+const postcssConfig = `module.exports = {
+  plugins: {
+    autoprefixer: {},
+  },
+}`;
+
+fs.writeFileSync('postcss.config.js', postcssConfig);
+console.log('✅ Created simple PostCSS config');
+
+// Create a simple Tailwind config that won't cause build issues
+const tailwindConfig = `/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}`;
+
+fs.writeFileSync('tailwind.config.js', tailwindConfig);
+console.log('✅ Created simple Tailwind config');
+
+console.log('\n🎉 QUICK CSS FIX COMPLETE!');
+console.log('Now your site will have proper styling without build errors.');
