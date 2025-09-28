@@ -275,6 +275,17 @@ export default function Header({ onLoginClick }: HeaderProps) {
                 </div>
               </li>
               <li><Link href="/products">Products</Link></li>
+              <li className="dropdown">
+                <a>🤖 AI Features ▼</a>
+                <div className="dropdown-menu">
+                  <Link href="/dashboard/ai-features">🧠 AI Dashboard</Link>
+                  <Link href="/voice-rfq">🎤 Voice RFQ</Link>
+                  <Link href="/dashboard/ai-features">🔍 AI Explainability</Link>
+                  <Link href="/dashboard/ai-features">⚠️ Risk Scoring</Link>
+                  <Link href="/dashboard/ai-features">📈 Market Data</Link>
+                  <Link href="/dashboard/ai-features">🎯 Smart Matching</Link>
+                </div>
+              </li>
               <li><Link href="/rfq/post">Post Buy Requirement</Link></li>
               <li className="dropdown">
                 <a>Services ▼</a>
