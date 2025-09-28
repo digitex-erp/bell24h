@@ -1,13 +1,5 @@
 {
   "locked": false,
-  "environment": "development",
-  "lastDeployment": null,
-  "protectedFiles": [
-  "vercel.json",
-  "railway.json",
-  ".env.production",
-  "next.config.js",
-  "package-lock.json",
-  "prisma/schema.prisma"
-]
+  "created": "2024-09-28T10:30:00.000Z",
+  "reason": "Automatic protection setup"
 }
