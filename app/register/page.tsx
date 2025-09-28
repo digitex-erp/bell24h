@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import RegisterFormWithEmailOTP from '@/components/RegisterFormWithEmailOTP';
 import AuthModal from '@/components/AuthModal';
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleSwitchToLogin = () => {
@@ -31,5 +31,13 @@ export default function RegisterPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <RegisterPageContent />
+    </Suspense>
   );
 }
