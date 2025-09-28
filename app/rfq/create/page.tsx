@@ -1,26 +1,153 @@
-import { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Create RFQ - Bell24h',
-  description: 'Create Request for Quotation'
-};
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function CreateRFQPage() {
+  const [formData, setFormData] = useState({
+    title: '',
+    category: '',
+    description: '',
+    quantity: '',
+    unit: '',
+    minBudget: '',
+    maxBudget: '',
+    timeline: '',
+    requirements: '',
+    urgency: 'normal'
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/rfq/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSuccess(true);
+        setTimeout(() => {
+          router.push('/rfq');
+        }, 2000);
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Failed to create RFQ. Please try again.');
+      }
+    } catch (error) {
+      setError('Failed to create RFQ. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-white py-8 px-6 shadow-xl rounded-lg">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">RFQ Created Successfully!</h2>
+            <p className="text-gray-600 mb-4">Your request for quotation has been submitted.</p>
+            <p className="text-sm text-gray-500">Redirecting to RFQ dashboard...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
+      {/* Navigation */}
+      <nav className="bg-white shadow-lg">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-8">
+              <Link href="/" className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
+                <div>
+                  <div className="font-bold text-xl">Bell24h</div>
+                  <div className="text-xs text-gray-600">Verified B2B Platform</div>
+                </div>
+              </Link>
+              <div className="hidden md:flex items-center gap-6">
+                <Link href="/dashboard" className="text-gray-700 hover:text-indigo-600">Dashboard</Link>
+                <Link href="/rfq" className="text-gray-700 hover:text-indigo-600">My RFQs</Link>
+                <Link href="/rfq/create" className="text-indigo-600 font-semibold">Create RFQ</Link>
+                <Link href="/suppliers" className="text-gray-700 hover:text-indigo-600">Suppliers</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">
-          Create Request for Quotation (RFQ)
-        </h1>
-        
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <form className="space-y-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              Create Request for Quotation
+            </h1>
+            <p className="text-xl text-gray-600">
+              Describe what you need and get quotes from verified suppliers
+            </p>
+          </div>
+          
+          <div className="bg-white p-8 rounded-xl shadow-lg">
+            {error && (
+              <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product/Service Category
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                  RFQ Title *
                 </label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <input
+                  id="title"
+                  name="title"
+                  type="text"
+                  required
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="e.g., Need 1000 units of LED bulbs"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                  Product/Service Category *
+                </label>
+                <select
+                  id="category"
+                  name="category"
+                  required
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                >
                   <option value="">Select Category</option>
                   <option value="textiles-garments">Textiles & Garments</option>
                   <option value="pharmaceuticals">Pharmaceuticals</option>
@@ -32,37 +159,59 @@ export default function CreateRFQPage() {
                   <option value="machinery-equipment">Machinery & Equipment</option>
                   <option value="chemicals">Chemicals</option>
                   <option value="food-processing">Food Processing</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="construction">Construction Materials</option>
+                  <option value="packaging">Packaging</option>
+                  <option value="logistics">Logistics & Transportation</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product/Service Description
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                  Product/Service Description *
                 </label>
                 <textarea 
+                  id="description"
+                  name="description"
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Describe the product or service you need..."
+                  required
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="Describe the product or service you need in detail..."
                 />
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Quantity
+                  <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
+                    Quantity *
                   </label>
                   <input 
+                    id="quantity"
+                    name="quantity"
                     type="number"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                    value={formData.quantity}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="Enter quantity"
+                    min="1"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Unit
+                  <label htmlFor="unit" className="block text-sm font-medium text-gray-700 mb-2">
+                    Unit *
                   </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <select
+                    id="unit"
+                    name="unit"
+                    required
+                    value={formData.unit}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  >
                     <option value="">Select Unit</option>
                     <option value="pieces">Pieces</option>
                     <option value="kg">Kilograms</option>
@@ -70,66 +219,133 @@ export default function CreateRFQPage() {
                     <option value="liters">Liters</option>
                     <option value="meters">Meters</option>
                     <option value="hours">Hours</option>
+                    <option value="units">Units</option>
+                    <option value="boxes">Boxes</option>
+                    <option value="pairs">Pairs</option>
+                    <option value="sets">Sets</option>
                   </select>
                 </div>
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Budget Range (INR)
+                  Budget Range (INR) *
                 </label>
                 <div className="grid grid-cols-2 gap-4">
-                  <input 
-                    type="number"
-                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Minimum"
-                  />
-                  <input 
-                    type="number"
-                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Maximum"
-                  />
+                  <div>
+                    <input 
+                      id="minBudget"
+                      name="minBudget"
+                      type="number"
+                      required
+                      value={formData.minBudget}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      placeholder="Minimum"
+                      min="0"
+                    />
+                    <label className="text-xs text-gray-500 mt-1">Minimum Budget</label>
+                  </div>
+                  <div>
+                    <input 
+                      id="maxBudget"
+                      name="maxBudget"
+                      type="number"
+                      required
+                      value={formData.maxBudget}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                      placeholder="Maximum"
+                      min="0"
+                    />
+                    <label className="text-xs text-gray-500 mt-1">Maximum Budget</label>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="timeline" className="block text-sm font-medium text-gray-700 mb-2">
+                    Delivery Timeline *
+                  </label>
+                  <select
+                    id="timeline"
+                    name="timeline"
+                    required
+                    value={formData.timeline}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  >
+                    <option value="">Select Timeline</option>
+                    <option value="1-week">Within 1 week</option>
+                    <option value="2-weeks">Within 2 weeks</option>
+                    <option value="1-month">Within 1 month</option>
+                    <option value="2-months">Within 2 months</option>
+                    <option value="3-months">Within 3 months</option>
+                    <option value="flexible">Flexible</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label htmlFor="urgency" className="block text-sm font-medium text-gray-700 mb-2">
+                    Urgency Level
+                  </label>
+                  <select
+                    id="urgency"
+                    name="urgency"
+                    value={formData.urgency}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  >
+                    <option value="low">Low - No rush</option>
+                    <option value="normal">Normal - Standard timeline</option>
+                    <option value="high">High - Urgent</option>
+                    <option value="critical">Critical - ASAP</option>
+                  </select>
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Delivery Timeline
-                </label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                  <option value="">Select Timeline</option>
-                  <option value="1-week">Within 1 week</option>
-                  <option value="2-weeks">Within 2 weeks</option>
-                  <option value="1-month">Within 1 month</option>
-                  <option value="2-months">Within 2 months</option>
-                  <option value="3-months">Within 3 months</option>
-                  <option value="flexible">Flexible</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="requirements" className="block text-sm font-medium text-gray-700 mb-2">
                   Additional Requirements
                 </label>
                 <textarea 
+                  id="requirements"
+                  name="requirements"
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Any specific requirements, certifications, or preferences..."
+                  value={formData.requirements}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  placeholder="Any specific requirements, certifications, quality standards, or preferences..."
                 />
               </div>
               
-              <div className="flex gap-4">
+              <div className="flex gap-4 pt-4">
                 <button 
                   type="submit"
-                  className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                  disabled={isLoading}
+                  className="flex-1 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  Submit RFQ
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Creating RFQ...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                      Submit RFQ
+                    </>
+                  )}
                 </button>
                 <button 
                   type="button"
+                  onClick={() => router.back()}
                   className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Save Draft
+                  Cancel
                 </button>
               </div>
             </form>
