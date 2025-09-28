@@ -28,6 +28,25 @@ export default function Home() {
     router.push('/dashboard');
   };
 
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      // For now, just show auth modal - in production, this would create an RFQ
+      setShowAuthModal(true);
+    }
+  };
+
+  const handlePopularSearch = (searchTerm: string) => {
+    setSearchQuery(searchTerm);
+    // Auto-trigger search when popular search is clicked
+    setTimeout(() => {
+      setShowAuthModal(true);
+    }, 100);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentRFQIndex((prev) => (prev + 1) % liveRFQs.length);
@@ -506,7 +525,7 @@ export default function Home() {
               <select 
                 className="category-select"
                 value={selectedCategory || 'all'}
-                onChange={(e) => setSelectedCategory(e.target.value || 'all')}
+                onChange={(e) => handleCategoryChange(e.target.value || 'all')}
               >
                 <option value="all">All Categories</option>
                 <option value="steel">Steel & Metals</option>
@@ -529,17 +548,17 @@ export default function Home() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button className="search-button">
+              <button className="search-button" onClick={handleSearch}>
                 Post Your RFQ
               </button>
             </div>
 
             <div className="popular-searches">
-              <span className="popular-search">Steel Pipes</span>
-              <span className="popular-search">Cotton Fabric</span>
-              <span className="popular-search">Electronics Components</span>
-              <span className="popular-search">Chemical Raw Materials</span>
-              <span className="popular-search">Packaging Materials</span>
+              <span className="popular-search" onClick={() => handlePopularSearch('Steel Pipes')}>Steel Pipes</span>
+              <span className="popular-search" onClick={() => handlePopularSearch('Cotton Fabric')}>Cotton Fabric</span>
+              <span className="popular-search" onClick={() => handlePopularSearch('Electronics Components')}>Electronics Components</span>
+              <span className="popular-search" onClick={() => handlePopularSearch('Chemical Raw Materials')}>Chemical Raw Materials</span>
+              <span className="popular-search" onClick={() => handlePopularSearch('Packaging Materials')}>Packaging Materials</span>
             </div>
           </div>
         </div>
@@ -636,7 +655,7 @@ export default function Home() {
             <div className="testimonial-card">
               <p>"Bell24h transformed our sourcing process. We found reliable suppliers faster and secured better deals. The escrow service is a game-changer!"</p>
               <div className="testimonial-author">
-                <img src="/avatars/avatar1.jpg" alt="Client 1" />
+                <img src="/avatar1.svg" alt="Client 1" />
                 <div className="author-info">
                   <h4>Rajesh Kumar</h4>
                   <p>Procurement Head, SteelCo India</p>
@@ -646,7 +665,7 @@ export default function Home() {
             <div className="testimonial-card">
               <p>"As an MSME, finding verified buyers was tough. Bell24h connected us with serious buyers and streamlined our sales. Highly recommended!"</p>
               <div className="testimonial-author">
-                <img src="/avatars/avatar2.jpg" alt="Client 2" />
+                <img src="/avatar2.svg" alt="Client 2" />
                 <div className="author-info">
                   <h4>Priya Sharma</h4>
                   <p>CEO, Textile Innovations</p>
@@ -656,7 +675,7 @@ export default function Home() {
             <div className="testimonial-card">
               <p>"The AI matching is incredibly accurate. We save hours every week and have significantly improved our supply chain efficiency. Fantastic platform!"</p>
               <div className="testimonial-author">
-                <img src="/avatars/avatar3.jpg" alt="Client 3" />
+                <img src="/avatar3.svg" alt="Client 3" />
                 <div className="author-info">
                   <h4>Amit Patel</h4>
                   <p>Operations Manager, ElectroTech Solutions</p>

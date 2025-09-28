@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "javascript-debugger": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-quickjs"],
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "performance-analyzer": {
+      "command": "npx", 
+      "args": ["@modelcontextprotocol/server-pagespeed"],
+      "env": {
+        "PAGESPEED_API_KEY": "your-pagespeed-api-key"
+      }
+    },
+    "file-manager": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem"],
+      "env": {
+        "ALLOWED_DIRECTORIES": "/workspace"
+      }
+    },
+    "git-manager": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-git"],
+      "env": {
+        "REPO_PATH": "/workspace"
+      }
+    },
+    "web-crawler": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-firecrawl"],
+      "env": {
+        "FIRECRAWL_API_KEY": "your-firecrawl-api-key"
+      }
+    },
+    "terminal-executor": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-terminal"],
+      "env": {
+        "SHELL": "/usr/bin/bash"
+      }
+    }
+  }
+}
