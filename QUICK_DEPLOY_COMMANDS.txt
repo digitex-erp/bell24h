@@ -12,18 +12,18 @@ BELL24H QUICK DEPLOYMENT COMMANDS
 4. Login to Vercel:
    vercel login
 
-5. Deploy to production:
-   vercel --prod
+5. Deploy to production (correct project):
+   vercel --prod --project bell24h-v1
 
 6. Add environment variables in Vercel Dashboard:
    https://vercel.com/dashboard
 
 7. Redeploy with environment variables:
-   vercel --prod
+   vercel --prod --project bell24h-v1
 
 ENVIRONMENT VARIABLES TO ADD:
 ============================
-NEXTAUTH_URL=https://your-app-name.vercel.app
+NEXTAUTH_URL=https://www.bell24h.com
 NEXTAUTH_SECRET=bell24h-super-secret-key-32-chars-minimum-required
 JWT_SECRET=bell24h-jwt-secret-key-32-chars-minimum
 DATABASE_URL=postgresql://neondb_owner:npg_K6M8mRhTPpCH@ep-fragrant-smoke-ae00uwml-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
@@ -33,16 +33,16 @@ API_SECRET_KEY=bell24h-api-secret-key-2024
 ENCRYPTION_KEY=bell24h-encryption-key-32-chars-minimum
 NODE_ENV=production
 NEXT_PUBLIC_APP_NAME=BELL24H
-NEXT_PUBLIC_APP_URL=https://your-app-name.vercel.app
+NEXT_PUBLIC_APP_URL=https://www.bell24h.com
 NEXT_TELEMETRY_DISABLED=1
 
 TEST URLS AFTER DEPLOYMENT:
 ===========================
-Main Site: https://your-app-name.vercel.app
-Health Check: https://your-app-name.vercel.app/api/health
-Authentication: https://your-app-name.vercel.app/auth/phone-email
-Admin Dashboard: https://your-app-name.vercel.app/admin
-Supplier Verification: https://your-app-name.vercel.app/services/verification/order
+Main Site: https://www.bell24h.com
+Health Check: https://www.bell24h.com/api/health
+Authentication: https://www.bell24h.com/auth/phone-email
+Admin Dashboard: https://www.bell24h.com/admin
+Supplier Verification: https://www.bell24h.com/services/verification/order
 
 WHATSAPP MARKETING MESSAGE:
 ===========================
@@ -55,7 +55,7 @@ We're offering a **Supplier Verification Service** at just **₹2,000**!
 ✅ Verify GST/PAN details  
 ✅ Get a comprehensive report in 48 hours
 
-Visit our service page: https://your-app-name.vercel.app/services/verification/order
+Visit our service page: https://www.bell24h.com/services/verification/order
 
 Reply 'YES' to this message to get started or learn more!
 

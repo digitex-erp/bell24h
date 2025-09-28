@@ -1,8 +1,6 @@
-name: Deploy Bell24h to Vercel (Simple)
+name: Deploy Bell24h to Vercel (Simple - Manual Only)
 
 on:
-  push:
-    branches: [ main, master ]
   workflow_dispatch:
 
 env:
