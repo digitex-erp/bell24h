@@ -1,14 +1,19 @@
+import EnterpriseHeader from '@/components/EnterpriseHeader';
+import EnterpriseFooter from '@/components/EnterpriseFooter';
+
 export default function TermsOfServicePage() {
   return (
-    <div className='min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
-      <div className='max-w-4xl mx-auto'>
-        <div className='bg-white shadow-lg rounded-lg p-8'>
-          <h1 className='text-3xl font-bold text-gray-900 mb-8'>Terms of Service</h1>
+    <div className="min-h-screen bg-gray-50">
+      <EnterpriseHeader title="Terms of Service" />
+      <div className='py-12 px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-4xl mx-auto'>
+          <div className='bg-white shadow-lg rounded-lg p-8'>
+            <h1 className='text-3xl font-bold text-gray-900 mb-8'>Terms of Service</h1>
 
-          <div className='prose prose-lg max-w-none'>
-            <p className='text-sm text-gray-600 mb-6'>
-              <strong>Last updated:</strong> {new Date().toLocaleDateString()}
-            </p>
+            <div className='prose prose-lg max-w-none'>
+              <p className='text-sm text-gray-600 mb-6'>
+                <strong>Last updated:</strong> {new Date().toLocaleDateString()}
+              </p>
 
             <section className='mb-8'>
               <h2 className='text-2xl font-semibold text-gray-900 mb-4'>1. Acceptance of Terms</h2>
@@ -191,9 +196,17 @@ export default function TermsOfServicePage() {
                 </p>
               </div>
             </section>
+<<<<<<< HEAD
+            </div>
           </div>
         </div>
       </div>
+      <EnterpriseFooter />
+=======
+          </div>
+        </div>
+      </div>
+>>>>>>> 504c5ee690291e877954561480a78ee33260c24a
     </div>
   );
 }

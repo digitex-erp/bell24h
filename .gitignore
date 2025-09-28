@@ -52,4 +52,18 @@ Thumbs.db
 *.temp
 .vercel
 
+# API Keys and Sensitive Files
+COMPLETE_PRODUCTION_SETUP.md
+fix-dns-configuration.bat
+fix-env.bat
+test-ai-keys.js
+*.key
+*.pem
+*.p12
+secrets/
+credentials/
+api-keys/
+.env.*
+!.env.example
+bell24h-production/
 .vercel

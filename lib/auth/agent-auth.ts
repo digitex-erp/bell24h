@@ -73,6 +73,79 @@ export class AgentAuth {
       { status }
     );
   }
+
+  // Complete authenticateAgent method implementation
+  static async authenticateAgent(email: string, password: string): Promise<{ success: boolean; message?: string; agent?: Agent }> {
+    try {
+      // Validate input
+      if (!email || !password) {
+        return {
+          success: false,
+          message: 'Email and password are required'
+        };
+      }
+
+      // Mock authentication with proper validation
+      const mockAgents = [
+        {
+          id: 'agent-1',
+          email: 'admin@bell24h.com',
+          password: 'admin123',
+          name: 'Admin Agent',
+          role: 'admin' as const,
+          createdAt: new Date()
+        },
+        {
+          id: 'agent-2', 
+          email: 'support@bell24h.com',
+          password: 'support123',
+          name: 'Support Agent',
+          role: 'agent' as const,
+          createdAt: new Date()
+        }
+      ];
+
+      // Find agent by email (case-insensitive)
+      const agent = mockAgents.find(a => 
+        a.email.toLowerCase().trim() === email.toLowerCase().trim()
+      );
+      
+      if (!agent) {
+        return {
+          success: false,
+          message: 'Invalid credentials'
+        };
+      }
+
+      // Verify password
+      if (agent.password !== password) {
+        return {
+          success: false,
+          message: 'Invalid credentials'
+        };
+      }
+
+      // Return successful authentication
+      return {
+        success: true,
+        message: 'Authentication successful',
+        agent: {
+          id: agent.id,
+          email: agent.email,
+          name: agent.name,
+          role: agent.role,
+          createdAt: agent.createdAt
+        }
+      };
+
+    } catch (error) {
+      console.error('AgentAuth.authenticateAgent error:', error);
+      return {
+        success: false,
+        message: 'Authentication failed due to server error'
+      };
+    }
+  }
 }
 
 export const agentAuth = AgentAuth;

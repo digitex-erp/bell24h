@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -182,17 +182,17 @@ const EnterpriseTradingDashboard: React.FC = () => {
                 className='group flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-all'
               >
                 <div className='p-2 rounded-xl hover:bg-blue-50 transition-colors'>
-                  <span>←</span>
+                  <span>?</span>
                 </div>
                 <div className='p-2 rounded-xl hover:bg-blue-50 transition-colors'>
-                  <span>🏠</span>
+                  <span>??</span>
                 </div>
                 <span className='font-medium'>Back to Home</span>
               </Link>
               <div className='border-l border-gray-300 pl-6'>
                 <div className='flex items-center space-x-4'>
                   <div className='h-12 w-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg'>
-                    <span>📊</span>
+                    <span>??</span>
                   </div>
                   <div>
                     <h1 className='text-2xl font-bold text-gray-900'>
@@ -200,7 +200,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
                     </h1>
                     <p className='text-gray-600 flex items-center space-x-4'>
                       <span>Real-time B2B trading platform</span>
-                      <span className='text-gray-400'>•</span>
+                      <span className='text-gray-400'>�</span>
                       <span className={marketStatus.color}>Market {marketStatus.status}</span>
                     </p>
                   </div>
@@ -210,15 +210,15 @@ const EnterpriseTradingDashboard: React.FC = () => {
             <div className='flex items-center space-x-6'>
               <div className='hidden lg:flex items-center space-x-6 text-sm'>
                 <div className='flex items-center space-x-2 text-green-600'>
-                  <span>🛡️</span>
+                  <span>???</span>
                   <span>Secure Trading</span>
                 </div>
                 <div className='flex items-center space-x-2 text-blue-600'>
-                  <span>⚡</span>
+                  <span>?</span>
                   <span>Real-time Data</span>
                 </div>
                 <div className='flex items-center space-x-2 text-purple-600'>
-                  <span>🌍</span>
+                  <span>??</span>
                   <span>Global Markets</span>
                 </div>
               </div>
@@ -252,9 +252,9 @@ const EnterpriseTradingDashboard: React.FC = () => {
               </div>
               <div className='text-right'>
                 <p className='text-sm text-gray-600'>24h Volume</p>
-                <p className='text-xl font-bold text-gray-900'>₹128 Cr</p>
+                <p className='text-xl font-bold text-gray-900'>?128 Cr</p>
                 <p className='text-green-600 text-sm flex items-center'>
-                  <span>📈</span>
+                  <span>??</span>
                   +12.8%
                 </p>
               </div>
@@ -264,7 +264,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
           <div className='bg-white/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-white/20'>
             <div className='flex items-center justify-between mb-4'>
               <div className='p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl'>
-                <span>👤</span>
+                <span>??</span>
               </div>
               <div className='text-right'>
                 <p className='text-sm text-gray-600'>Active Traders</p>
@@ -290,7 +290,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
           <div className='bg-white/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-white/20'>
             <div className='flex items-center justify-between mb-4'>
               <div className='p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl'>
-                <span>🛡️</span>
+                <span>???</span>
               </div>
               <div className='text-right'>
                 <p className='text-sm text-gray-600'>Risk Score</p>
@@ -308,7 +308,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
               <div className='p-6 border-b border-gray-200/50'>
                 <div className='flex items-center justify-between mb-4'>
                   <h3 className='text-xl font-bold text-gray-900 flex items-center'>
-                    <span>📊</span>
+                    <span>??</span>
                     Live Commodity Prices
                   </h3>
                   <div className='flex items-center space-x-3'>
@@ -350,7 +350,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
                     <span>Live Updates</span>
                   </div>
                   <div className='flex items-center space-x-1'>
-                    <span>🕐</span>
+                    <span>??</span>
                     <span>Updated every 2 seconds</span>
                   </div>
                 </div>
@@ -407,9 +407,9 @@ const EnterpriseTradingDashboard: React.FC = () => {
                               }`}
                             >
                               {commodity.change >= 0 ? (
-                                <span>📈</span>
+                                <span>??</span>
                               ) : (
-                                <span>📉</span>
+                                <span>??</span>
                               )}
                               <span>
                                 {commodity.change >= 0 ? '+' : ''}
@@ -459,7 +459,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
             {selectedCommodity && (
               <div className='bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6'>
                 <h3 className='text-lg font-bold text-gray-900 mb-4 flex items-center'>
-                  <span>👁️</span>
+                  <span>???</span>
                   Trading Details
                 </h3>
                 <div className='space-y-4'>
@@ -504,14 +504,14 @@ const EnterpriseTradingDashboard: React.FC = () => {
                       onClick={() => handleTrade('buy', selectedCommodity, 1000)}
                       className='flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all shadow-lg'
                     >
-                      <span>➕</span>
+                      <span>?</span>
                       <span>Buy 1000</span>
                     </button>
                     <button
                       onClick={() => handleTrade('sell', selectedCommodity, 1000)}
                       className='flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg'
                     >
-                      <span>➖</span>
+                      <span>?</span>
                       <span>Sell 1000</span>
                     </button>
                   </div>
@@ -522,7 +522,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
             {/* Recent Orders */}
             <div className='bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6'>
               <h3 className='text-lg font-bold text-gray-900 mb-4 flex items-center'>
-                <span>📊</span>
+                <span>??</span>
                 Recent Orders
               </h3>
               <div className='space-y-3 max-h-80 overflow-y-auto'>
@@ -575,7 +575,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
                 ))}
                 {orders.length === 0 && (
                   <div className='text-center py-8'>
-                    <span>📊</span>
+                    <span>??</span>
                     <p className='text-gray-500'>No orders yet</p>
                     <p className='text-sm text-gray-400'>Start trading to see your orders here</p>
                   </div>
@@ -586,7 +586,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
             {/* Market Insights */}
             <div className='bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6'>
               <h3 className='text-lg font-bold text-gray-900 mb-4 flex items-center'>
-                <span>📊</span>
+                <span>??</span>
                 AI Market Insights
               </h3>
               <div className='space-y-4'>
@@ -631,17 +631,17 @@ const EnterpriseTradingDashboard: React.FC = () => {
         {/* Enterprise Trading Statistics */}
         <div className='mt-8 grid grid-cols-1 md:grid-cols-3 gap-6'>
           <div className='bg-white/80 backdrop-blur-xl rounded-xl p-6 shadow-lg border border-white/20 text-center'>
-            <span>📈</span>
-            <p className='text-2xl font-bold text-gray-900'>₹8+ Cr</p>
+            <span>??</span>
+            <p className='text-2xl font-bold text-gray-900'>?8+ Cr</p>
             <p className='text-sm text-gray-600'>Annual Revenue Potential</p>
           </div>
           <div className='bg-white/80 backdrop-blur-xl rounded-xl p-6 shadow-lg border border-white/20 text-center'>
-            <span>🛡️</span>
+            <span>???</span>
             <p className='text-2xl font-bold text-gray-900'>99.9%</p>
             <p className='text-sm text-gray-600'>Platform Uptime</p>
           </div>
           <div className='bg-white/80 backdrop-blur-xl rounded-xl p-6 shadow-lg border border-white/20 text-center'>
-            <span>🌍</span>
+            <span>??</span>
             <p className='text-2xl font-bold text-gray-900'>24/7</p>
             <p className='text-sm text-gray-600'>Global Market Access</p>
           </div>

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 
@@ -20,7 +20,7 @@ export default function MinimalHeader({ title = 'Bell24H Platform' }: MinimalHea
           <div className='flex items-center space-x-4'>
             {/* Search */}
             <div className='relative'>
-              <span>🔍</span>
+              <span>??</span>
               <input
                 type='text'
                 placeholder='Search...'
@@ -30,12 +30,12 @@ export default function MinimalHeader({ title = 'Bell24H Platform' }: MinimalHea
 
             {/* Notifications */}
             <button className='p-2 text-gray-400 hover:text-gray-600 transition-colors'>
-              <span>🔔</span>
+              <span>??</span>
             </button>
 
             {/* User Menu */}
             <button className='flex items-center space-x-2 p-2 text-gray-700 hover:text-gray-900 transition-colors'>
-              <span>👤</span>
+              <span>??</span>
               <span className='text-sm font-medium'>Admin</span>
             </button>
           </div>

@@ -391,7 +391,11 @@ Bell24h - Made in India 🇮🇳
       }
 
       await this.transporter.sendMail({
+<<<<<<< HEAD
+        from: `"Bell24h" <${process.env.SMTP_USER || 'digitex.studio@gmail.com'}>`,
+=======
         from: `"Bell24h" <${process.env.SMTP_USER || 'noreply@bell24h.com'}>`,
+>>>>>>> 504c5ee690291e877954561480a78ee33260c24a
         to,
         subject: template.subject,
         html: template.html,

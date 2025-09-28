@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { Activity, BarChart3, DollarSign, TrendingUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -58,7 +58,7 @@ export default function TradingPlatformPage() {
         changePercent: 1.38,
         volume: '2,847 kg',
         market: 'MCX',
-        unit: '₹/10g',
+        unit: '?/10g',
       },
       {
         id: '2',
@@ -69,7 +69,7 @@ export default function TradingPlatformPage() {
         changePercent: -0.58,
         volume: '15,234 kg',
         market: 'MCX',
-        unit: '₹/kg',
+        unit: '?/kg',
       },
       {
         id: '3',
@@ -80,7 +80,7 @@ export default function TradingPlatformPage() {
         changePercent: 1.85,
         volume: '4,567 BBL',
         market: 'MCX',
-        unit: '₹/BBL',
+        unit: '?/BBL',
       },
       {
         id: '4',
@@ -91,7 +91,7 @@ export default function TradingPlatformPage() {
         changePercent: -1.58,
         volume: '8,945 kg',
         market: 'MCX',
-        unit: '₹/kg',
+        unit: '?/kg',
       },
       {
         id: '5',
@@ -102,7 +102,7 @@ export default function TradingPlatformPage() {
         changePercent: 1.45,
         volume: '12,456 Q',
         market: 'NCDEX',
-        unit: '₹/Q',
+        unit: '?/Q',
       },
     ];
 
@@ -211,13 +211,13 @@ export default function TradingPlatformPage() {
                   isLiveUpdating ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                 }`}
               >
-                <span>📊</span>
+                <span>??</span>
                 {isLiveUpdating ? 'Live' : 'Paused'}
               </button>
               <div className='text-right'>
                 <div className='text-sm text-gray-500'>Portfolio Value</div>
                 <div className='text-xl font-bold text-gray-900'>
-                  ₹{(totalPortfolioValue / 100000).toFixed(1)}L
+                  ?{(totalPortfolioValue / 100000).toFixed(1)}L
                 </div>
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function TradingPlatformPage() {
                     <div className='ml-4'>
                       <p className='text-sm font-medium text-gray-600'>Total Value</p>
                       <p className='text-2xl font-bold text-gray-900'>
-                        ₹{(totalPortfolioValue / 100000).toFixed(1)}L
+                        ?{(totalPortfolioValue / 100000).toFixed(1)}L
                       </p>
                     </div>
                   </div>
@@ -267,7 +267,7 @@ export default function TradingPlatformPage() {
 
                 <div className='bg-white p-6 rounded-lg border border-gray-200'>
                   <div className='flex items-center'>
-                    <span>📈</span>
+                    <span>??</span>
                     <div className='ml-4'>
                       <p className='text-sm font-medium text-gray-600'>Total P&L</p>
                       <p
@@ -275,7 +275,7 @@ export default function TradingPlatformPage() {
                           totalPnL >= 0 ? 'text-green-600' : 'text-red-600'
                         }`}
                       >
-                        {totalPnL >= 0 ? '+' : ''}₹{(totalPnL / 1000).toFixed(1)}K
+                        {totalPnL >= 0 ? '+' : ''}?{(totalPnL / 1000).toFixed(1)}K
                       </p>
                     </div>
                   </div>
@@ -283,7 +283,7 @@ export default function TradingPlatformPage() {
 
                 <div className='bg-white p-6 rounded-lg border border-gray-200'>
                   <div className='flex items-center'>
-                    <span>📊</span>
+                    <span>??</span>
                     <div className='ml-4'>
                       <p className='text-sm font-medium text-gray-600'>P&L %</p>
                       <p
@@ -300,7 +300,7 @@ export default function TradingPlatformPage() {
 
                 <div className='bg-white p-6 rounded-lg border border-gray-200'>
                   <div className='flex items-center'>
-                    <span>📊</span>
+                    <span>??</span>
                     <div className='ml-4'>
                       <p className='text-sm font-medium text-gray-600'>Active Positions</p>
                       <p className='text-2xl font-bold text-gray-900'>{portfolioData.length}</p>
@@ -318,7 +318,7 @@ export default function TradingPlatformPage() {
                   <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
                     <div>
                       <h4 className='text-sm font-medium text-green-600 mb-3 flex items-center'>
-                        <span>↑</span>
+                        <span>?</span>
                         Top Gainers
                       </h4>
                       {commodityData
@@ -336,7 +336,7 @@ export default function TradingPlatformPage() {
                             </div>
                             <div className='text-right'>
                               <div className='font-medium text-gray-900'>
-                                ₹{commodity.price.toLocaleString()}
+                                ?{commodity.price.toLocaleString()}
                               </div>
                               <div className='text-sm text-green-600'>
                                 +{commodity.changePercent.toFixed(2)}%
@@ -348,7 +348,7 @@ export default function TradingPlatformPage() {
 
                     <div>
                       <h4 className='text-sm font-medium text-red-600 mb-3 flex items-center'>
-                        <span>↓</span>
+                        <span>?</span>
                         Top Losers
                       </h4>
                       {commodityData
@@ -366,7 +366,7 @@ export default function TradingPlatformPage() {
                             </div>
                             <div className='text-right'>
                               <div className='font-medium text-gray-900'>
-                                ₹{commodity.price.toLocaleString()}
+                                ?{commodity.price.toLocaleString()}
                               </div>
                               <div className='text-sm text-red-600'>
                                 {commodity.changePercent.toFixed(2)}%
@@ -421,13 +421,13 @@ export default function TradingPlatformPage() {
                           {item.quantity}
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                          ₹{item.buyPrice.toLocaleString()}
+                          ?{item.buyPrice.toLocaleString()}
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                          ₹{item.currentPrice.toLocaleString()}
+                          ?{item.currentPrice.toLocaleString()}
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                          ₹{item.totalValue.toLocaleString()}
+                          ?{item.totalValue.toLocaleString()}
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap'>
                           <div
@@ -435,7 +435,7 @@ export default function TradingPlatformPage() {
                               item.pnl >= 0 ? 'text-green-600' : 'text-red-600'
                             }`}
                           >
-                            {item.pnl >= 0 ? '+' : ''}₹{item.pnl.toLocaleString()}
+                            {item.pnl >= 0 ? '+' : ''}?{item.pnl.toLocaleString()}
                           </div>
                           <div
                             className={`text-xs ${
@@ -463,7 +463,7 @@ export default function TradingPlatformPage() {
                   onClick={() => window.location.reload()}
                   className='flex items-center px-3 py-1 text-sm text-gray-600 hover:text-gray-900'
                 >
-                  <span>🔄</span>
+                  <span>??</span>
                   Refresh
                 </button>
               </div>
@@ -504,7 +504,7 @@ export default function TradingPlatformPage() {
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap'>
                           <div className='text-sm font-medium text-gray-900'>
-                            ₹{commodity.price.toLocaleString()}
+                            ?{commodity.price.toLocaleString()}
                           </div>
                           <div className='text-xs text-gray-500'>{commodity.unit}</div>
                         </td>
@@ -514,7 +514,7 @@ export default function TradingPlatformPage() {
                               commodity.changePercent >= 0 ? 'text-green-600' : 'text-red-600'
                             }`}
                           >
-                            {commodity.changePercent >= 0 ? <span>📈</span> : <span>📉</span>}
+                            {commodity.changePercent >= 0 ? <span>??</span> : <span>??</span>}
                             {commodity.changePercent >= 0 ? '+' : ''}
                             {commodity.changePercent.toFixed(2)}%
                           </div>
@@ -523,7 +523,7 @@ export default function TradingPlatformPage() {
                               commodity.change >= 0 ? 'text-green-600' : 'text-red-600'
                             }`}
                           >
-                            ({commodity.change >= 0 ? '+' : ''}₹{commodity.change})
+                            ({commodity.change >= 0 ? '+' : ''}?{commodity.change})
                           </div>
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
@@ -537,11 +537,11 @@ export default function TradingPlatformPage() {
                         <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                           <div className='flex space-x-2'>
                             <button className='flex items-center px-3 py-1 bg-green-100 text-green-800 rounded hover:bg-green-200'>
-                              <span>➕</span>
+                              <span>?</span>
                               Buy
                             </button>
                             <button className='flex items-center px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200'>
-                              <span>➖</span>
+                              <span>?</span>
                               Sell
                             </button>
                           </div>

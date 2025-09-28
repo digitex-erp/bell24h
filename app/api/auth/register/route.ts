@@ -1,69 +1,132 @@
-import { NextRequest, NextResponse } from 'next/server'
-import bcrypt from 'bcryptjs'
+import { NextRequest, NextResponse } from 'next/server';
+
+// Mock user database (in production, use real database)
+const users = new Map<string, any>([
+  ['9876543210', {
+    id: '1',
+    mobile: '9876543210',
+    name: 'Test User',
+    companyName: 'Test Company',
+    businessType: 'manufacturer',
+    verified: true
+  }]
+]);
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, phone, password, company, role } = await request.json()
+    const { mobile, name, companyName, businessType } = await request.json();
 
     // Validate required fields
-    if (!name || !email || !phone || !password || !company) {
+    if (!mobile || !name || !companyName) {
       return NextResponse.json(
-        { message: 'All fields are required' },
+        { success: false, error: 'Mobile number, name, and company name are required' },
         { status: 400 }
-      )
+      );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
+    if (!/^\d{10}$/.test(mobile)) {
       return NextResponse.json(
-        { message: 'Invalid email format' },
+        { success: false, error: 'Invalid mobile number format' },
         { status: 400 }
-      )
+      );
     }
 
-    // Validate password strength
-    if (password.length < 8) {
+    // Check if user already exists
+    if (users.has(mobile)) {
       return NextResponse.json(
-        { message: 'Password must be at least 8 characters long' },
+        { success: false, error: 'User with this mobile number already exists' },
         { status: 400 }
-      )
+      );
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 12)
-
-    // In production, save to database
-    // For now, just return success
-    const user = {
-      id: Date.now().toString(),
-      name,
-      email,
-      phone,
-      company,
-      role,
-      createdAt: new Date().toISOString()
-    }
-
-    return NextResponse.json(
-      { 
-        message: 'User registered successfully',
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          company: user.company,
-          role: user.role
-        }
+    // Create new user
+    const newUser = {
+      id: Date.now().toString(), // Simple ID generation
+      mobile,
+      name: name.trim(),
+      companyName: companyName.trim(),
+      businessType: businessType || 'manufacturer',
+      verified: true,
+      createdAt: new Date().toISOString(),
+      profile: {
+        avatar: null,
+        description: '',
+        location: '',
+        website: '',
+        gstNumber: '',
+        panNumber: ''
       },
-      { status: 201 }
-    )
+      preferences: {
+        notifications: true,
+        emailUpdates: false,
+        smsUpdates: true
+      },
+      subscription: {
+        plan: 'free',
+        features: ['basic_rfq', 'supplier_search', 'messaging']
+      }
+    };
+
+    // Save user (in production, save to database)
+    users.set(mobile, newUser);
+
+    console.log(`✅ New user registered: ${name} (${mobile})`);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Registration successful',
+      user: newUser,
+      redirectUrl: '/dashboard'
+    });
 
   } catch (error) {
-    console.error('Registration error:', error)
+    console.error('Registration error:', error);
     return NextResponse.json(
-      { message: 'Internal server error' },
+      { success: false, error: 'Registration failed' },
       { status: 500 }
-    )
+    );
+  }
+}
+
+// Get user by mobile number
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const mobile = searchParams.get('mobile');
+
+    if (!mobile || !/^\d{10}$/.test(mobile)) {
+      return NextResponse.json(
+        { success: false, error: 'Valid mobile number required' },
+        { status: 400 }
+      );
+    }
+
+    const user = users.get(mobile);
+    
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      user: {
+        id: user.id,
+        mobile: user.mobile,
+        name: user.name,
+        companyName: user.companyName,
+        businessType: user.businessType,
+        verified: user.verified
+      }
+    });
+
+  } catch (error) {
+    console.error('Get user error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to get user' },
+      { status: 500 }
+    );
   }
 }

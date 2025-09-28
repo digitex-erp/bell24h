@@ -1,162 +1,224 @@
-"use client";
-import React from 'react';
-import { Mail, Phone, MapPin, CheckCircle, Clock, MessageSquare } from 'lucide-react';
+'use client';
+import { useState } from 'react';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    subject: '',
+    message: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    // Simulate form submission
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 2000);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white text-3xl font-bold">🔔</span>
-            </div>
-          </div>
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
-            Contact Bell24h
-          </h1>
-          <p className="text-xl text-blue-600 font-semibold mb-2">
-            India's First AI-Powered B2B Marketplace
-          </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Get in touch with our team for business inquiries, technical support, or partnership opportunities.
-          </p>
-        </div>
-
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 py-12">
+      <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Contact Methods Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Mail className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Email Us</h3>
-              <p className="text-blue-600 font-medium">digitex.studio@gmail.com</p>
-              <p className="text-sm text-gray-500 mt-2">24/7 Support</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <Phone className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Call Us</h3>
-              <p className="text-green-600 font-medium">+91 [Your Number]</p>
-              <p className="text-sm text-gray-500 mt-2">Mon-Fri 9AM-6PM</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Visit Us</h3>
-              <p className="text-purple-600 font-medium">Mumbai, Maharashtra</p>
-              <p className="text-sm text-gray-500 mt-2">India</p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="h-6 w-6 text-orange-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">GST Verified</h3>
-              <p className="text-orange-600 font-medium">27AAAPP9753F2ZF</p>
-              <p className="text-sm text-gray-500 mt-2">Registered Business</p>
-            </div>
-          </div>
-
-          {/* Services Section */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Our Services</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="text-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Supplier Verification</h3>
-                <p className="text-sm text-gray-600 mb-3">Comprehensive verification reports</p>
-                <p className="text-lg font-bold text-blue-600">₹2,000</p>
-              </div>
-
-              <div className="text-center p-4 border border-gray-200 rounded-lg hover:border-green-300 transition-colors">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <MessageSquare className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">RFQ Writing</h3>
-                <p className="text-sm text-gray-600 mb-3">Professional RFQ creation</p>
-                <p className="text-lg font-bold text-green-600">₹500</p>
-              </div>
-
-              <div className="text-center p-4 border border-gray-200 rounded-lg hover:border-purple-300 transition-colors">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <Clock className="h-6 w-6 text-purple-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Featured Suppliers</h3>
-                <p className="text-sm text-gray-600 mb-3">Premium platform visibility</p>
-                <p className="text-lg font-bold text-purple-600">₹1,000/mo</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Business Hours & Response Times */}
+          <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">Contact Us</h1>
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Business Hours</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Monday - Friday</span>
-                  <span className="font-medium">9:00 AM - 6:00 PM IST</span>
+            {/* Contact Form */}
+            <div className="bg-white rounded-2xl shadow-xl p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+              
+              {submitted ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-green-600 text-2xl">✓</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Message Sent!</h3>
+                  <p className="text-gray-600">We'll get back to you within 24 hours.</p>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Saturday</span>
-                  <span className="font-medium">10:00 AM - 4:00 PM IST</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Sunday</span>
-                  <span className="font-medium">Closed</span>
-                </div>
-              </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="Enter your name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Email *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="Enter your email"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="Enter your phone number"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Company
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.company}
+                        onChange={(e) => setFormData({...formData, company: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="Enter your company name"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Subject *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.subject}
+                      onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      placeholder="What's this about?"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Message *
+                    </label>
+                    <textarea
+                      required
+                      rows={5}
+                      value={formData.message}
+                      onChange={(e) => setFormData({...formData, message: e.target.value})}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      placeholder="Tell us how we can help you..."
+                    />
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-indigo-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5 mr-2" />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Response Times</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Email Inquiries</span>
-                  <span className="font-medium text-green-600">Within 2 hours</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Phone Calls</span>
-                  <span className="font-medium text-green-600">Immediate</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">LinkedIn Messages</span>
-                  <span className="font-medium text-green-600">Within 1 hour</span>
+            {/* Contact Information */}
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl shadow-xl p-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h3>
+                
+                <div className="space-y-6">
+                  <div className="flex items-start">
+                    <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                      <Phone className="w-6 h-6 text-indigo-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">Phone</h4>
+                      <p className="text-gray-600">+91-9004962871</p>
+                      <p className="text-sm text-gray-500">Mon-Fri 9AM-6PM IST</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                      <Mail className="w-6 h-6 text-emerald-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">Email</h4>
+                      <p className="text-gray-600">contact@bell24h.com</p>
+                      <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                      <MapPin className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-1">Address</h4>
+                      <p className="text-gray-600">
+                        Mumbai, Maharashtra<br />
+                        India 400001
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Call to Action */}
-          <div className="text-center mt-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Get Started?</h3>
-            <p className="text-lg text-gray-600 mb-8">Contact us today to discuss your B2B needs</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="mailto:digitex.studio@gmail.com"
-                className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <Mail className="h-5 w-5 mr-2" />
-                Send Email
-              </a>
-              <a
-                href="https://linkedin.com/in/vishal-pendharkar-28387b19/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <MessageSquare className="h-5 w-5 mr-2" />
-                Connect on LinkedIn
-              </a>
+              <div className="bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-2xl p-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Why Choose Bell24h?</h3>
+                <ul className="space-y-3 text-gray-600">
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-2">✓</span>
+                    AI-powered supplier matching
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-2">✓</span>
+                    Escrow-secured payments
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-2">✓</span>
+                    GST-verified suppliers only
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-2">✓</span>
+                    24-hour quote delivery
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-2">✓</span>
+                    Voice, video, or text RFQ
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

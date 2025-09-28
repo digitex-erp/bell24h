@@ -13,25 +13,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
     }
 
-    // Generate image using DALL-E
-    const response = await openai.images.generate({
-      model: "dall-e-3",
-      prompt: prompt,
-      size: size as "1024x1024" | "1792x1024" | "1024x1792",
-      quality: "standard",
-      n: 1,
-    });
+    // Temporarily disabled due to OpenAI billing limit
+    // Return a placeholder image instead
+    const placeholderImages = [
+      'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1024&h=1024&fit=crop',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1024&h=1024&fit=crop',
+      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1024&h=1024&fit=crop',
+      'https://images.unsplash.com/photo-1552664730-d307ca884974?w=1024&h=1024&fit=crop',
+      'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=1024&h=1024&fit=crop'
+    ];
 
-    const imageUrl = response.data[0]?.url;
-
-    if (!imageUrl) {
-      return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
-    }
+    // Select a random placeholder image
+    const randomIndex = Math.floor(Math.random() * placeholderImages.length);
+    const imageUrl = placeholderImages[randomIndex];
 
     return NextResponse.json({
       success: true,
       imageUrl,
-      prompt
+      prompt,
+      note: 'Using placeholder image due to OpenAI billing limit'
     });
 
   } catch (error) {

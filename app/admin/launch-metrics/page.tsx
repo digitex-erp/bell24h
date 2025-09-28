@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity, BarChart3, DollarSign, Eye, MessageSquare, Share2, Target, TrendingUp } from 'lucide-react';
+// Removed broken lucide-react import - using emojis instead
 import { useState } from 'react';
 
 interface Campaign {
@@ -39,7 +39,7 @@ export default function LaunchMetricsPage() {
       value: '24',
       change: 12.5,
       trend: 'up',
-      icon: Target,
+      icon: '🎯',
       color: 'text-blue-600'
     },
     {
@@ -47,7 +47,7 @@ export default function LaunchMetricsPage() {
       value: '₹2.4L',
       change: 8.3,
       trend: 'up',
-      icon: DollarSign,
+      icon: '💰',
       color: 'text-green-600'
     },
     {
@@ -55,7 +55,7 @@ export default function LaunchMetricsPage() {
       value: '1.2M',
       change: 15.7,
       trend: 'up',
-      icon: Eye,
+      icon: '👁️',
       color: 'text-purple-600'
     },
     {
@@ -63,7 +63,7 @@ export default function LaunchMetricsPage() {
       value: '3.2%',
       change: -2.1,
       trend: 'down',
-      icon: TrendingUp,
+      icon: '↗️',
       color: 'text-orange-600'
     },
     {
@@ -71,7 +71,7 @@ export default function LaunchMetricsPage() {
       value: '₹12.50',
       change: 5.4,
       trend: 'up',
-      icon: Activity,
+      icon: '📈',
       color: 'text-red-600'
     },
     {
@@ -79,7 +79,7 @@ export default function LaunchMetricsPage() {
       value: '4.2x',
       change: 18.9,
       trend: 'up',
-      icon: BarChart3,
+      icon: '📈',
       color: 'text-indigo-600'
     }
   ];
@@ -167,26 +167,26 @@ export default function LaunchMetricsPage() {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'email':
-        return <MessageSquare className="h-4 w-4" />;
+        return <span className="text-lg">💬</span>;
       case 'social':
-        return <Share2 className="h-4 w-4" />;
+        return <span className="text-lg">🔗</span>;
       case 'paid':
-        return <DollarSign className="h-4 w-4" />;
+        return <span className="text-lg">💰</span>;
       case 'content':
-        return <BarChart3 className="h-4 w-4" />;
+        return <span className="text-lg">📈</span>;
       default:
-        return <Activity className="h-4 w-4" />;
+        return <span className="text-lg">📈</span>;
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up':
-        return <TrendingUp className="h-4 w-4 text-green-600" />;
+        return <span className="text-green-600">↗️</span>;
       case 'down':
-        return <TrendingUp className="h-4 w-4 text-red-600 transform rotate-180" />;
+        return <span className="text-red-600">↘️</span>;
       default:
-        return <Activity className="h-4 w-4 text-gray-600" />;
+        return <span className="text-gray-600">📈</span>;
     }
   };
 
@@ -203,9 +203,9 @@ export default function LaunchMetricsPage() {
         <div className="border-b border-gray-200 mb-8">
           <nav className="flex space-x-8">
             {[
-              { id: 'overview', name: 'Overview', icon: BarChart3 },
-              { id: 'campaigns', name: 'Campaigns', icon: Target },
-              { id: 'analytics', name: 'Analytics', icon: TrendingUp }
+              { id: 'overview', name: 'Overview', icon: '📈' },
+              { id: 'campaigns', name: 'Campaigns', icon: '🎯' },
+              { id: 'analytics', name: 'Analytics', icon: '📈' }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -215,7 +215,7 @@ export default function LaunchMetricsPage() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
               >
-                <tab.icon className="w-5 h-5" />
+                <span className="text-lg">{tab.icon}</span>
                 <span>{tab.name}</span>
               </button>
             ))}
@@ -246,7 +246,7 @@ export default function LaunchMetricsPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <div className="p-2 bg-gray-100 rounded-lg">
-                        <metric.icon className={`h-6 w-6 ${metric.color}`} />
+                        <span className={`text-2xl ${metric.color}`}>{metric.icon}</span>
                       </div>
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-600">{metric.name}</p>
@@ -271,7 +271,7 @@ export default function LaunchMetricsPage() {
               <h3 className="text-lg font-medium text-gray-900 mb-4">Performance Trends</h3>
               <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
                 <div className="text-center">
-                  <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <span className="text-5xl text-gray-400 mx-auto mb-4">📈</span>
                   <p className="text-gray-500">Performance chart would be displayed here</p>
                 </div>
               </div>

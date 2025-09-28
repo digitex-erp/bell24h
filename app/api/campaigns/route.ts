@@ -1,4 +1,4 @@
-import { AgentAuthService } from '@/lib/auth/agent-auth'
+import { AgentAuth } from '@/lib/auth/agent-auth'
 import { CampaignService } from '@/lib/services/campaign-service'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -6,20 +6,24 @@ import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic';
 
 // Helper function to get agent from request
-async function getAgentFromRequest(request: NextRequest) {
+function getAgentFromRequest(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return null
   }
 
   const token = authHeader.substring(7)
-  const result = await AgentAuthService.verifyToken(token)
-  return result.success ? result.agent : null
+  const authToken = AgentAuth.verifyToken(token)
+  return authToken ? {
+    id: authToken.agentId,
+    email: authToken.email,
+    role: authToken.role
+  } : null
 }
 
 export async function GET(request: NextRequest) {
   try {
-    const agent = await getAgentFromRequest(request)
+    const agent = getAgentFromRequest(request)
     if (!agent) {
       return NextResponse.json({
         success: false,
@@ -56,7 +60,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const agent = await getAgentFromRequest(request)
+    const agent = getAgentFromRequest(request)
     if (!agent) {
       return NextResponse.json({
         success: false,

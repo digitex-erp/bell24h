@@ -1,75 +1,73 @@
 'use client';
 
-import { CheckCircle, Clock, Edit, Eye, FileText, Search, Trash2, XCircle } from 'lucide-react';
-import { useState } from 'react';
+import { CheckCircle, Clock, Edit, Eye, FileText, Search, Trash2, XCircle, Play, Mic, RefreshCw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+// Add CSS for line clamp
+const styles = `
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+`;
 
 interface RFQ {
   id: string;
   title: string;
-  buyer: string;
+  description: string;
+  buyer: {
+    name: string;
+    company: string;
+  };
   category: string;
-  budget: string;
+  budget: number;
   status: 'active' | 'closed' | 'pending' | 'expired';
   responses: number;
+  views: number;
   createdAt: string;
   deadline: string;
+  type: 'text' | 'video' | 'voice';
+  urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+  timeAgo: string;
 }
 
 export default function RFQManagementPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [rfqs, setRfqs] = useState<RFQ[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const mockRFQs: RFQ[] = [
-    {
-      id: 'RFQ-001',
-      title: 'Industrial IoT Sensors Required',
-      buyer: 'TechCorp Industries',
-      category: 'Electronics',
-      budget: '₹4.0L - ₹6.0L',
-      status: 'active',
-      responses: 12,
-      createdAt: '2024-08-25',
-      deadline: '2024-09-15'
-    },
-    {
-      id: 'RFQ-002',
-      title: 'Textile Manufacturing Equipment',
-      buyer: 'FashionCorp Ltd',
-      category: 'Manufacturing',
-      budget: '₹15.0L - ₹25.0L',
-      status: 'active',
-      responses: 8,
-      createdAt: '2024-08-28',
-      deadline: '2024-09-20'
-    },
-    {
-      id: 'RFQ-003',
-      title: 'Chemical Processing Units',
-      buyer: 'ChemCorp Solutions',
-      category: 'Chemicals',
-      budget: '₹50.0L - ₹75.0L',
-      status: 'pending',
-      responses: 0,
-      createdAt: '2024-08-30',
-      deadline: '2024-09-25'
-    },
-    {
-      id: 'RFQ-004',
-      title: 'Automotive Components',
-      buyer: 'AutoCorp India',
-      category: 'Manufacturing',
-      budget: '₹8.0L - ₹12.0L',
-      status: 'closed',
-      responses: 15,
-      createdAt: '2024-08-20',
-      deadline: '2024-09-10'
+  // Fetch live RFQs from API
+  useEffect(() => {
+    fetchRFQs();
+    // Auto-refresh every 30 seconds
+    const interval = setInterval(fetchRFQs, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchRFQs = async () => {
+    try {
+      setRefreshing(true);
+      const response = await fetch('/api/rfq/live?limit=50');
+      const data = await response.json();
+      if (data.success) {
+        setRfqs(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching RFQs:', error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
     }
-  ];
+  };
 
-  const filteredRFQs = mockRFQs.filter(rfq => {
+  const filteredRFQs = rfqs.filter(rfq => {
     const matchesSearch = rfq.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      rfq.buyer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      rfq.buyer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       rfq.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'all' || rfq.category === categoryFilter;
     const matchesStatus = statusFilter === 'all' || rfq.status === statusFilter;
@@ -92,13 +90,60 @@ export default function RFQManagementPage() {
     }
   };
 
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'video': return <Play className="w-4 h-4" />;
+      case 'voice': return <Mic className="w-4 h-4" />;
+      default: return <FileText className="w-4 h-4" />;
+    }
+  };
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case 'video': return 'bg-red-100 text-red-600';
+      case 'voice': return 'bg-blue-100 text-blue-600';
+      default: return 'bg-gray-100 text-gray-600';
+    }
+  };
+
+  const getUrgencyColor = (urgency: string) => {
+    switch (urgency) {
+      case 'URGENT': return 'bg-red-500';
+      case 'HIGH': return 'bg-orange-500';
+      case 'MEDIUM': return 'bg-yellow-500';
+      default: return 'bg-green-500';
+    }
+  };
+
+  // Calculate stats from live data
+  const stats = {
+    total: rfqs.length,
+    active: rfqs.filter(rfq => rfq.status === 'active').length,
+    pending: rfqs.filter(rfq => rfq.status === 'pending').length,
+    closed: rfqs.filter(rfq => rfq.status === 'closed').length,
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <style dangerouslySetInnerHTML={{ __html: styles }} />
+      <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">RFQ Management</h1>
-          <p className="mt-2 text-gray-600">Review and moderate Request for Quotations</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">RFQ Management</h1>
+              <p className="mt-2 text-gray-600">Review and moderate Request for Quotations</p>
+            </div>
+            <button
+              onClick={fetchRFQs}
+              disabled={refreshing}
+              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+            >
+              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -110,7 +155,7 @@ export default function RFQManagementPage() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total RFQs</p>
-                <p className="text-2xl font-bold text-gray-900">156</p>
+                <p className="text-2xl font-bold text-gray-900">{loading ? '...' : stats.total}</p>
               </div>
             </div>
           </div>
@@ -122,7 +167,7 @@ export default function RFQManagementPage() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Active</p>
-                <p className="text-2xl font-bold text-gray-900">89</p>
+                <p className="text-2xl font-bold text-gray-900">{loading ? '...' : stats.active}</p>
               </div>
             </div>
           </div>
@@ -134,7 +179,7 @@ export default function RFQManagementPage() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-gray-900">34</p>
+                <p className="text-2xl font-bold text-gray-900">{loading ? '...' : stats.pending}</p>
               </div>
             </div>
           </div>
@@ -146,7 +191,7 @@ export default function RFQManagementPage() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Closed</p>
-                <p className="text-2xl font-bold text-gray-900">33</p>
+                <p className="text-2xl font-bold text-gray-900">{loading ? '...' : stats.closed}</p>
               </div>
             </div>
           </div>
@@ -172,6 +217,7 @@ export default function RFQManagementPage() {
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              title="Filter by category"
             >
               <option value="all">All Categories</option>
               <option value="Electronics">Electronics</option>
@@ -184,6 +230,7 @@ export default function RFQManagementPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              title="Filter by status"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -205,71 +252,109 @@ export default function RFQManagementPage() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RFQ Details</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buyer</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Budget</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urgency</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Responses</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deadline</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredRFQs.map((rfq) => (
-                  <tr key={rfq.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">{rfq.title}</div>
-                        <div className="text-sm text-gray-500">ID: {rfq.id}</div>
+                {loading ? (
+                  <tr>
+                    <td colSpan={10} className="px-6 py-8 text-center">
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                        <span className="ml-2 text-gray-600">Loading RFQs...</span>
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {rfq.buyer}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {rfq.category}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {rfq.budget}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        {getStatusIcon(rfq.status)}
-                        <span className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${rfq.status === 'active' ? 'bg-blue-100 text-blue-800' :
-                            rfq.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              rfq.status === 'closed' ? 'bg-green-100 text-green-800' :
-                                'bg-red-100 text-red-800'
-                          }`}>
-                          {rfq.status}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {rfq.responses} responses
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {rfq.deadline}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button className="text-blue-600 hover:text-blue-900 mr-3">
-                        <Eye className="h-4 w-4" />
-                      </button>
-                      <button className="text-green-600 hover:text-green-900 mr-3">
-                        <Edit className="h-4 w-4" />
-                      </button>
-                      <button className="text-red-600 hover:text-red-900">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
                     </td>
                   </tr>
-                ))}
+                ) : filteredRFQs.length === 0 ? (
+                  <tr>
+                    <td colSpan={10} className="px-6 py-8 text-center text-gray-500">
+                      No RFQs found matching your criteria
+                    </td>
+                  </tr>
+                ) : (
+                  filteredRFQs.map((rfq) => (
+                    <tr key={rfq.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 line-clamp-2">{rfq.title}</div>
+                          <div className="text-sm text-gray-500">ID: {rfq.id}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${getTypeColor(rfq.type)}`}>
+                          {getTypeIcon(rfq.type)}
+                          {rfq.type.toUpperCase()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <div>
+                          <div className="font-medium">{rfq.buyer.name}</div>
+                          <div className="text-gray-500">{rfq.buyer.company}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                          {rfq.category}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        ₹{(rfq.budget / 100000).toFixed(1)}L
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2 h-2 rounded-full ${getUrgencyColor(rfq.urgency)}`}></div>
+                          <span className="text-xs font-medium text-gray-600">{rfq.urgency}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          {getStatusIcon(rfq.status)}
+                          <span className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${rfq.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                              rfq.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                rfq.status === 'closed' ? 'bg-green-100 text-green-800' :
+                                  'bg-red-100 text-red-800'
+                            }`}>
+                            {rfq.status}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div className="flex items-center gap-4">
+                          <span>{rfq.responses} quotes</span>
+                          <span>{rfq.views} views</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {rfq.timeAgo}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button className="text-blue-600 hover:text-blue-900 mr-3" title="View RFQ details">
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button className="text-green-600 hover:text-green-900 mr-3" title="Edit RFQ">
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button className="text-red-600 hover:text-red-900" title="Delete RFQ">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

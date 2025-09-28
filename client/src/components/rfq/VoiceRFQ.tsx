@@ -177,36 +177,50 @@ export default function VoiceRFQ() {
     setIsProcessing(true);
     
     try {
-      // Simulate transcription processing
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // REAL transcription processing with OpenAI
+      const formData = new FormData();
+      formData.append('audioFile', blob, 'recording.wav');
+      formData.append('language', 'en');
+
+      const response = await fetch('/api/voice/process', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Transcription failed');
+      }
+
+      const result = await response.json();
       
-      const mockTranscription: TranscriptionResult = {
-        text: 'We need electronic components for our new IoT device. Looking for reliable suppliers with competitive pricing. Budget range is five to ten thousand dollars. Deadline is February fifteenth.',
-        confidence: 94.2,
-        segments: [
-          { start: 0, end: 3, text: 'We need electronic components', confidence: 96.1 },
-          { start: 3, end: 6, text: 'for our new IoT device', confidence: 93.8 },
-          { start: 6, end: 9, text: 'Looking for reliable suppliers', confidence: 95.2 },
-          { start: 9, end: 12, text: 'with competitive pricing', confidence: 92.7 }
+      if (!result.success) {
+        throw new Error(result.error || 'Transcription failed');
+      }
+
+      const realTranscription: TranscriptionResult = {
+        text: result.transcript,
+        confidence: result.analysis?.confidence || 85.0,
+        segments: result.analysis?.segments || [
+          { start: 0, end: 5, text: result.transcript, confidence: 85.0 }
         ]
       };
 
-      setTranscription(mockTranscription);
+      setTranscription(realTranscription);
       
-      // Update recording status
+      // Update recording status with REAL data
       const updatedRecording: VoiceRecording = {
         ...currentRecording,
         status: 'completed',
-        transcription: mockTranscription.text,
-        confidence: mockTranscription.confidence,
+        transcription: realTranscription.text,
+        confidence: realTranscription.confidence,
         duration: recordingTime,
         size: `${(blob.size / (1024 * 1024)).toFixed(1)} MB`,
         rfqData: {
-          title: 'Electronic Components for IoT Device',
-          description: mockTranscription.text,
-          category: selectedCategory,
-          budget: budget || '$5,000 - $10,000',
-          deadline: deadline || '2024-02-15'
+          title: result.analysis?.title || 'Voice RFQ - ' + realTranscription.text.substring(0, 50) + '...',
+          description: realTranscription.text,
+          category: result.analysis?.category || selectedCategory,
+          budget: result.analysis?.budget || budget || 'Not specified',
+          deadline: result.analysis?.deadline || deadline || 'Not specified'
         }
       };
 
