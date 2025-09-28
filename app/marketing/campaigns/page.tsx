@@ -144,7 +144,7 @@ export default function MarketingCampaignsPage() {
                     <td className="py-3 px-4">
                       <span className={`px-2 py-1 rounded-full text-xs ${campaign.status === 'Active' ? 'bg-green-500/20 text-green-400' :
                           campaign.status === 'Paused' ? 'bg-yellow-500/20 text-yellow-400' :
-                            'bg-gray-500/20 text-gray-400'
+                            'bg-neutral-500/20 text-gray-400'
                         }`}>
                         {campaign.status}
                       </span>

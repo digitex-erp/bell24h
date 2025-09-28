@@ -1,339 +1,114 @@
+'use client';
+
 import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <>
-      <style jsx>{`
-        .footer {
-          background: #1a237e;
-          color: white;
-          margin-top: 80px;
-        }
-        
-        .trust-section {
-          background: #0d47a1;
-          padding: 30px 0;
-        }
-        
-        .trust-section .container {
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
-          flex-wrap: wrap;
-          gap: 20px;
-        }
-        
-        .trust-item {
-          text-align: center;
-        }
-        
-        .trust-item img {
-          height: 60px;
-          margin-bottom: 10px;
-        }
-        
-        .trust-item p {
-          margin: 0;
-          font-size: 14px;
-          opacity: 0.9;
-        }
-        
-        .main-footer {
-          padding: 60px 0;
-        }
-        
-        .main-footer .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
-        
-        .footer-grid {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 40px;
-        }
-        
-        .footer-section h3,
-        .footer-section h4 {
-          margin-bottom: 20px;
-          font-size: 18px;
-        }
-        
-        .footer-section p {
-          margin-bottom: 15px;
-          opacity: 0.8;
-          line-height: 1.6;
-        }
-        
-        .social-links {
-          display: flex;
-          gap: 10px;
-        }
-        
-        .social-link {
-          background: white;
-          color: #1a237e;
-          width: 35px;
-          height: 35px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          font-weight: bold;
-          transition: transform 0.3s;
-        }
-        
-        .social-link:hover {
-          transform: scale(1.1);
-        }
-        
-        .footer-section ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
-        
-        .footer-section li {
-          margin-bottom: 10px;
-        }
-        
-        .footer-section a {
-          color: white;
-          text-decoration: none;
-          opacity: 0.8;
-          transition: opacity 0.3s;
-        }
-        
-        .footer-section a:hover {
-          opacity: 1;
-          text-decoration: underline;
-        }
-        
-        .payment-section {
-          background: #0d47a1;
-          padding: 20px 0;
-        }
-        
-        .payment-section .container {
-          text-align: center;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
-        
-        .payment-section p {
-          margin-bottom: 15px;
-          opacity: 0.9;
-        }
-        
-        .payment-partners {
-          display: flex;
-          justify-content: center;
-          gap: 30px;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-        
-        .payment-partners img {
-          height: 30px;
-          opacity: 0.8;
-          transition: opacity 0.3s;
-        }
-        
-        .payment-partners img:hover {
-          opacity: 1;
-        }
-        
-        .copyright {
-          background: #001970;
-          padding: 15px 0;
-          text-align: center;
-          font-size: 14px;
-          opacity: 0.9;
-        }
-        
-        @media (max-width: 768px) {
-          .footer-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-          }
-          
-          .trust-section .container {
-            flex-direction: column;
-            gap: 30px;
-          }
-          
-          .payment-partners {
-            gap: 20px;
-          }
-        }
-      `}</style>
+    <footer className="bg-neutral-900 text-white">
+      <div className="container-custom py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                B
+              </div>
+              <div>
+                <div className="font-bold text-xl">Bell24h</div>
+                <div className="text-sm text-neutral-400">Enterprise B2B</div>
+              </div>
+            </div>
+            <p className="text-neutral-300 mb-6 leading-relaxed">
+              India's leading AI-powered B2B marketplace connecting verified suppliers and buyers with advanced matching technology and secure escrow payments.
+            </p>
+            <div className="flex space-x-4">
+              <a href="#" className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
+                <span className="text-lg">📘</span>
+              </a>
+              <a href="#" className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
+                <span className="text-lg">🐦</span>
+              </a>
+              <a href="#" className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
+                <span className="text-lg">💼</span>
+              </a>
+              <a href="#" className="w-10 h-10 bg-neutral-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors">
+                <span className="text-lg">📺</span>
+              </a>
+            </div>
+          </div>
 
-      <footer className="footer">
-        {/* Trust Badges Section */}
-        <div className="trust-section">
-          <div className="container">
-            <div className="trust-item">
-              <div style={{
-                width: '60px',
-                height: '60px',
-                background: 'white',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 10px',
-                fontSize: '24px'
-              }}>
-                ✅
-              </div>
-              <p>ISO 9001:2015</p>
-            </div>
-            <div className="trust-item">
-              <div style={{
-                width: '60px',
-                height: '60px',
-                background: 'white',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 10px',
-                fontSize: '24px'
-              }}>
-                🇮🇳
-              </div>
-              <p>Startup India</p>
-            </div>
-            <div className="trust-item">
-              <div style={{
-                width: '60px',
-                height: '60px',
-                background: 'white',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 10px',
-                fontSize: '24px'
-              }}>
-                🏭
-              </div>
-              <p>Make in India</p>
-            </div>
-            <div className="trust-item">
-              <div style={{
-                width: '60px',
-                height: '60px',
-                background: 'white',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 10px',
-                fontSize: '24px'
-              }}>
-                📋
-              </div>
-              <p>MSME Registered</p>
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
+            <ul className="space-y-3">
+              <li><Link href="/" className="text-neutral-300 hover:text-white transition-colors">Home</Link></li>
+              <li><Link href="/marketplace" className="text-neutral-300 hover:text-white transition-colors">Marketplace</Link></li>
+              <li><Link href="/suppliers" className="text-neutral-300 hover:text-white transition-colors">Suppliers</Link></li>
+              <li><Link href="/rfq/create" className="text-neutral-300 hover:text-white transition-colors">Post RFQ</Link></li>
+              <li><Link href="/pricing" className="text-neutral-300 hover:text-white transition-colors">Pricing</Link></li>
+              <li><Link href="/about" className="text-neutral-300 hover:text-white transition-colors">About Us</Link></li>
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h3 className="text-lg font-semibold mb-6">Services</h3>
+            <ul className="space-y-3">
+              <li><Link href="/services/verification" className="text-neutral-300 hover:text-white transition-colors">Supplier Verification</Link></li>
+              <li><Link href="/services/escrow" className="text-neutral-300 hover:text-white transition-colors">Escrow Services</Link></li>
+              <li><Link href="/services/logistics" className="text-neutral-300 hover:text-white transition-colors">Logistics</Link></li>
+              <li><Link href="/services/rfq-writing" className="text-neutral-300 hover:text-white transition-colors">RFQ Writing</Link></li>
+              <li><Link href="/services/trade-assurance" className="text-neutral-300 hover:text-white transition-colors">Trade Assurance</Link></li>
+              <li><Link href="/fintech" className="text-neutral-300 hover:text-white transition-colors">Fintech Solutions</Link></li>
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h3 className="text-lg font-semibold mb-6">Support</h3>
+            <ul className="space-y-3">
+              <li><Link href="/help" className="text-neutral-300 hover:text-white transition-colors">Help Center</Link></li>
+              <li><Link href="/help/faq" className="text-neutral-300 hover:text-white transition-colors">FAQ</Link></li>
+              <li><Link href="/contact" className="text-neutral-300 hover:text-white transition-colors">Contact Us</Link></li>
+              <li><Link href="/help/how-to-buy" className="text-neutral-300 hover:text-white transition-colors">How to Buy</Link></li>
+              <li><Link href="/help/how-to-sell" className="text-neutral-300 hover:text-white transition-colors">How to Sell</Link></li>
+              <li><Link href="/report-issue" className="text-neutral-300 hover:text-white transition-colors">Report Issue</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Newsletter Signup */}
+        <div className="border-t border-neutral-800 mt-12 pt-8">
+          <div className="max-w-md mx-auto text-center">
+            <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
+            <p className="text-neutral-300 mb-6">Get the latest B2B insights and marketplace updates delivered to your inbox.</p>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-lg text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+              <button className="btn-primary px-6 py-3">
+                Subscribe
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Main Footer Content */}
-        <div className="main-footer">
-          <div className="container">
-            <div className="footer-grid">
-              {/* Company Info */}
-              <div className="footer-section">
-                <h3>About Bell24h</h3>
-                <p>
-                  India's largest B2B marketplace connecting buyers with verified suppliers. 
-                  Trusted by 45,000+ businesses across India.
-                </p>
-                <div className="social-links">
-                  <a href="#" className="social-link">f</a>
-                  <a href="#" className="social-link">t</a>
-                  <a href="#" className="social-link">in</a>
-                  <a href="#" className="social-link">yt</a>
-                </div>
-              </div>
-
-              {/* Quick Links */}
-              <div className="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                  <li><Link href="/about">About Us</Link></li>
-                  <li><Link href="/contact">Contact Us</Link></li>
-                  <li><Link href="/careers">Careers</Link></li>
-                  <li><Link href="/testimonials">Testimonials</Link></li>
-                  <li><Link href="/media">Media</Link></li>
-                </ul>
-          </div>
-
-              {/* Services */}
-              <div className="footer-section">
-                <h4>Our Services</h4>
-                <ul>
-                  <li><Link href="/services/rfq">RFQ Service</Link></li>
-                  <li><Link href="/services/verified-suppliers">Verified Suppliers</Link></li>
-                  <li><Link href="/services/trade-assurance">Trade Assurance</Link></li>
-                  <li><Link href="/services/logistics">Logistics Service</Link></li>
-                  <li><Link href="/advertising">Advertise with Us</Link></li>
-            </ul>
-          </div>
-
-              {/* Help & Support */}
-              <div className="footer-section">
-                <h4>Help & Support</h4>
-                <ul>
-                  <li><Link href="/help/faq">FAQs</Link></li>
-                  <li><Link href="/help/how-to-buy">How to Buy</Link></li>
-                  <li><Link href="/help/how-to-sell">How to Sell</Link></li>
-                  <li><Link href="/help/payment">Payment Options</Link></li>
-                  <li><Link href="/help/safety">Safety Center</Link></li>
-            </ul>
-          </div>
-
-              {/* Legal & Compliance */}
-              <div className="footer-section">
-                <h4>Legal</h4>
-                <ul>
-                  <li><Link href="/terms">Terms of Use</Link></li>
-                  <li><Link href="/privacy">Privacy Policy</Link></li>
-                  <li><Link href="/compliance/razorpay">Razorpay Compliance</Link></li>
-                  <li><Link href="/compliance/gst">GST Compliance</Link></li>
-                  <li><Link href="/report-issue">Report Issue</Link></li>
-            </ul>
-              </div>
+        {/* Bottom Bar */}
+        <div className="border-t border-neutral-800 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-neutral-400 text-sm">
+              © 2024 Bell24h. All rights reserved. | Made in India 🇮🇳
+            </div>
+            <div className="flex space-x-6 text-sm">
+              <Link href="/privacy" className="text-neutral-400 hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="text-neutral-400 hover:text-white transition-colors">Terms of Service</Link>
+              <Link href="/refund-policy" className="text-neutral-400 hover:text-white transition-colors">Refund Policy</Link>
             </div>
           </div>
         </div>
-
-        {/* Payment Partners */}
-        <div className="payment-section">
-          <div className="container">
-            <p>Secure Payments Powered By</p>
-            <div className="payment-partners">
-              <div style={{ fontSize: '24px' }}>💳</div>
-              <div style={{ fontSize: '24px' }}>📱</div>
-              <div style={{ fontSize: '24px' }}>🏦</div>
-              <div style={{ fontSize: '24px' }}>💰</div>
-              <div style={{ fontSize: '24px' }}>🏪</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="copyright">
-          <p>&copy; 2024 Bell24h.com. All rights reserved. | CIN: U74999MH2024PTC123456</p>
       </div>
     </footer>
-    </>
   );
 }

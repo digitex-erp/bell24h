@@ -105,7 +105,7 @@ export default function SystemMonitoringPage() {
       case 'critical':
         return 'text-red-600 bg-red-100';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-neutral-600 bg-neutral-100';
     }
   };
 
@@ -118,7 +118,7 @@ export default function SystemMonitoringPage() {
       case 'info':
         return <CheckCircle className="h-4 w-4 text-blue-600" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-600" />;
+        return <Clock className="h-4 w-4 text-neutral-600" />;
     }
   };
 
@@ -127,12 +127,12 @@ export default function SystemMonitoringPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">System Monitoring</h1>
-          <p className="mt-2 text-gray-600">Real-time system health and performance monitoring</p>
+          <h1 className="text-3xl font-bold text-neutral-900">System Monitoring</h1>
+          <p className="mt-2 text-neutral-600">Real-time system health and performance monitoring</p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="border-b border-gray-200 mb-8">
+        <div className="border-b border-neutral-200 mb-8">
           <nav className="flex space-x-8">
             {[
               { id: 'overview', name: 'Overview', icon: Monitor },
@@ -144,7 +144,7 @@ export default function SystemMonitoringPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
                   }`}
               >
                 <tab.icon className="w-5 h-5" />
@@ -163,12 +163,12 @@ export default function SystemMonitoringPage() {
                 <div key={index} className="bg-white rounded-lg shadow p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className="p-2 bg-gray-100 rounded-lg">
+                      <div className="p-2 bg-neutral-100 rounded-lg">
                         <metric.icon className={`h-6 w-6 ${metric.color}`} />
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">{metric.name}</p>
-                        <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
+                        <p className="text-sm font-medium text-neutral-600">{metric.name}</p>
+                        <p className="text-2xl font-bold text-neutral-900">{metric.value}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -183,27 +183,27 @@ export default function SystemMonitoringPage() {
 
             {/* System Status */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">System Status</h3>
+              <h3 className="text-lg font-medium text-neutral-900 mb-4">System Status</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Services</h4>
+                  <h4 className="text-sm font-medium text-neutral-600 mb-2">Services</h4>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">API Server</span>
+                      <span className="text-sm text-neutral-900">API Server</span>
                       <div className="flex items-center">
                         <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
                         <span className="text-sm text-green-600">Running</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">Database</span>
+                      <span className="text-sm text-neutral-900">Database</span>
                       <div className="flex items-center">
                         <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
                         <span className="text-sm text-green-600">Connected</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">Cache</span>
+                      <span className="text-sm text-neutral-900">Cache</span>
                       <div className="flex items-center">
                         <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
                         <span className="text-sm text-green-600">Active</span>
@@ -212,11 +212,11 @@ export default function SystemMonitoringPage() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Recent Activity</h4>
+                  <h4 className="text-sm font-medium text-neutral-600 mb-2">Recent Activity</h4>
                   <div className="space-y-2">
-                    <div className="text-sm text-gray-900">Last backup: 2 hours ago</div>
-                    <div className="text-sm text-gray-900">Active users: 1,247</div>
-                    <div className="text-sm text-gray-900">API calls today: 45,678</div>
+                    <div className="text-sm text-neutral-900">Last backup: 2 hours ago</div>
+                    <div className="text-sm text-neutral-900">Active users: 1,247</div>
+                    <div className="text-sm text-neutral-900">API calls today: 45,678</div>
                   </div>
                 </div>
               </div>
@@ -228,8 +228,8 @@ export default function SystemMonitoringPage() {
         {activeTab === 'alerts' && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900">System Alerts</h3>
+              <div className="px-6 py-4 border-b border-neutral-200">
+                <h3 className="text-lg font-medium text-neutral-900">System Alerts</h3>
               </div>
               <div className="divide-y divide-gray-200">
                 {alerts.map((alert) => (
@@ -237,8 +237,8 @@ export default function SystemMonitoringPage() {
                     <div className="flex items-center">
                       {getAlertIcon(alert.type)}
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-900">{alert.message}</p>
-                        <p className="text-sm text-gray-500">{alert.timestamp}</p>
+                        <p className="text-sm font-medium text-neutral-900">{alert.message}</p>
+                        <p className="text-sm text-neutral-500">{alert.timestamp}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -259,37 +259,37 @@ export default function SystemMonitoringPage() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Response Times</h3>
+                <h3 className="text-lg font-medium text-neutral-900 mb-4">Response Times</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">API Endpoints</span>
-                    <span className="text-sm font-medium text-gray-900">142ms</span>
+                    <span className="text-sm text-neutral-600">API Endpoints</span>
+                    <span className="text-sm font-medium text-neutral-900">142ms</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Database Queries</span>
-                    <span className="text-sm font-medium text-gray-900">23ms</span>
+                    <span className="text-sm text-neutral-600">Database Queries</span>
+                    <span className="text-sm font-medium text-neutral-900">23ms</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Static Assets</span>
-                    <span className="text-sm font-medium text-gray-900">45ms</span>
+                    <span className="text-sm text-neutral-600">Static Assets</span>
+                    <span className="text-sm font-medium text-neutral-900">45ms</span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Throughput</h3>
+                <h3 className="text-lg font-medium text-neutral-900 mb-4">Throughput</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Requests/min</span>
-                    <span className="text-sm font-medium text-gray-900">1,247</span>
+                    <span className="text-sm text-neutral-600">Requests/min</span>
+                    <span className="text-sm font-medium text-neutral-900">1,247</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Active Sessions</span>
-                    <span className="text-sm font-medium text-gray-900">847</span>
+                    <span className="text-sm text-neutral-600">Active Sessions</span>
+                    <span className="text-sm font-medium text-neutral-900">847</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Error Rate</span>
-                    <span className="text-sm font-medium text-gray-900">0.02%</span>
+                    <span className="text-sm text-neutral-600">Error Rate</span>
+                    <span className="text-sm font-medium text-neutral-900">0.02%</span>
                   </div>
                 </div>
               </div>

@@ -1,9 +1,9 @@
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">Terms of Service</h1>
+          <h1 className="text-4xl font-bold text-neutral-900 mb-8">Terms of Service</h1>
           
           <div className="prose prose-lg max-w-none">
             <h2>1. Acceptance of Terms</h2>

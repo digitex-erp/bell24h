@@ -59,7 +59,7 @@ export default function FeaturedSuppliersPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="page-title">
             Featured Supplier Program
           </h1>
           <p className="page-subtitle max-w-3xl mx-auto">
@@ -73,24 +73,24 @@ export default function FeaturedSuppliersPage() {
             <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Star className="w-8 h-8 text-yellow-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Premium Visibility</h3>
-            <p className="text-gray-600">Featured placement on homepage and category pages</p>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2">Premium Visibility</h3>
+            <p className="text-neutral-600">Featured placement on homepage and category pages</p>
           </div>
 
           <div className="text-center">
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Eye className="w-8 h-8 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">5x More Inquiries</h3>
-            <p className="text-gray-600">Get significantly more leads than regular suppliers</p>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2">5x More Inquiries</h3>
+            <p className="text-neutral-600">Get significantly more leads than regular suppliers</p>
           </div>
 
           <div className="text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Quality Leads</h3>
-            <p className="text-gray-600">Attract serious buyers with verified requirements</p>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2">Quality Leads</h3>
+            <p className="text-neutral-600">Attract serious buyers with verified requirements</p>
           </div>
         </div>
 
@@ -99,12 +99,12 @@ export default function FeaturedSuppliersPage() {
           <div className="text-center">
             <h2 className="page-title">Pricing</h2>
             <div className="text-5xl font-bold text-blue-600 mb-2">₹1,000</div>
-            <p className="text-gray-600 mb-6">Per month</p>
+            <p className="text-neutral-600 mb-6">Per month</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">What's Included:</h3>
-                <ul className="space-y-2 text-gray-600">
+                <h3 className="font-semibold text-neutral-900 mb-3">What's Included:</h3>
+                <ul className="space-y-2 text-neutral-600">
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
                     Featured placement on homepage
@@ -129,8 +129,8 @@ export default function FeaturedSuppliersPage() {
               </div>
               
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Additional Benefits:</h3>
-                <ul className="space-y-2 text-gray-600">
+                <h3 className="font-semibold text-neutral-900 mb-3">Additional Benefits:</h3>
+                <ul className="space-y-2 text-neutral-600">
                   <li className="flex items-center">
                     <Clock className="w-5 h-5 text-blue-500 mr-2" />
                     Monthly renewal
@@ -151,7 +151,7 @@ export default function FeaturedSuppliersPage() {
 
         {/* Current Featured Suppliers */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-2xl font-bold text-neutral-900 mb-8 text-center">
             Current Featured Suppliers
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -162,15 +162,15 @@ export default function FeaturedSuppliersPage() {
                     <span className="text-blue-600 font-bold text-lg">S{i}</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Supplier {i}</h3>
-                    <p className="text-sm text-gray-600">Electronics</p>
+                    <h3 className="font-semibold text-neutral-900">Supplier {i}</h3>
+                    <p className="text-sm text-neutral-600">Electronics</p>
                   </div>
                   <Star className="w-5 h-5 text-yellow-500 ml-auto" />
                 </div>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="text-neutral-600 text-sm mb-4">
                   Leading manufacturer of electronic components with 10+ years experience.
                 </p>
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-neutral-500">
                   <MapPin className="w-4 h-4 mr-1" />
                   <span>Mumbai, India</span>
                 </div>
@@ -181,7 +181,7 @@ export default function FeaturedSuppliersPage() {
 
         {/* Order Form */}
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-bold text-neutral-900 mb-6 text-center">
             Become a Featured Supplier
           </h2>
           
@@ -196,7 +196,7 @@ export default function FeaturedSuppliersPage() {
                   required
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Your company name"
                 />
               </div>
@@ -210,7 +210,7 @@ export default function FeaturedSuppliersPage() {
                   required
                   value={formData.contactPerson}
                   onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Your name"
                 />
               </div>
@@ -224,7 +224,7 @@ export default function FeaturedSuppliersPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="your@email.com"
                 />
               </div>
@@ -238,7 +238,7 @@ export default function FeaturedSuppliersPage() {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="+91 98765 43210"
                 />
               </div>
@@ -251,7 +251,7 @@ export default function FeaturedSuppliersPage() {
                   required
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select category</option>
                   {categories.map((cat) => (
@@ -267,7 +267,7 @@ export default function FeaturedSuppliersPage() {
                 <select
                   value={formData.experience}
                   onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select experience</option>
                   <option value="1-2">1-2 years</option>
@@ -285,7 +285,7 @@ export default function FeaturedSuppliersPage() {
                   type="url"
                   value={formData.website}
                   onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="https://yourcompany.com"
                 />
               </div>
@@ -298,7 +298,7 @@ export default function FeaturedSuppliersPage() {
                   type="text"
                   value={formData.gstNumber}
                   onChange={(e) => setFormData({ ...formData, gstNumber: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="22ABCDE1234F1Z5"
                 />
               </div>
@@ -312,7 +312,7 @@ export default function FeaturedSuppliersPage() {
                 value={formData.address}
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                 rows={3}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter your company address"
               />
             </div>
@@ -325,7 +325,7 @@ export default function FeaturedSuppliersPage() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Describe your company, products, and services"
               />
             </div>
@@ -337,7 +337,7 @@ export default function FeaturedSuppliersPage() {
               >
                 Pay ₹1,000 & Get Featured
               </button>
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-neutral-500 mt-2">
                 Payment processed securely via Razorpay • GST extra as applicable • Monthly renewal
               </p>
             </div>
@@ -346,7 +346,7 @@ export default function FeaturedSuppliersPage() {
 
         {/* Testimonials */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-2xl font-bold text-neutral-900 mb-8 text-center">
             What Featured Suppliers Say
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -358,7 +358,7 @@ export default function FeaturedSuppliersPage() {
                 <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                 <div>
                   <p className="font-semibold">Rajesh Electronics</p>
-                  <p className="text-sm text-gray-500">Featured Supplier</p>
+                  <p className="text-sm text-neutral-500">Featured Supplier</p>
                 </div>
               </div>
             </div>
@@ -371,7 +371,7 @@ export default function FeaturedSuppliersPage() {
                 <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                 <div>
                   <p className="font-semibold">Mumbai Textiles</p>
-                  <p className="text-sm text-gray-500">Featured Supplier</p>
+                  <p className="text-sm text-neutral-500">Featured Supplier</p>
                 </div>
               </div>
             </div>

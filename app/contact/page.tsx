@@ -26,23 +26,23 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">Contact Us</h1>
+          <h1 className="text-4xl font-bold text-neutral-900 mb-8 text-center">Contact Us</h1>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Contact Form */}
             <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+              <h2 className="text-2xl font-bold text-neutral-900 mb-6">Send us a Message</h2>
               
               {submitted ? (
                 <div className="text-center py-8">
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-green-600 text-2xl">✓</span>
                   </div>
-                  <h3 className="feature-title text-gray-900 mb-2">Message Sent!</h3>
-                  <p className="text-gray-600">We'll get back to you within 24 hours.</p>
+                  <h3 className="feature-title text-neutral-900 mb-2">Message Sent!</h3>
+                  <p className="text-neutral-600">We'll get back to you within 24 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -56,7 +56,7 @@ export default function ContactPage() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         placeholder="Enter your name"
                       />
                     </div>
@@ -69,7 +69,7 @@ export default function ContactPage() {
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         placeholder="Enter your email"
                       />
                     </div>
@@ -84,7 +84,7 @@ export default function ContactPage() {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         placeholder="Enter your phone number"
                       />
                     </div>
@@ -96,7 +96,7 @@ export default function ContactPage() {
                         type="text"
                         value={formData.company}
                         onChange={(e) => setFormData({...formData, company: e.target.value})}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         placeholder="Enter your company name"
                       />
                     </div>
@@ -111,7 +111,7 @@ export default function ContactPage() {
                       required
                       value={formData.subject}
                       onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       placeholder="What's this about?"
                     />
                   </div>
@@ -125,7 +125,7 @@ export default function ContactPage() {
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       placeholder="Tell us how we can help you..."
                     />
                   </div>
@@ -133,7 +133,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-gray-50"
+                    className="w-full bg-neutral-50"
                   >
                     {loading ? (
                       <>
@@ -154,7 +154,7 @@ export default function ContactPage() {
             {/* Contact Information */}
             <div className="space-y-6">
               <div className="bg-white rounded-2xl shadow-xl p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h3>
+                <h3 className="text-2xl font-bold text-neutral-900 mb-6">Get in Touch</h3>
                 
                 <div className="space-y-6">
                   <div className="flex items-start">
@@ -162,9 +162,9 @@ export default function ContactPage() {
                       <Phone className="w-6 h-6 text-indigo-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Phone</h4>
-                      <p className="text-gray-600">+91-9004962871</p>
-                      <p className="text-sm text-gray-500">Mon-Fri 9AM-6PM IST</p>
+                      <h4 className="font-semibold text-neutral-900 mb-1">Phone</h4>
+                      <p className="text-neutral-600">+91-9004962871</p>
+                      <p className="text-sm text-neutral-500">Mon-Fri 9AM-6PM IST</p>
                     </div>
                   </div>
                   
@@ -173,9 +173,9 @@ export default function ContactPage() {
                       <Mail className="w-6 h-6 text-emerald-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Email</h4>
-                      <p className="text-gray-600">contact@bell24h.com</p>
-                      <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
+                      <h4 className="font-semibold text-neutral-900 mb-1">Email</h4>
+                      <p className="text-neutral-600">contact@bell24h.com</p>
+                      <p className="text-sm text-neutral-500">We'll respond within 24 hours</p>
                     </div>
                   </div>
                   
@@ -184,8 +184,8 @@ export default function ContactPage() {
                       <MapPin className="w-6 h-6 text-purple-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Address</h4>
-                      <p className="text-gray-600">
+                      <h4 className="font-semibold text-neutral-900 mb-1">Address</h4>
+                      <p className="text-neutral-600">
                         Mumbai, Maharashtra<br />
                         India 400001
                       </p>
@@ -194,9 +194,9 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="bg-gray-50">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Why Choose Bell24h?</h3>
-                <ul className="space-y-3 text-gray-600">
+              <div className="bg-neutral-50">
+                <h3 className="text-xl font-bold text-neutral-900 mb-4">Why Choose Bell24h?</h3>
+                <ul className="space-y-3 text-neutral-600">
                   <li className="flex items-center">
                     <span className="text-green-600 mr-2">✓</span>
                     AI-powered supplier matching

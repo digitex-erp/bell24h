@@ -71,7 +71,7 @@ export default function TestLivePage() {
       <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Running live functionality tests...</p>
+          <p className="mt-4 text-neutral-600">Running live functionality tests...</p>
         </div>
       </div>
     );
@@ -80,7 +80,7 @@ export default function TestLivePage() {
   return (
     <div className="page-container p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Live Functionality Test Results</h1>
+        <h1 className="text-3xl font-bold text-neutral-900 mb-8">Live Functionality Test Results</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Object.entries(testResults).map(([key, result]: [string, any]) => (
@@ -100,7 +100,7 @@ export default function TestLivePage() {
                 <div>
                   <p className="text-green-600 mb-2">✅ API is working correctly</p>
                   {result.data && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-neutral-600">
                       <p>Data received: {JSON.stringify(result.data).length} characters</p>
                       {key === 'categories' && result.data.categories && (
                         <p>Categories: {result.data.categories.length}</p>
@@ -120,7 +120,7 @@ export default function TestLivePage() {
               ) : (
                 <div>
                   <p className="text-red-600 mb-2">❌ API failed</p>
-                  <p className="text-sm text-gray-600">Error: {result.error}</p>
+                  <p className="text-sm text-neutral-600">Error: {result.error}</p>
                 </div>
               )}
             </div>

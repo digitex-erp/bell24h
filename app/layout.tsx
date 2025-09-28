@@ -4,6 +4,8 @@ import './globals.css'
 import { Providers } from './providers/session-provider'
 import Script from 'next/script'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -91,7 +93,11 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <Providers>
-          {children}
+          <Header />
+          <main>
+            {children}
+          </main>
+          <Footer />
         </Providers>
         
         {/* Vercel Speed Insights */}

@@ -102,13 +102,13 @@ export default function DashboardPage() {
   const getTrendIcon = (value: number, threshold: number = 0) => {
     if (value > threshold) return <span className="text-green-500">↗</span>;
     if (value < threshold) return <span className="text-red-500">↘</span>;
-    return <span className="text-gray-500">→</span>;
+    return <span className="text-neutral-500">→</span>;
   };
 
   const getTrendColor = (value: number, threshold: number = 0) => {
     if (value > threshold) return 'text-green-600';
     if (value < threshold) return 'text-red-600';
-    return 'text-gray-600';
+    return 'text-neutral-600';
   };
 
   // Loading state
@@ -117,7 +117,7 @@ export default function DashboardPage() {
       <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard data...</p>
+          <p className="mt-4 text-neutral-600">Loading dashboard data...</p>
         </div>
       </div>
     );
@@ -129,11 +129,11 @@ export default function DashboardPage() {
       <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Dashboard</h2>
+          <h2 className="text-2xl font-bold text-neutral-900 mb-2">Error Loading Dashboard</h2>
           <p className="feature-description">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-primary-700"
           >
             Retry
           </button>
@@ -149,14 +149,14 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Advanced Dashboard</h1>
-              <p className="text-gray-600 mt-1">Real-time analytics with AI explainability</p>
+              <h1 className="text-3xl font-bold text-neutral-900">Advanced Dashboard</h1>
+              <p className="text-neutral-600 mt-1">Real-time analytics with AI explainability</p>
             </div>
             <div className="flex items-center space-x-4">
               <select
                 value={selectedTimeRange}
                 onChange={(e) => setSelectedTimeRange(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 title="Select time range for dashboard data"
               >
                 <option value="1d">Last 24 hours</option>
@@ -167,7 +167,7 @@ export default function DashboardPage() {
               <button
                 onClick={refreshData}
                 disabled={isRefreshing}
-                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
               >
                 <span className={`text-lg ${isRefreshing ? 'animate-spin' : ''}`}>🔄</span>
                 Refresh
@@ -184,8 +184,8 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Users</p>
-                <p className="text-3xl font-bold text-gray-900">{metrics.totalUsers.toLocaleString()}</p>
+                <p className="text-sm font-medium text-neutral-600">Total Users</p>
+                <p className="text-3xl font-bold text-neutral-900">{metrics.totalUsers.toLocaleString()}</p>
                 <div className="flex items-center mt-2">
                   {getTrendIcon(12.5)}
                   <span className={`text-sm font-medium ml-1 ${getTrendColor(12.5)}`}>+12.5%</span>
@@ -201,8 +201,8 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active Suppliers</p>
-                <p className="text-3xl font-bold text-gray-900">{metrics.activeSuppliers.toLocaleString()}</p>
+                <p className="text-sm font-medium text-neutral-600">Active Suppliers</p>
+                <p className="text-3xl font-bold text-neutral-900">{metrics.activeSuppliers.toLocaleString()}</p>
                 <div className="flex items-center mt-2">
                   {getTrendIcon(8.2)}
                   <span className={`text-sm font-medium ml-1 ${getTrendColor(8.2)}`}>+8.2%</span>
@@ -218,8 +218,8 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-3xl font-bold text-gray-900">₹{(metrics.totalRevenue / 10000000).toFixed(1)}Cr</p>
+                <p className="text-sm font-medium text-neutral-600">Total Revenue</p>
+                <p className="text-3xl font-bold text-neutral-900">₹{(metrics.totalRevenue / 10000000).toFixed(1)}Cr</p>
                 <div className="flex items-center mt-2">
                   {getTrendIcon(15.3)}
                   <span className={`text-sm font-medium ml-1 ${getTrendColor(15.3)}`}>+15.3%</span>
@@ -235,8 +235,8 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">System Health</p>
-                <p className="text-3xl font-bold text-gray-900">{metrics.systemHealth}%</p>
+                <p className="text-sm font-medium text-neutral-600">System Health</p>
+                <p className="text-3xl font-bold text-neutral-900">{metrics.systemHealth}%</p>
                 <div className="flex items-center mt-2">
                   {getTrendIcon(0.1)}
                   <span className={`text-sm font-medium ml-1 ${getTrendColor(0.1)}`}>+0.1%</span>
@@ -252,39 +252,39 @@ export default function DashboardPage() {
         {/* AI Explainability - SHAP */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-gray-900">AI Trust Score Explanation (SHAP)</h3>
+            <h3 className="text-xl font-bold text-neutral-900">AI Trust Score Explanation (SHAP)</h3>
             <button
               onClick={() => toggleCardExpansion('shap')}
-              className="p-2 hover:bg-gray-100 rounded-lg"
+              className="p-2 hover:bg-neutral-100 rounded-lg"
             >
               {expandedCards.has('shap') ? '−' : '+'}
             </button>
           </div>
           <div className="space-y-4">
             {shapExplanations.map((explanation, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={index} className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg">
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
                     <div className={`w-3 h-3 rounded-full ${
                       explanation.impact === 'positive' ? 'bg-green-500' : 
-                      explanation.impact === 'negative' ? 'bg-red-500' : 'bg-gray-500'
+                      explanation.impact === 'negative' ? 'bg-red-500' : 'bg-neutral-500'
                     }`}></div>
-                    <span className="font-medium text-gray-900">{explanation.feature}</span>
+                    <span className="font-medium text-neutral-900">{explanation.feature}</span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{explanation.description}</p>
+                  <p className="text-sm text-neutral-600 mt-1">{explanation.description}</p>
                 </div>
                 <div className="text-right">
                   <div className={`text-lg font-bold ${
                     explanation.impact === 'positive' ? 'text-green-600' : 
-                    explanation.impact === 'negative' ? 'text-red-600' : 'text-gray-600'
+                    explanation.impact === 'negative' ? 'text-red-600' : 'text-neutral-600'
                   }`}>
                     {(explanation.importance * 100).toFixed(1)}%
                   </div>
-                  <div className="w-20 bg-gray-200 rounded-full h-2 mt-1">
+                  <div className="w-20 bg-neutral-200 rounded-full h-2 mt-1">
                     <div 
                       className={`h-2 rounded-full ${
                         explanation.impact === 'positive' ? 'bg-green-500' : 
-                        explanation.impact === 'negative' ? 'bg-red-500' : 'bg-gray-500'
+                        explanation.impact === 'negative' ? 'bg-red-500' : 'bg-neutral-500'
                       }`}
                       className="w-full"
                       style={{ width: `${Math.abs(explanation.importance) * 100}%` }}
@@ -301,8 +301,8 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">AI Accuracy</p>
-                <p className="text-2xl font-bold text-gray-900">{metrics.aiAccuracy}%</p>
+                <p className="text-sm font-medium text-neutral-600">AI Accuracy</p>
+                <p className="text-2xl font-bold text-neutral-900">{metrics.aiAccuracy}%</p>
               </div>
               <span className="text-3xl">🤖</span>
             </div>
@@ -310,8 +310,8 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Fraud Detection</p>
-                <p className="text-2xl font-bold text-gray-900">{metrics.fraudDetection}%</p>
+                <p className="text-sm font-medium text-neutral-600">Fraud Detection</p>
+                <p className="text-2xl font-bold text-neutral-900">{metrics.fraudDetection}%</p>
               </div>
               <span className="text-3xl">🛡️</span>
             </div>
@@ -319,8 +319,8 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Uptime</p>
-                <p className="text-2xl font-bold text-gray-900">{metrics.uptime}%</p>
+                <p className="text-sm font-medium text-neutral-600">Uptime</p>
+                <p className="text-2xl font-bold text-neutral-900">{metrics.uptime}%</p>
               </div>
               <span className="text-3xl">⏰</span>
             </div>
@@ -328,8 +328,8 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Performance</p>
-                <p className="text-2xl font-bold text-gray-900">{metrics.performanceScore}%</p>
+                <p className="text-sm font-medium text-neutral-600">Performance</p>
+                <p className="text-2xl font-bold text-neutral-900">{metrics.performanceScore}%</p>
               </div>
               <span className="text-3xl">⚡</span>
             </div>
@@ -338,31 +338,31 @@ export default function DashboardPage() {
 
         {/* Real-time Activity Feed */}
         <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Real-time Activity Feed</h3>
+          <h3 className="text-xl font-bold text-neutral-900 mb-6">Real-time Activity Feed</h3>
           <div className="space-y-4">
             <div className="flex items-center gap-4 p-4 bg-green-50 rounded-lg">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">New RFQ submitted</p>
-                <p className="text-xs text-gray-600">Industrial IoT Sensors - ₹4.5L budget</p>
+                <p className="text-sm font-medium text-neutral-900">New RFQ submitted</p>
+                <p className="text-xs text-neutral-600">Industrial IoT Sensors - ₹4.5L budget</p>
               </div>
-              <span className="text-xs text-gray-500">2 min ago</span>
+              <span className="text-xs text-neutral-500">2 min ago</span>
             </div>
             <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-lg">
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">Supplier verified</p>
-                <p className="text-xs text-gray-600">TechCorp Industries - AI Trust Score: 94.2%</p>
+                <p className="text-sm font-medium text-neutral-900">Supplier verified</p>
+                <p className="text-xs text-neutral-600">TechCorp Industries - AI Trust Score: 94.2%</p>
               </div>
-              <span className="text-xs text-gray-500">5 min ago</span>
+              <span className="text-xs text-neutral-500">5 min ago</span>
             </div>
             <div className="flex items-center gap-4 p-4 bg-yellow-50 rounded-lg">
               <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">Payment processed</p>
-                <p className="text-xs text-gray-600">₹2.3L escrow payment - Order #RFQ-2024-089</p>
+                <p className="text-sm font-medium text-neutral-900">Payment processed</p>
+                <p className="text-xs text-neutral-600">₹2.3L escrow payment - Order #RFQ-2024-089</p>
               </div>
-              <span className="text-xs text-gray-500">8 min ago</span>
+              <span className="text-xs text-neutral-500">8 min ago</span>
             </div>
           </div>
         </div>

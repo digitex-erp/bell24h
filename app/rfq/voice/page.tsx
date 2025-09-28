@@ -89,7 +89,7 @@ export default function VoiceRFQPage() {
             <h1 className="page-title">
               Voice RFQ - Coming Soon
             </h1>
-            <p className="text-gray-600">
+            <p className="text-neutral-600">
               Record your RFQ requirements using voice and get AI-powered transcription
             </p>
           </div>
@@ -119,7 +119,7 @@ export default function VoiceRFQPage() {
 
           {/* Demo Interface */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="feature-title text-gray-900 mb-6">Demo Interface</h2>
+            <h2 className="feature-title text-neutral-900 mb-6">Demo Interface</h2>
 
             <div className="space-y-6">
               {/* Recording Controls */}
@@ -145,8 +145,8 @@ export default function VoiceRFQPage() {
 
               {/* Audio Player */}
               {audioUrl && (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Your Recording</h3>
+                <div className="bg-neutral-50 rounded-lg p-4">
+                  <h3 className="text-lg font-medium text-neutral-900 mb-3">Your Recording</h3>
                   <div className="flex items-center space-x-4">
                     <button
                       onClick={playRecording}
@@ -170,9 +170,9 @@ export default function VoiceRFQPage() {
 
               {/* Transcript */}
               {transcript && (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Transcription</h3>
-                  <p className="text-gray-700">{transcript}</p>
+                <div className="bg-neutral-50 rounded-lg p-4">
+                  <h3 className="text-lg font-medium text-neutral-900 mb-3">Transcription</h3>
+                  <p className="text-neutral-700">{transcript}</p>
                 </div>
               )}
 
@@ -198,24 +198,24 @@ export default function VoiceRFQPage() {
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                 <Mic className="h-6 w-6 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Voice Recording</h3>
-              <p className="text-gray-600">Record your RFQ requirements naturally using voice</p>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Voice Recording</h3>
+              <p className="text-neutral-600">Record your RFQ requirements naturally using voice</p>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <Play className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">AI Transcription</h3>
-              <p className="text-gray-600">Get accurate transcription with AI-powered processing</p>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">AI Transcription</h3>
+              <p className="text-neutral-600">Get accurate transcription with AI-powered processing</p>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                 <Send className="h-6 w-6 text-purple-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Auto Send</h3>
-              <p className="text-gray-600">Automatically send to relevant suppliers</p>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Auto Send</h3>
+              <p className="text-neutral-600">Automatically send to relevant suppliers</p>
             </div>
           </div>
 

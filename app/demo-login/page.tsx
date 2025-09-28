@@ -75,7 +75,7 @@ export default function DemoLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="page-header">
@@ -83,11 +83,11 @@ export default function DemoLoginPage() {
             <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">B</div>
             <div>
               <div className="font-bold text-2xl">Bell24h</div>
-              <div className="text-sm text-gray-600">Verified B2B Platform</div>
+              <div className="text-sm text-neutral-600">Verified B2B Platform</div>
             </div>
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Login with OTP</h1>
-          <p className="text-gray-600">Secure mobile authentication</p>
+          <h1 className="text-3xl font-bold text-neutral-900 mb-2">Login with OTP</h1>
+          <p className="text-neutral-600">Secure mobile authentication</p>
         </div>
 
         {/* Info */}
@@ -106,7 +106,7 @@ export default function DemoLoginPage() {
         {/* Phone Step */}
         {step === 'phone' && (
           <div className="card">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Enter Phone Number</h2>
+            <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Enter Phone Number</h2>
             
             {error && (
               <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
@@ -125,12 +125,12 @@ export default function DemoLoginPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Enter 10-digit mobile number"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   required
                   pattern="[0-9]{10}"
                   maxLength={10}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-neutral-500 mt-1">
                   Demo: Use any 10-digit number (e.g., 9876543210)
                 </p>
               </div>
@@ -138,7 +138,7 @@ export default function DemoLoginPage() {
               <button
                 type="submit"
                 disabled={isLoading || phone.length !== 10}
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>
@@ -156,7 +156,7 @@ export default function DemoLoginPage() {
         {/* OTP Step */}
         {step === 'otp' && (
           <div className="card">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Enter OTP</h2>
+            <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Enter OTP</h2>
             
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
               <div className="flex items-center gap-2">
@@ -184,7 +184,7 @@ export default function DemoLoginPage() {
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                   placeholder="Enter 6-digit OTP"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-center text-2xl tracking-widest"
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-center text-2xl tracking-widest"
                   required
                   pattern="[0-9]{6}"
                   maxLength={6}
@@ -195,14 +195,14 @@ export default function DemoLoginPage() {
                 <button
                   type="button"
                   onClick={() => setStep('phone')}
-                  className="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 border border-neutral-300 text-neutral-700 py-3 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
                   disabled={isLoading || otp.length !== 6}
-                  className="flex-1 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-indigo-600 text-white py-3 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <>
@@ -226,9 +226,9 @@ export default function DemoLoginPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">Login Successful!</h2>
+            <h2 className="text-2xl font-semibold text-neutral-900 mb-2">Login Successful!</h2>
             <p className="feature-description">Welcome to Bell24h Demo</p>
-            <p className="text-sm text-gray-500">Redirecting to dashboard...</p>
+            <p className="text-sm text-neutral-500">Redirecting to dashboard...</p>
           </div>
         )}
 
@@ -236,16 +236,16 @@ export default function DemoLoginPage() {
         <div className="mt-6 text-center">
           <p className="text-sm feature-description">Quick Access:</p>
           <div className="flex flex-wrap gap-2 justify-center">
-            <Link href="/marketplace" className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+            <Link href="/marketplace" className="px-4 py-2 bg-white text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
               Marketplace
             </Link>
-            <Link href="/suppliers" className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+            <Link href="/suppliers" className="px-4 py-2 bg-white text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
               Suppliers
             </Link>
-            <Link href="/admin" className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+            <Link href="/admin" className="px-4 py-2 bg-white text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
               Admin
             </Link>
-            <Link href="/test-live" className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+            <Link href="/test-live" className="px-4 py-2 bg-white text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
               Test APIs
             </Link>
           </div>

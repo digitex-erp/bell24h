@@ -113,58 +113,58 @@ export default function AIFeaturesPage() {
 
         {/* AI Features Dashboard */}
         <div className="card">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">AI Features Dashboard</h2>
+          <h2 className="text-2xl font-bold text-neutral-900 mb-6">AI Features Dashboard</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent AI Insights</h3>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-4">Recent AI Insights</h3>
               <div className="space-y-4">
                 <div className="border-l-4 border-blue-500 pl-4 py-3">
                   <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-900">Market Trend</span>
+                    <span className="font-medium text-neutral-900">Market Trend</span>
                     <span className="badge-success">positive</span>
                   </div>
-                  <p className="text-gray-600 text-sm">Textile demand increased by 15% this month</p>
+                  <p className="text-neutral-600 text-sm">Textile demand increased by 15% this month</p>
                 </div>
                 <div className="border-l-4 border-yellow-500 pl-4 py-3">
                   <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-900">Price Alert</span>
+                    <span className="font-medium text-neutral-900">Price Alert</span>
                     <span className="badge-warning">warning</span>
                   </div>
-                  <p className="text-gray-600 text-sm">Steel prices expected to rise 8% next quarter</p>
+                  <p className="text-neutral-600 text-sm">Steel prices expected to rise 8% next quarter</p>
                 </div>
                 <div className="border-l-4 border-purple-500 pl-4 py-3">
                   <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-900">Opportunity</span>
+                    <span className="font-medium text-neutral-900">Opportunity</span>
                     <span className="badge-info">info</span>
                   </div>
-                  <p className="text-gray-600 text-sm">3 new suppliers match your criteria</p>
+                  <p className="text-neutral-600 text-sm">3 new suppliers match your criteria</p>
                 </div>
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">AI Recommendations</h3>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-4">AI Recommendations</h3>
               <div className="space-y-4">
                 <div className="border-l-4 border-red-500 pl-4 py-3">
                   <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-900">Suggested Action</span>
+                    <span className="font-medium text-neutral-900">Suggested Action</span>
                     <span className="badge-error">high</span>
                   </div>
-                  <p className="text-gray-600 text-sm">Update your RFQ for better response rates</p>
+                  <p className="text-neutral-600 text-sm">Update your RFQ for better response rates</p>
                 </div>
                 <div className="border-l-4 border-yellow-500 pl-4 py-3">
                   <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-900">New Feature</span>
+                    <span className="font-medium text-neutral-900">New Feature</span>
                     <span className="badge-warning">medium</span>
                   </div>
-                  <p className="text-gray-600 text-sm">Try voice RFQ for faster communication</p>
+                  <p className="text-neutral-600 text-sm">Try voice RFQ for faster communication</p>
                 </div>
                 <div className="border-l-4 border-blue-500 pl-4 py-3">
                   <div className="flex justify-between items-start mb-2">
-                    <span className="font-medium text-gray-900">Optimization</span>
+                    <span className="font-medium text-neutral-900">Optimization</span>
                     <span className="badge-info">low</span>
                   </div>
-                  <p className="text-gray-600 text-sm">Consider expanding to 2 new categories</p>
+                  <p className="text-neutral-600 text-sm">Consider expanding to 2 new categories</p>
                 </div>
               </div>
             </div>

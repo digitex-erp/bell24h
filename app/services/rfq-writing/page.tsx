@@ -46,7 +46,7 @@ export default function RFQWritingServicePage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="page-title">
             Professional RFQ Writing Service
           </h1>
           <p className="page-subtitle max-w-3xl mx-auto">
@@ -60,24 +60,24 @@ export default function RFQWritingServicePage() {
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Edit3 className="w-8 h-8 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Professional Writing</h3>
-            <p className="text-gray-600">Expertly crafted RFQs that attract quality suppliers</p>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2">Professional Writing</h3>
+            <p className="text-neutral-600">Expertly crafted RFQs that attract quality suppliers</p>
           </div>
 
           <div className="text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <FileText className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Detailed Specifications</h3>
-            <p className="text-gray-600">Comprehensive requirements that get accurate quotes</p>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2">Detailed Specifications</h3>
+            <p className="text-neutral-600">Comprehensive requirements that get accurate quotes</p>
           </div>
 
           <div className="text-center">
             <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Star className="w-8 h-8 text-purple-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Better Results</h3>
-            <p className="text-gray-600">Get more competitive quotes from quality suppliers</p>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2">Better Results</h3>
+            <p className="text-neutral-600">Get more competitive quotes from quality suppliers</p>
           </div>
         </div>
 
@@ -86,12 +86,12 @@ export default function RFQWritingServicePage() {
           <div className="text-center">
             <h2 className="page-title">Pricing</h2>
             <div className="text-5xl font-bold text-blue-600 mb-2">₹500</div>
-            <p className="text-gray-600 mb-6">Per RFQ improvement</p>
+            <p className="text-neutral-600 mb-6">Per RFQ improvement</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">What's Included:</h3>
-                <ul className="space-y-2 text-gray-600">
+                <h3 className="font-semibold text-neutral-900 mb-3">What's Included:</h3>
+                <ul className="space-y-2 text-neutral-600">
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
                     Professional RFQ writing
@@ -116,8 +116,8 @@ export default function RFQWritingServicePage() {
               </div>
               
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Delivery:</h3>
-                <ul className="space-y-2 text-gray-600">
+                <h3 className="font-semibold text-neutral-900 mb-3">Delivery:</h3>
+                <ul className="space-y-2 text-neutral-600">
                   <li className="flex items-center">
                     <Clock className="w-5 h-5 text-blue-500 mr-2" />
                     24 hours delivery
@@ -138,7 +138,7 @@ export default function RFQWritingServicePage() {
 
         {/* Order Form */}
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-bold text-neutral-900 mb-6 text-center">
             Order RFQ Writing Service
           </h2>
           
@@ -153,7 +153,7 @@ export default function RFQWritingServicePage() {
                   required
                   value={formData.product}
                   onChange={(e) => setFormData({ ...formData, product: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="What do you need to buy?"
                 />
               </div>
@@ -167,7 +167,7 @@ export default function RFQWritingServicePage() {
                   required
                   value={formData.quantity}
                   onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="How many units?"
                 />
               </div>
@@ -180,7 +180,7 @@ export default function RFQWritingServicePage() {
                   type="text"
                   value={formData.budget}
                   onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="₹50,000 - ₹1,00,000"
                 />
               </div>
@@ -192,7 +192,7 @@ export default function RFQWritingServicePage() {
                 <select
                   value={formData.timeline}
                   onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select timeline</option>
                   <option value="immediate">Immediate</option>
@@ -212,7 +212,7 @@ export default function RFQWritingServicePage() {
                   required
                   value={formData.buyerName}
                   onChange={(e) => setFormData({ ...formData, buyerName: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Your full name"
                 />
               </div>
@@ -225,7 +225,7 @@ export default function RFQWritingServicePage() {
                   type="text"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Your company name"
                 />
               </div>
@@ -239,7 +239,7 @@ export default function RFQWritingServicePage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="your@email.com"
                 />
               </div>
@@ -253,7 +253,7 @@ export default function RFQWritingServicePage() {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="+91 98765 43210"
                 />
               </div>
@@ -267,7 +267,7 @@ export default function RFQWritingServicePage() {
                 value={formData.specifications}
                 onChange={(e) => setFormData({ ...formData, specifications: e.target.value })}
                 rows={4}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Describe technical requirements, quality standards, certifications needed, etc."
               />
             </div>
@@ -280,7 +280,7 @@ export default function RFQWritingServicePage() {
                 value={formData.currentRfq}
                 onChange={(e) => setFormData({ ...formData, currentRfq: e.target.value })}
                 rows={4}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Paste your current RFQ here for improvement"
               />
             </div>
@@ -292,7 +292,7 @@ export default function RFQWritingServicePage() {
               >
                 Pay ₹500 & Get Professional RFQ
               </button>
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-neutral-500 mt-2">
                 Payment processed securely via Razorpay • GST extra as applicable
               </p>
             </div>
@@ -301,7 +301,7 @@ export default function RFQWritingServicePage() {
 
         {/* Testimonials */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h2 className="text-2xl font-bold text-neutral-900 mb-8 text-center">
             What Our Clients Say
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -313,7 +313,7 @@ export default function RFQWritingServicePage() {
                 <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                 <div>
                   <p className="font-semibold">Amit Patel</p>
-                  <p className="text-sm text-gray-500">Manufacturing Company</p>
+                  <p className="text-sm text-neutral-500">Manufacturing Company</p>
                 </div>
               </div>
             </div>
@@ -326,7 +326,7 @@ export default function RFQWritingServicePage() {
                 <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                 <div>
                   <p className="font-semibold">Sneha Reddy</p>
-                  <p className="text-sm text-gray-500">Trading Company</p>
+                  <p className="text-sm text-neutral-500">Trading Company</p>
                 </div>
               </div>
             </div>

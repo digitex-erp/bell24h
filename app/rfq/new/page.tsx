@@ -57,7 +57,7 @@ export default function NewRFQPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       {/* Navigation */}
       <nav className="bg-white shadow-lg">
         <div className="container mx-auto px-4">
@@ -67,18 +67,18 @@ export default function NewRFQPage() {
                 <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
                 <div>
                   <div className="font-bold text-xl">Bell24h</div>
-                  <div className="text-xs text-gray-600">Verified B2B Platform</div>
+                  <div className="text-xs text-neutral-600">Verified B2B Platform</div>
                 </div>
               </div>
               <div className="hidden md:flex items-center gap-6">
-                <Link href="/dashboard" className="text-gray-700 hover:text-indigo-600">Dashboard</Link>
-                <Link href="/rfq" className="text-gray-700 hover:text-indigo-600">My RFQs</Link>
+                <Link href="/dashboard" className="text-neutral-700 hover:text-primary-600">Dashboard</Link>
+                <Link href="/rfq" className="text-neutral-700 hover:text-primary-600">My RFQs</Link>
                 <Link href="/rfq/new" className="text-indigo-600 font-semibold">New RFQ</Link>
-                <Link href="#" className="text-gray-700 hover:text-indigo-600">Suppliers</Link>
+                <Link href="#" className="text-neutral-700 hover:text-primary-600">Suppliers</Link>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/dashboard" className="text-gray-700 hover:text-indigo-600">Back to Dashboard</Link>
+              <Link href="/dashboard" className="text-neutral-700 hover:text-primary-600">Back to Dashboard</Link>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function NewRFQPage() {
       <main className="page-content">
         <div className="max-w-4xl mx-auto">
           <div className="page-header">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Create New RFQ</h1>
+            <h1 className="page-title">Create New RFQ</h1>
             <p className="page-subtitle">Post your request and get 3 verified quotes in 24 hours</p>
           </div>
 
@@ -110,7 +110,7 @@ export default function NewRFQPage() {
                   required
                   value={formData.title}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   placeholder="e.g., Steel Pipes for Construction Project"
                 />
               </div>
@@ -126,7 +126,7 @@ export default function NewRFQPage() {
                   rows={4}
                   value={formData.description}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   placeholder="Provide detailed specifications, quality requirements, delivery timeline, etc."
                 />
               </div>
@@ -142,7 +142,7 @@ export default function NewRFQPage() {
                     required
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   >
                     <option value="">Select a category</option>
                     <option value="Steel & Metals">Steel & Metals</option>
@@ -165,7 +165,7 @@ export default function NewRFQPage() {
                     name="quantity"
                     value={formData.quantity}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="Enter quantity"
                     min="1"
                   />
@@ -183,7 +183,7 @@ export default function NewRFQPage() {
                     name="budget"
                     value={formData.budget}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="Enter your budget"
                     min="0"
                     step="0.01"
@@ -200,7 +200,7 @@ export default function NewRFQPage() {
                     name="deadline"
                     value={formData.deadline}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     min={new Date().toISOString().split('T')[0]}
                   />
                 </div>
@@ -216,10 +216,10 @@ export default function NewRFQPage() {
                   rows={3}
                   value={formData.specifications}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   placeholder="Enter specifications separated by commas (e.g., Grade A steel, 6 inch diameter, galvanized coating)"
                 />
-                <p className="mt-1 text-sm text-gray-500">Separate multiple specifications with commas</p>
+                <p className="mt-1 text-sm text-neutral-500">Separate multiple specifications with commas</p>
               </div>
 
               <div className="bg-indigo-50 p-6 rounded-lg">
@@ -235,14 +235,14 @@ export default function NewRFQPage() {
               <div className="flex justify-end gap-4">
                 <Link
                   href="/rfq"
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-6 py-3 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
                 >
                   Cancel
                 </Link>
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                  className="px-8 py-3 bg-indigo-600 hover:bg-primary-700 text-white rounded-lg transition-colors disabled:opacity-50"
                 >
                   {isLoading ? 'Creating RFQ...' : 'Create RFQ'}
                 </button>

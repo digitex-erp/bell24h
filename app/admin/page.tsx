@@ -108,11 +108,11 @@ export default function AdminIndexPage() {
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <h1 className="text-2xl font-bold text-gray-900">Bell24h Admin Portal</h1>
+                <h1 className="text-2xl font-bold text-neutral-900">Bell24h Admin Portal</h1>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500">Last updated: {new Date().toLocaleString()}</span>
+              <span className="text-sm text-neutral-500">Last updated: {new Date().toLocaleString()}</span>
               <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
             </div>
           </div>
@@ -133,9 +133,9 @@ export default function AdminIndexPage() {
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">{stat.label}</dt>
+                      <dt className="text-sm font-medium text-neutral-500 truncate">{stat.label}</dt>
                       <dd className="flex items-baseline">
-                        <div className="text-2xl font-semibold text-gray-900">{stat.value}</div>
+                        <div className="text-2xl font-semibold text-neutral-900">{stat.value}</div>
                         <div className={`ml-2 flex items-baseline text-sm font-semibold ${
                           stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
                         }`}>
@@ -165,16 +165,16 @@ export default function AdminIndexPage() {
                         </div>
                       </div>
                       <div className="ml-4 flex-1">
-                        <h3 className="text-lg font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
+                        <h3 className="text-lg font-medium text-neutral-900 group-hover:text-blue-600 transition-colors duration-200">
                           {module.title}
                         </h3>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-neutral-500 mt-1">
                           {module.description}
                         </p>
                       </div>
                     </div>
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-900">{module.stats}</span>
+                      <span className="text-sm font-medium text-neutral-900">{module.stats}</span>
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                     </div>
                   </div>
@@ -187,19 +187,19 @@ export default function AdminIndexPage() {
         {/* System Status */}
         <div className="mt-8 bg-white shadow rounded-lg">
           <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">System Status</h3>
+            <h3 className="text-lg leading-6 font-medium text-neutral-900 mb-4">System Status</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm text-gray-600">Database: Operational</span>
+                <span className="text-sm text-neutral-600">Database: Operational</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm text-gray-600">APIs: All Services Running</span>
+                <span className="text-sm text-neutral-600">APIs: All Services Running</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm text-gray-600">Security: No Threats Detected</span>
+                <span className="text-sm text-neutral-600">Security: No Threats Detected</span>
               </div>
             </div>
           </div>

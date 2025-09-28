@@ -139,8 +139,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     return (
       <div className="page-container flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
-          <p className="text-gray-600 mb-6">The requested category does not exist.</p>
+          <h1 className="page-title">Category Not Found</h1>
+          <p className="text-neutral-600 mb-6">The requested category does not exist.</p>
           <a href="/marketplace" className="text-blue-600 hover:text-blue-800">
             Back to Marketplace
           </a>
@@ -156,8 +156,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           <div className="flex items-center mb-4">
             <span className="text-4xl mr-4">{category.icon}</span>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{category.title}</h1>
-              <p className="text-gray-600 mt-2">{category.description}</p>
+              <h1 className="text-3xl font-bold text-neutral-900">{category.title}</h1>
+              <p className="text-neutral-600 mt-2">{category.description}</p>
             </div>
           </div>
 
@@ -194,17 +194,17 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         <div className="feature-card">
           <h2 className="feature-title mb-4">Featured Suppliers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="border border-gray-200 p-4 rounded-lg">
+            <div className="border border-neutral-200 p-4 rounded-lg">
               <div className="flex items-center mb-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
                   <span className="text-blue-600 font-bold">A</span>
                 </div>
                 <div>
                   <h4 className="font-semibold">ABC {category.title}</h4>
-                  <p className="text-sm text-gray-600">Verified Supplier</p>
+                  <p className="text-sm text-neutral-600">Verified Supplier</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-neutral-600 mb-3">
                 Leading supplier in {category.title.toLowerCase()} with 10+ years experience
               </p>
               <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
@@ -212,17 +212,17 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               </button>
             </div>
 
-            <div className="border border-gray-200 p-4 rounded-lg">
+            <div className="border border-neutral-200 p-4 rounded-lg">
               <div className="flex items-center mb-3">
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
                   <span className="text-green-600 font-bold">B</span>
                 </div>
                 <div>
                   <h4 className="font-semibold">Best {category.title}</h4>
-                  <p className="text-sm text-gray-600">Premium Supplier</p>
+                  <p className="text-sm text-neutral-600">Premium Supplier</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-neutral-600 mb-3">
                 High-quality {category.title.toLowerCase()} products and services
               </p>
               <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
@@ -230,17 +230,17 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               </button>
             </div>
 
-            <div className="border border-gray-200 p-4 rounded-lg">
+            <div className="border border-neutral-200 p-4 rounded-lg">
               <div className="flex items-center mb-3">
                 <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
                   <span className="text-yellow-600 font-bold">C</span>
                 </div>
                 <div>
                   <h4 className="font-semibold">Creative {category.title}</h4>
-                  <p className="text-sm text-gray-600">Innovative Solutions</p>
+                  <p className="text-sm text-neutral-600">Innovative Solutions</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-neutral-600 mb-3">
                 Innovative {category.title.toLowerCase()} solutions and products
               </p>
               <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">

@@ -36,7 +36,7 @@ Delivery: 48 hours`;
     <div className="page-container py-8">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
         <div className="page-header">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-neutral-900 mb-2">
             Supplier Verification Service
           </h1>
           <p className="feature-description">
@@ -58,7 +58,7 @@ Delivery: 48 hours`;
                 required
                 value={formData.companyName}
                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Your company name"
               />
             </div>
@@ -72,7 +72,7 @@ Delivery: 48 hours`;
                 required
                 value={formData.supplierName}
                 onChange={(e) => setFormData({ ...formData, supplierName: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Supplier to verify"
               />
             </div>
@@ -86,7 +86,7 @@ Delivery: 48 hours`;
                 required
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="+91 9876543210"
               />
             </div>
@@ -99,7 +99,7 @@ Delivery: 48 hours`;
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="your@email.com"
               />
             </div>
@@ -113,7 +113,7 @@ Delivery: 48 hours`;
                 required
                 value={formData.gstNumber}
                 onChange={(e) => setFormData({ ...formData, gstNumber: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="22ABCDE1234F1Z5"
               />
             </div>
@@ -127,7 +127,7 @@ Delivery: 48 hours`;
                 required
                 value={formData.panNumber}
                 onChange={(e) => setFormData({ ...formData, panNumber: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="ABCDE1234F"
               />
             </div>
@@ -142,7 +142,7 @@ Delivery: 48 hours`;
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Complete address with PIN code"
             />
           </div>
@@ -155,7 +155,7 @@ Delivery: 48 hours`;
               value={formData.requirements}
               onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Any specific verification requirements..."
             />
           </div>

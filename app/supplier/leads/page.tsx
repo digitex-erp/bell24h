@@ -138,7 +138,7 @@ export default function SupplierLeadsPage() {
       case '60days':
         return 'text-green-600 bg-green-100';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-neutral-600 bg-neutral-100';
     }
   };
 
@@ -147,7 +147,7 @@ export default function SupplierLeadsPage() {
       <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading leads...</p>
+          <p className="mt-4 text-neutral-600">Loading leads...</p>
         </div>
       </div>
     );
@@ -160,14 +160,14 @@ export default function SupplierLeadsPage() {
         <div className="mb-8">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Available Leads</h1>
-              <p className="mt-2 text-gray-600">Find and unlock buyer requirements</p>
+              <h1 className="text-3xl font-bold text-neutral-900">Available Leads</h1>
+              <p className="mt-2 text-neutral-600">Find and unlock buyer requirements</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="bg-white rounded-lg shadow p-4">
                 <div className="flex items-center">
                   <CreditCard className="h-5 w-5 text-blue-600 mr-2" />
-                  <span className="text-sm font-medium text-gray-600">Credits:</span>
+                  <span className="text-sm font-medium text-neutral-600">Credits:</span>
                   <span className="ml-2 text-lg font-bold text-blue-600">{userCredits}</span>
                 </div>
               </div>
@@ -188,8 +188,8 @@ export default function SupplierLeadsPage() {
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{lead.product}</h3>
-                    <p className="text-sm text-gray-600">{lead.category}</p>
+                    <h3 className="text-lg font-semibold text-neutral-900">{lead.product}</h3>
+                    <p className="text-sm text-neutral-600">{lead.category}</p>
                   </div>
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getUrgencyColor(lead.urgency)}`}>
                     {lead.urgency || 'Not specified'}
@@ -197,30 +197,30 @@ export default function SupplierLeadsPage() {
                 </div>
 
                 <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-sm text-gray-600">
+                  <div className="flex items-center text-sm text-neutral-600">
                     <DollarSign className="h-4 w-4 mr-2" />
                     {lead.budget ? `₹${lead.budget.toLocaleString()}` : 'Budget not specified'}
                   </div>
-                  <div className="flex items-center text-sm text-gray-600">
+                  <div className="flex items-center text-sm text-neutral-600">
                     <MapPin className="h-4 w-4 mr-2" />
                     {lead.location || 'Location not specified'}
                   </div>
-                  <div className="flex items-center text-sm text-gray-600">
+                  <div className="flex items-center text-sm text-neutral-600">
                     <Calendar className="h-4 w-4 mr-2" />
                     {new Date(lead.createdAt).toLocaleDateString()}
                   </div>
                 </div>
 
                 {lead.description && (
-                  <p className="text-sm text-gray-700 mb-4 line-clamp-2">{lead.description}</p>
+                  <p className="text-sm text-neutral-700 mb-4 line-clamp-2">{lead.description}</p>
                 )}
 
                 <div className="border-t pt-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{lead.buyerName}</p>
+                      <p className="text-sm font-medium text-neutral-900">{lead.buyerName}</p>
                       {lead.buyerCompany && (
-                        <p className="text-sm text-gray-600">{lead.buyerCompany}</p>
+                        <p className="text-sm text-neutral-600">{lead.buyerCompany}</p>
                       )}
                     </div>
                     <button
@@ -265,10 +265,10 @@ export default function SupplierLeadsPage() {
             <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
               <div className="mt-3">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Lead Details</h3>
+                  <h3 className="text-lg font-medium text-neutral-900">Lead Details</h3>
                   <button
                     onClick={() => setSelectedLead(null)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-neutral-600"
                   >
                     ✕
                   </button>
@@ -276,35 +276,35 @@ export default function SupplierLeadsPage() {
                 
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-gray-900">{selectedLead.product}</h4>
-                    <p className="text-sm text-gray-600">{selectedLead.category}</p>
+                    <h4 className="font-semibold text-neutral-900">{selectedLead.product}</h4>
+                    <p className="text-sm text-neutral-600">{selectedLead.category}</p>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium text-gray-500">Buyer</label>
-                      <p className="text-sm text-gray-900">{selectedLead.buyerName}</p>
+                      <label className="text-sm font-medium text-neutral-500">Buyer</label>
+                      <p className="text-sm text-neutral-900">{selectedLead.buyerName}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-500">Company</label>
-                      <p className="text-sm text-gray-900">{selectedLead.buyerCompany || 'N/A'}</p>
+                      <label className="text-sm font-medium text-neutral-500">Company</label>
+                      <p className="text-sm text-neutral-900">{selectedLead.buyerCompany || 'N/A'}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-500">Budget</label>
-                      <p className="text-sm text-gray-900">
+                      <label className="text-sm font-medium text-neutral-500">Budget</label>
+                      <p className="text-sm text-neutral-900">
                         {selectedLead.budget ? `₹${selectedLead.budget.toLocaleString()}` : 'N/A'}
                       </p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-500">Quantity</label>
-                      <p className="text-sm text-gray-900">{selectedLead.quantity || 'N/A'}</p>
+                      <label className="text-sm font-medium text-neutral-500">Quantity</label>
+                      <p className="text-sm text-neutral-900">{selectedLead.quantity || 'N/A'}</p>
                     </div>
                   </div>
                   
                   {selectedLead.description && (
                     <div>
-                      <label className="text-sm font-medium text-gray-500">Description</label>
-                      <p className="text-sm text-gray-900">{selectedLead.description}</p>
+                      <label className="text-sm font-medium text-neutral-500">Description</label>
+                      <p className="text-sm text-neutral-900">{selectedLead.description}</p>
                     </div>
                   )}
                   
@@ -341,10 +341,10 @@ export default function SupplierLeadsPage() {
             <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 lg:w-1/3 shadow-lg rounded-md bg-white">
               <div className="mt-3">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">Purchase Credits</h3>
+                  <h3 className="text-lg font-medium text-neutral-900">Purchase Credits</h3>
                   <button
                     onClick={() => setShowPurchase(false)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-neutral-600"
                   >
                     ✕
                   </button>

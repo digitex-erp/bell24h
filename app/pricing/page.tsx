@@ -234,12 +234,12 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="page-title">
               Choose Your Perfect Plan
             </h1>
             <p className="page-subtitle mb-8">
@@ -248,12 +248,12 @@ export default function PricingPage() {
             
             {/* Billing Toggle */}
             <div className="flex items-center justify-center space-x-4 mb-8">
-              <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-gray-900' : 'text-gray-500'}`}>
+              <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-neutral-900' : 'text-neutral-500'}`}>
                 Monthly
               </span>
               <button
                 onClick={() => setBillingPeriod(billingPeriod === 'monthly' ? 'yearly' : 'monthly')}
-                className="relative inline-flex h-6 w-11 items-center rounded-full bg-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="relative inline-flex h-6 w-11 items-center rounded-full bg-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -261,7 +261,7 @@ export default function PricingPage() {
                   }`}
                 />
               </button>
-              <span className={`text-sm font-medium ${billingPeriod === 'yearly' ? 'text-gray-900' : 'text-gray-500'}`}>
+              <span className={`text-sm font-medium ${billingPeriod === 'yearly' ? 'text-neutral-900' : 'text-neutral-500'}`}>
                 Yearly
               </span>
               {billingPeriod === 'yearly' && (
@@ -293,21 +293,21 @@ export default function PricingPage() {
               )}
 
               <div className="page-header">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{tier.name}</h3>
-                <p className="text-gray-600 mb-6">{tier.description}</p>
+                <h3 className="text-2xl font-bold text-neutral-900 mb-2">{tier.name}</h3>
+                <p className="text-neutral-600 mb-6">{tier.description}</p>
                 
                 <div className="mb-4">
-                  <span className="text-5xl font-bold text-gray-900">
+                  <span className="text-5xl font-bold text-neutral-900">
                     {tier.price === 0 ? 'Free' : `${tier.currency}${getDiscountedPrice(tier).toLocaleString()}`}
                   </span>
                   {tier.price > 0 && (
-                    <span className="text-gray-500 ml-2">/{billingPeriod === 'yearly' ? 'year' : 'month'}</span>
+                    <span className="text-neutral-500 ml-2">/{billingPeriod === 'yearly' ? 'year' : 'month'}</span>
                   )}
                 </div>
                 
                 {tier.originalPrice && (
                   <div className="flex items-center justify-center space-x-2 mb-4">
-                    <span className="text-lg text-gray-500 line-through">
+                    <span className="text-lg text-neutral-500 line-through">
                       {tier.currency}{tier.originalPrice.toLocaleString()}
                     </span>
                     <span className="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded">
@@ -322,7 +322,7 @@ export default function PricingPage() {
                 {tier.features.map((feature, index) => (
                   <div key={index} className="flex items-start">
                     <span className="text-green-500 mr-3 mt-1">✓</span>
-                    <span className="text-gray-700">{feature}</span>
+                    <span className="text-neutral-700">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -330,11 +330,11 @@ export default function PricingPage() {
               {/* Limitations */}
               {tier.limitations.length > 0 && (
                 <div className="space-y-2 mb-8">
-                  <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Limitations</h4>
+                  <h4 className="text-sm font-medium text-neutral-500 uppercase tracking-wide">Limitations</h4>
                   {tier.limitations.map((limitation, index) => (
                     <div key={index} className="flex items-start">
                       <span className="text-gray-400 mr-3 mt-1">✗</span>
-                      <span className="text-gray-500 text-sm">{limitation}</span>
+                      <span className="text-neutral-500 text-sm">{limitation}</span>
                     </div>
                   ))}
                 </div>
@@ -345,7 +345,7 @@ export default function PricingPage() {
                 onClick={() => setSelectedTier(tier.id)}
                 className={`w-full py-3 px-6 rounded-lg font-semibold text-lg transition-colors ${
                   tier.buttonVariant === 'primary'
-                    ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                    ? 'bg-indigo-600 text-white hover:bg-primary-700'
                     : tier.buttonVariant === 'secondary'
                     ? 'bg-purple-600 text-white hover:bg-purple-700'
                     : 'border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50'
@@ -359,7 +359,7 @@ export default function PricingPage() {
       </div>
 
       {/* Feature Comparison */}
-      <div className="bg-gray-50 py-16">
+      <div className="bg-neutral-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="page-title">
@@ -373,13 +373,13 @@ export default function PricingPage() {
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-neutral-50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-neutral-500 uppercase tracking-wide">
                       Features
                     </th>
                     {pricingTiers.map((tier) => (
-                      <th key={tier.id} className="px-6 py-4 text-center text-sm font-medium text-gray-900">
+                      <th key={tier.id} className="px-6 py-4 text-center text-sm font-medium text-neutral-900">
                         {tier.name}
                       </th>
                     ))}
@@ -387,65 +387,65 @@ export default function PricingPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Monthly RFQs</td>
+                    <td className="px-6 py-4 text-sm font-medium text-neutral-900">Monthly RFQs</td>
                     {pricingTiers.map((tier) => (
-                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-gray-500">
+                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-neutral-500">
                         {tier.maxRFQs === -1 ? 'Unlimited' : tier.maxRFQs}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">AI Matching</td>
+                    <td className="px-6 py-4 text-sm font-medium text-neutral-900">AI Matching</td>
                     {pricingTiers.map((tier) => (
-                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-gray-500">
+                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-neutral-500">
                         {tier.aiFeatures ? '✓' : '✗'}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Voice RFQ</td>
+                    <td className="px-6 py-4 text-sm font-medium text-neutral-900">Voice RFQ</td>
                     {pricingTiers.map((tier) => (
-                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-gray-500">
+                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-neutral-500">
                         {tier.voiceRFQ ? '✓' : '✗'}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Video RFQ</td>
+                    <td className="px-6 py-4 text-sm font-medium text-neutral-900">Video RFQ</td>
                     {pricingTiers.map((tier) => (
-                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-gray-500">
+                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-neutral-500">
                         {tier.videoRFQ ? '✓' : '✗'}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Escrow Protection</td>
+                    <td className="px-6 py-4 text-sm font-medium text-neutral-900">Escrow Protection</td>
                     {pricingTiers.map((tier) => (
-                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-gray-500">
+                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-neutral-500">
                         {tier.escrowProtection ? '✓' : '✗'}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">API Access</td>
+                    <td className="px-6 py-4 text-sm font-medium text-neutral-900">API Access</td>
                     {pricingTiers.map((tier) => (
-                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-gray-500">
+                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-neutral-500">
                         {tier.apiAccess ? '✓' : '✗'}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">White Label</td>
+                    <td className="px-6 py-4 text-sm font-medium text-neutral-900">White Label</td>
                     {pricingTiers.map((tier) => (
-                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-gray-500">
+                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-neutral-500">
                         {tier.whiteLabel ? '✓' : '✗'}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">Dedicated Manager</td>
+                    <td className="px-6 py-4 text-sm font-medium text-neutral-900">Dedicated Manager</td>
                     {pricingTiers.map((tier) => (
-                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-gray-500">
+                      <td key={tier.id} className="px-6 py-4 text-center text-sm text-neutral-500">
                         {tier.dedicatedManager ? '✓' : '✗'}
                       </td>
                     ))}
@@ -472,23 +472,23 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {addOns.map((addon, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{addon.name}</h3>
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2">{addon.name}</h3>
                 <p className="feature-description">{addon.description}</p>
                 <div className="mb-4">
-                  <span className="text-2xl font-bold text-gray-900">
+                  <span className="text-2xl font-bold text-neutral-900">
                     {addon.currency}{addon.price.toLocaleString()}
                   </span>
-                  <span className="text-gray-500 ml-1">{addon.unit}</span>
+                  <span className="text-neutral-500 ml-1">{addon.unit}</span>
                 </div>
                 <ul className="space-y-2">
                   {addon.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start">
                       <span className="text-green-500 mr-2 mt-1">✓</span>
-                      <span className="text-sm text-gray-700">{feature}</span>
+                      <span className="text-sm text-neutral-700">{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <button className="w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                <button className="w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors">
                   Add to Plan
                 </button>
               </div>
@@ -498,7 +498,7 @@ export default function PricingPage() {
       </div>
 
       {/* FAQ */}
-      <div className="bg-gray-50 py-16">
+      <div className="bg-neutral-50 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="page-title">
@@ -508,37 +508,37 @@ export default function PricingPage() {
 
           <div className="space-y-8">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                 Can I change my plan anytime?
               </h3>
-              <p className="text-gray-600">
+              <p className="text-neutral-600">
                 Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate any billing differences.
               </p>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                 What happens if I exceed my RFQ limit?
               </h3>
-              <p className="text-gray-600">
+              <p className="text-neutral-600">
                 You can purchase additional RFQs as add-ons, or upgrade to a higher plan. We'll notify you when you're approaching your limit.
               </p>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                 Is there a free trial?
               </h3>
-              <p className="text-gray-600">
+              <p className="text-neutral-600">
                 Yes, all paid plans come with a 14-day free trial. No credit card required to start.
               </p>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">
                 What payment methods do you accept?
               </h3>
-              <p className="text-gray-600">
+              <p className="text-neutral-600">
                 We accept all major credit cards, UPI, net banking, and Razorpay. Enterprise customers can also pay via bank transfer.
               </p>
             </div>
@@ -547,15 +547,15 @@ export default function PricingPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gray-50">
+      <div className="bg-neutral-50">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-xl mb-8">Join thousands of businesses already using Bell24h</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/register" className="bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100">
+            <Link href="/auth/register" className="bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-neutral-100">
               Start Free Trial
             </Link>
-            <Link href="/contact" className="bg-transparent border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-600">
+            <Link href="/contact" className="bg-transparent border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600">
               Contact Sales
             </Link>
           </div>

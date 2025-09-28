@@ -67,9 +67,9 @@ export default function CreateRFQPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">RFQ Created Successfully!</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 mb-4">RFQ Created Successfully!</h2>
             <p className="feature-description">Your request for quotation has been submitted.</p>
-            <p className="text-sm text-gray-500">Redirecting to RFQ dashboard...</p>
+            <p className="text-sm text-neutral-500">Redirecting to RFQ dashboard...</p>
           </div>
         </div>
       </div>
@@ -87,14 +87,14 @@ export default function CreateRFQPage() {
                 <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
                 <div>
                   <div className="font-bold text-xl">Bell24h</div>
-                  <div className="text-xs text-gray-600">Verified B2B Platform</div>
+                  <div className="text-xs text-neutral-600">Verified B2B Platform</div>
                 </div>
               </Link>
               <div className="hidden md:flex items-center gap-6">
-                <Link href="/dashboard" className="text-gray-700 hover:text-blue-600">Dashboard</Link>
-                <Link href="/rfq" className="text-gray-700 hover:text-blue-600">My RFQs</Link>
+                <Link href="/dashboard" className="nav-link">Dashboard</Link>
+                <Link href="/rfq" className="nav-link">My RFQs</Link>
                 <Link href="/rfq/create" className="text-blue-600 font-semibold">Create RFQ</Link>
-                <Link href="/suppliers" className="text-gray-700 hover:text-blue-600">Suppliers</Link>
+                <Link href="/suppliers" className="nav-link">Suppliers</Link>
               </div>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function CreateRFQPage() {
                       placeholder="Minimum"
                       min="0"
                     />
-                    <label className="text-xs text-gray-500 mt-1">Minimum Budget</label>
+                    <label className="text-xs text-neutral-500 mt-1">Minimum Budget</label>
                   </div>
                   <div>
                     <input 
@@ -258,7 +258,7 @@ export default function CreateRFQPage() {
                       placeholder="Maximum"
                       min="0"
                     />
-                    <label className="text-xs text-gray-500 mt-1">Maximum Budget</label>
+                    <label className="text-xs text-neutral-500 mt-1">Maximum Budget</label>
                   </div>
                 </div>
               </div>
