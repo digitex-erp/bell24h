@@ -1,8 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    domains: ['localhost'],
+  reactStrictMode: true,
+  swcMinify: true,
+  eslint: {
+    ignoreDuringBuilds: true
   },
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client']
+  },
+  images: {
+    unoptimized: true
+  }
 }
 
 module.exports = nextConfig

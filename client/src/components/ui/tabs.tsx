@@ -1,6 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+
+interface TabsContextType {
+  activeTab: string;
+  setActiveTab: (value: string) => void;
+}
+
+const TabsContext = createContext<TabsContextType | undefined>(undefined);
 
 interface TabsProps {
   children: React.ReactNode;
@@ -29,14 +36,11 @@ export function Tabs({ children, defaultValue, className = '' }: TabsProps) {
   const [activeTab, setActiveTab] = useState(defaultValue || '');
 
   return (
-    <div className={className}>
-      {React.Children.map(children, child => {
-        if (React.isValidElement(child)) {
-          return React.cloneElement(child, { activeTab, setActiveTab });
-        }
-        return child;
-      })}
-    </div>
+    <TabsContext.Provider value={{ activeTab, setActiveTab }}>
+      <div className={className}>
+        {children}
+      </div>
+    </TabsContext.Provider>
   );
 }
 
@@ -44,8 +48,14 @@ export function TabsList({ children, className = '' }: TabsListProps) {
   return <div className={`flex border-b border-gray-200 ${className}`}>{children}</div>;
 }
 
-export function TabsTrigger({ value, children, className = '', ...props }: TabsTriggerProps & any) {
-  const { activeTab, setActiveTab } = props;
+export function TabsTrigger({ value, children, className = '' }: TabsTriggerProps) {
+  const context = useContext(TabsContext);
+  
+  if (!context) {
+    throw new Error('TabsTrigger must be used within a Tabs component');
+  }
+
+  const { activeTab, setActiveTab } = context;
   const isActive = activeTab === value;
 
   return (
@@ -62,8 +72,14 @@ export function TabsTrigger({ value, children, className = '', ...props }: TabsT
   );
 }
 
-export function TabsContent({ value, children, className = '', ...props }: TabsContentProps & any) {
-  const { activeTab } = props;
+export function TabsContent({ value, children, className = '' }: TabsContentProps) {
+  const context = useContext(TabsContext);
+  
+  if (!context) {
+    throw new Error('TabsContent must be used within a Tabs component');
+  }
+
+  const { activeTab } = context;
 
   if (activeTab !== value) {
     return null;

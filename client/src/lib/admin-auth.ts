@@ -35,23 +35,42 @@ export class AdminAuthService {
   static readonly ADMIN_ACCOUNTS = [
     {
       id: 1,
+<<<<<<< HEAD
+      phoneNumber: '+919004962871', // Your mobile number for testing
+      email: 'digitex.studio@gmail.com',
+=======
       email: 'superadmin@bell24h.com',
+>>>>>>> 504c5ee690291e877954561480a78ee33260c24a
       password: 'Bell24H@SuperAdmin2025!',
       role: this.ADMIN_ROLES.SUPER_ADMIN,
       name: 'Super Administrator',
       lastLogin: null,
       isActive: true,
+<<<<<<< HEAD
+      twoFactorEnabled: false, // Disabled for testing
+      loginMethod: 'mobile_otp' // Use OTP for production
+    },
+    {
+      id: 2,
+      phoneNumber: '+919004962871', // Your mobile number for testing
+      email: 'digitex.studio@gmail.com',
+=======
       twoFactorEnabled: true,
     },
     {
       id: 2,
       email: 'admin@bell24h.com',
+>>>>>>> 504c5ee690291e877954561480a78ee33260c24a
       password: 'Bell24H@Admin2025!',
       role: this.ADMIN_ROLES.PLATFORM_ADMIN,
       name: 'Platform Administrator',
       lastLogin: null,
       isActive: true,
       twoFactorEnabled: false,
+<<<<<<< HEAD
+      loginMethod: 'password' // Use password for development
+=======
+>>>>>>> 504c5ee690291e877954561480a78ee33260c24a
     },
     {
       id: 3,

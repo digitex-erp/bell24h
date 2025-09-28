@@ -12,7 +12,7 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
     company: '',
-    role: 'buyer'
+    role: 'supplier' // Default to supplier as per business logic
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -84,7 +84,7 @@ export default function RegisterPage() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">B</div>
+            <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">B</div>
             <span className="text-3xl font-bold">Bell24h</span>
           </div>
           <h2 className="text-3xl font-bold text-gray-900">Create Your Account</h2>
@@ -165,7 +165,7 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                I am a
+                Primary Role
               </label>
               <select
                 id="role"
@@ -174,10 +174,12 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
+                <option value="supplier">Supplier (Selling products) - Default</option>
                 <option value="buyer">Buyer (Looking for suppliers)</option>
-                <option value="supplier">Supplier (Selling products)</option>
-                <option value="both">Both (Buyer & Supplier)</option>
               </select>
+              <p className="mt-1 text-sm text-gray-500">
+                💡 You can switch between supplier and buyer modes anytime after registration
+              </p>
             </div>
 
             <div>
@@ -217,7 +219,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
               {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>

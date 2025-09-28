@@ -63,7 +63,7 @@ export default function RFQListPage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
+                <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
                 <div>
                   <div className="font-bold text-xl">Bell24h</div>
                   <div className="text-xs text-gray-600">Verified B2B Platform</div>
@@ -77,7 +77,7 @@ export default function RFQListPage() {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/rfq/new" className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white rounded-lg hover:from-indigo-700 hover:to-emerald-700">
+              <Link href="/rfq/new" className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
                 + New RFQ
               </Link>
             </div>
@@ -94,7 +94,7 @@ export default function RFQListPage() {
             </div>
             <Link
               href="/rfq/new"
-              className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white rounded-lg hover:from-indigo-700 hover:to-emerald-700 transition-colors"
+              className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
             >
               + Create New RFQ
             </Link>
@@ -142,7 +142,7 @@ export default function RFQListPage() {
               </p>
               <Link
                 href="/rfq/new"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white rounded-lg hover:from-indigo-700 hover:to-emerald-700"
+                className="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
               >
                 Create Your First RFQ
               </Link>

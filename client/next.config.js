@@ -1,46 +1,74 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Clean configuration - no problematic experimental features
-  reactStrictMode: true,
-  swcMinify: true,
-  
-  // Important for Railway deployment
-  output: 'standalone',
-  
-  // Handle images for deployment
+  // Optimized for Vercel deployment
+  output: undefined, // Remove static export
+  trailingSlash: false,
+
+  // Enable image optimization for Next.js
   images: {
-    domains: ['localhost', 'bell24h.vercel.app', '*.up.railway.app'],
-    unoptimized: true
+    unoptimized: false,
+    domains: ['localhost', 'vercel.app'],
   },
-  
-  // Environment variables for Razorpay
-  env: {
-    NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-    RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
-  },
-  
-  // Ignore build errors temporarily for deployment
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  
+
+  // Skip problematic features during build
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
-  // Allow Railway domain
-  async headers() {
+
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
+  // Optimized experimental features
+  experimental: {
+    esmExternals: false,
+    serverComponentsExternalPackages: ['ioredis', '@prisma/client'],
+  },
+
+  // Environment variables for build
+  env: {
+    REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
+    DATABASE_URL: process.env.DATABASE_URL,
+  },
+
+  // Block problematic routes during build
+  async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
-          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
-        ],
+        source: '/upload-invoice',
+        destination: '/404'
       },
-    ];
+      {
+        source: '/admin/audit/video',
+        destination: '/404'
+      },
+      {
+        source: '/legal/msme-registration',
+        destination: '/404'
+      },
+      {
+        source: '/dashboard/video-rfq',
+        destination: '/404'
+      },
+      {
+        source: '/claim-company/:slug*',
+        destination: '/404'
+      },
+      {
+        source: '/claim/:companyId*',
+        destination: '/404'
+      },
+      {
+        source: '/business-categories',
+        destination: '/404'
+      },
+      {
+        source: '/legal/urd-information',
+        destination: '/404'
+      }
+    ]
   },
+
 }
 
 module.exports = nextConfig

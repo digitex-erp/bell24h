@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import RealTimeMetrics from './RealTimeMetrics';
 
 interface ChartData {
@@ -26,9 +26,9 @@ export default function AnalyticsDashboard({ timeRange = '7d' }: AnalyticsDashbo
 
   useEffect(() => {
     fetchAnalyticsData();
-  }, [selectedTimeRange]);
+  }, [selectedTimeRange, fetchAnalyticsData]);
 
-  const fetchAnalyticsData = async () => {
+  const fetchAnalyticsData = useCallback(async () => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -78,7 +78,7 @@ export default function AnalyticsDashboard({ timeRange = '7d' }: AnalyticsDashbo
       { segment: 'Suppliers', count: 1890, percentage: 34.8 },
       { segment: 'Both', count: 1080, percentage: 20.0 }
     ]);
-  };
+  }, [selectedTimeRange]);
 
   const generateTimeLabels = (range: string): string[] => {
     const now = new Date();
