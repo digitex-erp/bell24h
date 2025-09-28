@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Briefcase, Building, Mail, Phone, Lock, ArrowRight, ShieldCheck, Users, CheckCircle } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -13,7 +13,7 @@ const steps = [
   { id: 'complete', title: 'Registration Complete', icon: <CheckCircle /> },
 ];
 
-const RegisterFormWithEmailOTP = ({ onSwitchView, onClose }) => {
+function RegisterFormContent({ onSwitchView, onClose }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -432,5 +432,13 @@ const InputField = ({ icon, ...props }) => (
     <input {...props} className="w-full bg-gray-700/50 border-2 border-white/10 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-amber-500"/>
   </div>
 );
+
+const RegisterFormWithEmailOTP = ({ onSwitchView, onClose }) => {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <RegisterFormContent onSwitchView={onSwitchView} onClose={onClose} />
+    </Suspense>
+  );
+};
 
 export default RegisterFormWithEmailOTP;
