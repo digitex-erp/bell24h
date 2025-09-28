@@ -12,7 +12,7 @@
       "autoBackup": true
     },
     "production": {
-      "url": "https://bell24h.vercel.app",
+      "url": "https://www.bell24h.com",
       "branch": "main",
       "requiresApproval": true,
       "requiresTests": true,

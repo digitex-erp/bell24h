@@ -1,16 +1,10 @@
-name: Deploy Bell24h to Vercel
+name: Deploy Bell24h to Vercel (Manual Only)
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 env:
   NODE_VERSION: '18'
-  VERCEL_PROJECT_ID: prj_8ub3FQx2y1KUEgTZcjrb2Urzt7mS
-  VERCEL_ORG_ID: team_COE65vdscwE4rITBcp2XyKqm
 
 jobs:
   deploy:
@@ -29,12 +23,12 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
-    - name: Setup environment variables
+    - name: Setup environment variables (from secrets)
       run: |
-        echo "DATABASE_URL=postgresql://neondb_owner:npg_0Duqdxs3RoyA@ep-super-wind-a1c1ni4n-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" >> $GITHUB_ENV
-        echo "RAZORPAY_KEY_ID=rzp_live_RJjxcgaBo9j0UA" >> $GITHUB_ENV
-        echo "RAZORPAY_KEY_SECRET=lwTxLReQSkVL7lbrr39XSoyG" >> $GITHUB_ENV
-        echo "NEXTAUTH_SECRET=bell24h_neon_production_secret_2024" >> $GITHUB_ENV
+        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+        echo "RAZORPAY_KEY_ID=${{ secrets.RAZORPAY_KEY_ID }}" >> $GITHUB_ENV
+        echo "RAZORPAY_KEY_SECRET=${{ secrets.RAZORPAY_KEY_SECRET }}" >> $GITHUB_ENV
+        echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> $GITHUB_ENV
         echo "NEXTAUTH_URL=https://www.bell24h.com" >> $GITHUB_ENV
         echo "NODE_ENV=production" >> $GITHUB_ENV
         
@@ -51,57 +45,17 @@ jobs:
     - name: Install Vercel CLI
       run: npm install -g vercel@latest
       
-    - name: Deploy to Vercel (Preview)
-      if: github.event_name == 'pull_request'
-      run: |
-        vercel --token ${{ secrets.VERCEL_TOKEN }} \
-               --project ${{ env.VERCEL_PROJECT_ID }} \
-               --org ${{ env.VERCEL_ORG_ID }} \
-               --confirm
-      env:
-        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        
     - name: Deploy to Vercel (Production)
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       run: |
         vercel --prod \
                --token ${{ secrets.VERCEL_TOKEN }} \
-               --project ${{ env.VERCEL_PROJECT_ID }} \
-               --org ${{ env.VERCEL_ORG_ID }} \
+               --project ${{ secrets.VERCEL_PROJECT_ID }} \
+               --org ${{ secrets.VERCEL_ORG_ID }} \
                --confirm
       env:
         VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         
-    - name: Comment PR with preview URL
-      if: github.event_name == 'pull_request'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          const { data: comments } = await github.rest.issues.listComments({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-          });
-          
-          const botComment = comments.find(comment => 
-            comment.user.type === 'Bot' && comment.body.includes('Preview URL')
-          );
-          
-          if (botComment) {
-            await github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: botComment.id,
-              body: `🚀 **Preview URL**: https://bell24h-complete-git-${context.payload.pull_request.head.ref}-${context.repo.owner}.vercel.app`
-            });
-          } else {
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: `🚀 **Preview URL**: https://bell24h-complete-git-${context.payload.pull_request.head.ref}-${context.repo.owner}.vercel.app`
-            });
-          }
+    # Removed PR comment step to reduce noise and permissions
           
     - name: Deploy Status
       if: always()
