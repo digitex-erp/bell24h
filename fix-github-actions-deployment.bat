@@ -102,11 +102,6 @@ echo   ],
 echo   "env": {
 echo     "NODE_ENV": "production"
 echo   },
-echo   "functions": {
-echo     "app/api/**/*.ts": {
-echo       "runtime": "nodejs18.x"
-echo     }
-echo   },
 echo   "regions": ["iad1"]
 echo }
 ) > vercel.json
