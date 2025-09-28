@@ -32,14 +32,14 @@ if %errorlevel% neq 0 (
 echo ✅ React app built successfully
 
 echo.
-echo Step 4: Deploying to Vercel...
-call npx vercel --prod --yes
+echo Step 4: Deploying to Vercel (bell24h-v1 project)...
+call npx vercel --prod --yes --project bell24h-v1
 if %errorlevel% neq 0 (
     echo ❌ Vercel deployment failed
     echo.
     echo Manual deployment steps:
     echo 1. Go to https://vercel.com/dashboard
-    echo 2. Find your bell24h project
+    echo 2. Find your bell24h-v1 project
     echo 3. Click "Deploy" or "Redeploy"
     echo 4. Your dynamic site will be live
     exit /b 1

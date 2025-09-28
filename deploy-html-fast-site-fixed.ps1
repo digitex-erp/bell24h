@@ -436,4 +436,8 @@ Write-Host "• All existing routes work immediately" -ForegroundColor White
 Write-Host "`n📊 Performance Comparison:" -ForegroundColor Yellow
 Write-Host "• React/Next.js: ~2-5s load time" -ForegroundColor White
 Write-Host "• Fast HTML: ~0.2-0.5s load time" -ForegroundColor White
+<<<<<<< HEAD
 Write-Host "• 10x improvement in speed!" -ForegroundColor Green
+=======
+Write-Host "• 10x improvement in speed!" -ForegroundColor Green
+>>>>>>> 7813a143b0b346893399a3e35fed46879897398a
