@@ -75,7 +75,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
+                <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
                 <div>
                   <div className="font-bold text-xl">Bell24h</div>
                   <div className="text-xs text-gray-600">Verified B2B Platform</div>
@@ -168,8 +168,8 @@ export default function DashboardPage() {
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="space-y-4">
-              <Link href="/rfq/new" className="flex items-center p-4 bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-lg hover:from-indigo-100 hover:to-emerald-100 transition-colors">
-                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold mr-4">+</div>
+              <Link href="/rfq/new" className="flex items-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
+                <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold mr-4">+</div>
                 <div>
                   <p className="font-semibold text-gray-900">Create New RFQ</p>
                   <p className="text-sm text-gray-600">Post a request for quotation</p>
@@ -228,7 +228,7 @@ export default function DashboardPage() {
                 </div>
                 <h4 className="text-lg font-medium text-gray-900 mb-2">No RFQs yet</h4>
                 <p className="text-gray-600 mb-4">Create your first RFQ to get started with Bell24h</p>
-                <Link href="/rfq/new" className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white rounded-lg hover:from-indigo-700 hover:to-emerald-700">
+                <Link href="/rfq/new" className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
                   Create RFQ
                 </Link>
               </div>

@@ -37,6 +37,10 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "BELL24H_BACKUP_*",
+    "BELL24H-WORKING-SITE-BACKUP-*",
+    "**/backup/**",
+    "**/backups/**"
   ]
 }

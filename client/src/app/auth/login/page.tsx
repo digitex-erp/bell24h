@@ -1,196 +1,489 @@
-"use client";
-import { CheckCircle, Phone, Shield } from 'lucide-react';
+'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Phone, MessageSquare, Mail, Shield, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
 export default function LoginPage() {
-  const [step, setStep] = useState('phone'); // 'phone' or 'otp'
-  const [phone, setPhone] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [otp, setOtp] = useState('');
+  const [email, setEmail] = useState('');
+  const [step, setStep] = useState<'phone' | 'otp' | 'email' | 'success'>('phone');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [demoOTP, setDemoOTP] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isExistingUser, setIsExistingUser] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+  
+  const router = useRouter();
 
-  const sendOTP = async () => {
+  // Step 1: Send Mobile OTP (Primary - Cost Effective)
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     setError('');
-
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      setError('Please enter a valid 10-digit mobile number');
-      setLoading(false);
-      return;
-    }
 
     try {
-      // Generate demo OTP for testing
-      const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-      setDemoOTP(generatedOTP);
+      // Send Mobile OTP first (Save money)
+      const response = await fetch('/api/auth/send-mobile-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber })
+      });
 
-      // In production, call API here
-      // const response = await fetch('/api/auth/send-phone-otp', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ phone })
-      // });
-
-      console.log(`📱 OTP for +91${phone}: ${generatedOTP}`);
-      setStep('otp');
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Check if user is existing (has email registered)
+        if (data.data.isExistingUser) {
+          setIsExistingUser(true);
+          setUserData(data.data.user);
+          setSuccessMessage(`Welcome back! OTP sent to ${phoneNumber}. We'll also send email OTP to your registered email.`);
+        } else {
+          setIsExistingUser(false);
+          setSuccessMessage(`OTP sent to ${phoneNumber}. New user detected - mobile verification only.`);
+        }
+        
+        setStep('otp');
+        console.log('Mobile OTP sent to:', phoneNumber);
+      } else {
+        setError('Failed to send OTP. Please try again.');
+      }
     } catch (err) {
-      setError('Failed to send OTP. Please try again.');
+      setError('Network error. Please check your connection.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  const verifyOTP = async () => {
+  // Step 2: Verify Mobile OTP
+  const handleOTPSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     setError('');
 
-    if (otp !== demoOTP) {
-      setError('Invalid OTP. Please try again.');
-      setLoading(false);
-      return;
-    }
+    try {
+      // Verify Mobile OTP
+      const response = await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber, otp })
+      });
 
-    // Success - redirect to dashboard
-    window.location.href = '/dashboard';
+      if (response.ok) {
+        const data = await response.json();
+        
+        // If existing user, proceed to email OTP
+        if (data.data.isExistingUser && data.data.user.email) {
+          setUserData(data.data.user);
+          setStep('email');
+          setSuccessMessage('Mobile OTP verified! Now verifying your email...');
+          
+          // Automatically send email OTP
+          await sendEmailOTP(data.data.user.email);
+        } else {
+          // New user - mobile verification complete
+          localStorage.setItem('bell24h_user', JSON.stringify(data.data.user));
+          setStep('success');
+          setSuccessMessage('Login successful! Welcome to Bell24h.');
+          
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 2000);
+        }
+      } else {
+        setError('Invalid OTP. Please try again.');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const resendOTP = () => {
-    sendOTP();
+  // Step 3: Send Email OTP for existing users
+  const sendEmailOTP = async (userEmail: string) => {
+    try {
+      const response = await fetch('/api/auth/send-email-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: userEmail, 
+          phoneNumber,
+          userName: userData?.name || 'User'
+        })
+      });
+
+      if (response.ok) {
+        setSuccessMessage(`Email OTP sent to ${userEmail}. Please check your inbox.`);
+      } else {
+        setError('Failed to send email OTP. Please try again.');
+      }
+    } catch (err) {
+      setError('Failed to send email OTP. Please try again.');
+    }
+  };
+
+  // Step 4: Verify Email OTP (Final verification for existing users)
+  const handleEmailOTPSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/auth/verify-email-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: userData.email, 
+          emailOtp: otp,
+          phoneNumber,
+          mobileOtpVerified: true
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('bell24h_user', JSON.stringify(data.data.user));
+        setStep('success');
+        setSuccessMessage('Dual verification complete! Welcome back to Bell24h.');
+        
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 2000);
+      } else {
+        setError('Invalid email OTP. Please try again.');
+      }
+    } catch (err) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resendOTP = async () => {
+    setLoading(true);
+    try {
+      if (step === 'otp') {
+        // Resend mobile OTP
+        const response = await fetch('/api/auth/send-mobile-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phoneNumber })
+        });
+        
+        if (response.ok) {
+          setError('');
+          alert('Mobile OTP resent successfully!');
+        }
+      } else if (step === 'email') {
+        // Resend email OTP
+        await sendEmailOTP(userData.email);
+        alert('Email OTP resent successfully!');
+      }
+    } catch (err) {
+      setError('Failed to resend OTP');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStepTitle = () => {
+    switch (step) {
+      case 'phone': return 'Mobile Number';
+      case 'otp': return 'Mobile OTP Verification';
+      case 'email': return 'Email OTP Verification';
+      case 'success': return 'Login Successful';
+      default: return 'Authentication';
+    }
+  };
+
+  const getStepIcon = () => {
+    switch (step) {
+      case 'phone': return <Phone className="h-5 w-5 text-indigo-600" />;
+      case 'otp': return <MessageSquare className="h-5 w-5 text-emerald-600" />;
+      case 'email': return <Mail className="h-5 w-5 text-blue-600" />;
+      case 'success': return <CheckCircle className="h-5 w-5 text-green-600" />;
+      default: return <Shield className="h-5 w-5 text-gray-600" />;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-            <Shield className="w-8 h-8 text-blue-600" />
+          <div className="flex items-center justify-center mb-4">
+            <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full flex items-center justify-center">
+              <Shield className="h-8 w-8 text-white" />
+            </div>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Bell24h Login</h1>
-          <p className="text-gray-600 mt-2">
-            {step === 'phone' ? 'Enter your mobile number to continue' : 'Enter the OTP sent to your phone'}
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            🔐 Bell24h Smart Login
+          </h1>
+          <p className="text-gray-600">
+            {step === 'phone' && 'Enter mobile number for cost-effective verification'}
+            {step === 'otp' && 'Verify mobile OTP (Primary authentication)'}
+            {step === 'email' && 'Verify email OTP (Secondary authentication)'}
+            {step === 'success' && 'Authentication complete!'}
           </p>
         </div>
 
-        {/* Demo OTP Display */}
-        {demoOTP && step === 'otp' && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-            <div className="text-center">
-              <h3 className="text-sm font-medium text-yellow-800">Demo OTP</h3>
-              <p className="text-2xl font-bold text-yellow-900 mt-1">{demoOTP}</p>
-              <p className="text-xs text-yellow-700 mt-1">Use this code for testing</p>
-            </div>
-          </div>
-        )}
-
-        {/* Phone Input Step */}
-        {step === 'phone' && (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Mobile Number
-              </label>
-              <div className="flex">
-                <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500">
-                  +91
-                </span>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                  placeholder="9876543210"
-                  className="flex-1 rounded-r-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+        <Card className="shadow-lg">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center gap-2">
+              {getStepIcon()}
+              {getStepTitle()}
+            </CardTitle>
+          </CardHeader>
+          
+          <CardContent>
+            {successMessage && (
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <div className="flex items-center gap-2 text-green-800 text-sm">
+                  <CheckCircle className="h-4 w-4" />
+                  <span className="font-medium">Success</span>
+                </div>
+                <p className="text-green-700 text-xs mt-1">{successMessage}</p>
               </div>
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-            </div>
+            )}
 
-            <button
-              onClick={sendOTP}
-              disabled={loading || phone.length !== 10}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
-            >
-              {loading ? 'Sending...' : 'Send OTP'}
-            </button>
-          </div>
-        )}
+            {step === 'phone' && (
+              <form onSubmit={handlePhoneSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Mobile Number (Primary - Cost Effective)
+                  </label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    placeholder="+91 98765 43210"
+                    required
+                    className="w-full"
+                    pattern="[0-9+\-\s()]{10,15}"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    We'll send OTP to your mobile first (saves money)
+                  </p>
+                </div>
 
-        {/* OTP Verification Step */}
-        {step === 'otp' && (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Enter OTP sent to +91 {phone}
-              </label>
-              <input
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                placeholder="000000"
-                className="w-full text-center text-2xl tracking-widest border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                maxLength="6"
-              />
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-            </div>
+                {error && (
+                  <div className="text-red-600 text-sm text-center">
+                    {error}
+                  </div>
+                )}
 
-            <button
-              onClick={verifyOTP}
-              disabled={loading || otp.length !== 6}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 disabled:bg-gray-400 transition-colors"
-            >
-              {loading ? 'Verifying...' : 'Verify OTP'}
-            </button>
+                <Button
+                  type="submit"
+                  disabled={loading || phoneNumber.length < 10}
+                  className="w-full bg-gradient-to-r from-blue-600 to-emerald-600"
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Sending OTP...
+                    </>
+                  ) : (
+                    <>
+                      <Phone className="h-4 w-4 mr-2" />
+                      Send Mobile OTP
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
 
-            <div className="flex justify-between">
-              <button
-                onClick={() => setStep('phone')}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-              >
-                Change Number
-              </button>
-              <button
-                onClick={resendOTP}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-              >
-                Resend OTP
-              </button>
-            </div>
-          </div>
-        )}
+            {step === 'otp' && (
+              <form onSubmit={handleOTPSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">
+                    Mobile OTP Code
+                  </label>
+                  <Input
+                    id="otp"
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="123456"
+                    required
+                    className="w-full text-center text-2xl tracking-widest"
+                    maxLength={6}
+                  />
+                  <p className="text-xs text-gray-500 mt-1 text-center">
+                    Mobile OTP sent to +91 {phoneNumber.slice(-10)}
+                    {isExistingUser && <span className="block text-blue-600">Existing user - Email OTP will follow</span>}
+                  </p>
+                </div>
 
-        {/* Service Information */}
-        <div className="mt-8 bg-gray-50 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-gray-900 mb-2">Our Services</h3>
-          <div className="space-y-1 text-sm text-gray-600">
-            <div className="flex items-center">
-              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-              <span>Supplier Verification - ₹2,000</span>
-            </div>
-            <div className="flex items-center">
-              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-              <span>RFQ Writing Service - ₹500</span>
-            </div>
-            <div className="flex items-center">
-              <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-              <span>Featured Listing - ₹1,000/month</span>
-            </div>
-          </div>
-        </div>
+                {error && (
+                  <div className="text-red-600 text-sm text-center">
+                    {error}
+                  </div>
+                )}
 
-        {/* WhatsApp Contact */}
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600 mb-3">Need help? Contact us on WhatsApp</p>
-          <a
-            href="https://wa.me/919876543210?text=Hi, I need supplier verification service"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            <Phone className="w-4 h-4 mr-2" />
-            WhatsApp Us
-          </a>
-        </div>
+                <Button
+                  type="submit"
+                  disabled={loading || otp.length !== 6}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-indigo-600"
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Verifying...
+                    </>
+                  ) : (
+                    <>
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      Verify Mobile OTP
+                    </>
+                  )}
+                </Button>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => setStep('phone')}
+                    className="text-sm text-gray-600 hover:text-gray-800"
+                  >
+                    ← Change Mobile Number
+                  </button>
+                </div>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={resendOTP}
+                    disabled={loading}
+                    className="text-sm text-indigo-600 hover:text-indigo-800"
+                  >
+                    Didn't receive OTP? Resend
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {step === 'email' && (
+              <form onSubmit={handleEmailOTPSubmit} className="space-y-4">
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-4">
+                  <div className="flex items-center gap-2 text-blue-800 text-sm mb-2">
+                    <Mail className="h-4 w-4" />
+                    <span className="font-medium">Email Verification Required</span>
+                  </div>
+                  <p className="text-blue-700 text-xs">
+                    As an existing user, we need to verify your email: <strong>{userData?.email}</strong>
+                  </p>
+                </div>
+
+                <div>
+                  <label htmlFor="emailOtp" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email OTP Code
+                  </label>
+                  <Input
+                    id="emailOtp"
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="123456"
+                    required
+                    className="w-full text-center text-2xl tracking-widest"
+                    maxLength={6}
+                  />
+                  <p className="text-xs text-gray-500 mt-1 text-center">
+                    Email OTP sent to {userData?.email}
+                  </p>
+                </div>
+
+                {error && (
+                  <div className="text-red-600 text-sm text-center">
+                    {error}
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  disabled={loading || otp.length !== 6}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600"
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Verifying Email...
+                    </>
+                  ) : (
+                    <>
+                      <Mail className="h-4 w-4 mr-2" />
+                      Verify Email OTP
+                    </>
+                  )}
+                </Button>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => setStep('otp')}
+                    className="text-sm text-gray-600 hover:text-gray-800"
+                  >
+                    ← Back to Mobile OTP
+                  </button>
+                </div>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={resendOTP}
+                    disabled={loading}
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                  >
+                    Didn't receive email OTP? Resend
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {step === 'success' && (
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                  <CheckCircle className="h-8 w-8 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900">Login Successful!</h3>
+                  <p className="text-gray-600 text-sm mt-1">
+                    {isExistingUser ? 'Dual verification complete' : 'Mobile verification complete'}
+                  </p>
+                </div>
+                <div className="animate-pulse">
+                  <p className="text-sm text-gray-500">Redirecting to dashboard...</p>
+                </div>
+              </div>
+            )}
+
+            {step !== 'success' && (
+              <div className="mt-6 text-center">
+                <Link 
+                  href="/" 
+                  className="flex items-center justify-center gap-2 text-gray-600 hover:text-gray-800"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Home
+                </Link>
+              </div>
+            )}
+
+            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+              <div className="flex items-center gap-2 text-green-800 text-sm">
+                <Shield className="h-4 w-4" />
+                <span className="font-medium">Smart Authentication</span>
+              </div>
+              <p className="text-green-700 text-xs mt-1">
+                Mobile OTP first (saves money), Email OTP for existing users (dual security)
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

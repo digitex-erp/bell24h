@@ -1,7 +1,7 @@
 // app/marketing/campaigns/page.tsx - Marketing Campaigns Page
 'use client';
 
-import { ArrowRight, Plus, Target, TrendingUp, Users } from 'lucide-react';
+import { ArrowRight, Plus, Target, ArrowUpRight, Users } from 'lucide-react';
 import { useState } from 'react';
 
 export default function MarketingCampaignsPage() {
@@ -84,7 +84,7 @@ export default function MarketingCampaignsPage() {
                   {campaigns.filter(c => c.status === 'Active').length}
                 </p>
               </div>
-              <TrendingUp className="h-8 w-8 text-green-400" />
+              <ArrowUpRight className="h-8 w-8 text-green-400" />
             </div>
           </div>
 

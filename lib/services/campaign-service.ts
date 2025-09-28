@@ -1,5 +1,34 @@
-import { prisma } from '@/lib/db'
-import { Agent, Campaign, CampaignStatus } from '@prisma/client'
+// Mock CampaignService without Prisma dependency
+export type CampaignStatus = 'DRAFT' | 'PUBLISHED' | 'PAUSED' | 'COMPLETED' | 'CANCELLED'
+
+export interface Agent {
+  id: string
+  email: string
+  name: string
+  role: string
+  isActive: boolean
+}
+
+export interface Campaign {
+  id: string
+  name: string
+  description?: string
+  supplierId?: string
+  productName?: string
+  targetMarket?: string
+  channels: string[]
+  budget?: number
+  spent?: number
+  status: CampaignStatus
+  startDate?: Date
+  endDate?: Date
+  content?: any
+  metrics?: any
+  aiInsights?: any
+  agentId?: string
+  createdAt: Date
+  updatedAt: Date
+}
 
 export interface CreateCampaignData {
   name: string
@@ -35,28 +64,35 @@ export interface CampaignWithAgent extends Campaign {
   agent?: Agent | null
 }
 
+// Mock campaign storage
+const mockCampaigns = new Map<string, Campaign>()
+const mockCampaignEvents = new Map<string, any[]>()
+
 export class CampaignService {
   /**
    * Create a new campaign
    */
   static async createCampaign(data: CreateCampaignData): Promise<Campaign | null> {
     try {
-      const campaign = await prisma.campaign.create({
-        data: {
-          name: data.name,
-          description: data.description,
-          supplierId: data.supplierId,
-          productName: data.productName,
-          targetMarket: data.targetMarket,
-          channels: data.channels,
-          budget: data.budget,
-          startDate: data.startDate,
-          endDate: data.endDate,
-          agentId: data.agentId,
-          status: CampaignStatus.DRAFT
-        }
-      })
+      const campaign: Campaign = {
+        id: `campaign_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        name: data.name,
+        description: data.description,
+        supplierId: data.supplierId,
+        productName: data.productName,
+        targetMarket: data.targetMarket,
+        channels: data.channels,
+        budget: data.budget,
+        spent: 0,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        agentId: data.agentId,
+        status: 'DRAFT',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
 
+      mockCampaigns.set(campaign.id, campaign)
       return campaign
     } catch (error) {
       console.error('Error creating campaign:', error)
@@ -69,14 +105,19 @@ export class CampaignService {
    */
   static async getCampaignById(id: string): Promise<CampaignWithAgent | null> {
     try {
-      const campaign = await prisma.campaign.findUnique({
-        where: { id },
-        include: {
-          agent: true
-        }
-      })
+      const campaign = mockCampaigns.get(id)
+      if (!campaign) return null
 
-      return campaign
+      return {
+        ...campaign,
+        agent: campaign.agentId ? {
+          id: campaign.agentId,
+          email: 'agent@bell24h.com',
+          name: 'Mock Agent',
+          role: 'agent',
+          isActive: true
+        } : null
+      }
     } catch (error) {
       console.error('Error getting campaign:', error)
       return null
@@ -88,12 +129,17 @@ export class CampaignService {
    */
   static async updateCampaign(id: string, data: UpdateCampaignData): Promise<Campaign | null> {
     try {
-      const campaign = await prisma.campaign.update({
-        where: { id },
-        data
-      })
+      const campaign = mockCampaigns.get(id)
+      if (!campaign) return null
 
-      return campaign
+      const updatedCampaign = {
+        ...campaign,
+        ...data,
+        updatedAt: new Date()
+      }
+
+      mockCampaigns.set(id, updatedCampaign)
+      return updatedCampaign
     } catch (error) {
       console.error('Error updating campaign:', error)
       return null
@@ -105,9 +151,8 @@ export class CampaignService {
    */
   static async deleteCampaign(id: string): Promise<boolean> {
     try {
-      await prisma.campaign.delete({
-        where: { id }
-      })
+      mockCampaigns.delete(id)
+      mockCampaignEvents.delete(id)
       return true
     } catch (error) {
       console.error('Error deleting campaign:', error)
@@ -125,20 +170,35 @@ export class CampaignService {
     offset?: number
   }): Promise<CampaignWithAgent[]> {
     try {
-      const campaigns = await prisma.campaign.findMany({
-        where: {
-          ...(filters?.agentId && { agentId: filters.agentId }),
-          ...(filters?.status && { status: filters.status })
-        },
-        include: {
-          agent: true
-        },
-        orderBy: { createdAt: 'desc' },
-        take: filters?.limit || 50,
-        skip: filters?.offset || 0
-      })
+      let campaigns = Array.from(mockCampaigns.values())
 
-      return campaigns
+      // Apply filters
+      if (filters?.agentId) {
+        campaigns = campaigns.filter(c => c.agentId === filters.agentId)
+      }
+      if (filters?.status) {
+        campaigns = campaigns.filter(c => c.status === filters.status)
+      }
+
+      // Sort by created date (desc)
+      campaigns.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+
+      // Apply pagination
+      const limit = filters?.limit || 50
+      const offset = filters?.offset || 0
+      campaigns = campaigns.slice(offset, offset + limit)
+
+      // Add agent data
+      return campaigns.map(campaign => ({
+        ...campaign,
+        agent: campaign.agentId ? {
+          id: campaign.agentId,
+          email: 'agent@bell24h.com',
+          name: 'Mock Agent',
+          role: 'agent',
+          isActive: true
+        } : null
+      }))
     } catch (error) {
       console.error('Error listing campaigns:', error)
       return []
@@ -150,10 +210,7 @@ export class CampaignService {
    */
   static async getCampaignMetrics(campaignId: string): Promise<any> {
     try {
-      const events = await prisma.campaignEvent.findMany({
-        where: { campaignId },
-        orderBy: { timestamp: 'desc' }
-      })
+      const events = mockCampaignEvents.get(campaignId) || []
 
       // Calculate metrics
       const metrics = {
@@ -187,13 +244,15 @@ export class CampaignService {
    */
   static async addCampaignEvent(campaignId: string, eventType: string, eventData?: any): Promise<boolean> {
     try {
-      await prisma.campaignEvent.create({
-        data: {
-          campaignId,
-          eventType,
-          eventData
-        }
+      const events = mockCampaignEvents.get(campaignId) || []
+      events.push({
+        id: `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        campaignId,
+        eventType,
+        eventData,
+        timestamp: new Date()
       })
+      mockCampaignEvents.set(campaignId, events)
 
       return true
     } catch (error) {
@@ -207,12 +266,17 @@ export class CampaignService {
    */
   static async updateCampaignStatus(id: string, status: CampaignStatus): Promise<Campaign | null> {
     try {
-      const campaign = await prisma.campaign.update({
-        where: { id },
-        data: { status }
-      })
+      const campaign = mockCampaigns.get(id)
+      if (!campaign) return null
 
-      return campaign
+      const updatedCampaign = {
+        ...campaign,
+        status,
+        updatedAt: new Date()
+      }
+
+      mockCampaigns.set(id, updatedCampaign)
+      return updatedCampaign
     } catch (error) {
       console.error('Error updating campaign status:', error)
       return null
@@ -224,15 +288,20 @@ export class CampaignService {
    */
   static async getCampaignsByAgent(agentId: string): Promise<CampaignWithAgent[]> {
     try {
-      const campaigns = await prisma.campaign.findMany({
-        where: { agentId },
-        include: {
-          agent: true
-        },
-        orderBy: { createdAt: 'desc' }
-      })
+      const campaigns = Array.from(mockCampaigns.values())
+        .filter(c => c.agentId === agentId)
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 
-      return campaigns
+      return campaigns.map(campaign => ({
+        ...campaign,
+        agent: {
+          id: campaign.agentId!,
+          email: 'agent@bell24h.com',
+          name: 'Mock Agent',
+          role: 'agent',
+          isActive: true
+        }
+      }))
     } catch (error) {
       console.error('Error getting campaigns by agent:', error)
       return []
@@ -244,27 +313,20 @@ export class CampaignService {
    */
   static async getCampaignStats(): Promise<any> {
     try {
-      const totalCampaigns = await prisma.campaign.count()
-      const activeCampaigns = await prisma.campaign.count({
-        where: { status: CampaignStatus.PUBLISHED }
-      })
-      const draftCampaigns = await prisma.campaign.count({
-        where: { status: CampaignStatus.DRAFT }
-      })
-      const completedCampaigns = await prisma.campaign.count({
-        where: { status: CampaignStatus.COMPLETED }
-      })
-
-      const totalSpent = await prisma.campaign.aggregate({
-        _sum: { spent: true }
-      })
+      const campaigns = Array.from(mockCampaigns.values())
+      
+      const totalCampaigns = campaigns.length
+      const activeCampaigns = campaigns.filter(c => c.status === 'PUBLISHED').length
+      const draftCampaigns = campaigns.filter(c => c.status === 'DRAFT').length
+      const completedCampaigns = campaigns.filter(c => c.status === 'COMPLETED').length
+      const totalSpent = campaigns.reduce((sum, c) => sum + (c.spent || 0), 0)
 
       return {
         totalCampaigns,
         activeCampaigns,
         draftCampaigns,
         completedCampaigns,
-        totalSpent: totalSpent._sum.spent || 0
+        totalSpent
       }
     } catch (error) {
       console.error('Error getting campaign stats:', error)
@@ -277,22 +339,25 @@ export class CampaignService {
    */
   static async searchCampaigns(query: string): Promise<CampaignWithAgent[]> {
     try {
-      const campaigns = await prisma.campaign.findMany({
-        where: {
-          OR: [
-            { name: { contains: query, mode: 'insensitive' } },
-            { description: { contains: query, mode: 'insensitive' } },
-            { productName: { contains: query, mode: 'insensitive' } },
-            { targetMarket: { contains: query, mode: 'insensitive' } }
-          ]
-        },
-        include: {
-          agent: true
-        },
-        orderBy: { createdAt: 'desc' }
-      })
+      const campaigns = Array.from(mockCampaigns.values())
+        .filter(c => 
+          c.name.toLowerCase().includes(query.toLowerCase()) ||
+          c.description?.toLowerCase().includes(query.toLowerCase()) ||
+          c.productName?.toLowerCase().includes(query.toLowerCase()) ||
+          c.targetMarket?.toLowerCase().includes(query.toLowerCase())
+        )
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 
-      return campaigns
+      return campaigns.map(campaign => ({
+        ...campaign,
+        agent: campaign.agentId ? {
+          id: campaign.agentId,
+          email: 'agent@bell24h.com',
+          name: 'Mock Agent',
+          role: 'agent',
+          isActive: true
+        } : null
+      }))
     } catch (error) {
       console.error('Error searching campaigns:', error)
       return []

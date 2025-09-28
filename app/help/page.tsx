@@ -1,216 +1,108 @@
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Help Center - Bell24h',
-  description: 'Get help and support for Bell24h B2B marketplace'
-};
-
 export default function HelpPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
-          Help Center
-        </h1>
-
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 py-12">
+      <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            <div className="lg:col-span-2">
-              <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                <h2 className="text-xl font-semibold mb-4">Search Help</h2>
-                <div className="flex gap-4">
-                  <input
-                    type="text"
-                    placeholder="Search for help articles, guides, or FAQs"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                    Search
-                  </button>
+          <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">Help Center</h1>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* FAQ Section */}
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-xl p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+              
+              <div className="space-y-6">
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">How do I post an RFQ?</h3>
+                  <p className="text-gray-600">Simply click on "Post RFQ" in the navigation, fill in your requirements, and our AI will match you with verified suppliers within 24 hours.</p>
                 </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Popular Help Topics</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                      <h3 className="font-medium">Getting Started</h3>
-                      <p className="text-sm text-gray-600">Learn how to set up your account and start using Bell24h</p>
-                    </a>
-
-                    <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                      <h3 className="font-medium">Creating RFQs</h3>
-                      <p className="text-sm text-gray-600">Step-by-step guide to creating effective RFQs</p>
-                    </a>
-
-                    <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                      <h3 className="font-medium">Payment Methods</h3>
-                      <p className="text-sm text-gray-600">Understanding payment options and processing</p>
-                    </a>
-
-                    <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                      <h3 className="font-medium">Supplier Verification</h3>
-                      <p className="text-sm text-gray-600">How we verify suppliers and ensure quality</p>
-                    </a>
-                  </div>
-
-                  <div className="space-y-3">
-                    <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                      <h3 className="font-medium">Account Settings</h3>
-                      <p className="text-sm text-gray-600">Manage your profile and account preferences</p>
-                    </a>
-
-                    <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                      <h3 className="font-medium">Troubleshooting</h3>
-                      <p className="text-sm text-gray-600">Common issues and their solutions</p>
-                    </a>
-
-                    <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                      <h3 className="font-medium">Security & Privacy</h3>
-                      <p className="text-sm text-gray-600">How we protect your data and transactions</p>
-                    </a>
-
-                    <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                      <h3 className="font-medium">Mobile App</h3>
-                      <p className="text-sm text-gray-600">Using Bell24h on mobile devices</p>
-                    </a>
-                  </div>
+                
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">How does the escrow system work?</h3>
+                  <p className="text-gray-600">Your payment is held securely in ICICI Bank escrow until you receive and approve your goods. This ensures 100% protection for both buyers and suppliers.</p>
+                </div>
+                
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">What payment methods do you accept?</h3>
+                  <p className="text-gray-600">We accept all major payment methods including credit/debit cards, UPI, net banking, and digital wallets through our secure Razorpay integration.</p>
+                </div>
+                
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">How do I verify suppliers?</h3>
+                  <p className="text-gray-600">All suppliers on Bell24h are pre-verified with GST, PAN, and other compliance documents. Our AI trust scoring system provides additional verification.</p>
+                </div>
+                
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Can I use voice or video for RFQ?</h3>
+                  <p className="text-gray-600">Yes! You can submit RFQs using voice, video, or text. Our AI understands all formats and converts them into structured requirements.</p>
+                </div>
+                
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">What if I'm not satisfied with the quotes?</h3>
+                  <p className="text-gray-600">You can request modifications or reject quotes. Your escrow payment is only released when you're completely satisfied with the delivered goods.</p>
                 </div>
               </div>
             </div>
 
+            {/* Contact & Support */}
             <div className="space-y-6">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-4">Quick Support</h3>
-                <div className="space-y-3">
-                  <button className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    Live Chat
-                  </button>
-                  <button className="w-full p-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                    Schedule Call
-                  </button>
-                  <button className="w-full p-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                    Email Support
-                  </button>
-                </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-medium">Phone Support</p>
-                    <p className="text-sm text-gray-600">+91 11 1234 5678</p>
-                    <p className="text-xs text-gray-500">Mon-Fri 9AM-6PM</p>
+              <div className="bg-white rounded-2xl shadow-xl p-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Contact Support</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-indigo-600">📞</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Phone Support</p>
+                      <p className="text-gray-600">+91-9004962871</p>
+                    </div>
                   </div>
-
-                  <div>
-                    <p className="font-medium">Email Support</p>
-                    <p className="text-sm text-gray-600">support@bell24h.com</p>
-                    <p className="text-xs text-gray-500">24/7 response</p>
+                  
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-emerald-600">✉️</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Email Support</p>
+                      <p className="text-gray-600">support@bell24h.com</p>
+                    </div>
                   </div>
-
-                  <div>
-                    <p className="font-medium">Emergency</p>
-                    <p className="text-sm text-gray-600">+91 98765 43210</p>
-                    <p className="text-xs text-gray-500">Critical issues only</p>
+                  
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-purple-600">💬</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900">Live Chat</p>
+                      <p className="text-gray-600">Available 24/7</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-lg font-semibold mb-4">Video Tutorials</h3>
+              <div className="bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-2xl p-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
                 <div className="space-y-3">
-                  <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-red-100 rounded flex items-center justify-center mr-3">
-                        <span className="text-red-600">▶</span>
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm">Getting Started</p>
-                        <p className="text-xs text-gray-600">5 min video</p>
-                      </div>
-                    </div>
-                  </a>
-
-                  <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-red-100 rounded flex items-center justify-center mr-3">
-                        <span className="text-red-600">▶</span>
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm">Creating RFQs</p>
-                        <p className="text-xs text-gray-600">8 min video</p>
-                      </div>
-                    </div>
-                  </a>
-
-                  <a href="#" className="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 bg-red-100 rounded flex items-center justify-center mr-3">
-                        <span className="text-red-600">▶</span>
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm">Payment Process</p>
-                        <p className="text-xs text-gray-600">6 min video</p>
-                      </div>
-                    </div>
-                  </a>
+                  <button className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                    Post New RFQ
+                  </button>
+                  <button className="w-full bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors">
+                    Browse Suppliers
+                  </button>
+                  <button className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                    Check Wallet
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-2">How do I create my first RFQ?</h3>
-                <p className="text-gray-600">
-                  To create an RFQ, go to the "Create RFQ" page, select your product category,
-                  describe your requirements, specify quantity and timeline, then submit.
-                  Our AI will help match you with relevant suppliers.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-2">What payment methods are accepted?</h3>
-                <p className="text-gray-600">
-                  We accept UPI, NEFT, RTGS, credit/debit cards, and digital wallets.
-                  We also offer escrow services for secure transactions between buyers and suppliers.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-2">How do I verify a supplier?</h3>
-                <p className="text-gray-600">
-                  All suppliers on our platform are verified through document checks, business registration verification,
-                  and customer reviews. Look for the verification badge on supplier profiles.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Is there a mobile app available?</h3>
-                <p className="text-gray-600">
-                  Yes, our mobile app is available for both iOS and Android. You can download it from the App Store or Google Play Store.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-2">What if I have a dispute with a supplier?</h3>
-                <p className="text-gray-600">
-                  We have a dispute resolution process in place. Contact our support team, and we'll help mediate
-                  the issue and work towards a fair resolution for all parties.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold mb-2">How do I update my company profile?</h3>
-                <p className="text-gray-600">
-                  Go to your account settings, select "Company Profile," and update the information.
-                  Changes may take 24-48 hours to be reflected on the platform.
-                </p>
+              <div className="bg-white rounded-2xl shadow-xl p-8">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Business Hours</h3>
+                <div className="space-y-2 text-gray-600">
+                  <p><span className="font-semibold">Monday - Friday:</span> 9:00 AM - 6:00 PM</p>
+                  <p><span className="font-semibold">Saturday:</span> 10:00 AM - 4:00 PM</p>
+                  <p><span className="font-semibold">Sunday:</span> Closed</p>
+                  <p className="text-sm text-gray-500 mt-2">Emergency support available 24/7</p>
+                </div>
               </div>
             </div>
           </div>

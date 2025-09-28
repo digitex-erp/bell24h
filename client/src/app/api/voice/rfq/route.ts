@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import { prisma } from '@/lib/prisma';
+=======
 import prisma from '@/lib/prisma';
+>>>>>>> 504c5ee690291e877954561480a78ee33260c24a
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {

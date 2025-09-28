@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { Briefcase, Target } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -87,7 +87,7 @@ const PortfolioManager: React.FC = () => {
               <div className='text-right'>
                 <p className='text-sm text-slate-600'>Total Portfolio Value</p>
                 <p className='text-2xl font-bold text-slate-900'>
-                  ₹{(portfolioSummary.totalValue / 10000000).toFixed(1)}Cr
+                  ?{(portfolioSummary.totalValue / 10000000).toFixed(1)}Cr
                 </p>
               </div>
             </div>
@@ -96,12 +96,12 @@ const PortfolioManager: React.FC = () => {
           <div className='bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow'>
             <div className='flex items-center justify-between mb-4'>
               <div className='p-2 bg-green-100 rounded-lg'>
-                <span>📈</span>
+                <span>??</span>
               </div>
               <div className='text-right'>
                 <p className='text-sm text-slate-600'>Total Gain/Loss</p>
                 <p className='text-2xl font-bold text-green-600'>
-                  +₹{(portfolioSummary.totalGainLoss / 100000).toFixed(1)}L
+                  +?{(portfolioSummary.totalGainLoss / 100000).toFixed(1)}L
                 </p>
               </div>
             </div>
@@ -110,7 +110,7 @@ const PortfolioManager: React.FC = () => {
           <div className='bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow'>
             <div className='flex items-center justify-between mb-4'>
               <div className='p-2 bg-purple-100 rounded-lg'>
-                <span>📦</span>
+                <span>??</span>
               </div>
               <div className='text-right'>
                 <p className='text-sm text-slate-600'>Active Holdings</p>
@@ -129,7 +129,7 @@ const PortfolioManager: React.FC = () => {
               <div className='text-right'>
                 <p className='text-sm text-slate-600'>Invested Amount</p>
                 <p className='text-2xl font-bold text-slate-900'>
-                  ₹{(portfolioSummary.totalInvested / 10000000).toFixed(1)}Cr
+                  ?{(portfolioSummary.totalInvested / 10000000).toFixed(1)}Cr
                 </p>
               </div>
             </div>
@@ -180,11 +180,11 @@ const PortfolioManager: React.FC = () => {
                       {holding.quantity.toLocaleString()} {holding.unit}
                     </td>
                     <td className='px-6 py-4 text-sm font-semibold text-slate-900'>
-                      ₹{(holding.marketValue / 100000).toFixed(1)}L
+                      ?{(holding.marketValue / 100000).toFixed(1)}L
                     </td>
                     <td className='px-6 py-4'>
                       <div className='text-sm font-medium text-green-600'>
-                        <div>+₹{(holding.gainLoss / 1000).toFixed(0)}K</div>
+                        <div>+?{(holding.gainLoss / 1000).toFixed(0)}K</div>
                         <div className='text-xs'>(+{holding.gainLossPercent.toFixed(2)}%)</div>
                       </div>
                     </td>

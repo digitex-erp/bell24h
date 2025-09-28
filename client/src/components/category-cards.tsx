@@ -195,7 +195,7 @@ export function TrendingCategories({
         <div className="text-center mt-12">
           <Link 
             href="/categories"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700 transition-all duration-300"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-indigo-700 hover:to-emerald-700 transition-all duration-300"
           >
             View All Categories
             <ArrowRight className="ml-2 w-5 h-5" />

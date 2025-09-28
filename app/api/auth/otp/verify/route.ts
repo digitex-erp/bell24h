@@ -1,50 +1,104 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+
+// Mock OTP storage (in production, use Redis or database)
+const otpStorage = new Map<string, { otp: string, timestamp: number }>();
+
+// Mock user database (in production, use real database)
+const users = new Map<string, any>([
+  ['9876543210', {
+    id: '1',
+    mobile: '9876543210',
+    name: 'Test User',
+    companyName: 'Test Company',
+    businessType: 'manufacturer',
+    verified: true
+  }]
+]);
 
 export async function POST(request: NextRequest) {
   try {
-    const { phone, otp } = await request.json()
+    const { mobile, otp } = await request.json();
 
-    if (!phone || !otp) {
+    // Validate inputs
+    if (!mobile || !otp) {
       return NextResponse.json(
-        { message: 'Phone number and OTP are required' },
+        { success: false, error: 'Mobile number and OTP are required' },
         { status: 400 }
-      )
+      );
     }
 
-    // In production, verify OTP from database/cache
-    // For now, accept any 6-digit OTP for development
-    const isValidOtp = /^\d{6}$/.test(otp)
-
-    if (!isValidOtp) {
+    if (!/^\d{10}$/.test(mobile)) {
       return NextResponse.json(
-        { message: 'Invalid OTP format' },
+        { success: false, error: 'Invalid mobile number format' },
         { status: 400 }
-      )
+      );
     }
 
-    // Mock user creation/login
-    const user = {
-      id: Date.now().toString(),
-      name: 'User',
-      email: `${phone}@Bell24h.com`,
-      phone,
-      role: 'buyer'
+    if (!/^\d{6}$/.test(otp)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid OTP format' },
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json(
-      { 
-        message: 'OTP verified successfully',
-        user
-      },
-      { status: 200 }
-    )
+    // Check if OTP exists and is valid
+    const storedOtp = otpStorage.get(mobile);
+    
+    if (!storedOtp) {
+      return NextResponse.json(
+        { success: false, error: 'OTP not found. Please request a new OTP.' },
+        { status: 400 }
+      );
+    }
+
+    // Check if OTP is expired (5 minutes)
+    const isExpired = Date.now() - storedOtp.timestamp > 5 * 60 * 1000;
+    if (isExpired) {
+      otpStorage.delete(mobile);
+      return NextResponse.json(
+        { success: false, error: 'OTP has expired. Please request a new OTP.' },
+        { status: 400 }
+      );
+    }
+
+    // Verify OTP
+    if (storedOtp.otp !== otp) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid OTP. Please try again.' },
+        { status: 400 }
+      );
+    }
+
+    // OTP is valid - remove it
+    otpStorage.delete(mobile);
+
+    // Check if user exists
+    const existingUser = users.get(mobile);
+    
+    if (existingUser) {
+      // Existing user - login successful
+      return NextResponse.json({
+        success: true,
+        message: 'Login successful',
+        isNewUser: false,
+        user: existingUser,
+        redirectUrl: '/dashboard'
+      });
+    } else {
+      // New user - need registration
+      return NextResponse.json({
+        success: true,
+        message: 'OTP verified. Please complete registration.',
+        isNewUser: true,
+        mobile
+      });
+    }
 
   } catch (error) {
-    console.error('OTP verify error:', error)
+    console.error('OTP verification error:', error);
     return NextResponse.json(
-      { message: 'Failed to verify OTP' },
+      { success: false, error: 'OTP verification failed' },
       { status: 500 }
-    )
+    );
   }
 }
-

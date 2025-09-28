@@ -64,7 +64,7 @@ export default function NewRFQPage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
+                <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
                 <div>
                   <div className="font-bold text-xl">Bell24h</div>
                   <div className="text-xs text-gray-600">Verified B2B Platform</div>
@@ -242,7 +242,7 @@ export default function NewRFQPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white rounded-lg hover:from-indigo-700 hover:to-emerald-700 transition-colors disabled:opacity-50"
+                  className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors disabled:opacity-50"
                 >
                   {isLoading ? 'Creating RFQ...' : 'Create RFQ'}
                 </button>
