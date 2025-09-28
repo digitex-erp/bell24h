@@ -1,3 +1,14 @@
+# Fix merge conflicts and clean up code
+Write-Host "🔧 Fixing merge conflicts and cleaning code..."
+
+# Remove email-OTP APIs (mobile OTP only)
+if (Test-Path "app\api\auth\email-otp") {
+    Remove-Item "app\api\auth\email-otp" -Recurse -Force
+    Write-Host "✅ Removed email-OTP APIs"
+}
+
+# Replace AuthModal with clean mobile-OTP-only version
+$authModalContent = @'
 import React, { useState } from 'react';
 
 type AuthModalProps = {
@@ -111,3 +122,16 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
     </div>
   );
 }
+'@
+
+Set-Content -Path "components\AuthModal.tsx" -Value $authModalContent -Encoding UTF8
+Write-Host "✅ Replaced AuthModal with clean mobile-OTP-only version"
+
+# Commit and push changes
+Write-Host "📝 Committing changes..."
+git add -A
+git commit -m "fix: mobile OTP only; remove email-otp; clean AuthModal merge conflicts"
+git push origin main
+
+Write-Host "✅ Changes pushed to GitHub!"
+Write-Host "🚀 Ready to deploy!"
