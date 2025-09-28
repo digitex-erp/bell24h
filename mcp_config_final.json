@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "gitkraken": {
+      "command": "node",
+      "args": ["gitkraken-mcp-server.js"],
+      "env": {
+        "NODE_ENV": "development",
+        "CURSOR_NO_Q_PREFIX": "true",
+        "BYPASS_Q_PREFIX": "true",
+        "CURSOR_TERMINAL_BYPASS": "true"
+      },
+      "cwd": "${workspaceFolder}"
+    },
+    "direct-git": {
+      "command": "node",
+      "args": ["direct-git-mcp-server.js"],
+      "env": {
+        "NODE_ENV": "development",
+        "CURSOR_NO_Q_PREFIX": "true",
+        "BYPASS_Q_PREFIX": "true",
+        "CURSOR_TERMINAL_BYPASS": "true"
+      },
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}
