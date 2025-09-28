@@ -190,7 +190,7 @@ export default function SubscriptionDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="page-container flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
@@ -198,11 +198,11 @@ export default function SubscriptionDashboard() {
 
   if (!subscription) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">No Subscription Found</h2>
           <p className="text-gray-600 mb-8">Please contact support if you believe this is an error.</p>
-          <Link href="/pricing" className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700">
+          <Link href="/pricing" className="btn-primary">
             View Plans
           </Link>
         </div>
@@ -211,7 +211,7 @@ export default function SubscriptionDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

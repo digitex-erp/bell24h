@@ -14,18 +14,18 @@ export default function WalletPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="max-w-6xl mx-auto p-6">
-        <div className="text-center mb-8">
+        <div className="page-header">
           <Wallet className="h-16 w-16 text-blue-600 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Digital Wallet</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="page-subtitle max-w-3xl mx-auto">
             Manage your B2B payments with our secure digital wallet. Fast, convenient, and secure transactions.
           </p>
         </div>
 
         {/* Wallet Balance */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg shadow-lg p-8 mb-8 text-white">
+        <div className="bg-gray-50">
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-2xl font-semibold mb-2">Wallet Balance</h2>

@@ -7,7 +7,7 @@ import Link from 'next/link';
 // Loading component
 function CompareQuotesLoading() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="page-container flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
         <p className="mt-4 text-gray-600">Loading quotes...</p>
@@ -93,7 +93,7 @@ function CompareQuotesContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="page-container py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">

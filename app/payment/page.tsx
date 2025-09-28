@@ -84,7 +84,7 @@ export default function PaymentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 py-12">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -92,7 +92,7 @@ export default function PaymentPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Secure Payment with Razorpay
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="page-subtitle">
               Powered by Razorpay - India's most trusted payment gateway
             </p>
           </div>
@@ -104,7 +104,7 @@ export default function PaymentPage() {
               
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="form-label">
                     Amount (₹)
                   </label>
                   <input
@@ -117,7 +117,7 @@ export default function PaymentPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="form-label">
                     Description
                   </label>
                   <input
@@ -130,7 +130,7 @@ export default function PaymentPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="form-label">
                     Customer Name
                   </label>
                   <input
@@ -143,7 +143,7 @@ export default function PaymentPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="form-label">
                     Email
                   </label>
                   <input
@@ -156,7 +156,7 @@ export default function PaymentPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="form-label">
                     Phone Number
                   </label>
                   <input
@@ -178,7 +178,7 @@ export default function PaymentPage() {
                 <button
                   onClick={handlePayment}
                   disabled={loading || !paymentData.amount || !paymentData.customerName}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-indigo-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center"
+                  className="w-full bg-gray-50"
                 >
                   {loading ? (
                     <>
@@ -252,7 +252,7 @@ export default function PaymentPage() {
               </div>
 
               {/* Compliance Info */}
-              <div className="bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-2xl p-8">
+              <div className="bg-gray-50">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Compliance & Security</h3>
                 <ul className="text-sm text-gray-600 space-y-2">
                   <li>• PCI DSS Level 1 Certified</li>

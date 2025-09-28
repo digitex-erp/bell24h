@@ -58,14 +58,14 @@ export default function VerificationServicePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Supplier Verification Report
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="page-subtitle max-w-3xl mx-auto">
             Get a comprehensive verification report for any supplier. We manually research and verify company details, GST registration, business legitimacy, and provide a detailed PDF report.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function VerificationServicePage() {
         {/* Pricing */}
         <div className="bg-white rounded-lg shadow-lg p-8 mb-12">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Pricing</h2>
+            <h2 className="page-title">Pricing</h2>
             <div className="text-5xl font-bold text-blue-600 mb-2">₹2,000</div>
             <p className="text-gray-600 mb-6">Per verification report</p>
             
@@ -177,7 +177,7 @@ export default function VerificationServicePage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Company Name *
                 </label>
                 <input
@@ -191,7 +191,7 @@ export default function VerificationServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Contact Person *
                 </label>
                 <input
@@ -205,7 +205,7 @@ export default function VerificationServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Email *
                 </label>
                 <input
@@ -219,7 +219,7 @@ export default function VerificationServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Phone *
                 </label>
                 <input
@@ -233,7 +233,7 @@ export default function VerificationServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   GST Number
                 </label>
                 <input
@@ -246,7 +246,7 @@ export default function VerificationServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Business Type
                 </label>
                 <select
@@ -266,7 +266,7 @@ export default function VerificationServicePage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 Company Address
               </label>
               <textarea
@@ -279,7 +279,7 @@ export default function VerificationServicePage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 Specific Requirements
               </label>
               <textarea
@@ -320,7 +320,7 @@ export default function VerificationServicePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white p-6 rounded-lg shadow">
-              <p className="text-gray-600 mb-4">
+              <p className="feature-description">
                 "Excellent service! The verification report helped us avoid a fraudulent supplier. Worth every rupee."
               </p>
               <div className="flex items-center">
@@ -333,7 +333,7 @@ export default function VerificationServicePage() {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow">
-              <p className="text-gray-600 mb-4">
+              <p className="feature-description">
                 "Quick delivery and comprehensive report. Saved us from a bad business decision."
               </p>
               <div className="flex items-center">

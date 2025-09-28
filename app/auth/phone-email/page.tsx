@@ -53,10 +53,10 @@ export default function PhoneEmailAuth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="page-header">
             <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
               <Shield className="w-8 h-8 text-blue-600" />
             </div>
@@ -81,7 +81,7 @@ export default function PhoneEmailAuth() {
           {step === 'phone' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Mobile Number
                 </label>
                 <div className="flex">
@@ -113,7 +113,7 @@ export default function PhoneEmailAuth() {
           {step === 'otp' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Enter OTP sent to +91 {phone}
                 </label>
                 <input

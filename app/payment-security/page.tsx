@@ -2,7 +2,7 @@
 
 export default function PaymentSecurityPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 py-12">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -10,7 +10,7 @@ export default function PaymentSecurityPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Payment Security & Compliance
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="page-subtitle">
               Your payments are protected by industry-leading security standards
             </p>
           </div>
@@ -21,7 +21,7 @@ export default function PaymentSecurityPage() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Certifications</h3>
+                <h3 className="feature-title text-gray-900 mb-4">Certifications</h3>
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <span className="text-green-600 mr-3">✅</span>
@@ -43,7 +43,7 @@ export default function PaymentSecurityPage() {
               </div>
               
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Security Features</h3>
+                <h3 className="feature-title text-gray-900 mb-4">Security Features</h3>
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <span className="text-green-600 mr-3">🔒</span>
@@ -72,8 +72,8 @@ export default function PaymentSecurityPage() {
             
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Payment Data Security</h3>
-                <p className="text-gray-600 mb-4">
+                <h3 className="feature-title text-gray-900 mb-3">Payment Data Security</h3>
+                <p className="feature-description">
                   Bell24h uses Razorpay's secure payment infrastructure. Your payment information is:
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-600">
@@ -85,8 +85,8 @@ export default function PaymentSecurityPage() {
               </div>
               
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Personal Information</h3>
-                <p className="text-gray-600 mb-4">
+                <h3 className="feature-title text-gray-900 mb-3">Personal Information</h3>
+                <p className="feature-description">
                   We collect only necessary information and protect it according to:
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-600">
@@ -105,8 +105,8 @@ export default function PaymentSecurityPage() {
             
             <div className="space-y-4">
               <div className="bg-white rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Test API Keys</h3>
-                <p className="text-gray-600 mb-4">
+                <h3 className="feature-title text-gray-900 mb-3">Test API Keys</h3>
+                <p className="feature-description">
                   For development and testing, use these Razorpay test credentials:
                 </p>
                 <div className="bg-gray-100 rounded-lg p-4 font-mono text-sm">
@@ -120,7 +120,7 @@ export default function PaymentSecurityPage() {
               </div>
               
               <div className="bg-white rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">Test Cards</h3>
+                <h3 className="feature-title text-gray-900 mb-3">Test Cards</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-2">Successful Payments</h4>

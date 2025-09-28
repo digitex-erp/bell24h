@@ -46,7 +46,7 @@ export default function RFQListPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading RFQs...</p>
@@ -56,7 +56,7 @@ export default function RFQListPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <nav className="bg-white shadow-lg">
         <div className="container mx-auto px-4">
@@ -85,12 +85,12 @@ export default function RFQListPage() {
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="page-content">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-4xl font-bold text-gray-900 mb-2">My RFQs</h1>
-              <p className="text-xl text-gray-600">Manage your requests for quotations</p>
+              <p className="page-subtitle">Manage your requests for quotations</p>
             </div>
             <Link
               href="/rfq/new"
@@ -153,7 +153,7 @@ export default function RFQListPage() {
                 <div key={rfq.id} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">{rfq.title}</h3>
+                      <h3 className="feature-title text-gray-900 mb-2">{rfq.title}</h3>
                       <p className="text-gray-600 mb-3">{rfq.description}</p>
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         <span className="flex items-center gap-1">

@@ -26,7 +26,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 py-12">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">Contact Us</h1>
@@ -41,14 +41,14 @@ export default function ContactPage() {
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-green-600 text-2xl">✓</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Message Sent!</h3>
+                  <h3 className="feature-title text-gray-900 mb-2">Message Sent!</h3>
                   <p className="text-gray-600">We'll get back to you within 24 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="form-label">
                         Full Name *
                       </label>
                       <input
@@ -61,7 +61,7 @@ export default function ContactPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="form-label">
                         Email *
                       </label>
                       <input
@@ -77,7 +77,7 @@ export default function ContactPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="form-label">
                         Phone Number
                       </label>
                       <input
@@ -89,7 +89,7 @@ export default function ContactPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="form-label">
                         Company
                       </label>
                       <input
@@ -103,7 +103,7 @@ export default function ContactPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="form-label">
                       Subject *
                     </label>
                     <input
@@ -117,7 +117,7 @@ export default function ContactPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="form-label">
                       Message *
                     </label>
                     <textarea
@@ -133,7 +133,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-indigo-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center"
+                    className="w-full bg-gray-50"
                   >
                     {loading ? (
                       <>
@@ -194,7 +194,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-2xl p-8">
+              <div className="bg-gray-50">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Why Choose Bell24h?</h3>
                 <ul className="space-y-3 text-gray-600">
                   <li className="flex items-center">

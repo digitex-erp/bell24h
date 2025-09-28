@@ -234,7 +234,7 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -242,7 +242,7 @@ export default function PricingPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Choose Your Perfect Plan
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="page-subtitle mb-8">
               Scale your B2B operations with our flexible pricing plans
             </p>
             
@@ -292,7 +292,7 @@ export default function PricingPage() {
                 </div>
               )}
 
-              <div className="text-center mb-8">
+              <div className="page-header">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{tier.name}</h3>
                 <p className="text-gray-600 mb-6">{tier.description}</p>
                 
@@ -362,10 +362,10 @@ export default function PricingPage() {
       <div className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="page-title">
               Compare All Features
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="page-subtitle">
               See what's included in each plan
             </p>
           </div>
@@ -461,10 +461,10 @@ export default function PricingPage() {
       <div className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="page-title">
               Add-ons & Extensions
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="page-subtitle">
               Enhance your plan with additional features
             </p>
           </div>
@@ -473,7 +473,7 @@ export default function PricingPage() {
             {addOns.map((addon, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">{addon.name}</h3>
-                <p className="text-gray-600 mb-4">{addon.description}</p>
+                <p className="feature-description">{addon.description}</p>
                 <div className="mb-4">
                   <span className="text-2xl font-bold text-gray-900">
                     {addon.currency}{addon.price.toLocaleString()}
@@ -501,7 +501,7 @@ export default function PricingPage() {
       <div className="bg-gray-50 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="page-title">
               Frequently Asked Questions
             </h2>
           </div>
@@ -547,7 +547,7 @@ export default function PricingPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
+      <div className="bg-gray-50">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-xl mb-8">Join thousands of businesses already using Bell24h</p>

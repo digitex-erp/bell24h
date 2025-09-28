@@ -7,21 +7,21 @@ export const metadata: Metadata = {
 
 export default function FintechPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="page-container">
+      <div className="page-content">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">
           Fintech Services
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="feature-card">
             <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+              <div className="feature-icon">
                 <span className="text-2xl">💳</span>
               </div>
-              <h2 className="text-xl font-semibold">Digital Payments</h2>
+              <h2 className="feature-title">Digital Payments</h2>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="feature-description">
               Secure and instant payment processing for B2B transactions with multiple payment options
             </p>
             <ul className="text-sm text-gray-600 space-y-1 mb-4">
@@ -35,14 +35,14 @@ export default function FintechPage() {
             </button>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="feature-card">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
                 <span className="text-2xl">🏦</span>
               </div>
-              <h2 className="text-xl font-semibold">Trade Finance</h2>
+              <h2 className="feature-title">Trade Finance</h2>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="feature-description">
               Get financing solutions for your B2B transactions including letters of credit and trade loans
             </p>
             <ul className="text-sm text-gray-600 space-y-1 mb-4">
@@ -56,14 +56,14 @@ export default function FintechPage() {
             </button>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="feature-card">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
                 <span className="text-2xl">🔒</span>
               </div>
-              <h2 className="text-xl font-semibold">Escrow Services</h2>
+              <h2 className="feature-title">Escrow Services</h2>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="feature-description">
               Secure your transactions with our escrow services that hold funds until delivery confirmation
             </p>
             <ul className="text-sm text-gray-600 space-y-1 mb-4">
@@ -77,14 +77,14 @@ export default function FintechPage() {
             </button>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="feature-card">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
                 <span className="text-2xl">📊</span>
               </div>
-              <h2 className="text-xl font-semibold">Financial Analytics</h2>
+              <h2 className="feature-title">Financial Analytics</h2>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="feature-description">
               Track your financial performance with detailed analytics and reporting tools
             </p>
             <ul className="text-sm text-gray-600 space-y-1 mb-4">
@@ -98,14 +98,14 @@ export default function FintechPage() {
             </button>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="feature-card">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
                 <span className="text-2xl">🛡️</span>
               </div>
-              <h2 className="text-xl font-semibold">Risk Management</h2>
+              <h2 className="feature-title">Risk Management</h2>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="feature-description">
               Protect your business with comprehensive risk assessment and fraud prevention
             </p>
             <ul className="text-sm text-gray-600 space-y-1 mb-4">
@@ -119,14 +119,14 @@ export default function FintechPage() {
             </button>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="feature-card">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
                 <span className="text-2xl">🌍</span>
               </div>
-              <h2 className="text-xl font-semibold">International Trade</h2>
+              <h2 className="feature-title">International Trade</h2>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="feature-description">
               Facilitate international B2B transactions with currency exchange and compliance tools
             </p>
             <ul className="text-sm text-gray-600 space-y-1 mb-4">
@@ -141,8 +141,8 @@ export default function FintechPage() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+        <div className="feature-card">
+          <h2 className="feature-title mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <div className="text-center">

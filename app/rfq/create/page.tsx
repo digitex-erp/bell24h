@@ -68,7 +68,7 @@ export default function CreateRFQPage() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">RFQ Created Successfully!</h2>
-            <p className="text-gray-600 mb-4">Your request for quotation has been submitted.</p>
+            <p className="feature-description">Your request for quotation has been submitted.</p>
             <p className="text-sm text-gray-500">Redirecting to RFQ dashboard...</p>
           </div>
         </div>

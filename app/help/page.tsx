@@ -1,6 +1,6 @@
 export default function HelpPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 py-12">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">Help Center</h1>
@@ -80,7 +80,7 @@ export default function HelpPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-2xl p-8">
+              <div className="bg-gray-50">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h3>
                 <div className="space-y-3">
                   <button className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">

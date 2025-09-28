@@ -116,7 +116,7 @@ export default function MarketingCampaignsPage() {
         {/* Campaigns Table */}
         <div className="bg-white/10 backdrop-blur rounded-lg p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold">Campaigns</h2>
+            <h2 className="feature-title">Campaigns</h2>
             <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
               <Plus className="h-4 w-4" />
               <span>New Campaign</span>

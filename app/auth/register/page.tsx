@@ -62,7 +62,7 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gray-50">
         <div className="max-w-md w-full text-center">
           <div className="bg-white py-8 px-6 shadow-xl rounded-lg">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -71,7 +71,7 @@ export default function RegisterPage() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Registration Successful!</h2>
-            <p className="text-gray-600 mb-4">Your account has been created successfully.</p>
+            <p className="feature-description">Your account has been created successfully.</p>
             <p className="text-sm text-gray-500">Redirecting to login page...</p>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
