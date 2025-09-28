@@ -141,7 +141,7 @@ export default function SecurityPage() {
       case 'system_change':
         return <Database className="h-4 w-4 text-purple-600" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-600" />;
+        return <Clock className="h-4 w-4 text-neutral-600" />;
     }
   };
 
@@ -154,7 +154,7 @@ export default function SecurityPage() {
       case 'error':
         return 'text-red-600 bg-red-100';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-neutral-600 bg-neutral-100';
     }
   };
 
@@ -167,7 +167,7 @@ export default function SecurityPage() {
       case 'expired':
         return 'text-red-600 bg-red-100';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-neutral-600 bg-neutral-100';
     }
   };
 
@@ -176,12 +176,12 @@ export default function SecurityPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Security & Compliance</h1>
-          <p className="mt-2 text-gray-600">Monitor security events, user access, and compliance status</p>
+          <h1 className="text-3xl font-bold text-neutral-900">Security & Compliance</h1>
+          <p className="mt-2 text-neutral-600">Monitor security events, user access, and compliance status</p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="border-b border-gray-200 mb-8">
+        <div className="border-b border-neutral-200 mb-8">
           <nav className="flex space-x-8">
             {[
               { id: 'overview', name: 'Overview', icon: Shield },
@@ -194,7 +194,7 @@ export default function SecurityPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
                   }`}
               >
                 <tab.icon className="w-5 h-5" />
@@ -216,8 +216,8 @@ export default function SecurityPage() {
                       <metric.icon className={`h-6 w-6 ${metric.color}`} />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">{metric.name}</p>
-                      <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
+                      <p className="text-sm font-medium text-neutral-600">{metric.name}</p>
+                      <p className="text-2xl font-bold text-neutral-900">{metric.value}</p>
                     </div>
                   </div>
                 </div>
@@ -226,38 +226,38 @@ export default function SecurityPage() {
 
             {/* Security Status */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Security Status</h3>
+              <h3 className="text-lg font-medium text-neutral-900 mb-4">Security Status</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Authentication</h4>
+                  <h4 className="text-sm font-medium text-neutral-600 mb-2">Authentication</h4>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">2FA Enabled</span>
+                      <span className="text-sm text-neutral-900">2FA Enabled</span>
                       <CheckCircle className="h-4 w-4 text-green-600" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">Password Policy</span>
+                      <span className="text-sm text-neutral-900">Password Policy</span>
                       <CheckCircle className="h-4 w-4 text-green-600" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">Session Timeout</span>
+                      <span className="text-sm text-neutral-900">Session Timeout</span>
                       <CheckCircle className="h-4 w-4 text-green-600" />
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Data Protection</h4>
+                  <h4 className="text-sm font-medium text-neutral-600 mb-2">Data Protection</h4>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">Data Encryption</span>
+                      <span className="text-sm text-neutral-900">Data Encryption</span>
                       <CheckCircle className="h-4 w-4 text-green-600" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">Backup Encryption</span>
+                      <span className="text-sm text-neutral-900">Backup Encryption</span>
                       <CheckCircle className="h-4 w-4 text-green-600" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-900">GDPR Compliance</span>
+                      <span className="text-sm text-neutral-900">GDPR Compliance</span>
                       <CheckCircle className="h-4 w-4 text-green-600" />
                     </div>
                   </div>
@@ -271,8 +271,8 @@ export default function SecurityPage() {
         {activeTab === 'events' && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900">Recent Security Events</h3>
+              <div className="px-6 py-4 border-b border-neutral-200">
+                <h3 className="text-lg font-medium text-neutral-900">Recent Security Events</h3>
               </div>
               <div className="divide-y divide-gray-200">
                 {mockSecurityEvents.map((event) => (
@@ -280,8 +280,8 @@ export default function SecurityPage() {
                     <div className="flex items-center">
                       {getEventIcon(event.type)}
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-900">{event.description}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm font-medium text-neutral-900">{event.description}</p>
+                        <p className="text-sm text-neutral-500">
                           {event.user} • {event.ip} • {event.timestamp}
                         </p>
                       </div>
@@ -302,38 +302,38 @@ export default function SecurityPage() {
         {activeTab === 'sessions' && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900">Active User Sessions</h3>
+              <div className="px-6 py-4 border-b border-neutral-200">
+                <h3 className="text-lg font-medium text-neutral-900">Active User Sessions</h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-neutral-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Login Time</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Activity</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">User</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">IP Address</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Location</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Login Time</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Last Activity</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {mockUserSessions.map((session) => (
-                      <tr key={session.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <tr key={session.id} className="hover:bg-neutral-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900">
                           {session.user}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                           {session.ip}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                           {session.location}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                           {session.loginTime}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                           {session.lastActivity}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -360,44 +360,44 @@ export default function SecurityPage() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">GDPR Compliance</h3>
+                <h3 className="text-lg font-medium text-neutral-900 mb-4">GDPR Compliance</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Data Processing Consent</span>
+                    <span className="text-sm text-neutral-600">Data Processing Consent</span>
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Right to Erasure</span>
+                    <span className="text-sm text-neutral-600">Right to Erasure</span>
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Data Portability</span>
+                    <span className="text-sm text-neutral-600">Data Portability</span>
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Privacy Policy</span>
+                    <span className="text-sm text-neutral-600">Privacy Policy</span>
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
                 </div>
               </div>
 
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Security Standards</h3>
+                <h3 className="text-lg font-medium text-neutral-900 mb-4">Security Standards</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">ISO 27001</span>
+                    <span className="text-sm text-neutral-600">ISO 27001</span>
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">SOC 2 Type II</span>
+                    <span className="text-sm text-neutral-600">SOC 2 Type II</span>
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">PCI DSS</span>
+                    <span className="text-sm text-neutral-600">PCI DSS</span>
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">OWASP Top 10</span>
+                    <span className="text-sm text-neutral-600">OWASP Top 10</span>
                     <CheckCircle className="h-5 w-5 text-green-600" />
                   </div>
                 </div>

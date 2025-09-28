@@ -54,10 +54,10 @@ export default function DashboardPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="page-container">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <p className="mt-4 text-neutral-600">Loading...</p>
         </div>
       </div>
     )
@@ -68,7 +68,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       {/* Navigation */}
       <nav className="bg-white shadow-lg">
         <div className="container mx-auto px-4">
@@ -78,20 +78,20 @@ export default function DashboardPage() {
                 <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
                 <div>
                   <div className="font-bold text-xl">Bell24h</div>
-                  <div className="text-xs text-gray-600">Verified B2B Platform</div>
+                  <div className="text-xs text-neutral-600">Verified B2B Platform</div>
                 </div>
               </div>
               <div className="hidden md:flex items-center gap-6">
                 <Link href="/dashboard" className="text-indigo-600 font-semibold">Dashboard</Link>
-                <Link href="/rfq" className="text-gray-700 hover:text-indigo-600">My RFQs</Link>
-                <Link href="/rfq/new" className="text-gray-700 hover:text-indigo-600">New RFQ</Link>
-                <Link href="#" className="text-gray-700 hover:text-indigo-600">Suppliers</Link>
-                <Link href="#" className="text-gray-700 hover:text-indigo-600">Wallet</Link>
+                <Link href="/rfq" className="text-neutral-700 hover:text-primary-600">My RFQs</Link>
+                <Link href="/rfq/new" className="text-neutral-700 hover:text-primary-600">New RFQ</Link>
+                <Link href="#" className="text-neutral-700 hover:text-primary-600">Suppliers</Link>
+                <Link href="#" className="text-neutral-700 hover:text-primary-600">Wallet</Link>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-gray-700">Welcome, {session.user?.name}</span>
-              <button className="px-4 py-2 text-gray-700 hover:text-indigo-600">Logout</button>
+              <span className="text-neutral-700">Welcome, {session.user?.name}</span>
+              <button className="px-4 py-2 text-neutral-700 hover:text-primary-600">Logout</button>
             </div>
           </div>
         </div>
@@ -100,7 +100,7 @@ export default function DashboardPage() {
       <main className="page-content">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome back!</h1>
+          <h1 className="text-4xl font-bold text-neutral-900 mb-2">Welcome back!</h1>
           <p className="page-subtitle">Here's what's happening with your RFQs today.</p>
         </div>
 
@@ -114,8 +114,8 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total RFQs</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalRfqs}</p>
+                <p className="text-sm font-medium text-neutral-600">Total RFQs</p>
+                <p className="text-2xl font-bold text-neutral-900">{stats.totalRfqs}</p>
               </div>
             </div>
           </div>
@@ -128,8 +128,8 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active RFQs</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.activeRfqs}</p>
+                <p className="text-sm font-medium text-neutral-600">Active RFQs</p>
+                <p className="text-2xl font-bold text-neutral-900">{stats.activeRfqs}</p>
               </div>
             </div>
           </div>
@@ -142,8 +142,8 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Completed</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.completedRfqs}</p>
+                <p className="text-sm font-medium text-neutral-600">Completed</p>
+                <p className="text-2xl font-bold text-neutral-900">{stats.completedRfqs}</p>
               </div>
             </div>
           </div>
@@ -156,8 +156,8 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Quotes</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalQuotes}</p>
+                <p className="text-sm font-medium text-neutral-600">Total Quotes</p>
+                <p className="text-2xl font-bold text-neutral-900">{stats.totalQuotes}</p>
               </div>
             </div>
           </div>
@@ -166,47 +166,47 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="feature-title text-gray-900 mb-4">Quick Actions</h3>
+            <h3 className="feature-title text-neutral-900 mb-4">Quick Actions</h3>
             <div className="space-y-4">
               <Link href="/rfq/new" className="flex items-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
                 <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold mr-4">+</div>
                 <div>
-                  <p className="font-semibold text-gray-900">Create New RFQ</p>
-                  <p className="text-sm text-gray-600">Post a request for quotation</p>
+                  <p className="font-semibold text-neutral-900">Create New RFQ</p>
+                  <p className="text-sm text-neutral-600">Post a request for quotation</p>
                 </div>
               </Link>
-              <Link href="/rfq" className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <Link href="/rfq" className="flex items-center p-4 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors">
                 <div className="w-10 h-10 bg-gray-600 rounded-lg flex items-center justify-center text-white font-bold mr-4">📋</div>
                 <div>
-                  <p className="font-semibold text-gray-900">View My RFQs</p>
-                  <p className="text-sm text-gray-600">Manage your requests</p>
+                  <p className="font-semibold text-neutral-900">View My RFQs</p>
+                  <p className="text-sm text-neutral-600">Manage your requests</p>
                 </div>
               </Link>
             </div>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="feature-title text-gray-900 mb-4">Recent Activity</h3>
+            <h3 className="feature-title text-neutral-900 mb-4">Recent Activity</h3>
             <div className="space-y-4">
               <div className="flex items-center p-3 bg-green-50 rounded-lg">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">New quote received</p>
-                  <p className="text-xs text-gray-600">Steel Pipes RFQ - 2 hours ago</p>
+                  <p className="text-sm font-medium text-neutral-900">New quote received</p>
+                  <p className="text-xs text-neutral-600">Steel Pipes RFQ - 2 hours ago</p>
                 </div>
               </div>
               <div className="flex items-center p-3 bg-blue-50 rounded-lg">
                 <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">RFQ published</p>
-                  <p className="text-xs text-gray-600">Textile Materials - 1 day ago</p>
+                  <p className="text-sm font-medium text-neutral-900">RFQ published</p>
+                  <p className="text-xs text-neutral-600">Textile Materials - 1 day ago</p>
                 </div>
               </div>
               <div className="flex items-center p-3 bg-purple-50 rounded-lg">
                 <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Payment processed</p>
-                  <p className="text-xs text-gray-600">Electronics order - 3 days ago</p>
+                  <p className="text-sm font-medium text-neutral-900">Payment processed</p>
+                  <p className="text-xs text-neutral-600">Electronics order - 3 days ago</p>
                 </div>
               </div>
             </div>
@@ -215,36 +215,36 @@ export default function DashboardPage() {
 
         {/* Recent RFQs */}
         <div className="bg-white rounded-lg shadow-lg">
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="feature-title text-gray-900">Recent RFQs</h3>
+          <div className="p-6 border-b border-neutral-200">
+            <h3 className="feature-title text-neutral-900">Recent RFQs</h3>
           </div>
           <div className="p-6">
             {rfqs.length === 0 ? (
               <div className="text-center py-8">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h4 className="text-lg font-medium text-gray-900 mb-2">No RFQs yet</h4>
+                <h4 className="text-lg font-medium text-neutral-900 mb-2">No RFQs yet</h4>
                 <p className="feature-description">Create your first RFQ to get started with Bell24h</p>
-                <Link href="/rfq/new" className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
+                <Link href="/rfq/new" className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-primary-700 text-white rounded-lg">
                   Create RFQ
                 </Link>
               </div>
             ) : (
               <div className="space-y-4">
                 {rfqs.map((rfq: any) => (
-                  <div key={rfq.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                  <div key={rfq.id} className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg">
                     <div>
-                      <h4 className="font-semibold text-gray-900">{rfq.title}</h4>
-                      <p className="text-sm text-gray-600">{rfq.description}</p>
-                      <p className="text-xs text-gray-500">Created {new Date(rfq.createdAt).toLocaleDateString()}</p>
+                      <h4 className="font-semibold text-neutral-900">{rfq.title}</h4>
+                      <p className="text-sm text-neutral-600">{rfq.description}</p>
+                      <p className="text-xs text-neutral-500">Created {new Date(rfq.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-1 text-xs rounded-full ${rfq.status === 'active' ? 'bg-green-100 text-green-800' :
                           rfq.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                            'bg-gray-100 text-gray-800'
+                            'bg-neutral-100 text-neutral-800'
                         }`}>
                         {rfq.status}
                       </span>

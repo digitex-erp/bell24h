@@ -160,7 +160,7 @@ export default function LaunchMetricsPage() {
       case 'completed':
         return 'text-blue-600 bg-blue-100';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-neutral-600 bg-neutral-100';
     }
   };
 
@@ -186,7 +186,7 @@ export default function LaunchMetricsPage() {
       case 'down':
         return <span className="text-red-600">↘️</span>;
       default:
-        return <span className="text-gray-600">📊</span>;
+        return <span className="text-neutral-600">📊</span>;
     }
   };
 
@@ -195,12 +195,12 @@ export default function LaunchMetricsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Launch Metrics</h1>
-          <p className="mt-2 text-gray-600">Track marketing campaign performance and launch metrics</p>
+          <h1 className="text-3xl font-bold text-neutral-900">Launch Metrics</h1>
+          <p className="mt-2 text-neutral-600">Track marketing campaign performance and launch metrics</p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="border-b border-gray-200 mb-8">
+        <div className="border-b border-neutral-200 mb-8">
           <nav className="flex space-x-8">
             {[
               { id: 'overview', name: 'Overview', icon: '📊' },
@@ -212,7 +212,7 @@ export default function LaunchMetricsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
                   }`}
               >
                 <span className="text-lg">{tab.icon}</span>
@@ -227,7 +227,7 @@ export default function LaunchMetricsPage() {
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="7d">Last 7 days</option>
             <option value="30d">Last 30 days</option>
@@ -245,18 +245,18 @@ export default function LaunchMetricsPage() {
                 <div key={index} className="bg-white rounded-lg shadow p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className="p-2 bg-gray-100 rounded-lg">
+                      <div className="p-2 bg-neutral-100 rounded-lg">
                         <span className={`text-2xl ${metric.color}`}>{metric.icon}</span>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">{metric.name}</p>
-                        <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
+                        <p className="text-sm font-medium text-neutral-600">{metric.name}</p>
+                        <p className="text-2xl font-bold text-neutral-900">{metric.value}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
                       {getTrendIcon(metric.trend)}
                       <span className={`text-sm font-medium ${metric.trend === 'up' ? 'text-green-600' :
-                          metric.trend === 'down' ? 'text-red-600' : 'text-gray-600'
+                          metric.trend === 'down' ? 'text-red-600' : 'text-neutral-600'
                         }`}>
                         {metric.change > 0 ? '+' : ''}{metric.change}%
                       </span>
@@ -268,11 +268,11 @@ export default function LaunchMetricsPage() {
 
             {/* Performance Chart Placeholder */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Performance Trends</h3>
-              <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+              <h3 className="text-lg font-medium text-neutral-900 mb-4">Performance Trends</h3>
+              <div className="h-64 bg-neutral-50 rounded-lg flex items-center justify-center">
                 <div className="text-center">
                   <span className="text-5xl text-gray-400 mx-auto mb-4">📊</span>
-                  <p className="text-gray-500">Performance chart would be displayed here</p>
+                  <p className="text-neutral-500">Performance chart would be displayed here</p>
                 </div>
               </div>
             </div>
@@ -283,36 +283,36 @@ export default function LaunchMetricsPage() {
         {activeTab === 'campaigns' && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900">Marketing Campaigns</h3>
+              <div className="px-6 py-4 border-b border-neutral-200">
+                <h3 className="text-lg font-medium text-neutral-900">Marketing Campaigns</h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-neutral-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Campaign</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Budget</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spent</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Impressions</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CTR</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ROAS</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Campaign</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Type</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Budget</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Spent</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Impressions</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">CTR</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">ROAS</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {campaigns.map((campaign) => (
-                      <tr key={campaign.id} className="hover:bg-gray-50">
+                      <tr key={campaign.id} className="hover:bg-neutral-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{campaign.name}</div>
-                            <div className="text-sm text-gray-500">{campaign.startDate} - {campaign.endDate}</div>
+                            <div className="text-sm font-medium text-neutral-900">{campaign.name}</div>
+                            <div className="text-sm text-neutral-500">{campaign.startDate} - {campaign.endDate}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             {getTypeIcon(campaign.type)}
-                            <span className="ml-2 text-sm text-gray-900 capitalize">{campaign.type}</span>
+                            <span className="ml-2 text-sm text-neutral-900 capitalize">{campaign.type}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -320,19 +320,19 @@ export default function LaunchMetricsPage() {
                             {campaign.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                           {campaign.budget}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                           {campaign.spent}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                           {campaign.impressions.toLocaleString()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                           {campaign.ctr}%
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
                           {campaign.roas}x
                         </td>
                       </tr>
@@ -349,7 +349,7 @@ export default function LaunchMetricsPage() {
           <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Top Performing Campaigns</h3>
+                <h3 className="text-lg font-medium text-neutral-900 mb-4">Top Performing Campaigns</h3>
                 <div className="space-y-4">
                   {campaigns.slice(0, 3).map((campaign, index) => (
                     <div key={campaign.id} className="flex items-center justify-between">
@@ -358,13 +358,13 @@ export default function LaunchMetricsPage() {
                           <span className="text-sm font-medium text-blue-600">{index + 1}</span>
                         </div>
                         <div className="ml-3">
-                          <p className="text-sm font-medium text-gray-900">{campaign.name}</p>
-                          <p className="text-sm text-gray-500">{campaign.type}</p>
+                          <p className="text-sm font-medium text-neutral-900">{campaign.name}</p>
+                          <p className="text-sm text-neutral-500">{campaign.type}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900">{campaign.roas}x ROAS</p>
-                        <p className="text-sm text-gray-500">{campaign.ctr}% CTR</p>
+                        <p className="text-sm font-medium text-neutral-900">{campaign.roas}x ROAS</p>
+                        <p className="text-sm text-neutral-500">{campaign.ctr}% CTR</p>
                       </div>
                     </div>
                   ))}
@@ -372,40 +372,40 @@ export default function LaunchMetricsPage() {
               </div>
 
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Channel Performance</h3>
+                <h3 className="text-lg font-medium text-neutral-900 mb-4">Channel Performance</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Paid Advertising</span>
+                    <span className="text-sm text-neutral-600">Paid Advertising</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-900">4.2x ROAS</span>
-                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                      <span className="text-sm font-medium text-neutral-900">4.2x ROAS</span>
+                      <div className="w-16 bg-neutral-200 rounded-full h-2">
                         <div className="bg-blue-600 h-2 rounded-full" style={{ width: '85%' }}></div>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Email Marketing</span>
+                    <span className="text-sm text-neutral-600">Email Marketing</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-900">3.2x ROAS</span>
-                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                      <span className="text-sm font-medium text-neutral-900">3.2x ROAS</span>
+                      <div className="w-16 bg-neutral-200 rounded-full h-2">
                         <div className="bg-green-600 h-2 rounded-full" style={{ width: '65%' }}></div>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Social Media</span>
+                    <span className="text-sm text-neutral-600">Social Media</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-900">2.8x ROAS</span>
-                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                      <span className="text-sm font-medium text-neutral-900">2.8x ROAS</span>
+                      <div className="w-16 bg-neutral-200 rounded-full h-2">
                         <div className="bg-purple-600 h-2 rounded-full" style={{ width: '55%' }}></div>
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Content Marketing</span>
+                    <span className="text-sm text-neutral-600">Content Marketing</span>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-900">5.1x ROAS</span>
-                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                      <span className="text-sm font-medium text-neutral-900">5.1x ROAS</span>
+                      <div className="w-16 bg-neutral-200 rounded-full h-2">
                         <div className="bg-orange-600 h-2 rounded-full" style={{ width: '95%' }}></div>
                       </div>
                     </div>

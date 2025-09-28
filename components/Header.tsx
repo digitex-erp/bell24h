@@ -22,245 +22,178 @@ export default function Header({ onLoginClick }: HeaderProps) {
 
   return (
     <>
-      <style jsx>{`
-        .top-bar {
-          background: #0d47a1;
-          color: white;
-          padding: 6px 0;
-          font-size: 12px;
-        }
-        
-        .top-bar .container {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
-        
-        .top-bar .left span {
-          margin-right: 20px;
-        }
-        
-        .top-bar .right a {
-          color: white;
-          text-decoration: none;
-          margin-left: 10px;
-        }
-        
-        .top-bar .right a:hover {
-          text-decoration: underline;
-        }
-        
-        .main-header {
-          background: white;
-          color: #333;
-          padding: 10px 0;
-          position: sticky;
-          top: 0;
-          z-index: 1000;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .main-header .container {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
-        
-        .logo {
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          color: #333;
-        }
-        
-        .logo .logo-icon {
-          width: 40px;
-          height: 40px;
-          background: #2563eb;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 20px;
-          font-weight: bold;
-          margin-right: 10px;
-        }
-        
-        .logo h1 {
-          font-size: 24px;
-          margin: 0;
-          font-weight: bold;
-          color: #1f2937;
-        }
-        
-        .logo p {
-          font-size: 10px;
-          margin: 0;
-          color: #6b7280;
-        }
-        
-        .main-nav ul {
-          display: flex;
-          gap: 30px;
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
-        
-        .main-nav a {
-          color: #374151;
-          text-decoration: none;
-          font-weight: 500;
-          transition: color 0.3s;
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-        
-        .main-nav a:hover {
-          color: #2563eb;
-        }
-        
-        .dropdown {
-          position: relative;
-        }
-        
-        .dropdown-menu {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          background: white;
-          min-width: 200px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-          border-radius: 8px;
-          padding: 10px 0;
-          opacity: 0;
-          visibility: hidden;
-          transform: translateY(-10px);
-          transition: all 0.3s;
-          z-index: 1001;
-        }
-        
-        .dropdown:hover .dropdown-menu {
-          opacity: 1;
-          visibility: visible;
-          transform: translateY(0);
-        }
-        
-        .dropdown-menu a {
-          color: #333;
-          padding: 10px 20px;
-          display: block;
-          font-size: 14px;
-        }
-        
-        .dropdown-menu a:hover {
-          background: #f5f5f5;
-          color: #2563eb;
-        }
-        
-        .header-actions {
-          display: flex;
-          gap: 15px;
-          align-items: center;
-        }
-        
-        .login-btn {
-          background: #2563eb;
-          color: white;
-          padding: 10px 25px;
-          border-radius: 8px;
-          border: none;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background 0.3s;
-          text-decoration: none;
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-        }
-        
-        .login-btn:hover {
-          background: #1d4ed8;
-        }
-        
-        @media (max-width: 768px) {
-          .top-bar .right {
-            display: none;
-          }
-          
-          .main-nav {
-            display: none;
-          }
-        }
-      `}</style>
-
       {/* Top Bar */}
-      <div className="top-bar">
-        <div className="container">
-          <div className="left">
-            <span>📧 support@bell24h.com</span>
-            <span>📞 +91-9876543210</span>
-          </div>
-          <div className="right">
-            <Link href="/supplier">Supplier Zone</Link>
-            <span>|</span>
-            <Link href="/help">Help</Link>
+      <div className="bg-primary-900 text-white py-2">
+        <div className="container-custom">
+          <div className="flex justify-between items-center text-sm">
+            <div className="flex items-center space-x-6">
+              <span className="flex items-center gap-2">
+                <span>📧</span>
+                <span>support@bell24h.com</span>
+              </span>
+              <span className="flex items-center gap-2">
+                <span>📞</span>
+                <span>+91-9876543210</span>
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Link href="/supplier" className="hover:text-primary-200 transition-colors">
+                Supplier Zone
+              </Link>
+              <span>|</span>
+              <Link href="/help" className="hover:text-primary-200 transition-colors">
+                Help
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Main Header */}
-      <header className="main-header">
-        <div className="container">
-          {/* Logo */}
-          <Link href="/" className="logo">
-            <div className="logo-icon">B</div>
-            <div>
-              <h1>Bell24h</h1>
-              <p>Enterprise B2B</p>
+      {/* Main Navigation */}
+      <nav className="bg-white shadow-lg sticky top-0 z-50">
+        <div className="container-custom">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:scale-105 transition-transform duration-200">
+                B
+              </div>
+              <div>
+                <div className="font-bold text-xl text-neutral-900">Bell24h</div>
+                <div className="text-xs text-neutral-600">Enterprise B2B</div>
+              </div>
+            </Link>
+
+            {/* Navigation Links */}
+            <div className="hidden lg:flex items-center space-x-8">
+              <Link href="/" className="nav-link nav-link-active flex items-center gap-2">
+                <span>🏠</span>
+                <span>Home</span>
+              </Link>
+              <Link href="/suppliers" className="nav-link flex items-center gap-2">
+                <span>🏢</span>
+                <span>Supplier Showcase</span>
+              </Link>
+              <Link href="/services/finance" className="nav-link flex items-center gap-2">
+                <span>📋</span>
+                <span>Fintech Services</span>
+              </Link>
+              <Link href="/services/escrow" className="nav-link flex items-center gap-2">
+                <span>💳</span>
+                <span>Wallet & Escrow</span>
+              </Link>
+
+              {/* AI Features Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowAIDropdown(!showAIDropdown)}
+                  className="nav-link flex items-center gap-2 border border-neutral-300 px-4 py-2 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-all duration-200"
+                >
+                  <span>🤖</span>
+                  <span>AI Features</span>
+                  <span className={`text-xs transition-transform duration-200 ${showAIDropdown ? 'rotate-180' : ''}`}>▼</span>
+                </button>
+                
+                {showAIDropdown && (
+                  <div className="absolute top-full mt-2 bg-white shadow-xl rounded-lg py-2 w-64 border border-neutral-200 animate-slide-down">
+                    <Link href="/dashboard/ai-features" className="block px-4 py-3 hover:bg-neutral-50 transition-colors duration-200 flex items-center gap-3">
+                      <span>🧠</span>
+                      <span>AI Features Dashboard</span>
+                    </Link>
+                    <Link href="/voice-rfq" className="block px-4 py-3 hover:bg-neutral-50 transition-colors duration-200 flex items-center gap-3">
+                      <span>🎤</span>
+                      <span>Voice RFQ</span>
+                    </Link>
+                    <Link href="/dashboard/ai-features" className="block px-4 py-3 hover:bg-neutral-50 transition-colors duration-200 flex items-center gap-3">
+                      <span>🔍</span>
+                      <span>AI Explainability</span>
+                    </Link>
+                    <Link href="/dashboard/ai-features" className="block px-4 py-3 hover:bg-neutral-50 transition-colors duration-200 flex items-center gap-3">
+                      <span>⚠️</span>
+                      <span>Risk Scoring</span>
+                    </Link>
+                    <Link href="/dashboard/ai-features" className="block px-4 py-3 hover:bg-neutral-50 transition-colors duration-200 flex items-center gap-3">
+                      <span>📈</span>
+                      <span>Market Data</span>
+                    </Link>
+                    <Link href="/dashboard/ai-features" className="block px-4 py-3 hover:bg-neutral-50 transition-colors duration-200 flex items-center gap-3">
+                      <span>🎯</span>
+                      <span>Smart Matching</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
-          </Link>
 
-          {/* Main Navigation */}
-          <nav className="main-nav">
-            <ul>
-              <li><Link href="/">🏠 Home</Link></li>
-              <li><Link href="/suppliers">🏢 Supplier Showcase</Link></li>
-              <li><Link href="/services/finance">📋 Fintech Services</Link></li>
-              <li><Link href="/services/escrow">💳 Wallet & Escrow</Link></li>
-              <li className="dropdown">
-                <a>🤖 AI Features ▼</a>
-                <div className="dropdown-menu">
-                  <Link href="/dashboard/ai-features">🧠 AI Features Dashboard</Link>
-                  <Link href="/voice-rfq">🎤 Voice RFQ</Link>
-                  <Link href="/dashboard/ai-features">🔍 AI Explainability</Link>
-                  <Link href="/dashboard/ai-features">⚠️ Risk Scoring</Link>
-                  <Link href="/dashboard/ai-features">📈 Market Data</Link>
-                  <Link href="/dashboard/ai-features">🎯 Smart Matching</Link>
-                </div>
-              </li>
-            </ul>
-          </nav>
+            {/* Mobile Menu Button */}
+            <div className="lg:hidden">
+              <button
+                onClick={() => setShowAIDropdown(!showAIDropdown)}
+                className="p-2 rounded-lg hover:bg-neutral-100 transition-colors"
+              >
+                <span className="text-xl">☰</span>
+              </button>
+            </div>
 
-          {/* Right Actions */}
-          <div className="header-actions">
-            <button
-              onClick={handleLoginClick}
-              className="login-btn"
-            >
-              Login <span>→</span>
-            </button>
+            {/* Login Button */}
+            <Link href="/demo-login" className="btn-primary flex items-center gap-2 hover-lift">
+              <span>Login</span>
+              <span className="text-sm">→</span>
+            </Link>
           </div>
+
+          {/* Mobile Menu */}
+          {showAIDropdown && (
+            <div className="lg:hidden border-t border-neutral-200 py-4">
+              <div className="flex flex-col space-y-2">
+                <Link href="/" className="nav-link flex items-center gap-2 px-4 py-2">
+                  <span>🏠</span>
+                  <span>Home</span>
+                </Link>
+                <Link href="/suppliers" className="nav-link flex items-center gap-2 px-4 py-2">
+                  <span>🏢</span>
+                  <span>Supplier Showcase</span>
+                </Link>
+                <Link href="/services/finance" className="nav-link flex items-center gap-2 px-4 py-2">
+                  <span>📋</span>
+                  <span>Fintech Services</span>
+                </Link>
+                <Link href="/services/escrow" className="nav-link flex items-center gap-2 px-4 py-2">
+                  <span>💳</span>
+                  <span>Wallet & Escrow</span>
+                </Link>
+                <div className="border-t border-neutral-200 pt-2 mt-2">
+                  <div className="text-sm font-medium text-neutral-500 px-4 py-2">AI Features</div>
+                  <Link href="/dashboard/ai-features" className="nav-link flex items-center gap-2 px-4 py-2">
+                    <span>🧠</span>
+                    <span>AI Features Dashboard</span>
+                  </Link>
+                  <Link href="/voice-rfq" className="nav-link flex items-center gap-2 px-4 py-2">
+                    <span>🎤</span>
+                    <span>Voice RFQ</span>
+                  </Link>
+                  <Link href="/dashboard/ai-features" className="nav-link flex items-center gap-2 px-4 py-2">
+                    <span>🔍</span>
+                    <span>AI Explainability</span>
+                  </Link>
+                  <Link href="/dashboard/ai-features" className="nav-link flex items-center gap-2 px-4 py-2">
+                    <span>⚠️</span>
+                    <span>Risk Scoring</span>
+                  </Link>
+                  <Link href="/dashboard/ai-features" className="nav-link flex items-center gap-2 px-4 py-2">
+                    <span>📈</span>
+                    <span>Market Data</span>
+                  </Link>
+                  <Link href="/dashboard/ai-features" className="nav-link flex items-center gap-2 px-4 py-2">
+                    <span>🎯</span>
+                    <span>Smart Matching</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      </header>
+      </nav>
 
       {/* Auth Modal */}
       {showAuthModal && (

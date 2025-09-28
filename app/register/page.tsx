@@ -18,7 +18,7 @@ function RegisterPageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <RegisterFormWithEmailOTP 
         onSwitchView={handleSwitchToLogin}
         onClose={() => setShowLoginModal(false)}

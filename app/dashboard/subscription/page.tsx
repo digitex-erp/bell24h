@@ -200,8 +200,8 @@ export default function SubscriptionDashboard() {
     return (
       <div className="page-container flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">No Subscription Found</h2>
-          <p className="text-gray-600 mb-8">Please contact support if you believe this is an error.</p>
+          <h2 className="text-2xl font-bold text-neutral-900 mb-4">No Subscription Found</h2>
+          <p className="text-neutral-600 mb-8">Please contact support if you believe this is an error.</p>
           <Link href="/pricing" className="btn-primary">
             View Plans
           </Link>
@@ -217,14 +217,14 @@ export default function SubscriptionDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Subscription Dashboard</h1>
-              <p className="text-gray-600">Manage your Bell24h subscription and usage</p>
+              <h1 className="text-2xl font-bold text-neutral-900">Subscription Dashboard</h1>
+              <p className="text-neutral-600">Manage your Bell24h subscription and usage</p>
             </div>
             <div className="flex space-x-4">
-              <Link href="/pricing" className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+              <Link href="/pricing" className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700">
                 Upgrade Plan
               </Link>
-              <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">
+              <button className="bg-neutral-200 text-neutral-800 px-4 py-2 rounded-lg hover:bg-gray-300">
                 Manage Billing
               </button>
             </div>
@@ -237,21 +237,21 @@ export default function SubscriptionDashboard() {
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-neutral-900 mb-2">
                 {subscription.plan.charAt(0).toUpperCase() + subscription.plan.slice(1)} Plan
               </h2>
               <div className="flex items-center space-x-4">
                 <span className={`px-3 py-1 rounded-full text-sm font-medium bg-${getStatusColor(subscription.status)}-100 text-${getStatusColor(subscription.status)}-800`}>
                   {subscription.status.charAt(0).toUpperCase() + subscription.status.slice(1)}
                 </span>
-                <span className="text-gray-600">
+                <span className="text-neutral-600">
                   {subscription.billing.currency}{subscription.billing.amount.toLocaleString()}/month
                 </span>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500">Next billing</p>
-              <p className="text-lg font-semibold text-gray-900">{subscription.billing.nextBilling}</p>
+              <p className="text-sm text-neutral-500">Next billing</p>
+              <p className="text-lg font-semibold text-neutral-900">{subscription.billing.nextBilling}</p>
             </div>
           </div>
 
@@ -259,12 +259,12 @@ export default function SubscriptionDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-600">RFQs Used</span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm font-medium text-neutral-600">RFQs Used</span>
+                <span className="text-sm text-neutral-500">
                   {subscription.usage.rfqsUsed} / {subscription.usage.rfqsLimit === -1 ? '∞' : subscription.usage.rfqsLimit}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-neutral-200 rounded-full h-2">
                 <div
                   className={`bg-${getUsageColor(getUsagePercentage(subscription.usage.rfqsUsed, subscription.usage.rfqsLimit))}-500 h-2 rounded-full`}
                   style={{ width: `${Math.min(100, getUsagePercentage(subscription.usage.rfqsUsed, subscription.usage.rfqsLimit))}%` }}
@@ -274,12 +274,12 @@ export default function SubscriptionDashboard() {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-600">Suppliers</span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm font-medium text-neutral-600">Suppliers</span>
+                <span className="text-sm text-neutral-500">
                   {subscription.usage.suppliersUsed} / {subscription.usage.suppliersLimit === -1 ? '∞' : subscription.usage.suppliersLimit}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-neutral-200 rounded-full h-2">
                 <div
                   className={`bg-${getUsageColor(getUsagePercentage(subscription.usage.suppliersUsed, subscription.usage.suppliersLimit))}-500 h-2 rounded-full`}
                   style={{ width: `${Math.min(100, getUsagePercentage(subscription.usage.suppliersUsed, subscription.usage.suppliersLimit))}%` }}
@@ -289,12 +289,12 @@ export default function SubscriptionDashboard() {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-600">API Calls</span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm font-medium text-neutral-600">API Calls</span>
+                <span className="text-sm text-neutral-500">
                   {subscription.usage.apiCallsUsed.toLocaleString()} / {subscription.usage.apiCallsLimit === -1 ? '∞' : subscription.usage.apiCallsLimit.toLocaleString()}
                 </span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-neutral-200 rounded-full h-2">
                 <div
                   className={`bg-${getUsageColor(getUsagePercentage(subscription.usage.apiCallsUsed, subscription.usage.apiCallsLimit))}-500 h-2 rounded-full`}
                   style={{ width: `${Math.min(100, getUsagePercentage(subscription.usage.apiCallsUsed, subscription.usage.apiCallsLimit))}%` }}
@@ -315,26 +315,26 @@ export default function SubscriptionDashboard() {
             >
               <div className="text-center">
                 <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.name}</h3>
-                <p className="text-gray-600 text-sm mb-4">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-neutral-900 mb-2">{feature.name}</h3>
+                <p className="text-neutral-600 text-sm mb-4">{feature.description}</p>
                 
                 {feature.available ? (
                   <div className="space-y-2">
                     {feature.usage && (
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-neutral-500">
                         {feature.usage.current} / {feature.usage.limit === -1 ? '∞' : feature.usage.limit}
                       </div>
                     )}
                     <Link
                       href={`/dashboard/${feature.id}`}
-                      className="inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700"
+                      className="inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-primary-700"
                     >
                       Access
                     </Link>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <span className="inline-block bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-sm">
+                    <span className="inline-block bg-neutral-200 text-neutral-600 px-3 py-1 rounded-full text-sm">
                       {feature.upgradeRequired ? 'Upgrade Required' : 'Not Available'}
                     </span>
                     {feature.upgradeRequired && (
@@ -356,12 +356,12 @@ export default function SubscriptionDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Included Features */}
           <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Included Features</h3>
+            <h3 className="text-xl font-bold text-neutral-900 mb-6">Included Features</h3>
             <div className="space-y-4">
               {subscription.features.map((feature, index) => (
                 <div key={index} className="flex items-center">
                   <span className="text-green-500 mr-3">✓</span>
-                  <span className="text-gray-700">{feature}</span>
+                  <span className="text-neutral-700">{feature}</span>
                 </div>
               ))}
             </div>
@@ -369,12 +369,12 @@ export default function SubscriptionDashboard() {
 
           {/* Limitations */}
           <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Limitations</h3>
+            <h3 className="text-xl font-bold text-neutral-900 mb-6">Limitations</h3>
             <div className="space-y-4">
               {subscription.limitations.map((limitation, index) => (
                 <div key={index} className="flex items-center">
                   <span className="text-gray-400 mr-3">✗</span>
-                  <span className="text-gray-700">{limitation}</span>
+                  <span className="text-neutral-700">{limitation}</span>
                 </div>
               ))}
             </div>
@@ -383,24 +383,24 @@ export default function SubscriptionDashboard() {
 
         {/* Billing Information */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mt-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Billing Information</h3>
+          <h3 className="text-xl font-bold text-neutral-900 mb-6">Billing Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Payment Method</h4>
-              <p className="text-gray-600">{subscription.billing.paymentMethod}</p>
+              <h4 className="font-semibold text-neutral-900 mb-2">Payment Method</h4>
+              <p className="text-neutral-600">{subscription.billing.paymentMethod}</p>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Next Billing Date</h4>
-              <p className="text-gray-600">{subscription.billing.nextBilling}</p>
+              <h4 className="font-semibold text-neutral-900 mb-2">Next Billing Date</h4>
+              <p className="text-neutral-600">{subscription.billing.nextBilling}</p>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Amount</h4>
-              <p className="text-gray-600">
+              <h4 className="font-semibold text-neutral-900 mb-2">Amount</h4>
+              <p className="text-neutral-600">
                 {subscription.billing.currency}{subscription.billing.amount.toLocaleString()}/month
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Status</h4>
+              <h4 className="font-semibold text-neutral-900 mb-2">Status</h4>
               <span className={`px-3 py-1 rounded-full text-sm font-medium bg-${getStatusColor(subscription.status)}-100 text-${getStatusColor(subscription.status)}-800`}>
                 {subscription.status.charAt(0).toUpperCase() + subscription.status.slice(1)}
               </span>

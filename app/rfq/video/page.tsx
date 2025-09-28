@@ -93,7 +93,7 @@ export default function VideoRFQPage() {
             <h1 className="page-title">
               Video RFQ - Coming Soon
             </h1>
-            <p className="text-gray-600">
+            <p className="text-neutral-600">
               Record video RFQ with product samples and get AI-powered analysis
             </p>
           </div>
@@ -124,7 +124,7 @@ export default function VideoRFQPage() {
 
           {/* Demo Interface */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="feature-title text-gray-900 mb-6">Demo Interface</h2>
+            <h2 className="feature-title text-neutral-900 mb-6">Demo Interface</h2>
 
             <div className="space-y-6">
               {/* Recording Controls */}
@@ -150,8 +150,8 @@ export default function VideoRFQPage() {
 
               {/* Video Player */}
               {videoUrl && (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Your Video</h3>
+                <div className="bg-neutral-50 rounded-lg p-4">
+                  <h3 className="text-lg font-medium text-neutral-900 mb-3">Your Video</h3>
                   <div className="flex items-center space-x-4">
                     <video
                       src={videoUrl}
@@ -182,9 +182,9 @@ export default function VideoRFQPage() {
 
               {/* Transcript */}
               {transcript && (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">AI Analysis</h3>
-                  <p className="text-gray-700">{transcript}</p>
+                <div className="bg-neutral-50 rounded-lg p-4">
+                  <h3 className="text-lg font-medium text-neutral-900 mb-3">AI Analysis</h3>
+                  <p className="text-neutral-700">{transcript}</p>
                 </div>
               )}
 
@@ -210,24 +210,24 @@ export default function VideoRFQPage() {
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                 <Video className="h-6 w-6 text-purple-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Video Recording</h3>
-              <p className="text-gray-600">Record video RFQ with product samples and demonstrations</p>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Video Recording</h3>
+              <p className="text-neutral-600">Record video RFQ with product samples and demonstrations</p>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                 <Play className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">AI Analysis</h3>
-              <p className="text-gray-600">Get AI-powered video analysis and product specification extraction</p>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">AI Analysis</h3>
+              <p className="text-neutral-600">Get AI-powered video analysis and product specification extraction</p>
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                 <Upload className="h-6 w-6 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Smart Matching</h3>
-              <p className="text-gray-600">Match with suppliers based on visual requirements</p>
+              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Smart Matching</h3>
+              <p className="text-neutral-600">Match with suppliers based on visual requirements</p>
             </div>
           </div>
 

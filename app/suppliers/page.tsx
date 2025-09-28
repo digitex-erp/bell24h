@@ -63,22 +63,22 @@ export default function SuppliersPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="page-container">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading suppliers...</p>
+          <p className="mt-4 text-neutral-600">Loading suppliers...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       {/* Header */}
       <div className="bg-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="page-content">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="page-title">
               Verified Suppliers
             </h1>
             <p className="page-subtitle mb-8">
@@ -94,14 +94,14 @@ export default function SuppliersPage() {
                     placeholder="Search suppliers by name, company, or location..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                 </div>
                 <div className="flex gap-2">
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    className="px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   >
                     <option value="all">All Categories</option>
                     <option value="electronics">Electronics</option>
@@ -116,7 +116,7 @@ export default function SuppliersPage() {
                     className={`px-4 py-3 rounded-lg transition-colors ${
                       showVerifiedOnly 
                         ? 'bg-green-600 text-white' 
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                     }`}
                   >
                     {showVerifiedOnly ? '✓ Verified Only' : 'Show All'}
@@ -128,14 +128,14 @@ export default function SuppliersPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="page-content">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-xl shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Suppliers</p>
-                <p className="text-3xl font-bold text-gray-900">{suppliers.length}</p>
+                <p className="text-sm font-medium text-neutral-600">Total Suppliers</p>
+                <p className="text-3xl font-bold text-neutral-900">{suppliers.length}</p>
               </div>
               <div className="p-3 bg-blue-100 rounded-lg">
                 <span className="text-2xl">🏢</span>
@@ -146,8 +146,8 @@ export default function SuppliersPage() {
           <div className="bg-white p-6 rounded-xl shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Verified Suppliers</p>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-neutral-600">Verified Suppliers</p>
+                <p className="text-3xl font-bold text-neutral-900">
                   {suppliers.filter(s => s.verified).length}
                 </p>
               </div>
@@ -160,8 +160,8 @@ export default function SuppliersPage() {
           <div className="bg-white p-6 rounded-xl shadow-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active This Month</p>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-neutral-600">Active This Month</p>
+                <p className="text-3xl font-bold text-neutral-900">
                   {suppliers.filter(s => {
                     const monthAgo = new Date();
                     monthAgo.setMonth(monthAgo.getMonth() - 1);
@@ -179,13 +179,13 @@ export default function SuppliersPage() {
         {/* Suppliers Grid */}
         {suppliers.length === 0 ? (
           <div className="bg-white rounded-xl shadow-lg p-12 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No suppliers found</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-lg font-medium text-neutral-900 mb-2">No suppliers found</h3>
+            <p className="text-neutral-600 mb-6">
               Try adjusting your search criteria or filters
             </p>
             <button
@@ -194,7 +194,7 @@ export default function SuppliersPage() {
                 setSelectedCategory('all');
                 setShowVerifiedOnly(false);
               }}
-              className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Clear Filters
             </button>
@@ -205,9 +205,9 @@ export default function SuppliersPage() {
               <div key={supplier.id} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="feature-title text-gray-900">{supplier.company}</h3>
-                    <p className="text-gray-600">{supplier.name}</p>
-                    <p className="text-sm text-gray-500">{supplier.location}</p>
+                    <h3 className="feature-title text-neutral-900">{supplier.company}</h3>
+                    <p className="text-neutral-600">{supplier.name}</p>
+                    <p className="text-sm text-neutral-500">{supplier.location}</p>
                   </div>
                   {supplier.verified && (
                     <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full">
@@ -229,24 +229,24 @@ export default function SuppliersPage() {
                       </svg>
                     ))}
                   </div>
-                  <span className="ml-2 text-sm text-gray-600">{supplier.rating}/5</span>
+                  <span className="ml-2 text-sm text-neutral-600">{supplier.rating}/5</span>
                 </div>
 
                 <div className="mb-4">
-                  <p className="text-sm text-gray-600 mb-2">Products:</p>
+                  <p className="text-sm text-neutral-600 mb-2">Products:</p>
                   <div className="flex flex-wrap gap-1">
                     {supplier.products.slice(0, 3).map((product, index) => (
-                      <span key={index} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                      <span key={index} className="bg-neutral-100 text-neutral-700 text-xs px-2 py-1 rounded">
                         {product}
                       </span>
                     ))}
                     {supplier.products.length > 3 && (
-                      <span className="text-xs text-gray-500">+{supplier.products.length - 3} more</span>
+                      <span className="text-xs text-neutral-500">+{supplier.products.length - 3} more</span>
                     )}
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                <div className="flex items-center justify-between text-sm text-neutral-500 mb-4">
                   <span>{supplier._count.rfqs} RFQs</span>
                   <span>{supplier._count.leads} Leads</span>
                   <span>Joined {new Date(supplier.createdAt).toLocaleDateString()}</span>
@@ -255,7 +255,7 @@ export default function SuppliersPage() {
                 <div className="flex gap-2">
                   <Link
                     href={`/suppliers/${supplier.id}`}
-                    className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors text-center text-sm"
+                    className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors text-center text-sm"
                   >
                     View Profile
                   </Link>

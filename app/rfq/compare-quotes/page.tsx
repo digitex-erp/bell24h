@@ -10,7 +10,7 @@ function CompareQuotesLoading() {
     <div className="page-container flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Loading quotes...</p>
+        <p className="mt-4 text-neutral-600">Loading quotes...</p>
       </div>
     </div>
   );
@@ -97,20 +97,20 @@ function CompareQuotesContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Compare Quotes</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-neutral-900">Compare Quotes</h1>
+          <p className="mt-2 text-neutral-600">
             Review and compare quotes from verified suppliers
           </p>
         </div>
 
         {/* Action Bar */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-neutral-600">
                 {quotes.length} quotes received
               </span>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-neutral-600">
                 {selectedQuotes.length} selected
               </span>
             </div>
@@ -123,14 +123,14 @@ function CompareQuotesContent() {
               </button>
               <button
                 onClick={() => setSelectedQuotes([])}
-                className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-md hover:bg-gray-100"
+                className="px-4 py-2 text-sm font-medium text-neutral-600 bg-neutral-50 rounded-md hover:bg-neutral-100"
               >
                 Clear Selection
               </button>
               <button
                 onClick={handlePlaceOrder}
                 disabled={selectedQuotes.length === 0}
-                className="px-6 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Place Order ({selectedQuotes.length})
               </button>
@@ -146,14 +146,14 @@ function CompareQuotesContent() {
               className={`bg-white rounded-lg shadow-sm border-2 transition-all duration-200 ${
                 selectedQuotes.includes(quote.id)
                   ? 'border-indigo-500 ring-2 ring-indigo-200'
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-neutral-200 hover:border-neutral-300'
               }`}
             >
               <div className="p-6">
                 {/* Quote Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-neutral-900">
                       {quote.supplier}
                     </h3>
                     <div className="flex items-center mt-1">
@@ -173,7 +173,7 @@ function CompareQuotesContent() {
                           </svg>
                         ))}
                       </div>
-                      <span className="ml-2 text-sm text-gray-600">
+                      <span className="ml-2 text-sm text-neutral-600">
                         {quote.rating}
                       </span>
                     </div>
@@ -183,7 +183,7 @@ function CompareQuotesContent() {
                     className={`w-6 h-6 rounded border-2 flex items-center justify-center ${
                       selectedQuotes.includes(quote.id)
                         ? 'bg-indigo-600 border-indigo-600'
-                        : 'border-gray-300'
+                        : 'border-neutral-300'
                     }`}
                   >
                     {selectedQuotes.includes(quote.id) && (
@@ -196,25 +196,25 @@ function CompareQuotesContent() {
 
                 {/* Price */}
                 <div className="mb-4">
-                  <div className="text-3xl font-bold text-gray-900">
+                  <div className="text-3xl font-bold text-neutral-900">
                     ₹{quote.price.toLocaleString()}
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-neutral-600">
                     Delivery: {quote.deliveryTime}
                   </div>
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="text-neutral-600 text-sm mb-4">
                   {quote.description}
                 </p>
 
                 {/* Features */}
                 <div className="mb-6">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">Key Features:</h4>
+                  <h4 className="text-sm font-medium text-neutral-900 mb-2">Key Features:</h4>
                   <ul className="space-y-1">
                     {quote.features.map((feature, index) => (
-                      <li key={index} className="text-sm text-gray-600 flex items-center">
+                      <li key={index} className="text-sm text-neutral-600 flex items-center">
                         <svg className="h-4 w-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
@@ -234,7 +234,7 @@ function CompareQuotesContent() {
                   </button>
                   <button
                     onClick={() => handleQuoteSelect(quote.id)}
-                    className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                    className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-primary-700"
                   >
                     {selectedQuotes.includes(quote.id) ? 'Selected' : 'Select Quote'}
                   </button>
@@ -248,7 +248,7 @@ function CompareQuotesContent() {
         <div className="mt-8 text-center">
           <Link
             href="/rfq"
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            className="inline-flex items-center px-4 py-2 text-sm font-medium text-neutral-600 bg-white border border-neutral-300 rounded-md hover:bg-neutral-50"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

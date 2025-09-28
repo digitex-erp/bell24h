@@ -29,7 +29,7 @@ export default function ClaimCompanyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       {/* Header */}
       <header className='sticky top-0 z-50 bg-gray-900/80 backdrop-blur px-6 py-4 flex justify-between items-center'>
         <div className='flex items-center space-x-2'>
@@ -95,7 +95,7 @@ export default function ClaimCompanyPage() {
                       value={formData.companyName}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white/20 border border-gray-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 bg-white/20 border border-neutral-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Enter company name"
                     />
                   </div>
@@ -110,7 +110,7 @@ export default function ClaimCompanyPage() {
                       value={formData.contactName}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white/20 border border-gray-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 bg-white/20 border border-neutral-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Your full name"
                     />
                   </div>
@@ -127,7 +127,7 @@ export default function ClaimCompanyPage() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white/20 border border-gray-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 bg-white/20 border border-neutral-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="company@email.com"
                     />
                   </div>
@@ -142,7 +142,7 @@ export default function ClaimCompanyPage() {
                       value={formData.phone}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-white/20 border border-gray-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 bg-white/20 border border-neutral-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="+91 98765 43210"
                     />
                   </div>
@@ -157,7 +157,7 @@ export default function ClaimCompanyPage() {
                     value={formData.industry}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-white/20 border border-gray-300/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-white/20 border border-neutral-300/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="" className="bg-gray-800 text-white">Select Industry</option>
                     <option value="manufacturing" className="bg-gray-800 text-white">Manufacturing</option>
@@ -181,7 +181,7 @@ export default function ClaimCompanyPage() {
                     value={formData.gstNumber}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-white/20 border border-gray-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-white/20 border border-neutral-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="27AAAPP9753F2ZF"
                   />
                 </div>
@@ -196,7 +196,7 @@ export default function ClaimCompanyPage() {
                     onChange={handleChange}
                     required
                     rows={3}
-                    className="w-full px-4 py-3 bg-white/20 border border-gray-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-white/20 border border-neutral-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter complete business address"
                   />
                 </div>
@@ -210,7 +210,7 @@ export default function ClaimCompanyPage() {
                     value={formData.description}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full px-4 py-3 bg-white/20 border border-gray-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-white/20 border border-neutral-300/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Describe your products/services, capabilities, and what makes your company unique"
                   />
                 </div>

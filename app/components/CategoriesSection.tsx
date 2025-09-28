@@ -80,12 +80,12 @@ export default function CategoriesSection() {
   };
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-5xl font-bold text-gray-900 mb-4">400+ Product Categories</h2>
-          <p className="text-xl text-gray-600 mb-8">Find suppliers across all major industries with live RFQ examples</p>
+          <h2 className="text-5xl font-bold text-neutral-900 mb-4">400+ Product Categories</h2>
+          <p className="text-xl text-neutral-600 mb-8">Find suppliers across all major industries with live RFQ examples</p>
           
           {/* Search and Filter */}
           <div className="max-w-2xl mx-auto mb-8">
@@ -96,7 +96,7 @@ export default function CategoriesSection() {
                 placeholder="Search categories (e.g., Steel, Electronics, Textiles...)"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-lg"
+                className="w-full pl-12 pr-4 py-4 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg"
               />
             </div>
           </div>
@@ -126,29 +126,29 @@ export default function CategoriesSection() {
                   </div>
 
                   {/* Category Info */}
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{category.name}</h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{category.description}</p>
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">{category.name}</h3>
+                  <p className="text-sm text-neutral-600 mb-3 line-clamp-2">{category.description}</p>
                   
                   {/* Supplier Count */}
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm font-medium text-gray-700">{category.supplierCount} Suppliers</span>
+                    <span className="text-sm font-medium text-neutral-700">{category.supplierCount} Suppliers</span>
                   </div>
 
                   {/* Subcategories Preview */}
                   <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-2">Key Subcategories:</p>
+                    <p className="text-xs text-neutral-500 mb-2">Key Subcategories:</p>
                     <div className="flex flex-wrap gap-1">
                       {category.subcategories.slice(0, 3).map((sub, index) => (
                         <span
                           key={index}
-                          className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full"
+                          className="text-xs bg-neutral-100 text-neutral-700 px-2 py-1 rounded-full"
                         >
                           {sub}
                         </span>
                       ))}
                       {category.subcategories.length > 3 && (
-                        <span className="text-xs text-gray-500">+{category.subcategories.length - 3} more</span>
+                        <span className="text-xs text-neutral-500">+{category.subcategories.length - 3} more</span>
                       )}
                     </div>
                   </div>
@@ -156,21 +156,21 @@ export default function CategoriesSection() {
                   {/* Live RFQs Preview */}
                   <div className="border-t pt-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-medium text-gray-600">Live RFQs</span>
+                      <span className="text-xs font-medium text-neutral-600">Live RFQs</span>
                       <div className="flex items-center gap-1">
                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-xs text-gray-500">Live</span>
+                        <span className="text-xs text-neutral-500">Live</span>
                       </div>
                     </div>
                     
                     <div className="space-y-2">
                       {mockRFQs.slice(0, 2).map((rfq) => (
-                        <div key={rfq.id} className="bg-gray-50 rounded-lg p-2">
+                        <div key={rfq.id} className="bg-neutral-50 rounded-lg p-2">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-medium text-gray-900 line-clamp-1">{rfq.title}</span>
+                            <span className="text-xs font-medium text-neutral-900 line-clamp-1">{rfq.title}</span>
                             <div className={`w-2 h-2 rounded-full ${getUrgencyColor(rfq.urgency)}`}></div>
                           </div>
-                          <div className="flex items-center justify-between text-xs text-gray-500">
+                          <div className="flex items-center justify-between text-xs text-neutral-500">
                             <span>{rfq.budget}</span>
                             <span>{rfq.timeAgo}</span>
                           </div>
@@ -209,13 +209,13 @@ export default function CategoriesSection() {
                   <div className="flex items-center gap-4">
                     <div className="text-6xl">{selectedCategory.icon}</div>
                     <div>
-                      <h3 className="text-3xl font-bold text-gray-900">{selectedCategory.name}</h3>
-                      <p className="text-gray-600">{selectedCategory.supplierCount} Verified Suppliers</p>
+                      <h3 className="text-3xl font-bold text-neutral-900">{selectedCategory.name}</h3>
+                      <p className="text-neutral-600">{selectedCategory.supplierCount} Verified Suppliers</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setSelectedCategory(null)}
-                    className="text-gray-400 hover:text-gray-600 text-2xl"
+                    className="text-gray-400 hover:text-neutral-600 text-2xl"
                   >
                     ×
                   </button>
@@ -224,11 +224,11 @@ export default function CategoriesSection() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Subcategories */}
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-4">Subcategories</h4>
+                    <h4 className="text-xl font-bold text-neutral-900 mb-4">Subcategories</h4>
                     <div className="grid grid-cols-2 gap-2">
                       {selectedCategory.subcategories.map((sub, index) => (
-                        <div key={index} className="bg-gray-50 p-3 rounded-lg">
-                          <span className="text-sm font-medium text-gray-900">{sub}</span>
+                        <div key={index} className="bg-neutral-50 p-3 rounded-lg">
+                          <span className="text-sm font-medium text-neutral-900">{sub}</span>
                         </div>
                       ))}
                     </div>
@@ -236,19 +236,19 @@ export default function CategoriesSection() {
 
                   {/* Live RFQs */}
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-4">Live RFQs in this Category</h4>
+                    <h4 className="text-xl font-bold text-neutral-900 mb-4">Live RFQs in this Category</h4>
                     <div className="space-y-3">
                       {generateMockRFQs(selectedCategory).map((rfq) => (
-                        <div key={rfq.id} className="bg-gray-50 p-4 rounded-lg">
+                        <div key={rfq.id} className="bg-neutral-50 p-4 rounded-lg">
                           <div className="flex items-center justify-between mb-2">
-                            <h5 className="font-medium text-gray-900 line-clamp-1">{rfq.title}</h5>
+                            <h5 className="font-medium text-neutral-900 line-clamp-1">{rfq.title}</h5>
                             <div className={`w-2 h-2 rounded-full ${getUrgencyColor(rfq.urgency)}`}></div>
                           </div>
-                          <div className="flex items-center justify-between text-sm text-gray-600">
+                          <div className="flex items-center justify-between text-sm text-neutral-600">
                             <span>{rfq.buyer}</span>
                             <span>{rfq.budget}</span>
                           </div>
-                          <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
+                          <div className="flex items-center justify-between text-xs text-neutral-500 mt-1">
                             <span>{rfq.urgency}</span>
                             <span>{rfq.timeAgo}</span>
                           </div>

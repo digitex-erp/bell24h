@@ -71,22 +71,22 @@ export default function MarketplacePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="page-container">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading marketplace...</p>
+          <p className="mt-4 text-neutral-600">Loading marketplace...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       {/* Header */}
       <div className="bg-white shadow-lg">
       <div className="page-content">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="page-title">
           B2B Marketplace
         </h1>
             <p className="page-subtitle mb-8">
@@ -101,7 +101,7 @@ export default function MarketplacePage() {
                   placeholder="Search suppliers, products, or categories..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-6 py-4 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg"
+                  className="w-full px-6 py-4 pl-12 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-lg"
                 />
                 <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -116,7 +116,7 @@ export default function MarketplacePage() {
                 className={`px-4 py-2 rounded-full transition-colors ${
                   selectedCategory === 'all' 
                     ? 'bg-indigo-600 text-white' 
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    : 'bg-white text-neutral-700 hover:bg-neutral-100'
                 }`}
               >
                 All Categories
@@ -128,7 +128,7 @@ export default function MarketplacePage() {
                   className={`px-4 py-2 rounded-full transition-colors ${
                     selectedCategory === category.id 
                       ? 'bg-indigo-600 text-white' 
-                      : 'bg-white text-gray-700 hover:bg-gray-100'
+                      : 'bg-white text-neutral-700 hover:bg-neutral-100'
                   }`}
                 >
                   {category.name}
@@ -142,7 +142,7 @@ export default function MarketplacePage() {
       <div className="page-content">
         {/* Categories Grid */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Browse by Category</h2>
+          <h2 className="text-3xl font-bold text-neutral-900 mb-8 text-center">Browse by Category</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {categories.map((category) => (
               <Link
@@ -156,7 +156,7 @@ export default function MarketplacePage() {
                   </div>
                   <h3 className="feature-title mb-2">{category.name}</h3>
                   <p className="feature-description text-sm">{category.description}</p>
-                  <div className="flex justify-between text-sm text-gray-500">
+                  <div className="flex justify-between text-sm text-neutral-500">
                     <span>{category.supplierCount} Suppliers</span>
                     <span>{category.productCount} Products</span>
                   </div>
@@ -168,15 +168,15 @@ export default function MarketplacePage() {
 
         {/* Featured Suppliers */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Featured Suppliers</h2>
+          <h2 className="text-3xl font-bold text-neutral-900 mb-8 text-center">Featured Suppliers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredSuppliers.slice(0, 6).map((supplier) => (
               <div key={supplier.id} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="feature-title text-gray-900">{supplier.company}</h3>
-                    <p className="text-gray-600">{supplier.name}</p>
-                    <p className="text-sm text-gray-500">{supplier.location}</p>
+                    <h3 className="feature-title text-neutral-900">{supplier.company}</h3>
+                    <p className="text-neutral-600">{supplier.name}</p>
+                    <p className="text-sm text-neutral-500">{supplier.location}</p>
                   </div>
                   {supplier.verified && (
                     <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full">
@@ -198,19 +198,19 @@ export default function MarketplacePage() {
                       </svg>
                     ))}
                   </div>
-                  <span className="ml-2 text-sm text-gray-600">{supplier.rating}/5</span>
+                  <span className="ml-2 text-sm text-neutral-600">{supplier.rating}/5</span>
                 </div>
 
                 <div className="mb-4">
-                  <p className="text-sm text-gray-600 mb-2">Products:</p>
+                  <p className="text-sm text-neutral-600 mb-2">Products:</p>
                   <div className="flex flex-wrap gap-1">
                     {supplier.products.slice(0, 3).map((product, index) => (
-                      <span key={index} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                      <span key={index} className="bg-neutral-100 text-neutral-700 text-xs px-2 py-1 rounded">
                         {product}
                       </span>
                     ))}
                     {supplier.products.length > 3 && (
-                      <span className="text-xs text-gray-500">+{supplier.products.length - 3} more</span>
+                      <span className="text-xs text-neutral-500">+{supplier.products.length - 3} more</span>
                     )}
                   </div>
           </div>
@@ -218,7 +218,7 @@ export default function MarketplacePage() {
                 <div className="flex gap-2">
                   <Link
                     href={`/suppliers/${supplier.id}`}
-                    className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors text-center text-sm"
+                    className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors text-center text-sm"
                   >
                     View Profile
                   </Link>
@@ -243,7 +243,7 @@ export default function MarketplacePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
             href="/rfq/create" 
-              className="bg-indigo-600 text-white px-8 py-4 rounded-lg hover:bg-indigo-700 transition-colors text-lg font-semibold"
+              className="bg-indigo-600 text-white px-8 py-4 rounded-lg hover:bg-primary-700 transition-colors text-lg font-semibold"
           >
             Create RFQ
             </Link>

@@ -75,15 +75,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
         {/* Header */}
         <div className="page-header">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Phone className="w-8 h-8 text-blue-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome to Bell24h</h1>
-          <p className="text-gray-600 mt-2">Enter your mobile number to continue</p>
+          <h1 className="text-2xl font-bold text-neutral-900">Welcome to Bell24h</h1>
+          <p className="text-neutral-600 mt-2">Enter your mobile number to continue</p>
         </div>
 
         {/* Demo OTP Display */}
@@ -106,7 +106,7 @@ export default function LoginPage() {
                 Mobile Number
               </label>
               <div className="flex">
-                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-neutral-300 bg-neutral-50 text-neutral-500 text-sm">
                   +91
                 </span>
                 <input
@@ -114,7 +114,7 @@ export default function LoginPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                   placeholder="Enter 10-digit mobile number"
-                  className="flex-1 min-w-0 block w-full px-3 py-3 border border-gray-300 rounded-r-md focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 min-w-0 block w-full px-3 py-3 border border-neutral-300 rounded-r-md focus:ring-blue-500 focus:border-blue-500"
                   maxLength={10}
                 />
               </div>
@@ -144,10 +144,10 @@ export default function LoginPage() {
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 placeholder="Enter 6-digit OTP"
-                className="w-full px-3 py-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-center text-lg tracking-widest"
+                className="w-full px-3 py-3 border border-neutral-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-center text-lg tracking-widest"
                 maxLength={6}
               />
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-neutral-500 mt-2">
                 OTP sent to +91{phone}
               </p>
             </div>
@@ -176,8 +176,8 @@ export default function LoginPage() {
         )}
 
         {/* Service Info */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="flex items-center justify-center text-sm text-gray-500">
+        <div className="mt-8 pt-6 border-t border-neutral-200">
+          <div className="flex items-center justify-center text-sm text-neutral-500">
             <Shield className="w-4 h-4 mr-2" />
             Secure & Verified
           </div>

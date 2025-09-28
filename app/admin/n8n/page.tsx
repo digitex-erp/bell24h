@@ -118,12 +118,12 @@ export default function N8NAdminPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-500/20 text-green-400';
-      case 'inactive': return 'bg-gray-500/20 text-gray-400';
+      case 'inactive': return 'bg-neutral-500/20 text-gray-400';
       case 'error': return 'bg-red-500/20 text-red-400';
       case 'success': return 'bg-green-500/20 text-green-400';
       case 'failed': return 'bg-red-500/20 text-red-400';
       case 'running': return 'bg-blue-500/20 text-blue-400';
-      default: return 'bg-gray-500/20 text-gray-400';
+      default: return 'bg-neutral-500/20 text-gray-400';
     }
   };
 
