@@ -75,10 +75,10 @@ export default function DemoLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-md w-full">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="page-header">
           <Link href="/" className="flex items-center justify-center gap-2 mb-6">
             <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">B</div>
             <div>
@@ -105,7 +105,7 @@ export default function DemoLoginPage() {
 
         {/* Phone Step */}
         {step === 'phone' && (
-          <div className="bg-white p-8 rounded-xl shadow-lg">
+          <div className="card">
             <h2 className="text-2xl font-semibold text-gray-900 mb-6">Enter Phone Number</h2>
             
             {error && (
@@ -116,7 +116,7 @@ export default function DemoLoginPage() {
 
             <form onSubmit={handlePhoneSubmit} className="space-y-4">
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="phone" className="form-label">
                   Mobile Number
                 </label>
                 <input
@@ -155,7 +155,7 @@ export default function DemoLoginPage() {
 
         {/* OTP Step */}
         {step === 'otp' && (
-          <div className="bg-white p-8 rounded-xl shadow-lg">
+          <div className="card">
             <h2 className="text-2xl font-semibold text-gray-900 mb-6">Enter OTP</h2>
             
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
@@ -175,7 +175,7 @@ export default function DemoLoginPage() {
 
             <form onSubmit={handleOtpSubmit} className="space-y-4">
               <div>
-                <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="otp" className="form-label">
                   OTP Code
                 </label>
                 <input
@@ -220,21 +220,21 @@ export default function DemoLoginPage() {
 
         {/* Success Step */}
         {step === 'success' && (
-          <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+          <div className="card text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">Login Successful!</h2>
-            <p className="text-gray-600 mb-4">Welcome to Bell24h Demo</p>
+            <p className="feature-description">Welcome to Bell24h Demo</p>
             <p className="text-sm text-gray-500">Redirecting to dashboard...</p>
           </div>
         )}
 
         {/* Quick Access Links */}
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600 mb-4">Quick Access:</p>
+          <p className="text-sm feature-description">Quick Access:</p>
           <div className="flex flex-wrap gap-2 justify-center">
             <Link href="/marketplace" className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
               Marketplace

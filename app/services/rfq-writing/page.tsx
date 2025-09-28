@@ -42,14 +42,14 @@ export default function RFQWritingServicePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Professional RFQ Writing Service
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="page-subtitle max-w-3xl mx-auto">
             Get your RFQ professionally written to attract better suppliers and get competitive quotes. Our experts will help you create compelling, detailed RFQs that get results.
           </p>
         </div>
@@ -84,7 +84,7 @@ export default function RFQWritingServicePage() {
         {/* Pricing */}
         <div className="bg-white rounded-lg shadow-lg p-8 mb-12">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Pricing</h2>
+            <h2 className="page-title">Pricing</h2>
             <div className="text-5xl font-bold text-blue-600 mb-2">₹500</div>
             <p className="text-gray-600 mb-6">Per RFQ improvement</p>
             
@@ -145,7 +145,7 @@ export default function RFQWritingServicePage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Product/Service *
                 </label>
                 <input
@@ -159,7 +159,7 @@ export default function RFQWritingServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Quantity *
                 </label>
                 <input
@@ -173,7 +173,7 @@ export default function RFQWritingServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Budget Range
                 </label>
                 <input
@@ -186,7 +186,7 @@ export default function RFQWritingServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Timeline
                 </label>
                 <select
@@ -204,7 +204,7 @@ export default function RFQWritingServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Your Name *
                 </label>
                 <input
@@ -218,7 +218,7 @@ export default function RFQWritingServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Company Name
                 </label>
                 <input
@@ -231,7 +231,7 @@ export default function RFQWritingServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Email *
                 </label>
                 <input
@@ -245,7 +245,7 @@ export default function RFQWritingServicePage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="form-label">
                   Phone *
                 </label>
                 <input
@@ -260,7 +260,7 @@ export default function RFQWritingServicePage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 Technical Specifications
               </label>
               <textarea
@@ -273,7 +273,7 @@ export default function RFQWritingServicePage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 Current RFQ (if any)
               </label>
               <textarea
@@ -306,7 +306,7 @@ export default function RFQWritingServicePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white p-6 rounded-lg shadow">
-              <p className="text-gray-600 mb-4">
+              <p className="feature-description">
                 "The improved RFQ got me 3x more quotes from better suppliers. Worth every rupee!"
               </p>
               <div className="flex items-center">
@@ -319,7 +319,7 @@ export default function RFQWritingServicePage() {
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow">
-              <p className="text-gray-600 mb-4">
+              <p className="feature-description">
                 "Professional service. The RFQ was so detailed that suppliers understood exactly what we needed."
               </p>
               <div className="flex items-center">

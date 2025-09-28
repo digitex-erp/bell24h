@@ -20,7 +20,7 @@ export default function VoiceRFQPage() {
         <div className="max-w-4xl mx-auto">
           {/* Main Voice Interface */}
           <div className="card card-hover mb-8">
-            <div className="text-center mb-8">
+            <div className="page-header">
               <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <span className="text-4xl">🎤</span>
               </div>
@@ -30,7 +30,7 @@ export default function VoiceRFQPage() {
               </p>
             </div>
 
-            <div className="text-center mb-8">
+            <div className="page-header">
               <button className="bg-red-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-red-700 transition-colors flex items-center mx-auto">
                 <span className="mr-2">🎤</span>
                 Start Recording

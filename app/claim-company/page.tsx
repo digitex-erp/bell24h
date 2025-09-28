@@ -29,7 +29,7 @@ export default function ClaimCompanyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A0A1B] to-[#1A1A2E] text-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className='sticky top-0 z-50 bg-gray-900/80 backdrop-blur px-6 py-4 flex justify-between items-center'>
         <div className='flex items-center space-x-2'>

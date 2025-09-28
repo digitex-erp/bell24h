@@ -7,7 +7,7 @@ export default function GSTRegistrationGuide() {
         <p className="font-bold">⚠️ IMPORTANT: Cannot legally take B2B payments without GST</p>
       </div>
 
-      <h2 className="text-xl font-semibold mb-3">Documents Required:</h2>
+      <h2 className="feature-title mb-3">Documents Required:</h2>
       <ul className="list-disc pl-6 mb-6">
         <li>PAN Card</li>
         <li>Aadhaar Card</li>
@@ -17,7 +17,7 @@ export default function GSTRegistrationGuide() {
         <li>Digital Signature (DSC)</li>
       </ul>
 
-      <h2 className="text-xl font-semibold mb-3">Process:</h2>
+      <h2 className="feature-title mb-3">Process:</h2>
       <ol className="list-decimal pl-6 mb-6">
         <li>Apply at gst.gov.in (₹0 fees)</li>
         <li>Fill Form GST REG-01</li>
@@ -26,7 +26,7 @@ export default function GSTRegistrationGuide() {
         <li>Receive GSTIN</li>
       </ol>
 
-      <h2 className="text-xl font-semibold mb-3">Alternative: GST Consultant</h2>
+      <h2 className="feature-title mb-3">Alternative: GST Consultant</h2>
       <p>Cost: ₹3,000-5,000 | Time: 7-10 days</p>
 
       <div className="bg-red-100 border-l-4 border-red-500 p-4 mt-6">

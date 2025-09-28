@@ -5,12 +5,12 @@ import { Shield, Lock, Clock, CheckCircle, AlertTriangle, CreditCard } from 'luc
 
 export default function EscrowPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="max-w-6xl mx-auto p-6">
-        <div className="text-center mb-8">
+        <div className="page-header">
           <Shield className="h-16 w-16 text-blue-600 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Secure Escrow Services</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="page-subtitle max-w-3xl mx-auto">
             Protect your B2B transactions with our secure escrow system. Funds are held safely until delivery confirmation.
           </p>
         </div>

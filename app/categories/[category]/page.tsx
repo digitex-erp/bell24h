@@ -137,7 +137,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   if (!category) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
           <p className="text-gray-600 mb-6">The requested category does not exist.</p>
@@ -150,8 +150,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="page-container">
+      <div className="page-content">
         <div className="mb-8">
           <div className="flex items-center mb-4">
             <span className="text-4xl mr-4">{category.icon}</span>
@@ -164,13 +164,13 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           <div className="flex gap-4">
             <a
               href="/rfq/create"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+              className="btn-primary transition-colors"
             >
               Create RFQ
             </a>
             <a
               href="/suppliers"
-              className="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+              className="btn-outline transition-colors"
             >
               Browse Suppliers
             </a>
@@ -179,9 +179,9 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {category.subcategories.map((subcategory, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+            <div key={index} className="feature-card">
               <h3 className="text-lg font-semibold mb-2">{subcategory}</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="feature-description">
                 Find suppliers and products in {subcategory.toLowerCase()}
               </p>
               <button className="text-blue-600 hover:text-blue-800 font-medium">
@@ -191,8 +191,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           ))}
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Featured Suppliers</h2>
+        <div className="feature-card">
+          <h2 className="feature-title mb-4">Featured Suppliers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="border border-gray-200 p-4 rounded-lg">
               <div className="flex items-center mb-3">

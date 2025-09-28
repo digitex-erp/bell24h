@@ -63,7 +63,7 @@ export default function SuppliersPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading suppliers...</p>
@@ -73,7 +73,7 @@ export default function SuppliersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-8">
@@ -81,7 +81,7 @@ export default function SuppliersPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Verified Suppliers
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="page-subtitle mb-8">
               Connect with trusted suppliers across India
             </p>
             
@@ -205,7 +205,7 @@ export default function SuppliersPage() {
               <div key={supplier.id} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{supplier.company}</h3>
+                    <h3 className="feature-title text-gray-900">{supplier.company}</h3>
                     <p className="text-gray-600">{supplier.name}</p>
                     <p className="text-sm text-gray-500">{supplier.location}</p>
                   </div>

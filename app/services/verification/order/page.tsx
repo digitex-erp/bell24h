@@ -33,13 +33,13 @@ Delivery: 48 hours`;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="page-container py-8">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
-        <div className="text-center mb-8">
+        <div className="page-header">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Supplier Verification Service
           </h1>
-          <p className="text-gray-600 mb-4">
+          <p className="feature-description">
             Complete GST/PAN verification in 48 hours
           </p>
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
@@ -50,7 +50,7 @@ Delivery: 48 hours`;
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 Company Name *
               </label>
               <input
@@ -64,7 +64,7 @@ Delivery: 48 hours`;
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 Supplier Name *
               </label>
               <input
@@ -78,7 +78,7 @@ Delivery: 48 hours`;
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 Contact Phone *
               </label>
               <input
@@ -92,7 +92,7 @@ Delivery: 48 hours`;
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 Email
               </label>
               <input
@@ -105,7 +105,7 @@ Delivery: 48 hours`;
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 GST Number *
               </label>
               <input
@@ -119,7 +119,7 @@ Delivery: 48 hours`;
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="form-label">
                 PAN Number *
               </label>
               <input
@@ -134,7 +134,7 @@ Delivery: 48 hours`;
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="form-label">
               Address *
             </label>
             <textarea
@@ -148,7 +148,7 @@ Delivery: 48 hours`;
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="form-label">
               Special Requirements
             </label>
             <textarea

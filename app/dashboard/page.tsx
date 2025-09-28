@@ -54,7 +54,7 @@ export default function DashboardPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
@@ -68,7 +68,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <nav className="bg-white shadow-lg">
         <div className="container mx-auto px-4">
@@ -97,11 +97,11 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="page-content">
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome back!</h1>
-          <p className="text-xl text-gray-600">Here's what's happening with your RFQs today.</p>
+          <p className="page-subtitle">Here's what's happening with your RFQs today.</p>
         </div>
 
         {/* Stats Cards */}
@@ -166,7 +166,7 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <h3 className="feature-title text-gray-900 mb-4">Quick Actions</h3>
             <div className="space-y-4">
               <Link href="/rfq/new" className="flex items-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
                 <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold mr-4">+</div>
@@ -186,7 +186,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h3>
+            <h3 className="feature-title text-gray-900 mb-4">Recent Activity</h3>
             <div className="space-y-4">
               <div className="flex items-center p-3 bg-green-50 rounded-lg">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
@@ -216,7 +216,7 @@ export default function DashboardPage() {
         {/* Recent RFQs */}
         <div className="bg-white rounded-lg shadow-lg">
           <div className="p-6 border-b border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-900">Recent RFQs</h3>
+            <h3 className="feature-title text-gray-900">Recent RFQs</h3>
           </div>
           <div className="p-6">
             {rfqs.length === 0 ? (
@@ -227,7 +227,7 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <h4 className="text-lg font-medium text-gray-900 mb-2">No RFQs yet</h4>
-                <p className="text-gray-600 mb-4">Create your first RFQ to get started with Bell24h</p>
+                <p className="feature-description">Create your first RFQ to get started with Bell24h</p>
                 <Link href="/rfq/new" className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
                   Create RFQ
                 </Link>

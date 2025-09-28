@@ -57,7 +57,7 @@ export default function NewRFQPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <nav className="bg-white shadow-lg">
         <div className="container mx-auto px-4">
@@ -84,11 +84,11 @@ export default function NewRFQPage() {
         </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="page-content">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="page-header">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Create New RFQ</h1>
-            <p className="text-xl text-gray-600">Post your request and get 3 verified quotes in 24 hours</p>
+            <p className="page-subtitle">Post your request and get 3 verified quotes in 24 hours</p>
           </div>
 
           <div className="bg-white rounded-lg shadow-xl p-8">
@@ -100,7 +100,7 @@ export default function NewRFQPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="title" className="form-label">
                   RFQ Title *
                 </label>
                 <input
@@ -116,7 +116,7 @@ export default function NewRFQPage() {
               </div>
 
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="description" className="form-label">
                   Detailed Description *
                 </label>
                 <textarea
@@ -133,7 +133,7 @@ export default function NewRFQPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="category" className="form-label">
                     Category *
                   </label>
                   <select
@@ -156,7 +156,7 @@ export default function NewRFQPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="quantity" className="form-label">
                     Quantity
                   </label>
                   <input
@@ -174,7 +174,7 @@ export default function NewRFQPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="budget" className="form-label">
                     Budget (₹)
                   </label>
                   <input
@@ -191,7 +191,7 @@ export default function NewRFQPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="deadline" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="deadline" className="form-label">
                     Delivery Deadline
                   </label>
                   <input
@@ -207,7 +207,7 @@ export default function NewRFQPage() {
               </div>
 
               <div>
-                <label htmlFor="specifications" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="specifications" className="form-label">
                   Additional Specifications
                 </label>
                 <textarea

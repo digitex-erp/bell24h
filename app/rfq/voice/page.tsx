@@ -82,11 +82,11 @@ export default function VoiceRFQPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="page-container">
+      <div className="page-content">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="page-header">
+            <h1 className="page-title">
               Voice RFQ - Coming Soon
             </h1>
             <p className="text-gray-600">
@@ -119,7 +119,7 @@ export default function VoiceRFQPage() {
 
           {/* Demo Interface */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Demo Interface</h2>
+            <h2 className="feature-title text-gray-900 mb-6">Demo Interface</h2>
 
             <div className="space-y-6">
               {/* Recording Controls */}

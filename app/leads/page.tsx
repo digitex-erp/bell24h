@@ -22,14 +22,14 @@ export default function LeadsPage() {
   const [activeTab, setActiveTab] = useState('submit');
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Submit Your Requirements
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="page-subtitle max-w-3xl mx-auto">
             Get connected with verified suppliers instantly. Submit your RFQ and receive quotes from qualified suppliers within 24 hours.
           </p>
         </div>

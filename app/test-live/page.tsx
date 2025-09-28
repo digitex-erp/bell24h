@@ -68,7 +68,7 @@ export default function TestLivePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Running live functionality tests...</p>
@@ -78,7 +78,7 @@ export default function TestLivePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="page-container p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Live Functionality Test Results</h1>
         
@@ -86,7 +86,7 @@ export default function TestLivePage() {
           {Object.entries(testResults).map(([key, result]: [string, any]) => (
             <div key={key} className="bg-white p-6 rounded-lg shadow-lg">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold capitalize">{key} API</h3>
+                <h3 className="feature-title capitalize">{key} API</h3>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                   result.status === 'PASS' 
                     ? 'bg-green-100 text-green-800' 
@@ -128,7 +128,7 @@ export default function TestLivePage() {
         </div>
 
         <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-semibold mb-4">Test Summary</h2>
+          <h2 className="feature-title mb-4">Test Summary</h2>
           <div className="space-y-2">
             {Object.entries(testResults).map(([key, result]: [string, any]) => (
               <div key={key} className="flex items-center gap-2">

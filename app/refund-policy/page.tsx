@@ -5,10 +5,10 @@ import { RefreshCw, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export default function RefundPolicyPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="page-container">
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="text-center mb-8">
+          <div className="page-header">
             <RefreshCw className="h-16 w-16 text-blue-600 mx-auto mb-4" />
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Refund Policy</h1>
             <p className="text-sm text-gray-600">Last Updated: September 11, 2025</p>

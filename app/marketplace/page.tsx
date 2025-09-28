@@ -71,7 +71,7 @@ export default function MarketplacePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading marketplace...</p>
@@ -81,15 +81,15 @@ export default function MarketplacePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-lg">
-      <div className="container mx-auto px-4 py-8">
+      <div className="page-content">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
           B2B Marketplace
         </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="page-subtitle mb-8">
               Connect with verified suppliers across India
             </p>
             
@@ -139,7 +139,7 @@ export default function MarketplacePage() {
         </div>
           </div>
           
-      <div className="container mx-auto px-4 py-8">
+      <div className="page-content">
         {/* Categories Grid */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Browse by Category</h2>
@@ -154,8 +154,8 @@ export default function MarketplacePage() {
                   <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
                     <span className="text-2xl">{category.icon}</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
-                  <p className="text-gray-600 mb-4 text-sm">{category.description}</p>
+                  <h3 className="feature-title mb-2">{category.name}</h3>
+                  <p className="feature-description text-sm">{category.description}</p>
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>{category.supplierCount} Suppliers</span>
                     <span>{category.productCount} Products</span>
@@ -174,7 +174,7 @@ export default function MarketplacePage() {
               <div key={supplier.id} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{supplier.company}</h3>
+                    <h3 className="feature-title text-gray-900">{supplier.company}</h3>
                     <p className="text-gray-600">{supplier.name}</p>
                     <p className="text-sm text-gray-500">{supplier.location}</p>
                   </div>
@@ -235,9 +235,9 @@ export default function MarketplacePage() {
         </div>
         
         {/* Call to Action */}
-        <div className="text-center bg-white p-8 rounded-xl shadow-lg">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to Get Started?</h2>
-          <p className="text-xl text-gray-600 mb-8">
+        <div className="text-center card">
+          <h2 className="page-title">Ready to Get Started?</h2>
+          <p className="page-subtitle mb-8">
             Create an RFQ and connect with verified suppliers
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
