@@ -12,7 +12,7 @@ export default function RegisterPage() {
     password: '',
     confirmPassword: '',
     company: '',
-    role: 'buyer'
+    role: 'supplier' // Default to supplier as per business logic
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -165,7 +165,7 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                I am a
+                Primary Role
               </label>
               <select
                 id="role"
@@ -174,10 +174,12 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               >
+                <option value="supplier">Supplier (Selling products) - Default</option>
                 <option value="buyer">Buyer (Looking for suppliers)</option>
-                <option value="supplier">Supplier (Selling products)</option>
-                <option value="both">Both (Buyer & Supplier)</option>
               </select>
+              <p className="mt-1 text-sm text-gray-500">
+                💡 You can switch between supplier and buyer modes anytime after registration
+              </p>
             </div>
 
             <div>
