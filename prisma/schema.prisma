@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -5,23 +8,26 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
   id        String   @id @default(cuid())
-  email     String?  @unique
-  phone     String?  @unique
+  email     String   @unique
   name      String?
-  role      String   @default("user")
+  phone     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Agent {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  role      String   @default("agent")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model RFQ {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
 }
