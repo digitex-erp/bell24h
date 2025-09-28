@@ -9,21 +9,23 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
-  const [step, setStep] = useState(1); // 1: Mobile, 2: OTP, 3: Registration
+  const [step, setStep] = useState(1); // 1: Mobile, 2: OTP
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
-  const [userDetails, setUserDetails] = useState({
-    name: '',
-    companyName: '',
-    businessType: 'manufacturer'
-  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [otpAttempts, setOtpAttempts] = useState(0);
+  const [resendCooldown, setResendCooldown] = useState(0);
   const router = useRouter();
 
+  const validateMobile = (mobile: string) => {
+    const cleaned = mobile.replace(/\D/g, '');
+    return cleaned.length === 10 && /^[6-9]/.test(cleaned);
+  };
+
   const handleSendOTP = async () => {
-    if (!mobile || mobile.length !== 10) {
-      setError('Please enter a valid 10-digit mobile number');
+    if (!validateMobile(mobile)) {
+      setError('Please enter a valid 10-digit Indian mobile number starting with 6-9');
       return;
     }
 
@@ -34,13 +36,14 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
       const response = await fetch('/api/auth/otp/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile })
+        body: JSON.stringify({ mobile: mobile.replace(/\D/g, '') })
       });
 
       const data = await response.json();
 
       if (data.success) {
         setStep(2);
+        startResendCooldown();
       } else {
         setError(data.error || 'Failed to send OTP');
       }
@@ -57,39 +60,8 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
       return;
     }
 
-    setLoading(true);
-    setError('');
-
-    try {
-      const response = await fetch('/api/auth/otp/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile, otp })
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        if (data.isNewUser) {
-          setStep(3); // Show registration form
-        } else {
-          // Existing user - login successful
-          onSuccess(data.user);
-          router.push('/dashboard');
-        }
-      } else {
-        setError(data.error || 'Invalid OTP');
-      }
-    } catch (err) {
-      setError('Network error. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRegister = async () => {
-    if (!userDetails.name || !userDetails.companyName) {
-      setError('Please fill in all required fields');
+    if (otpAttempts >= 3) {
+      setError('Maximum OTP attempts exceeded. Please request a new OTP.');
       return;
     }
 
@@ -97,24 +69,29 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/auth/otp/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mobile,
-          name: userDetails.name,
-          companyName: userDetails.companyName,
-          businessType: userDetails.businessType
+        body: JSON.stringify({ 
+          mobile: mobile.replace(/\D/g, ''),
+          otp 
         })
       });
 
       const data = await response.json();
 
       if (data.success) {
-        onSuccess(data.user);
-        router.push('/dashboard');
+        if (data.isNewUser) {
+          // New user - redirect to registration page
+          router.push('/register?mobile=' + mobile.replace(/\D/g, ''));
+          onClose();
+        } else {
+          // Existing user - direct dashboard access
+          onSuccess(data.user);
+        }
       } else {
-        setError(data.error || 'Registration failed');
+        setOtpAttempts(prev => prev + 1);
+        setError(data.error || 'Invalid OTP. Please try again.');
       }
     } catch (err) {
       setError('Network error. Please try again.');
@@ -123,372 +100,150 @@ export default function AuthModal({ onClose, onSuccess }: AuthModalProps) {
     }
   };
 
-  return (
-    <>
-      <style jsx>{`
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.7);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 10000;
-          padding: 20px;
+  const startResendCooldown = () => {
+    setResendCooldown(30);
+    const interval = setInterval(() => {
+      setResendCooldown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
         }
-        
-        .modal-content {
-          background: white;
-          border-radius: 12px;
-          padding: 40px;
-          max-width: 450px;
-          width: 100%;
-          max-height: 90vh;
-          overflow-y: auto;
-          position: relative;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        
-        .modal-close {
-          position: absolute;
-          top: 15px;
-          right: 20px;
-          background: none;
-          border: none;
-          font-size: 24px;
-          cursor: pointer;
-          color: #666;
-          width: 30px;
-          height: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          transition: background 0.3s;
-        }
-        
-        .modal-close:hover {
-          background: #f5f5f5;
-        }
-        
-        .modal-header {
-          text-align: center;
-          margin-bottom: 30px;
-        }
-        
-        .modal-title {
-          font-size: 28px;
-          font-weight: bold;
-          color: #1a237e;
-          margin-bottom: 10px;
-        }
-        
-        .modal-subtitle {
-          color: #666;
-          font-size: 16px;
-        }
-        
-        .step-indicator {
-          display: flex;
-          justify-content: center;
-          margin-bottom: 30px;
-          gap: 10px;
-        }
-        
-        .step {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: bold;
-          font-size: 16px;
-          transition: all 0.3s;
-        }
-        
-        .step.active {
-          background: #1a237e;
-          color: white;
-        }
-        
-        .step.completed {
-          background: #4caf50;
-          color: white;
-        }
-        
-        .step.pending {
-          background: #e0e0e0;
-          color: #666;
-        }
-        
-        .form-group {
-          margin-bottom: 20px;
-        }
-        
-        .form-label {
-          display: block;
-          margin-bottom: 8px;
-          font-weight: 600;
-          color: #333;
-        }
-        
-        .form-input {
-          width: 100%;
-          padding: 12px 15px;
-          border: 2px solid #e0e0e0;
-          border-radius: 8px;
-          font-size: 16px;
-          transition: border-color 0.3s;
-          box-sizing: border-box;
-        }
-        
-        .form-input:focus {
-          outline: none;
-          border-color: #1a237e;
-        }
-        
-        .form-select {
-          width: 100%;
-          padding: 12px 15px;
-          border: 2px solid #e0e0e0;
-          border-radius: 8px;
-          font-size: 16px;
-          background: white;
-          cursor: pointer;
-        }
-        
-        .btn-primary {
-          width: 100%;
-          padding: 15px;
-          background: #1a237e;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          font-size: 16px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background 0.3s;
-          margin-top: 10px;
-        }
-        
-        .btn-primary:hover:not(:disabled) {
-          background: #0d47a1;
-        }
-        
-        .btn-primary:disabled {
-          background: #ccc;
-          cursor: not-allowed;
-        }
-        
-        .btn-secondary {
-          width: 100%;
-          padding: 15px;
-          background: transparent;
-          color: #1a237e;
-          border: 2px solid #1a237e;
-          border-radius: 8px;
-          font-size: 16px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s;
-          margin-top: 10px;
-        }
-        
-        .btn-secondary:hover {
-          background: #1a237e;
-          color: white;
-        }
-        
-        .error-message {
-          background: #ffebee;
-          color: #c62828;
-          padding: 12px;
-          border-radius: 8px;
-          margin-bottom: 20px;
-          font-size: 14px;
-        }
-        
-        .otp-input {
-          text-align: center;
-          font-size: 20px;
-          letter-spacing: 5px;
-        }
-        
-        .resend-link {
-          text-align: center;
-          margin-top: 15px;
-        }
-        
-        .resend-link a {
-          color: #1a237e;
-          text-decoration: none;
-          font-weight: 500;
-        }
-        
-        .resend-link a:hover {
-          text-decoration: underline;
-        }
-        
-        @media (max-width: 480px) {
-          .modal-content {
-            padding: 30px 20px;
-            margin: 10px;
-          }
-          
-          .modal-title {
-            font-size: 24px;
-          }
-        }
-      `}</style>
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <button className="modal-close" onClick={onClose}>×</button>
-          
-          <div className="modal-header">
-            <h2 className="modal-title">Login / Sign Up</h2>
-            <p className="modal-subtitle">
-              {step === 1 && "Enter your mobile number to get started"}
-              {step === 2 && "Enter the OTP sent to your mobile"}
-              {step === 3 && "Complete your registration"}
+  const handleResendOTP = () => {
+    if (resendCooldown > 0) return;
+    setOtp('');
+    setError('');
+    setOtpAttempts(0);
+    handleSendOTP();
+  };
+
+  const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+    setMobile(value);
+    setError('');
+  };
+
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    setOtp(value);
+    setError('');
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg max-w-md w-full p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">
+            {step === 1 ? 'Login / Join Free' : 'Verify OTP'}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            ✕
+          </button>
+        </div>
+
+        {step === 1 && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mobile Number
+              </label>
+              <input
+                type="tel"
+                value={mobile}
+                onChange={handleMobileChange}
+                placeholder="10-digit mobile number"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                maxLength={10}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Enter your Indian mobile number starting with 6-9
+              </p>
+            </div>
+
+            {error && (
+              <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            <button
+              onClick={handleSendOTP}
+              disabled={loading || !validateMobile(mobile)}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Sending OTP...' : 'Send OTP'}
+            </button>
+
+            <p className="text-sm text-gray-600 text-center">
+              By continuing, you agree to our Terms of Service and Privacy Policy
             </p>
           </div>
+        )}
 
-          {/* Step Indicator */}
-          <div className="step-indicator">
-            <div className={`step ${step >= 1 ? (step > 1 ? 'completed' : 'active') : 'pending'}`}>
-              1
+        {step === 2 && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Enter OTP
+              </label>
+              <input
+                type="text"
+                value={otp}
+                onChange={handleOtpChange}
+                placeholder="6-digit OTP"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-widest"
+                maxLength={6}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                OTP sent to +91 {mobile}
+              </p>
             </div>
-            <div className={`step ${step >= 2 ? (step > 2 ? 'completed' : 'active') : 'pending'}`}>
-              2
+
+            {error && (
+              <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            <button
+              onClick={handleVerifyOTP}
+              disabled={loading || otp.length !== 6}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Verifying...' : 'Verify OTP'}
+            </button>
+
+            <div className="text-center">
+              <button
+                onClick={handleResendOTP}
+                disabled={resendCooldown > 0}
+                className="text-blue-600 text-sm disabled:text-gray-400 disabled:cursor-not-allowed"
+              >
+                {resendCooldown > 0 
+                  ? `Resend OTP in ${resendCooldown}s` 
+                  : 'Resend OTP'
+                }
+              </button>
             </div>
-            <div className={`step ${step >= 3 ? (step > 3 ? 'completed' : 'active') : 'pending'}`}>
-              3
+
+            <div className="text-center">
+              <button
+                onClick={() => setStep(1)}
+                className="text-gray-600 text-sm"
+              >
+                ← Change Mobile Number
+              </button>
             </div>
           </div>
-
-          {error && (
-            <div className="error-message">{error}</div>
-          )}
-
-          {/* Step 1: Mobile Number */}
-          {step === 1 && (
-            <>
-              <div className="form-group">
-                <label className="form-label">Mobile Number</label>
-                <input
-                  type="tel"
-                  className="form-input"
-                  placeholder="Enter 10-digit mobile number"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                  maxLength={10}
-                />
-              </div>
-              <button
-                className="btn-primary"
-                onClick={handleSendOTP}
-                disabled={loading || mobile.length !== 10}
-              >
-                {loading ? 'Sending...' : 'Get OTP'}
-              </button>
-            </>
-          )}
-
-          {/* Step 2: OTP Verification */}
-          {step === 2 && (
-            <>
-              <div className="form-group">
-                <label className="form-label">Enter OTP</label>
-                <input
-                  type="text"
-                  className="form-input otp-input"
-                  placeholder="000000"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  maxLength={6}
-                />
-                <p style={{ fontSize: '14px', color: '#666', marginTop: '5px' }}>
-                  OTP sent to +91 {mobile}
-                </p>
-              </div>
-              <button
-                className="btn-primary"
-                onClick={handleVerifyOTP}
-                disabled={loading || otp.length !== 6}
-              >
-                {loading ? 'Verifying...' : 'Verify OTP'}
-              </button>
-              <div className="resend-link">
-                <a href="#" onClick={(e) => { e.preventDefault(); handleSendOTP(); }}>
-                  Resend OTP
-                </a>
-              </div>
-              <button
-                className="btn-secondary"
-                onClick={() => setStep(1)}
-              >
-                Change Mobile Number
-              </button>
-            </>
-          )}
-
-          {/* Step 3: Registration */}
-          {step === 3 && (
-            <>
-              <div className="form-group">
-                <label className="form-label">Full Name *</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="Enter your full name"
-                  value={userDetails.name}
-                  onChange={(e) => setUserDetails({...userDetails, name: e.target.value})}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">Company Name *</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="Enter your company name"
-                  value={userDetails.companyName}
-                  onChange={(e) => setUserDetails({...userDetails, companyName: e.target.value})}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">Business Type</label>
-                <select
-                  className="form-select"
-                  value={userDetails.businessType}
-                  onChange={(e) => setUserDetails({...userDetails, businessType: e.target.value})}
-                >
-                  <option value="manufacturer">Manufacturer</option>
-                  <option value="supplier">Supplier</option>
-                  <option value="trader">Trader</option>
-                  <option value="buyer">Buyer</option>
-                  <option value="importer">Importer</option>
-                  <option value="exporter">Exporter</option>
-                </select>
-              </div>
-              
-              <button
-                className="btn-primary"
-                onClick={handleRegister}
-                disabled={loading || !userDetails.name || !userDetails.companyName}
-              >
-                {loading ? 'Creating Account...' : 'Complete Registration'}
-              </button>
-            </>
-          )}
-        </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }
