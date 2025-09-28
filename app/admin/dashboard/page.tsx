@@ -23,10 +23,10 @@ interface SHAPExplanation {
 
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState<DashboardMetrics>({
-    totalUsers: 1250,
-    activeSuppliers: 847,
-    totalRevenue: 12500000,
-    systemHealth: 99.8,
+    totalUsers: 0,
+    activeSuppliers: 0,
+    totalRevenue: 0,
+    systemHealth: 0,
     aiAccuracy: 94.2,
     fraudDetection: 98.1,
     uptime: 99.9,
@@ -43,6 +43,8 @@ export default function DashboardPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleCardExpansion = (cardId: string) => {
     const newExpanded = new Set(expandedCards);
@@ -54,9 +56,46 @@ export default function DashboardPage() {
     setExpandedCards(newExpanded);
   };
 
+  // Fetch analytics data from API
+  const fetchAnalytics = async () => {
+    try {
+      const response = await fetch(`/api/admin/analytics?range=${selectedTimeRange}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch analytics data');
+      }
+      const data = await response.json();
+      
+      setMetrics({
+        totalUsers: data.metrics.totalUsers,
+        activeSuppliers: data.metrics.activeSuppliers,
+        totalRevenue: data.metrics.totalRevenue,
+        systemHealth: data.metrics.systemHealth,
+        aiAccuracy: data.metrics.aiAccuracy,
+        fraudDetection: data.metrics.fraudDetection,
+        uptime: data.metrics.uptime,
+        performanceScore: data.metrics.performanceScore
+      });
+      
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching analytics:', err);
+      setError('Failed to load dashboard data');
+    }
+  };
+
+  // Load data on component mount and when time range changes
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      await fetchAnalytics();
+      setIsLoading(false);
+    };
+    loadData();
+  }, [selectedTimeRange]);
+
   const refreshData = async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await fetchAnalytics();
     setIsRefreshing(false);
   };
 
@@ -71,6 +110,37 @@ export default function DashboardPage() {
     if (value < threshold) return 'text-red-600';
     return 'text-gray-600';
   };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Dashboard</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -216,6 +286,7 @@ export default function DashboardPage() {
                         explanation.impact === 'positive' ? 'bg-green-500' : 
                         explanation.impact === 'negative' ? 'bg-red-500' : 'bg-gray-500'
                       }`}
+                      className="w-full"
                       style={{ width: `${Math.abs(explanation.importance) * 100}%` }}
                     ></div>
                   </div>
