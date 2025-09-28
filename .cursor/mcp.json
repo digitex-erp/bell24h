@@ -1,11 +1,30 @@
 {
   "mcpServers": {
-    "playwright-mcp": {
-      "command": "npx",
+    "GitKraken": {
+      "command": "c:\\Users\\Sanika\\AppData\\Roaming\\Cursor\\User\\globalStorage\\eamodio.gitlens\\gk.exe",
+      "type": "stdio",
+      "name": "GitKraken",
       "args": [
-        "-y",
-        "playwright-mcp"
-      ]
+        "mcp",
+        "--host=cursor",
+        "--source=gitlens",
+        "--scheme=cursor"
+      ],
+      "env": {}
+    },
+    "Playwright": {
+      "command": "npx",
+      "args": ["playwright-mcp"],
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "Filesystem": {
+      "command": "npx",
+      "args": ["filesystem-mcp", "C:\\Users\\Sanika\\Projects\\bell24h"],
+      "env": {
+        "NODE_ENV": "development"
+      }
     }
   }
 }
