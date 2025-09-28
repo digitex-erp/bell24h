@@ -13,30 +13,30 @@ export default function HomePage() {
         <div className="text-center max-w-6xl mx-auto">
           {/* Main Headline */}
           <h1 className="hero-title mb-8 animate-fade-in">
-            <span className="text-neutral-900">India&apos;s Leading</span>
+            <span className="text-black">India&apos;s Leading</span>
             <br />
-            <span className="gradient-text">AI-Powered B2B Market</span>
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">AI-Powered B2B Market</span>
           </h1>
 
           {/* Feature Badges */}
           <div className="flex flex-wrap justify-center gap-4 mb-8 animate-slide-up">
-            <span className="feature-badge feature-badge-green">
+            <span className="px-4 py-2 bg-green-200 text-green-900 rounded-full text-sm font-semibold flex items-center gap-2 shadow-sm">
               <span>🇮🇳</span>
               <span>Made in India</span>
             </span>
-            <span className="feature-badge feature-badge-blue">
+            <span className="px-4 py-2 bg-blue-200 text-blue-900 rounded-full text-sm font-semibold flex items-center gap-2 shadow-sm">
               <span>🏛️</span>
               <span>GST Compliant</span>
             </span>
-            <span className="feature-badge feature-badge-orange">
+            <span className="px-4 py-2 bg-orange-200 text-orange-900 rounded-full text-sm font-semibold flex items-center gap-2 shadow-sm">
               <span>🏪</span>
               <span>MSME Friendly</span>
             </span>
-            <span className="feature-badge feature-badge-purple">
+            <span className="px-4 py-2 bg-purple-200 text-purple-900 rounded-full text-sm font-semibold flex items-center gap-2 shadow-sm">
               <span>💳</span>
               <span>UPI Payments</span>
             </span>
-            <span className="feature-badge feature-badge-pink">
+            <span className="px-4 py-2 bg-pink-200 text-pink-900 rounded-full text-sm font-semibold flex items-center gap-2 shadow-sm">
               <span>🗣️</span>
               <span>Hindi Support</span>
             </span>
@@ -48,23 +48,23 @@ export default function HomePage() {
           </p>
 
           {/* Location */}
-          <p className="text-lg text-primary-600 mb-12 flex items-center justify-center gap-2 animate-fade-in">
+          <p className="text-lg text-blue-600 mb-12 flex items-center justify-center gap-2 animate-fade-in font-medium">
             <span>📍</span>
             <span>Based in Mumbai, Maharashtra - Serving All India</span>
           </p>
 
           {/* Search Bar */}
-          <div className="search-container animate-slide-up">
+          <div className="bg-white rounded-lg shadow-xl p-2 max-w-4xl mx-auto animate-slide-up">
             <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="What are you looking for? (e.g., 'steel pipes', 'textiles')"
-                className="search-input"
+                className="flex-1 px-6 py-4 text-lg border-none outline-none bg-transparent placeholder-gray-400"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <select
-                className="search-select"
+                className="px-4 py-2 border-l border-gray-200 bg-white text-gray-700 rounded-none"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
@@ -81,11 +81,11 @@ export default function HomePage() {
                 <option value="food">Food & Beverage</option>
                 <option value="agriculture">Agriculture</option>
               </select>
-              <button className="search-button hover-glow">
+              <button className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold flex items-center gap-2 transition-colors duration-200">
                 <span>🔍</span>
                 <span>AI Search</span>
               </button>
-              <button className="px-4 py-4 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-lg transition-colors duration-200">
+              <button className="px-4 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200">
                 <span className="text-xl">💬</span>
               </button>
             </div>
@@ -93,19 +93,19 @@ export default function HomePage() {
 
           {/* Popular Searches */}
           <div className="mt-8 flex flex-wrap justify-center gap-3 animate-fade-in">
-            <span className="px-4 py-2 bg-primary-50 text-primary-700 rounded-full text-sm font-medium hover:bg-primary-100 cursor-pointer transition-colors duration-200">
+            <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold hover:bg-blue-200 cursor-pointer transition-colors duration-200 shadow-sm">
               Steel Pipes
             </span>
-            <span className="px-4 py-2 bg-primary-50 text-primary-700 rounded-full text-sm font-medium hover:bg-primary-100 cursor-pointer transition-colors duration-200">
+            <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold hover:bg-blue-200 cursor-pointer transition-colors duration-200 shadow-sm">
               Cotton Fabric
             </span>
-            <span className="px-4 py-2 bg-primary-50 text-primary-700 rounded-full text-sm font-medium hover:bg-primary-100 cursor-pointer transition-colors duration-200">
+            <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold hover:bg-blue-200 cursor-pointer transition-colors duration-200 shadow-sm">
               Electronics
             </span>
-            <span className="px-4 py-2 bg-primary-50 text-primary-700 rounded-full text-sm font-medium hover:bg-primary-100 cursor-pointer transition-colors duration-200">
+            <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold hover:bg-blue-200 cursor-pointer transition-colors duration-200 shadow-sm">
               Machinery Parts
             </span>
-            <span className="px-4 py-2 bg-primary-50 text-primary-700 rounded-full text-sm font-medium hover:bg-primary-100 cursor-pointer transition-colors duration-200">
+            <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold hover:bg-blue-200 cursor-pointer transition-colors duration-200 shadow-sm">
               Chemical Raw Materials
             </span>
           </div>
@@ -117,20 +117,20 @@ export default function HomePage() {
         <div className="container-custom">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="animate-fade-in">
-              <div className="text-4xl font-bold text-primary-600 mb-2">45,000+</div>
-              <div className="text-neutral-600">Verified Suppliers</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">45,000+</div>
+              <div className="text-gray-600">Verified Suppliers</div>
             </div>
             <div className="animate-fade-in">
-              <div className="text-4xl font-bold text-primary-600 mb-2">2.5M+</div>
-              <div className="text-neutral-600">Products Listed</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">2.5M+</div>
+              <div className="text-gray-600">Products Listed</div>
             </div>
             <div className="animate-fade-in">
-              <div className="text-4xl font-bold text-primary-600 mb-2">10,000+</div>
-              <div className="text-neutral-600">RFQs Daily</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">10,000+</div>
+              <div className="text-gray-600">RFQs Daily</div>
             </div>
             <div className="animate-fade-in">
-              <div className="text-4xl font-bold text-primary-600 mb-2">24h</div>
-              <div className="text-neutral-600">Avg. Response Time</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">24h</div>
+              <div className="text-gray-600">Avg. Response Time</div>
             </div>
           </div>
         </div>
