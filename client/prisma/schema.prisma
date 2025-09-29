@@ -596,6 +596,22 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+// OTP model for authentication
+model OTP {
+  id          String   @id @default(cuid())
+  email       String
+  phone       String?
+  otp         String
+  type        String   // 'email' or 'phone'
+  expiresAt   DateTime
+  isUsed      Boolean  @default(false)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  
+  @@map("otps")
+}
+
 // Enums
 enum UserRole {
   ADMIN
