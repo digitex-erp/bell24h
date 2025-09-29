@@ -38,8 +38,7 @@ export async function POST(request: Request) {
           phone,
           phoneVerified: true,
           trustScore: 50, // Phone verified
-          role: 'BUYER',
-          verificationMethod: 'phone_otp'
+          role: 'BUYER'
         }
       });
     } else {
