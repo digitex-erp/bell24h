@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Store OTP in database
-    await prisma.oTP.create({
+    await prisma.OTP.create({
       data: {
         email,
         phone,
