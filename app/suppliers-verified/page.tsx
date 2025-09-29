@@ -9,20 +9,26 @@ export default function SuppliersVerifiedPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [viewMode, setViewMode] = useState('grid');
+  const [sortBy, setSortBy] = useState('rating');
 
   const categories = [
     { value: 'all', label: 'All Categories' },
     { value: 'steel', label: 'Steel & Metals' },
     { value: 'textiles', label: 'Textiles' },
     { value: 'electronics', label: 'Electronics' },
-    { value: 'chemicals', label: 'Chemicals' },
     { value: 'machinery', label: 'Machinery' }
+  ];
+
+  const sortOptions = [
+    { value: 'rating', label: 'Rating' },
+    { value: 'name', label: 'Name' },
+    { value: 'location', label: 'Location' },
+    { value: 'verified', label: 'Verification' }
   ];
 
   useEffect(() => {
     fetchSuppliers();
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, sortBy]);
 
   const fetchSuppliers = async () => {
     setLoading(true);
@@ -30,53 +36,14 @@ export default function SuppliersVerifiedPage() {
       const params = new URLSearchParams();
       if (searchTerm) params.append('search', searchTerm);
       if (selectedCategory !== 'all') params.append('category', selectedCategory);
+      params.append('sort', sortBy);
       params.append('verified', 'true');
       
       const response = await fetch('/api/suppliers?' + params);
       const data = await response.json();
-      
-      if (data.suppliers) {
-        setSuppliers(data.suppliers);
-      } else {
-        // Fallback to mock data if API fails
-        const mockSuppliers = [
-          {
-            id: '1',
-            name: 'Rajesh Kumar',
-            company: 'SteelCo India',
-            email: 'rajesh@steelco.com',
-            phone: '+91-9876543210',
-            location: 'Mumbai, Maharashtra',
-            verified: true,
-            createdAt: '2024-01-15T10:30:00Z',
-            rating: 4.8,
-            products: ['Steel Pipes', 'Steel Sheets', 'Steel Rods', 'Steel Plates'],
-            category: 'steel',
-            rfqCount: 45,
-            leadCount: 23
-          },
-          {
-            id: '2',
-            name: 'Priya Sharma',
-            company: 'Textile Innovations',
-            email: 'priya@textileinnovations.com',
-            phone: '+91-9876543211',
-            location: 'Surat, Gujarat',
-            verified: true,
-            createdAt: '2024-02-20T14:15:00Z',
-            rating: 4.6,
-            products: ['Cotton Fabric', 'Silk Fabric', 'Polyester Fabric', 'Blended Fabric'],
-            category: 'textiles',
-            rfqCount: 32,
-            leadCount: 18
-          }
-        ];
-        setSuppliers(mockSuppliers);
-      }
+      setSuppliers(data.suppliers || []);
     } catch (error) {
       console.error('Error fetching suppliers:', error);
-      // Set empty array on error
-      setSuppliers([]);
     } finally {
       setLoading(false);
     }
@@ -86,53 +53,54 @@ export default function SuppliersVerifiedPage() {
     <>
       <Header />
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
         <section className="bg-white py-12">
           <div className="container mx-auto px-4">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Verified Suppliers</h1>
             <p className="text-lg text-gray-600 mb-8">
-              Connect with trusted, verified suppliers across India
+              Connect with verified suppliers across India
             </p>
             
-            {/* Search and Filters */}
-            <div className="flex flex-col md:flex-row gap-4 mb-8">
-              <div className="flex-1">
-                <input
-                  type="text"
-                  placeholder="Search suppliers, companies, or products..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                {categories.map(cat => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
-                ))}
-              </select>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={"px-4 py-3 rounded-lg " + (viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700')}
-                >
-                  Grid
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={"px-4 py-3 rounded-lg " + (viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700')}
-                >
-                  List
-                </button>
+            <div className="bg-gray-50 rounded-lg p-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+                  <input
+                    type="text"
+                    placeholder="Search suppliers, companies, products..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    {categories.map(category => (
+                      <option key={category.value} value={category.value}>{category.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    {sortOptions.map(option => (
+                      <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Suppliers Grid */}
         <section className="py-12">
           <div className="container mx-auto px-4">
             {loading ? (
@@ -146,50 +114,60 @@ export default function SuppliersVerifiedPage() {
                 ))}
               </div>
             ) : suppliers.length > 0 ? (
-              <div className={"grid gap-6 " + (viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1')}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {suppliers.map((supplier) => (
-                  <div key={supplier.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
+                  <div key={supplier.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6 group">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-900">{supplier.company}</h3>
+                        <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">{supplier.company}</h3>
                         <p className="text-gray-600">{supplier.name}</p>
                       </div>
-                      {supplier.verified && (
-                        <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                          Verified
-                        </span>
-                      )}
+                      <div className="flex flex-col items-end">
+                        {supplier.verified && (
+                          <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full mb-2">
+                            ✓ Verified
+                          </span>
+                        )}
+                        <div className="flex items-center">
+                          <span className="text-yellow-400">★</span>
+                          <span className="text-sm text-gray-600 ml-1">{supplier.rating}</span>
+                        </div>
+                      </div>
                     </div>
                     
                     <div className="space-y-2 mb-4">
                       <p className="text-sm text-gray-600">
-                        <span className="font-medium">Location:</span> {supplier.location}
+                        <span className="font-medium">📍</span> {supplier.location}
                       </p>
                       <p className="text-sm text-gray-600">
-                        <span className="font-medium">Rating:</span> {supplier.rating}/5.0
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        <span className="font-medium">RFQs:</span> {supplier.rfqCount}
+                        <span className="font-medium">🏷️</span> {supplier.category}
                       </p>
                     </div>
                     
                     <div className="mb-4">
                       <p className="text-sm font-medium text-gray-700 mb-2">Products:</p>
                       <div className="flex flex-wrap gap-1">
-                        {supplier.products.slice(0, 3).map((product, index) => (
-                          <span key={index} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                        {supplier.products?.slice(0, 3).map((product, index) => (
+                          <span key={index} className="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full">
                             {product}
                           </span>
                         ))}
-                        {supplier.products.length > 3 && (
-                          <span className="text-xs text-gray-500">+{supplier.products.length - 3} more</span>
+                        {supplier.products?.length > 3 && (
+                          <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                            +{supplier.products.length - 3} more
+                          </span>
                         )}
                       </div>
                     </div>
                     
-                    <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                      View Profile
-                    </button>
+                    <div className="flex space-x-2">
+                      <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        View Profile
+                      </button>
+                      <button className="bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors">
+                        💬
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -197,7 +175,7 @@ export default function SuppliersVerifiedPage() {
               <div className="text-center py-12">
                 <div className="text-gray-400 text-6xl mb-4">🔍</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No suppliers found</h3>
-                <p className="text-gray-600">Try adjusting your search criteria</p>
+                <p className="text-gray-600">Try adjusting your search criteria or filters</p>
               </div>
             )}
           </div>
