@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       where: { id: user.id },
       data: {
         email,
-        emailVerified: true,
+        emailVerified: new Date(),
         trustScore: 100, // Phone + Email verified
         lastLoginAt: new Date()
       }
