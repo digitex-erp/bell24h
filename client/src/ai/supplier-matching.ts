@@ -3,6 +3,7 @@ interface NLPAnalysis {
   categories: string[];
   confidence: number;
   keywords: string[];
+  urgency?: 'low' | 'medium' | 'high';
 }
 
 // Supplier Matching Interfaces
