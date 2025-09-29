@@ -1,20 +1,8 @@
 {
   "version": 2,
-  "name": "bell24h-production",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
   "env": {
     "NODE_ENV": "production",
     "NEXT_PUBLIC_SITE_URL": "https://www.bell24h.com"
-  },
-  "functions": {
-    "app/api/**/*.ts": {
-      "maxDuration": 30
-    }
   },
   "headers": [
     {
