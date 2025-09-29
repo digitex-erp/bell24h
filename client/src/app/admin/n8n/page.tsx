@@ -250,7 +250,7 @@ export default function AdminN8NDashboard() {
     setApiKeys(prev => ({
       ...prev,
       [service]: {
-        ...prev[service],
+        ...(prev as any)[service],
         [field]: value
       }
     }));
@@ -262,7 +262,7 @@ export default function AdminN8NDashboard() {
       setApiKeys(prev => ({
         ...prev,
         [service]: {
-          ...prev[service],
+          ...(prev as any)[service],
           status: Math.random() > 0.2 ? 'active' : 'error'
         }
       }));
@@ -275,7 +275,7 @@ export default function AdminN8NDashboard() {
     setApiKeys(prev => ({
       ...prev,
       [service]: {
-        ...prev[service],
+        ...(prev as any)[service],
         key: newKey
       }
     }));
