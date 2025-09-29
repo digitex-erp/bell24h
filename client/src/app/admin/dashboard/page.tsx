@@ -77,7 +77,14 @@ const mockAdminData = {
 };
 
 // Admin KPI Card Component
-const AdminKPICard = ({ title, value, subValue, trend, icon: Icon, color = 'blue' }) => (
+const AdminKPICard = ({ title, value, subValue, trend, icon: Icon, color = 'blue' }: {
+  title: string;
+  value: string;
+  subValue?: string;
+  trend?: { value: number; isPositive: boolean };
+  icon: any;
+  color?: string;
+}) => (
   <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
     <div className="flex items-center justify-between">
       <div>
