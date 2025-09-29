@@ -26,8 +26,9 @@
     "db:migrate": "prisma migrate deploy",
     "migrate:prod": "npx prisma migrate deploy",
     "migrate:reset": "npx prisma migrate reset --force",
-    "db:seed": "node prisma/seed.js",
-    "seed:admin": "node prisma/seed-admin.js",
+    "db:seed": "tsx prisma/seed.ts",
+    "seed:admin": "tsx prisma/seed-admin.ts",
+    "db:setup": "node scripts/setup-database.cjs setup",
     "deploy:safe": "node scripts/deploy-safe.cjs",
     "backup": "node scripts/backup.cjs",
     "protect": "node scripts/protect-files.cjs",
@@ -56,7 +57,6 @@
     "env:status": "node scripts/setup-env.cjs status",
     "api:setup": "node scripts/setup-api-integrations.cjs",
     "api:test": "node scripts/test-api-integrations.cjs",
-    "db:setup": "node scripts/setup-database.cjs setup",
     "db:status": "node scripts/setup-database.cjs status",
     "audit:admin": "node scripts/audit-admin-pages.js",
     "backup:vercel": "node scripts/backup-vercel-admin.js backup",
@@ -81,7 +81,7 @@
     "check:links": "node scripts/check-links.js"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
