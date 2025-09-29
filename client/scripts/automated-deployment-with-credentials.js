@@ -156,8 +156,7 @@ function updatePackageJson() {
     delete packageJson.dependencies['next-auth'];
     delete packageJson.dependencies['@next-auth/prisma-adapter'];
     
-    // Add MSG91 and JWT dependencies
-    packageJson.dependencies['msg91'] = '^1.0.0';
+    // Add JWT dependencies (MSG91 will be handled via API calls)
     packageJson.dependencies['jsonwebtoken'] = '^9.0.2';
     packageJson.dependencies['resend'] = '^2.0.0';
     
