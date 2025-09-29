@@ -486,7 +486,7 @@ export class SupplierMatcher {
 
   private calculateLocationScore(supplierLocation: string, rfqAnalysis: NLPAnalysis): number {
     // Calculate location proximity score
-    const detectedLocations = rfqAnalysis.extractedEntities.locations;
+    const detectedLocations = rfqAnalysis.extractedEntities?.locations || [];
 
     if (detectedLocations.length === 0) {
       return 0.5; // Neutral if no location specified
