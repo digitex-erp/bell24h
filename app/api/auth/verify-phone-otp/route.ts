@@ -1,6 +1,6 @@
 // app/api/auth/verify-phone-otp/route.ts - Mock OTP verification
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { findOrCreateUser, updateUser, users } from '@/lib/mock-users';
 
 // Mock OTP storage (in production, this would be in a database)
 const mockOTPStorage = new Map<string, { otp: string; expiresAt: number }>();
@@ -45,16 +45,18 @@ export async function POST(request: NextRequest) {
     }
     // If no stored OTP, accept any 6-digit code for testing
 
-    // Create user
+    // Create or find user in shared storage
     const userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const userRole = 'BUYER'; // Default role
+    const userIndex = findOrCreateUser(userId, phone);
+    
+    // Update user with verification status
+    const updatedUser = updateUser(userIndex, {
+      isVerified: true,
+      trustScore: 50
+    });
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId, phone, role: userRole },
-      process.env.JWT_SECRET || 'fallback_secret_key',
-      { expiresIn: '7d' }
-    );
+    // Generate mock token (in production, use proper JWT)
+    const token = `mock_jwt_token_${userId}_${Date.now()}`;
 
     // Clean up used OTP
     mockOTPStorage.delete(phone);
@@ -62,11 +64,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       user: {
-        id: userId,
-        phone,
-        role: userRole,
-        trustScore: 50,
-        isVerified: true
+        id: updatedUser.id,
+        phone: updatedUser.phone,
+        email: updatedUser.email,
+        role: 'BUYER',
+        trustScore: updatedUser.trustScore,
+        isVerified: updatedUser.isVerified,
+        isNewUser: updatedUser.isNewUser,
+        kycCompleted: updatedUser.kycCompleted,
+        planSelected: updatedUser.planSelected
       },
       token
     });

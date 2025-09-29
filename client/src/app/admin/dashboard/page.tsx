@@ -1,383 +1,385 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
-  Users,
-  Building2,
-  TrendingUp,
-  DollarSign,
-  Activity,
-  Shield,
-  Settings,
   BarChart3,
+  Brain,
+  Calendar,
+  CreditCard,
+  DollarSign,
+  FileText,
+  Globe,
+  Heart,
+  Home,
+  MessageCircle,
+  Mic,
+  Package,
+  Settings,
+  Shield,
+  Star,
+  TrendingUp,
+  Truck,
+  Users,
+  Video,
+  Wallet,
+  Zap,
+  PlusCircle,
+  Lightbulb,
+  Activity,
+  Building2,
+  Database,
+  Workflow,
   AlertTriangle,
   CheckCircle,
   Clock,
-  Globe,
-  Database,
-  Server,
-  Cpu,
-  HardDrive
-} from 'lucide-react'
+} from 'lucide-react';
 
-interface PlatformStats {
-  totalUsers: number
-  totalSuppliers: number
-  totalBuyers: number
-  totalTransactions: number
-  totalRevenue: number
-  activeRFQs: number
-}
-
-interface SystemHealth {
-  database: string
-  api: string
-  uptime: number
-  memory: any
-  region: string
-}
-
-interface RevenueAnalytics {
-  total: number
-  monthly: number
-  growth: number
-  topCategories: Array<{
-    category: string
-    revenue: number
-    growth: number
-  }>
-}
-
-// Fallback data to prevent errors
-const fallbackData = {
-  platform: {
-    totalUsers: 1250,
+// Mock admin data
+const mockAdminData = {
+  user: {
+    name: 'Admin User',
+    role: 'Administrator',
+    company: 'Bell24H Admin',
+    avatar: '👨‍💼',
+  },
+  kpis: {
+    totalUsers: 1247,
     totalSuppliers: 847,
-    totalBuyers: 403,
-    totalTransactions: 2341,
+    totalBuyers: 400,
     totalRevenue: 12500000,
-    activeRFQs: 156
+    activeRFQs: 156,
+    completedRFQs: 89,
+    pendingApprovals: 23,
+    systemHealth: 98.5,
   },
-  system: {
-    database: 'healthy',
-    api: 'operational',
-    uptime: 86400,
-    memory: {
-      used: '2.1GB',
-      total: '4GB',
-      percentage: 52.5
-    },
-    region: 'Mumbai (BOM1)'
+  systemInsights: {
+    uptime: '99.9%',
+    activeWorkflows: 12,
+    dataProcessed: 45678,
+    alerts: [
+      { type: 'success', message: 'System backup completed successfully' },
+      { type: 'warning', message: 'High memory usage detected on server 2' },
+      { type: 'info', message: 'New user registration spike detected' },
+    ],
   },
-  revenue: {
-    total: 12500000,
-    monthly: 2100000,
-    growth: 15.8,
-    topCategories: [
-      {
-        category: 'Manufacturing',
-        revenue: 4500000,
-        growth: 22.5
-      },
-      {
-        category: 'Electronics',
-        revenue: 3200000,
-        growth: 18.3
-      },
-      {
-        category: 'Textiles',
-        revenue: 2800000,
-        growth: 12.7
-      },
-      {
-        category: 'Chemicals',
-        revenue: 2000000,
-        growth: 8.9
-      }
-    ]
-  }
-}
+  recentActivity: [
+    { id: 1, type: 'user', title: 'New user registered: SteelCorp Ltd', status: 'new', time: '5 minutes ago' },
+    { id: 2, type: 'workflow', title: 'N8N workflow executed successfully', status: 'completed', time: '10 minutes ago' },
+    { id: 3, type: 'payment', title: 'Payment processed: ₹2,50,000', status: 'completed', time: '1 hour ago' },
+    { id: 4, type: 'alert', title: 'System maintenance scheduled', status: 'scheduled', time: '2 hours ago' },
+  ],
+  topFeatures: [
+    { name: 'CRM Management', description: 'Customer relationship management', users: 156, status: 'active' },
+    { name: 'N8N Automation', description: 'Workflow automation server', workflows: 12, status: 'active' },
+    { name: 'Analytics Dashboard', description: 'Business intelligence and insights', reports: 45, status: 'active' },
+    { name: 'User Management', description: 'User accounts and permissions', users: 1247, status: 'active' },
+  ],
+};
 
-export default function EnterpriseAdminDashboard() {
-  const [platformStats, setPlatformStats] = useState<PlatformStats | null>(fallbackData.platform)
-  const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(fallbackData.system)
-  const [revenueAnalytics, setRevenueAnalytics] = useState<RevenueAnalytics | null>(fallbackData.revenue)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState('overview')
+// Admin KPI Card Component
+const AdminKPICard = ({ title, value, subValue, trend, icon: Icon, color = 'blue' }) => (
+  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm text-gray-600">{title}</p>
+        <p className="text-2xl font-bold text-gray-900">{value}</p>
+        {subValue && <p className="text-xs text-gray-500">{subValue}</p>}
+        {trend && (
+          <span className={`text-sm ${trend.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+            {trend}
+          </span>
+        )}
+      </div>
+      {Icon && <Icon className={`w-8 h-8 text-${color}-600`} />}
+    </div>
+  </div>
+);
 
+// System Health Panel
+const SystemHealthPanel = ({ insights }) => (
+  <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border border-green-200">
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+        <Shield className="w-5 h-5 mr-2 text-green-600" />
+        System Health
+      </h3>
+      <span className="text-sm text-gray-500">Real-time monitoring</span>
+    </div>
+    
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white p-4 rounded-lg">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-gray-600">System Uptime</span>
+          <span className="text-2xl font-bold text-green-600">{insights.uptime}</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="bg-green-500 h-2 rounded-full" style={{ width: '99.9%' }}></div>
+        </div>
+      </div>
+
+      <div className="bg-white p-4 rounded-lg">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-gray-600">Active Workflows</span>
+          <span className="text-2xl font-bold text-blue-600">{insights.activeWorkflows}</span>
+        </div>
+        <p className="text-xs text-gray-500">N8N automation running</p>
+      </div>
+
+      <div className="bg-white p-4 rounded-lg">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-gray-600">Data Processed</span>
+          <span className="text-2xl font-bold text-purple-600">{insights.dataProcessed.toLocaleString()}</span>
+        </div>
+        <p className="text-xs text-gray-500">Records today</p>
+      </div>
+    </div>
+
+    <div className="mt-4">
+      <h4 className="text-sm font-medium text-gray-900 mb-2">System Alerts</h4>
+      <div className="space-y-1">
+        {insights.alerts.map((alert, index) => (
+          <div key={index} className={`text-xs px-2 py-1 rounded ${
+            alert.type === 'success' ? 'text-green-600 bg-green-100' :
+            alert.type === 'warning' ? 'text-yellow-600 bg-yellow-100' :
+            'text-blue-600 bg-blue-100'
+          }`}>
+            {alert.message}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// Feature Management Cards
+const FeatureCard = ({ feature }) => (
+  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+    <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center">
+        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+          {feature.name === 'CRM Management' && <Users className="w-5 h-5 text-blue-600" />}
+          {feature.name === 'N8N Automation' && <Zap className="w-5 h-5 text-purple-600" />}
+          {feature.name === 'Analytics Dashboard' && <BarChart3 className="w-5 h-5 text-green-600" />}
+          {feature.name === 'User Management' && <Settings className="w-5 h-5 text-orange-600" />}
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">{feature.name}</h3>
+          <p className="text-sm text-gray-600">{feature.description}</p>
+        </div>
+      </div>
+      <span className={`px-2 py-1 text-xs rounded-full ${
+        feature.status === 'active' ? 'text-green-600 bg-green-100' : 'text-red-600 bg-red-100'
+      }`}>
+        {feature.status}
+      </span>
+    </div>
+    
+    <div className="flex items-center justify-between">
+      <div className="text-sm text-gray-500">
+        {feature.users ? `${feature.users} users` : `${feature.workflows} workflows`}
+        {feature.reports && ` • ${feature.reports} reports`}
+      </div>
+      <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+        Manage →
+      </button>
+    </div>
+  </div>
+);
+
+export default function AdminDashboard() {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Update time every second for live feel
   useEffect(() => {
-    fetchAdminData()
-    const interval = setInterval(fetchAdminData, 30000) // Refresh every 30 seconds
-    return () => clearInterval(interval)
-  }, [])
-
-  const fetchAdminData = async () => {
-    try {
-      setError(null)
-      const response = await fetch('/api/enterprise/admin/dashboard')
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      const data = await response.json()
-      
-      if (data.status === 'success') {
-        setPlatformStats(data.platform)
-        setSystemHealth(data.system)
-        setRevenueAnalytics(data.revenue)
-      } else {
-        throw new Error(data.message || 'Failed to fetch data')
-      }
-    } catch (error) {
-      console.error('Failed to fetch admin data:', error)
-      setError(error instanceof Error ? error.message : 'Failed to fetch data')
-      // Keep fallback data if API fails
-    } finally {
-      setLoading(false)
-    }
-  }
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount)
-  }
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
 
-  const formatUptime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-    return `${hours}h ${minutes}m`
-  }
-
-  const getHealthStatusColor = (status: string) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy':
-      case 'operational':
-        return 'text-green-600'
-      case 'degraded':
-        return 'text-yellow-600'
-      case 'unhealthy':
-      case 'error':
-        return 'text-red-600'
+      case 'completed':
+      case 'active':
+      case 'new':
+        return 'text-green-600 bg-green-100';
+      case 'warning':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'scheduled':
+        return 'text-blue-600 bg-blue-100';
       default:
-        return 'text-gray-600'
+        return 'text-gray-600 bg-gray-100';
     }
-  }
+  };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading Enterprise Dashboard...</p>
-        </div>
-      </div>
-    )
-  }
+  const user = mockAdminData.user;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      {/* Admin Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Enterprise Admin Dashboard</h1>
-              <p className="text-gray-600">Platform-wide analytics and management</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-green-600">
-                <CheckCircle className="w-5 h-5" />
-                <span className="text-sm font-medium">All Systems Operational</span>
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
               </div>
-              <div className="flex items-center space-x-2 text-blue-600">
-                <Clock className="w-5 h-5" />
-                <span className="text-sm font-medium">
-                  Uptime: {systemHealth ? formatUptime(systemHealth.uptime) : 'N/A'}
+              <span className="ml-2 text-xl font-bold text-gray-900">Bell24H Admin</span>
+            </div>
+
+            {/* Admin Actions */}
+            <div className="hidden md:flex items-center space-x-4">
+              <button className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                <Users className="w-4 h-4 mr-2" />
+                CRM Management
+              </button>
+              <button className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                <Zap className="w-4 h-4 mr-2" />
+                N8N Workflows
+              </button>
+              <button className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Analytics
+              </button>
+            </div>
+
+            {/* Right Side */}
+            <div className="flex items-center space-x-4">
+              {/* Notifications */}
+              <div className="relative">
+                <button className="p-2 text-gray-500 hover:text-gray-700 relative">
+                  <MessageCircle className="w-6 h-6" />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    5
+                  </span>
+                </button>
+              </div>
+
+              {/* Profile */}
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-medium">
+                    {user.avatar}
+                </span>
+                </div>
+                <div className="hidden md:block">
+                  <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                  <p className="text-xs text-gray-500">{user.role}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Admin Dashboard 🛠️
+              </h1>
+              <p className="text-gray-600 mt-2">
+                System management and monitoring center
+              </p>
+                </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-500">Live Admin Panel</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {currentTime.toLocaleTimeString()}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Admin KPI Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <AdminKPICard 
+            title="Total Users" 
+            value={mockAdminData.kpis.totalUsers.toLocaleString()} 
+            subValue={`${mockAdminData.kpis.totalSuppliers} suppliers, ${mockAdminData.kpis.totalBuyers} buyers`}
+            trend="+15% this month"
+            icon={Users}
+            color="blue"
+          />
+          <AdminKPICard 
+            title="Total Revenue" 
+            value={formatCurrency(mockAdminData.kpis.totalRevenue)} 
+            trend="+22% this month"
+            icon={DollarSign}
+            color="green"
+          />
+          <AdminKPICard 
+            title="Active RFQs" 
+            value={mockAdminData.kpis.activeRFQs} 
+            subValue={`${mockAdminData.kpis.completedRFQs} completed`}
+            icon={FileText}
+            color="purple"
+          />
+          <AdminKPICard 
+            title="System Health" 
+            value={`${mockAdminData.kpis.systemHealth}%`} 
+            subValue="All systems operational"
+            icon={Shield}
+            color="green"
+          />
+        </div>
+
+        {/* System Health Panel */}
+        <div className="mb-8">
+          <SystemHealthPanel insights={mockAdminData.systemInsights} />
+              </div>
+
+        {/* Feature Management */}
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Feature Management</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {mockAdminData.topFeatures.map((feature, index) => (
+              <FeatureCard key={index} feature={feature} />
+            ))}
+                </div>
+              </div>
+
+        {/* Recent Activity */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            <Activity className="w-5 h-5 mr-2 text-blue-600" />
+            Recent System Activity
+          </h3>
+          <div className="space-y-4">
+            {mockAdminData.recentActivity.map((activity) => (
+              <div key={activity.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                    {activity.type === 'user' && <Users className="w-5 h-5 text-blue-600" />}
+                    {activity.type === 'workflow' && <Zap className="w-5 h-5 text-purple-600" />}
+                    {activity.type === 'payment' && <DollarSign className="w-5 h-5 text-green-600" />}
+                    {activity.type === 'alert' && <AlertTriangle className="w-5 h-5 text-orange-600" />}
+                  </div>
+                <div>
+                    <p className="text-sm font-medium text-gray-900">{activity.title}</p>
+                    <p className="text-xs text-gray-500">{activity.time}</p>
+                  </div>
+                </div>
+                <span className={`px-3 py-1 text-xs rounded-full ${getStatusColor(activity.status)}`}>
+                  {activity.status}
                 </span>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Error Display */}
-      {error && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <div className="flex">
-              <AlertTriangle className="h-5 w-5 text-red-400" />
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">API Error</h3>
-                <div className="mt-2 text-sm text-red-700">
-                  <p>{error}</p>
-                  <p className="mt-1">Using fallback data. Please check your connection.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Tab Navigation */}
-        <div className="border-b border-gray-200 mb-8">
-          <nav className="flex space-x-8">
-            {[
-              { id: 'overview', name: 'Overview', icon: BarChart3 },
-              { id: 'users', name: 'User Management', icon: Users },
-              { id: 'revenue', name: 'Revenue Analytics', icon: DollarSign },
-              { id: 'system', name: 'System Health', icon: Server },
-              { id: 'security', name: 'Security & Compliance', icon: Shield }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                <tab.icon className="w-5 h-5" />
-                <span>{tab.name}</span>
-              </button>
             ))}
-          </nav>
-        </div>
-
-        {/* Overview Tab */}
-        {activeTab === 'overview' && (
-          <div className="space-y-8">
-            {/* Platform Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Users className="h-8 w-8 text-blue-600" />
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Total Users</dt>
-                      <dd className="text-lg font-medium text-gray-900">
-                        {platformStats?.totalUsers.toLocaleString() || '0'}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Building2 className="h-8 w-8 text-green-600" />
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Suppliers</dt>
-                      <dd className="text-lg font-medium text-gray-900">
-                        {platformStats?.totalSuppliers.toLocaleString() || '0'}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Users className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Buyers</dt>
-                      <dd className="text-lg font-medium text-gray-900">
-                        {platformStats?.totalBuyers.toLocaleString() || '0'}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <DollarSign className="h-8 w-8 text-yellow-600" />
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Revenue</dt>
-                      <dd className="text-lg font-medium text-gray-900">
-                        {platformStats?.totalRevenue ? formatCurrency(platformStats.totalRevenue) : '₹0'}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* System Health */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">System Health</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className={`text-2xl font-bold ${getHealthStatusColor(systemHealth?.database || 'unknown')}`}>
-                    {systemHealth?.database || 'Unknown'}
-                  </div>
-                  <div className="text-sm text-gray-500">Database</div>
-                </div>
-                <div className="text-center">
-                  <div className={`text-2xl font-bold ${getHealthStatusColor(systemHealth?.api || 'unknown')}`}>
-                    {systemHealth?.api || 'Unknown'}
-                  </div>
-                  <div className="text-sm text-gray-500">API Status</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {systemHealth?.region || 'Unknown'}
-                  </div>
-                  <div className="text-sm text-gray-500">Region</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Revenue Analytics */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Revenue Analytics</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <div className="text-3xl font-bold text-gray-900">
-                    {revenueAnalytics?.total ? formatCurrency(revenueAnalytics.total) : '₹0'}
-                  </div>
-                  <div className="text-sm text-gray-500">Total Revenue</div>
-                  <div className="text-sm text-green-600">
-                    +{revenueAnalytics?.growth || 0}% from last month
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-gray-900">
-                    {revenueAnalytics?.monthly ? formatCurrency(revenueAnalytics.monthly) : '₹0'}
-                  </div>
-                  <div className="text-sm text-gray-500">Monthly Revenue</div>
-                </div>
-              </div>
-            </div>
           </div>
-        )}
-
-        {/* Other tabs can be implemented similarly */}
-        {activeTab !== 'overview' && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h3>
-            <p className="text-gray-600">This section is under development.</p>
           </div>
-        )}
       </div>
     </div>
-  )
+  );
 }

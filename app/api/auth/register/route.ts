@@ -1,131 +1,70 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Mock user database (in production, use real database)
-const users = new Map<string, any>([
-  ['9876543210', {
-    id: '1',
-    mobile: '9876543210',
-    name: 'Test User',
-    companyName: 'Test Company',
-    businessType: 'manufacturer',
-    verified: true
-  }]
-]);
-
 export async function POST(request: NextRequest) {
   try {
-    const { mobile, name, companyName, businessType } = await request.json();
+    const { name, company, email, phone, userType, category, location } = await request.json();
 
     // Validate required fields
-    if (!mobile || !name || !companyName) {
+    if (!name || !company || !email || !phone) {
       return NextResponse.json(
-        { success: false, error: 'Mobile number, name, and company name are required' },
+        { success: false, message: 'All required fields must be filled' },
         { status: 400 }
       );
     }
 
-    if (!/^\d{10}$/.test(mobile)) {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid mobile number format' },
+        { success: false, message: 'Invalid email format' },
         { status: 400 }
       );
     }
 
-    // Check if user already exists
-    if (users.has(mobile)) {
+    // Validate phone format (basic validation)
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
       return NextResponse.json(
-        { success: false, error: 'User with this mobile number already exists' },
+        { success: false, message: 'Invalid phone number format' },
         { status: 400 }
       );
     }
 
-    // Create new user
-    const newUser = {
-      id: Date.now().toString(), // Simple ID generation
-      mobile,
-      name: name.trim(),
-      companyName: companyName.trim(),
-      businessType: businessType || 'manufacturer',
-      verified: true,
-      createdAt: new Date().toISOString(),
-      profile: {
-        avatar: null,
-        description: '',
-        location: '',
-        website: '',
-        gstNumber: '',
-        panNumber: ''
-      },
-      preferences: {
-        notifications: true,
-        emailUpdates: false,
-        smsUpdates: true
-      },
-      subscription: {
-        plan: 'free',
-        features: ['basic_rfq', 'supplier_search', 'messaging']
-      }
+    // In a real application, you would:
+    // 1. Check if email/phone already exists
+    // 2. Hash password if using password-based auth
+    // 3. Save user to database
+    // 4. Send verification email/SMS
+    // 5. Generate JWT token
+
+    const user = {
+      id: 'user_' + Date.now(),
+      name,
+      company,
+      email,
+      phone,
+      userType,
+      category,
+      location,
+      verified: false,
+      createdAt: new Date().toISOString()
     };
 
-    // Save user (in production, save to database)
-    users.set(mobile, newUser);
+    console.log('New user registration:', user);
 
-    console.log(`✅ New user registered: ${name} (${mobile})`);
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     return NextResponse.json({
       success: true,
-      message: 'Registration successful',
-      user: newUser,
-      redirectUrl: '/dashboard'
+      message: 'Registration successful. Please verify your account.',
+      user: user
     });
 
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
-      { success: false, error: 'Registration failed' },
-      { status: 500 }
-    );
-  }
-}
-
-// Get user by mobile number
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const mobile = searchParams.get('mobile');
-
-    if (!mobile || !/^\d{10}$/.test(mobile)) {
-      return NextResponse.json(
-        { success: false, error: 'Valid mobile number required' },
-        { status: 400 }
-      );
-    }
-
-    const user = users.get(mobile);
-    
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      user: {
-        id: user.id,
-        mobile: user.mobile,
-        name: user.name,
-        companyName: user.companyName,
-        businessType: user.businessType,
-        verified: user.verified
-      }
-    });
-
-  } catch (error) {
-    console.error('Get user error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to get user' },
+      { success: false, message: 'Internal server error' },
       { status: 500 }
     );
   }
