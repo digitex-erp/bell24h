@@ -1,226 +1,326 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
-export default function RFQListPage() {
-  const [rfqs, setRfqs] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [filter, setFilter] = useState('all')
+interface RFQ {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  quantity: string;
+  unit: string;
+  minBudget: string;
+  maxBudget: string;
+  timeline: string;
+  status: 'active' | 'quoted' | 'completed' | 'cancelled';
+  urgency: 'low' | 'normal' | 'high' | 'urgent';
+  createdBy: string;
+  createdAt: string;
+  views: number;
+  quotes: number;
+  suppliers: number;
+  tags: string[];
+  location: string;
+  priority: number;
+  estimatedValue: number;
+}
+
+export default function RFQPage() {
+  const [rfqs, setRfqs] = useState<RFQ[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    category: 'all',
+    status: 'all',
+    search: '',
+    sortBy: 'createdAt',
+    sortOrder: 'desc'
+  });
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0,
+    hasNextPage: false,
+    hasPrevPage: false
+  });
 
   useEffect(() => {
-    fetchRfqs()
-  }, [])
+    fetchRFQs();
+  }, [filters, pagination.page]);
 
-  const fetchRfqs = async () => {
+  const fetchRFQs = async () => {
     try {
-      const response = await fetch('/api/rfq/list')
+      setIsLoading(true);
+      const params = new URLSearchParams({
+        page: pagination.page.toString(),
+        limit: pagination.limit.toString(),
+        ...filters
+      });
+
+      const response = await fetch(`/api/rfq/list?${params}`);
       if (response.ok) {
-        const data = await response.json()
-        setRfqs(data.rfqs || [])
+        const data = await response.json();
+        setRfqs(data.rfqs || []);
+        setPagination(prev => ({ ...prev, ...data.pagination }));
       }
     } catch (error) {
-      console.error('Failed to fetch RFQs:', error)
+      console.error('Error fetching RFQs:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
-  const filteredRfqs = rfqs.filter((rfq: any) => {
-    if (filter === 'all') return true
-    return rfq.status === filter
-  })
+  const handleFilterChange = (key: string, value: string) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+    setPagination(prev => ({ ...prev, page: 1 }));
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800'
-      case 'completed':
-        return 'bg-blue-100 text-blue-800'
-      case 'cancelled':
-        return 'bg-red-100 text-red-800'
-      default:
-        return 'bg-neutral-100 text-neutral-800'
+      case 'active': return 'badge-success';
+      case 'quoted': return 'badge-info';
+      case 'completed': return 'badge-warning';
+      case 'cancelled': return 'badge-error';
+      default: return 'badge-info';
     }
-  }
+  };
+
+  const getUrgencyColor = (urgency: string) => {
+    switch (urgency) {
+      case 'urgent': return 'text-red-600 bg-red-100';
+      case 'high': return 'text-orange-600 bg-orange-100';
+      case 'normal': return 'text-blue-600 bg-blue-100';
+      case 'low': return 'text-gray-600 bg-gray-100';
+      default: return 'text-gray-600 bg-gray-100';
+    }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-IN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   if (isLoading) {
     return (
       <div className="page-container">
-        <div className="text-center">
+        <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
           <p className="mt-4 text-neutral-600">Loading RFQs...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="page-container">
-      {/* Navigation */}
-      <nav className="bg-white shadow-lg">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">B</div>
-                <div>
-                  <div className="font-bold text-xl">Bell24h</div>
-                  <div className="text-xs text-neutral-600">Verified B2B Platform</div>
-                </div>
-              </div>
-              <div className="hidden md:flex items-center gap-6">
-                <Link href="/dashboard" className="text-neutral-700 hover:text-primary-600">Dashboard</Link>
-                <Link href="/rfq" className="text-indigo-600 font-semibold">My RFQs</Link>
-                <Link href="/rfq/new" className="text-neutral-700 hover:text-primary-600">New RFQ</Link>
-                <Link href="#" className="text-neutral-700 hover:text-primary-600">Suppliers</Link>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link href="/rfq/new" className="px-4 py-2 bg-indigo-600 hover:bg-primary-700 text-white rounded-lg">
-                + New RFQ
-              </Link>
-            </div>
-          </div>
+      <div className="page-content">
+        {/* Header */}
+        <div className="page-header">
+          <h1 className="page-title">RFQ Management</h1>
+          <p className="page-subtitle">
+            Manage your Request for Quotations and track supplier responses
+          </p>
         </div>
-      </nav>
 
-      <main className="page-content">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-4xl font-bold text-neutral-900 mb-2">My RFQs</h1>
-              <p className="page-subtitle">Manage your requests for quotations</p>
-            </div>
-            <Link
-              href="/rfq/new"
-              className="px-6 py-3 bg-indigo-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
-            >
-              + Create New RFQ
-            </Link>
-          </div>
-
-          {/* Filter Tabs */}
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <div className="flex space-x-1 bg-neutral-100 p-1 rounded-lg">
-              {[
-                { key: 'all', label: 'All RFQs', count: rfqs.length },
-                { key: 'active', label: 'Active', count: rfqs.filter((r: any) => r.status === 'active').length },
-                { key: 'completed', label: 'Completed', count: rfqs.filter((r: any) => r.status === 'completed').length }
-              ].map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => setFilter(tab.key)}
-                  className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    filter === tab.key
-                      ? 'bg-white text-indigo-600 shadow-sm'
-                      : 'text-neutral-600 hover:text-neutral-900'
-                  }`}
-                >
-                  {tab.label} ({tab.count})
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* RFQ List */}
-          {filteredRfqs.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-lg p-12 text-center">
-              <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        {/* Filters and Actions */}
+        <div className="card mb-8">
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+            <div className="flex flex-wrap gap-4">
+              {/* Search */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search RFQs..."
+                  value={filters.search}
+                  onChange={(e) => handleFilterChange('search', e.target.value)}
+                  className="form-input pl-10"
+                />
+                <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-neutral-900 mb-2">
-                {filter === 'all' ? 'No RFQs yet' : `No ${filter} RFQs`}
-              </h3>
-              <p className="text-neutral-600 mb-6">
-                {filter === 'all' 
-                  ? 'Create your first RFQ to get started with Bell24h'
-                  : `You don't have any ${filter} RFQs at the moment`
-                }
-              </p>
-              <Link
-                href="/rfq/new"
-                className="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-primary-700 text-white rounded-lg"
+
+              {/* Category Filter */}
+              <select
+                value={filters.category}
+                onChange={(e) => handleFilterChange('category', e.target.value)}
+                className="form-input"
               >
-                Create Your First RFQ
-              </Link>
+                <option value="all">All Categories</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="textiles">Textiles</option>
+                <option value="electronics">Electronics</option>
+                <option value="construction">Construction</option>
+                <option value="chemicals">Chemicals</option>
+                <option value="machinery">Machinery</option>
+                <option value="packaging">Packaging</option>
+                <option value="automotive">Automotive</option>
+              </select>
+
+              {/* Status Filter */}
+              <select
+                value={filters.status}
+                onChange={(e) => handleFilterChange('status', e.target.value)}
+                className="form-input"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="quoted">Quoted</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+
+              {/* Sort */}
+              <select
+                value={filters.sortBy}
+                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+                className="form-input"
+              >
+                <option value="createdAt">Sort by Date</option>
+                <option value="priority">Sort by Priority</option>
+                <option value="estimatedValue">Sort by Value</option>
+                <option value="quotes">Sort by Quotes</option>
+              </select>
             </div>
-          ) : (
-            <div className="space-y-6">
-              {filteredRfqs.map((rfq: any) => (
-                <div key={rfq.id} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      <h3 className="feature-title text-neutral-900 mb-2">{rfq.title}</h3>
-                      <p className="text-neutral-600 mb-3">{rfq.description}</p>
-                      <div className="flex items-center gap-4 text-sm text-neutral-500">
-                        <span className="flex items-center gap-1">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                          </svg>
-                          {rfq.category}
+
+            <Link
+              href="/rfq/create"
+              className="btn-primary flex items-center gap-2"
+            >
+              <span>+</span>
+              <span>Create RFQ</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* RFQ List */}
+        <div className="space-y-4">
+          {rfqs.length > 0 ? (
+            rfqs.map((rfq) => (
+              <div key={rfq.id} className="card card-hover">
+                <div className="flex flex-col lg:flex-row gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-lg font-semibold text-neutral-900">{rfq.title}</h3>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(rfq.status)}`}>
+                          {rfq.status.charAt(0).toUpperCase() + rfq.status.slice(1)}
                         </span>
-                        <span className="flex items-center gap-1">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-                          </svg>
-                          Qty: {rfq.quantity}
-                        </span>
-                        {rfq.budget && (
-                          <span className="flex items-center gap-1">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                            </svg>
-                            ₹{rfq.budget.toLocaleString()}
-                          </span>
-                        )}
-                        <span className="flex items-center gap-1">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          {new Date(rfq.createdAt).toLocaleDateString()}
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(rfq.urgency)}`}>
+                          {rfq.urgency.charAt(0).toUpperCase() + rfq.urgency.slice(1)}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(rfq.status)}`}>
-                        {rfq.status}
-                      </span>
-                      {rfq.quotes > 0 && (
-                        <span className="px-3 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
-                          {rfq.quotes} quotes
+
+                    <p className="text-neutral-600 mb-3">{rfq.description}</p>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <span className="text-neutral-500">Quantity:</span>
+                        <span className="ml-1 font-semibold">{rfq.quantity} {rfq.unit}</span>
+                      </div>
+                      <div>
+                        <span className="text-neutral-500">Budget:</span>
+                        <span className="ml-1 font-semibold">
+                          {formatCurrency(parseInt(rfq.minBudget))} - {formatCurrency(parseInt(rfq.maxBudget))}
                         </span>
-                      )}
+                      </div>
+                      <div>
+                        <span className="text-neutral-500">Timeline:</span>
+                        <span className="ml-1 font-semibold">{rfq.timeline}</span>
+                      </div>
+                      <div>
+                        <span className="text-neutral-500">Location:</span>
+                        <span className="ml-1 font-semibold">{rfq.location}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {rfq.tags.map((tag, index) => (
+                        <span key={index} className="bg-neutral-100 text-neutral-700 text-xs px-2 py-1 rounded">
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-neutral-500">
-                      Created {new Date(rfq.createdAt).toLocaleDateString()}
+
+                  <div className="lg:w-48 flex flex-col justify-between">
+                    <div className="text-sm text-neutral-500 mb-2">
+                      <div>Created: {formatDate(rfq.createdAt)}</div>
+                      <div>Views: {rfq.views}</div>
+                      <div>Quotes: {rfq.quotes}</div>
+                      <div>Suppliers: {rfq.suppliers}</div>
                     </div>
+
                     <div className="flex gap-2">
                       <Link
                         href={`/rfq/${rfq.id}`}
-                        className="px-4 py-2 text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors"
+                        className="btn-outline text-sm px-4 py-2 flex-1 text-center"
                       >
                         View Details
                       </Link>
-                      {rfq.status === 'active' && (
-                        <button className="btn-ghost">
-                          Edit
-                        </button>
-                      )}
+                      <Link
+                        href={`/rfq/${rfq.id}/quotes`}
+                        className="btn-primary text-sm px-4 py-2 flex-1 text-center"
+                      >
+                        View Quotes
+                      </Link>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📋</div>
+              <h3 className="text-xl font-semibold text-neutral-900 mb-2">No RFQs Found</h3>
+              <p className="text-neutral-600 mb-6">Create your first RFQ to get started</p>
+              <Link href="/rfq/create" className="btn-primary">
+                Create RFQ
+              </Link>
             </div>
           )}
         </div>
-      </main>
-    </div>
-  )
-}
 
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-8">
+            <button
+              onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+              disabled={!pagination.hasPrevPage}
+              className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            
+            <span className="px-4 py-2 text-sm text-neutral-600">
+              Page {pagination.page} of {pagination.totalPages}
+            </span>
+            
+            <button
+              onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+              disabled={!pagination.hasNextPage}
+              className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
