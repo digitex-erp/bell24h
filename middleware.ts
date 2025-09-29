@@ -2,8 +2,6 @@
 // Combines security, rate limiting, caching, and performance optimizations
 
 import { NextRequest, NextResponse } from 'next/server';
-import { securityHeaders, apiSecurityMiddleware, logSecurityEvent } from './lib/security';
-import { rateLimiters } from './lib/rate-limit';
 
 // Middleware configuration
 const middlewareConfig = {
@@ -53,8 +51,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Security headers for all requests
-  let response = securityHeaders(request);
+  // Create response with security headers
+  let response = NextResponse.next();
+  
+  // Add security headers
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   
   // API route specific handling
   if (pathname.startsWith('/api/')) {
@@ -80,7 +85,9 @@ function handleAPIRoute(request: NextRequest, response: NextResponse): NextRespo
   const { pathname } = request.nextUrl;
   
   // Add API-specific security headers
-  response = apiSecurityMiddleware(request);
+  response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  response.headers.set('Pragma', 'no-cache');
+  response.headers.set('Expires', '0');
   
   // Apply rate limiting based on route
   const rateLimitType = middlewareConfig.rateLimitedRoutes[pathname as keyof typeof middlewareConfig.rateLimitedRoutes];
@@ -101,9 +108,6 @@ function handleAPIRoute(request: NextRequest, response: NextResponse): NextRespo
     return new NextResponse(null, { status: 200, headers: response.headers });
   }
   
-  // Log API access
-  logSecurityEvent('API_ACCESS', { pathname, method: request.method }, request);
-  
   return response;
 }
 
@@ -116,13 +120,10 @@ function handleAdminRoute(request: NextRequest, response: NextResponse): NextRes
   
   // Check for admin authentication (this would be implemented with actual auth)
   const authHeader = request.headers.get('authorization');
-  if (!authHeader && !pathname.includes('/login')) {
+  if (!authHeader && !request.nextUrl.pathname.includes('/login')) {
     // Redirect to admin login
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }
-  
-  // Log admin access
-  logSecurityEvent('ADMIN_ACCESS', { pathname }, request);
   
   return response;
 }
@@ -135,7 +136,7 @@ function addPerformanceHeaders(request: NextRequest, response: NextResponse): Ne
   response.headers.set('X-Permitted-Cross-Domain-Policies', 'none');
   
   // Add resource hints for critical resources
-  if (pathname === '/') {
+  if (request.nextUrl.pathname === '/') {
     response.headers.set('Link', '</fonts/inter.woff2>; rel=preload; as=font; type=font/woff2; crossorigin');
   }
   
