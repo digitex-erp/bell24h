@@ -190,6 +190,11 @@ export default function AdminCRMDashboard() {
               <p className="text-gray-600">Manage customer relationships and interactions across the platform</p>
             </div>
             <div className="flex items-center space-x-4">
+              <a href="/admin/dashboard" className="text-gray-600 hover:text-gray-900 text-sm">← Dashboard</a>
+              <a href="/admin/n8n" className="text-gray-600 hover:text-gray-900 text-sm">N8N</a>
+              <a href="/admin/analytics" className="text-gray-600 hover:text-gray-900 text-sm">Analytics</a>
+            </div>
+            <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowAddCustomer(true)}
                 className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

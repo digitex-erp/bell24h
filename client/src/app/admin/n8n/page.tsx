@@ -25,6 +25,7 @@ import {
   Globe,
   Shield,
   RefreshCw,
+  XCircle,
 } from 'lucide-react';
 
 // Mock N8N data
@@ -168,6 +169,19 @@ export default function AdminN8NDashboard() {
   const [executions, setExecutions] = useState(mockN8NData.executions);
   const [selectedWorkflow, setSelectedWorkflow] = useState(null);
   const [showCreateWorkflow, setShowCreateWorkflow] = useState(false);
+  const [showApiKeys, setShowApiKeys] = useState(false);
+  const [apiKeys, setApiKeys] = useState({
+    razorpay: { key: 'rzp_test_1234567890', secret: 'secret_1234567890', status: 'active' },
+    shiprocket: { key: 'ship_1234567890', secret: 'secret_1234567890', status: 'active' },
+    slack: { key: 'xoxb-1234567890-1234567890', secret: '', status: 'active' },
+    whatsapp: { key: 'whatsapp_1234567890', secret: 'secret_1234567890', status: 'active' },
+    sendgrid: { key: 'SG.1234567890', secret: 'secret_1234567890', status: 'active' },
+    aws: { key: 'AKIA1234567890', secret: 'secret_1234567890', status: 'active' },
+    mysql: { key: 'mysql_1234567890', secret: 'secret_1234567890', status: 'active' },
+    googleSheets: { key: 'google_1234567890', secret: 'secret_1234567890', status: 'active' },
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -205,6 +219,21 @@ export default function AdminN8NDashboard() {
     });
   };
 
+  // Simulate live data updates
+  useEffect(() => {
+    const updateInterval = setInterval(() => {
+      setWorkflows(prev => prev.map(workflow => ({
+        ...workflow,
+        executions: workflow.executions + Math.floor(Math.random() * 3),
+        lastRun: new Date().toISOString(),
+        successRate: Math.max(80, Math.min(100, workflow.successRate + (Math.random() - 0.5) * 2)),
+      })));
+      setLastUpdated(new Date());
+    }, 10000);
+
+    return () => clearInterval(updateInterval);
+  }, []);
+
   const handleWorkflowAction = (workflowId: number, action: string) => {
     setWorkflows(prev => prev.map(workflow => {
       if (workflow.id === workflowId) {
@@ -214,6 +243,41 @@ export default function AdminN8NDashboard() {
         };
       }
       return workflow;
+    }));
+  };
+
+  const handleApiKeyUpdate = (service: string, field: 'key' | 'secret', value: string) => {
+    setApiKeys(prev => ({
+      ...prev,
+      [service]: {
+        ...prev[service],
+        [field]: value
+      }
+    }));
+  };
+
+  const testApiConnection = (service: string) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setApiKeys(prev => ({
+        ...prev,
+        [service]: {
+          ...prev[service],
+          status: Math.random() > 0.2 ? 'active' : 'error'
+        }
+      }));
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  const generateNewApiKey = (service: string) => {
+    const newKey = `${service}_${Math.random().toString(36).substr(2, 9)}`;
+    setApiKeys(prev => ({
+      ...prev,
+      [service]: {
+        ...prev[service],
+        key: newKey
+      }
     }));
   };
 
@@ -231,6 +295,18 @@ export default function AdminN8NDashboard() {
               <p className="text-gray-600">Platform-wide workflow automation and integration management</p>
             </div>
             <div className="flex items-center space-x-4">
+              <a href="/admin/dashboard" className="text-gray-600 hover:text-gray-900 text-sm">← Dashboard</a>
+              <a href="/admin/crm" className="text-gray-600 hover:text-gray-900 text-sm">CRM</a>
+              <a href="/admin/analytics" className="text-gray-600 hover:text-gray-900 text-sm">Analytics</a>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setShowApiKeys(true)}
+                className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                API Keys
+              </button>
               <button
                 onClick={() => setShowCreateWorkflow(true)}
                 className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -467,6 +543,97 @@ export default function AdminN8NDashboard() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* API Keys Management Modal */}
+      {showApiKeys && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">API Keys Management</h3>
+                <button
+                  onClick={() => setShowApiKeys(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <XCircle className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="space-y-6">
+                {Object.entries(apiKeys).map(([service, config]) => (
+                  <div key={service} className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-lg font-medium text-gray-900 capitalize">{service.replace(/([A-Z])/g, ' $1')}</h4>
+                      <div className="flex items-center space-x-2">
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          config.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {config.status}
+                        </span>
+                        <button
+                          onClick={() => testApiConnection(service)}
+                          disabled={isLoading}
+                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50"
+                        >
+                          Test
+                        </button>
+                        <button
+                          onClick={() => generateNewApiKey(service)}
+                          className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                        >
+                          Generate New
+                        </button>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">API Key</label>
+                        <input
+                          type="text"
+                          value={config.key}
+                          onChange={(e) => handleApiKeyUpdate(service, 'key', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Secret Key</label>
+                        <input
+                          type="password"
+                          value={config.secret}
+                          onChange={(e) => handleApiKeyUpdate(service, 'secret', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 flex justify-end space-x-4">
+                <button
+                  onClick={() => setShowApiKeys(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => setShowApiKeys(false)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Last Updated */}
+      <div className="mt-6 text-center">
+        <p className="text-sm text-gray-500">
+          Last updated: {lastUpdated.toLocaleTimeString()} • Auto-refresh every 10 seconds
+        </p>
       </div>
     </div>
   );
