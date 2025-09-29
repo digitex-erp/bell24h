@@ -370,7 +370,7 @@ export default function AdminDashboard() {
           />
           <AdminKPICard 
             title="Active RFQs" 
-            value={liveData.kpis.activeRFQs} 
+            value={liveData.kpis.activeRFQs.toString()} 
             subValue={`${liveData.kpis.completedRFQs} completed`}
             icon={FileText}
             color="purple"
