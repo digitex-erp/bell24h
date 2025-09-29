@@ -179,7 +179,7 @@ function generateCertifications(category: string) {
     'default': ['ISO 9001:2015', 'Quality Certified', 'Industry Standard']
   };
 
-  const certs = certifications[category] || certifications['default'];
+  const certs = certifications[category as keyof typeof certifications] || certifications['default'];
   return certs.slice(0, Math.floor(Math.random() * 3) + 1);
 }
 
