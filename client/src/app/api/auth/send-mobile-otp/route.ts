@@ -128,8 +128,8 @@ async function sendOTPviaMSG91(phoneNumber: string, otp: string) {
       mobiles: formattedNumber,
       message: message,
       sender: senderId,
-      route: 4, // Transactional route
-      country: 91 // India country code
+      route: '4', // Transactional route
+      country: '91' // India country code
     };
 
     const response = await fetch('https://api.msg91.com/api/sendhttp.php', {
