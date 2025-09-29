@@ -69,7 +69,7 @@ async function validateClaimData(claimData: any) {
 
 // Process claim with early user benefits
 async function processClaimWithBenefits(companyId: string, claimData: any) {
-  console.log(`💰 Processing claim with early user benefits for ${companyData.companyName}`);
+  console.log(`💰 Processing claim with early user benefits for ${claimData.companyName}`);
 
   const claimId = `claim_${Date.now()}_${companyId}`;
   
