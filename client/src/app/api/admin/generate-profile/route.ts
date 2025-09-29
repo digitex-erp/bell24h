@@ -140,7 +140,7 @@ function generateDescription(scrapedData: any) {
     'default': `${name} is a well-established company in the ${category} sector, known for quality products and excellent customer service. We have built a strong reputation through years of dedicated service and innovation.`
   };
 
-  return descriptions[category] || descriptions['default'];
+  return descriptions[category as keyof typeof descriptions] || descriptions['default'];
 }
 
 // Generate established year
