@@ -192,7 +192,7 @@ function generateProducts(category: string) {
     'default': ['Quality Products', 'Custom Solutions', 'Industrial Goods']
   };
 
-  const prods = products[category] || products['default'];
+  const prods = products[category as keyof typeof products] || products['default'];
   return prods.slice(0, Math.floor(Math.random() * 3) + 2);
 }
 
