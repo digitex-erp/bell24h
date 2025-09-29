@@ -103,7 +103,10 @@ const AdminKPICard = ({ title, value, subValue, trend, icon: Icon, color = 'blue
 );
 
 // System Health Panel
-const SystemHealthPanel = ({ insights, alerts = [] }) => (
+const SystemHealthPanel = ({ insights, alerts = [] }: {
+  insights: any;
+  alerts?: any[];
+}) => (
   <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border border-green-200">
     <div className="flex items-center justify-between mb-4">
       <h3 className="text-lg font-semibold text-gray-900 flex items-center">
