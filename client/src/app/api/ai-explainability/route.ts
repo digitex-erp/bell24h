@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     }));
 
     // Sort by match score (highest first)
-    mockExplanations.sort((a, b) => b.match_score - a.match_score);
+    mockExplanations.sort((a: any, b: any) => b.match_score - a.match_score);
 
     return NextResponse.json({
       success: true,
