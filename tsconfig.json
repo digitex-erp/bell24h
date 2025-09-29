@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "es5",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "es6"
     ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -27,6 +26,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@/generated/*": [
+        "./src/generated/*"
       ]
     }
   },
@@ -37,10 +39,6 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "BELL24H_BACKUP_*",
-    "BELL24H-WORKING-SITE-BACKUP-*",
-    "**/backup/**",
-    "**/backups/**"
+    "node_modules"
   ]
 }

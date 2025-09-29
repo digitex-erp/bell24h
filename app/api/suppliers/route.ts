@@ -1,127 +1,169 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Force dynamic rendering
-export const dynamic = 'force-dynamic';
+// Mock data for suppliers
+const mockSuppliers = [
+  {
+    id: '1',
+    company: 'ABC Steel Works',
+    name: 'John Doe',
+    email: 'john@abcsteel.com',
+    phone: '+91-9876543210',
+    location: 'Mumbai, Maharashtra',
+    category: 'Steel & Metals',
+    verified: true,
+    rating: 4.5,
+    description: 'Leading steel manufacturer with 20+ years experience',
+    gstNumber: '27ABCDE1234F1Z5',
+    website: 'https://abcsteel.com',
+    createdAt: '2024-01-15T10:30:00Z',
+    updatedAt: '2024-01-15T10:30:00Z'
+  },
+  {
+    id: '2',
+    company: 'TechText Solutions',
+    name: 'Priya Sharma',
+    email: 'priya@techtext.com',
+    phone: '+91-9876543211',
+    location: 'Delhi, NCR',
+    category: 'Textiles',
+    verified: true,
+    rating: 4.8,
+    description: 'Premium textile manufacturer and exporter',
+    gstNumber: '07FGHIJ5678K9L2',
+    website: 'https://techtext.com',
+    createdAt: '2024-01-16T09:15:00Z',
+    updatedAt: '2024-01-16T09:15:00Z'
+  },
+  {
+    id: '3',
+    company: 'ElectroMax India',
+    name: 'Rajesh Kumar',
+    email: 'rajesh@electromax.com',
+    phone: '+91-9876543212',
+    location: 'Bangalore, Karnataka',
+    category: 'Electronics',
+    verified: true,
+    rating: 4.3,
+    description: 'Electronic components and devices manufacturer',
+    gstNumber: '29MNOPQ9012R3S4',
+    website: 'https://electromax.com',
+    createdAt: '2024-01-17T14:20:00Z',
+    updatedAt: '2024-01-17T14:20:00Z'
+  },
+  {
+    id: '4',
+    company: 'Machinery Hub',
+    name: 'Amit Patel',
+    email: 'amit@machineryhub.com',
+    phone: '+91-9876543213',
+    location: 'Pune, Maharashtra',
+    category: 'Machinery',
+    verified: true,
+    rating: 4.6,
+    description: 'Industrial machinery and equipment supplier',
+    gstNumber: '27TUVWX3456Y7Z8',
+    website: 'https://machineryhub.com',
+    createdAt: '2024-01-18T11:45:00Z',
+    updatedAt: '2024-01-18T11:45:00Z'
+  },
+  {
+    id: '5',
+    company: 'ChemPro Industries',
+    name: 'Sneha Reddy',
+    email: 'sneha@chempro.com',
+    phone: '+91-9876543214',
+    location: 'Chennai, Tamil Nadu',
+    category: 'Chemicals',
+    verified: true,
+    rating: 4.4,
+    description: 'Chemical products and solutions provider',
+    gstNumber: '33ABCDE7890F1G2',
+    website: 'https://chempro.com',
+    createdAt: '2024-01-19T16:30:00Z',
+    updatedAt: '2024-01-19T16:30:00Z'
+  },
+  {
+    id: '6',
+    company: 'FoodCorp India',
+    name: 'Vikram Singh',
+    email: 'vikram@foodcorp.com',
+    phone: '+91-9876543215',
+    location: 'Hyderabad, Telangana',
+    category: 'Food & Beverages',
+    verified: true,
+    rating: 4.7,
+    description: 'Premium food products and packaging solutions',
+    gstNumber: '36HIJKLM1234N5O6',
+    website: 'https://foodcorp.com',
+    createdAt: '2024-01-20T08:15:00Z',
+    updatedAt: '2024-01-20T08:15:00Z'
+  }
+];
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '20');
-    const category = searchParams.get('category');
-    const search = searchParams.get('search');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const search = searchParams.get('search') || '';
+    const category = searchParams.get('category') || '';
+    const location = searchParams.get('location') || '';
     const verified = searchParams.get('verified');
 
-    // Mock suppliers data
-    const mockSuppliers = [
-      {
-        id: '1',
-        name: 'Rajesh Kumar',
-        company: 'Tech Solutions India',
-        email: 'rajesh@techsolutions.com',
-        phone: '+91-9876543210',
-        location: 'Mumbai, Maharashtra',
-        verified: true,
-        rating: 4.5,
-        products: ['LED Bulbs', 'Electrical Components', 'Power Supplies'],
-        category: 'electronics',
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: '2',
-        name: 'Priya Sharma',
-        company: 'Steel Works Ltd',
-        email: 'priya@steelworks.com',
-        phone: '+91-9876543211',
-        location: 'Delhi, NCR',
-        verified: true,
-        rating: 4.2,
-        products: ['Steel Pipes', 'Metal Sheets', 'Construction Materials'],
-        category: 'steel',
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: '3',
-        name: 'Amit Patel',
-        company: 'Textile Mills',
-        email: 'amit@textilemills.com',
-        phone: '+91-9876543212',
-        location: 'Ahmedabad, Gujarat',
-        verified: false,
-        rating: 3.8,
-        products: ['Cotton Fabric', 'Silk Materials', 'Wool Products'],
-        category: 'textiles',
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: '4',
-        name: 'Sunita Singh',
-        company: 'Machinery Hub',
-        email: 'sunita@machineryhub.com',
-        phone: '+91-9876543213',
-        location: 'Pune, Maharashtra',
-        verified: true,
-        rating: 4.7,
-        products: ['Industrial Machines', 'Tools & Equipment', 'Spare Parts'],
-        category: 'machinery',
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: '5',
-        name: 'Vikram Reddy',
-        company: 'Chemical Industries',
-        email: 'vikram@chemicalind.com',
-        phone: '+91-9876543214',
-        location: 'Chennai, Tamil Nadu',
-        verified: true,
-        rating: 4.3,
-        products: ['Industrial Chemicals', 'Solvents', 'Raw Materials'],
-        category: 'chemicals',
-        createdAt: new Date().toISOString()
-      }
-    ];
+    let filteredSuppliers = [...mockSuppliers];
 
-    // Filter suppliers based on search criteria
-    let filteredSuppliers = mockSuppliers;
-
-    if (category && category !== 'all') {
-      filteredSuppliers = filteredSuppliers.filter(s => s.category === category);
-    }
-
-    if (verified === 'true') {
-      filteredSuppliers = filteredSuppliers.filter(s => s.verified === true);
-    }
-
+    // Apply filters
     if (search) {
-      const searchLower = search.toLowerCase();
-      filteredSuppliers = filteredSuppliers.filter(s => 
-        s.name.toLowerCase().includes(searchLower) ||
-        s.company.toLowerCase().includes(searchLower) ||
-        s.location.toLowerCase().includes(searchLower) ||
-        s.products.some(p => p.toLowerCase().includes(searchLower))
+      filteredSuppliers = filteredSuppliers.filter(supplier =>
+        supplier.company.toLowerCase().includes(search.toLowerCase()) ||
+        supplier.name.toLowerCase().includes(search.toLowerCase()) ||
+        supplier.description.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Apply pagination
-    const skip = (page - 1) * limit;
-    const paginatedSuppliers = filteredSuppliers.slice(skip, skip + limit);
+    if (category && category !== 'all') {
+      filteredSuppliers = filteredSuppliers.filter(supplier =>
+        supplier.category.toLowerCase() === category.toLowerCase()
+      );
+    }
 
-    const response = {
-      suppliers: paginatedSuppliers,
+    if (location) {
+      filteredSuppliers = filteredSuppliers.filter(supplier =>
+        supplier.location.toLowerCase().includes(location.toLowerCase())
+      );
+    }
+
+    if (verified === 'true') {
+      filteredSuppliers = filteredSuppliers.filter(supplier => supplier.verified);
+    }
+
+    // Calculate pagination
+    const total = filteredSuppliers.length;
+    const totalPages = Math.ceil(total / limit);
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const suppliers = filteredSuppliers.slice(startIndex, endIndex);
+
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    return NextResponse.json({
+      suppliers,
       pagination: {
         page,
         limit,
-        total: filteredSuppliers.length,
-        pages: Math.ceil(filteredSuppliers.length / limit)
+        total,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1
       }
-    };
+    });
 
-    return NextResponse.json(response);
-    
   } catch (error) {
-    console.error('Error fetching suppliers:', error);
-    return NextResponse.json({ 
-      error: 'Failed to fetch suppliers' 
-    }, { status: 500 });
+    console.error('Suppliers API error:', error);
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

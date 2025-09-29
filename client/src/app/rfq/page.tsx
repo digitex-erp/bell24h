@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Send } from 'lucide-react';
+import PageHeader from '@/components/common/PageHeader';
 import { useEffect, useState } from 'react';
 
 export default function RFQPage() {
@@ -86,14 +88,15 @@ export default function RFQPage() {
 
   return (
     <div className='min-h-screen bg-gray-50'>
+      <PageHeader
+        title="BELL24H Request for Quotation"
+        subtitle="Create and manage your RFQs to get competitive quotes from verified suppliers"
+        showBackButton={true}
+        showHomeButton={true}
+        showDashboardButton={true}
+      />
+
       <div className='max-w-7xl mx-auto p-6'>
-        {/* Header */}
-        <div className='mb-8'>
-          <h1 className='text-3xl font-bold text-gray-900'>BELL24H Request for Quotation</h1>
-          <p className='text-gray-600 mt-2'>
-            Create and manage your RFQs to get competitive quotes from verified suppliers
-          </p>
-        </div>
 
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Create RFQ Form */}

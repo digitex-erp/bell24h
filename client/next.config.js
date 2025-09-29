@@ -25,6 +25,9 @@ const nextConfig = {
     serverComponentsExternalPackages: ['ioredis', '@prisma/client'],
   },
 
+  // Timeout settings for production build
+  staticPageGenerationTimeout: 180,
+
   // Environment variables for build
   env: {
     REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
@@ -68,6 +71,7 @@ const nextConfig = {
       }
     ]
   },
+
 
 }
 

@@ -4,6 +4,7 @@ import { generateRFQReport } from '@/lib/napkin-pdf';
 import { calculateTrafficPricing, getPricingDisplay } from '@/lib/traffic-pricing';
 import { Brain, CheckCircle, FileText, Mic, Star, TrendingUp, Users } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import PageHeader from '@/components/common/PageHeader';
 import React, { useEffect, useState, Suspense } from 'react';
 
 interface RFQForm {
@@ -281,14 +282,15 @@ function RFQCreationContent() {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
+      <PageHeader
+        title="Create RFQ"
+        subtitle="AI-powered Request for Quotation with smart supplier matching"
+        showBackButton={true}
+        showHomeButton={true}
+        showDashboardButton={true}
+      />
+
       <div className='container mx-auto px-4 py-8'>
-        {/* Header */}
-        <div className='mb-8'>
-          <h1 className='text-4xl font-bold text-gray-900 mb-2'>Create RFQ</h1>
-          <p className='text-xl text-gray-600'>
-            AI-powered Request for Quotation with smart supplier matching
-          </p>
-        </div>
 
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Main Form */}

@@ -1,73 +1,84 @@
 {
   "mcpServers": {
-    "ultra-fast-generator": {
+    "hybrid-generator": {
       "command": "node",
       "args": [
-        "mcp-ultra-fast-simple.js"
+        "scripts/hybrid-generator.js"
       ],
-      "cwd": "/workspace",
-      "description": "Ultra-fast page generation (2ms per page)",
+      "cwd": "${workspaceFolder}",
+      "description": "Hybrid code generation (Spec Kit + Custom Templates)",
       "features": [
-        "Single page generation",
-        "Multiple pages generation",
-        "All pages generation",
-        "Sub-millisecond performance"
+        "API client generation from OpenAPI specs",
+        "Custom page templates with API integration",
+        "TypeScript type safety",
+        "Pagination and search functionality",
+        "Error handling and loading states"
       ]
     },
-    "vibe-coding": {
-      "command": "node",
+    "api-generator": {
+      "command": "npx",
       "args": [
-        "mcp-vibe-coding-simple.js"
+        "@openapitools/openapi-generator-cli",
+        "generate",
+        "-i",
+        "api-spec.yaml",
+        "-g",
+        "typescript-axios",
+        "-o",
+        "src/generated/api"
       ],
-      "cwd": "/workspace",
-      "description": "AI-powered natural language coding (3ms response)",
+      "cwd": "${workspaceFolder}",
+      "description": "Generate API client from OpenAPI specification",
       "features": [
-        "Natural language processing",
-        "AI vibe recognition",
-        "Template matching",
-        "Multi-vibe sessions"
+        "TypeScript client generation",
+        "Axios HTTP client",
+        "Type-safe API calls",
+        "Request/Response validation",
+        "Error handling"
       ]
     },
-    "github-ultra": {
+    "page-generator": {
       "command": "node",
       "args": [
-        "mcp-github-ultra-simple.js"
+        "scripts/hybrid-generator.js",
+        "page"
       ],
-      "cwd": "/workspace",
-      "description": "GitHub integration with auto-deployment (5ms generation)",
+      "cwd": "${workspaceFolder}",
+      "description": "Generate individual pages with API integration",
       "features": [
-        "Direct GitHub push",
-        "Automatic git operations",
-        "Version control",
-        "Production deployment"
+        "Suppliers page with search and pagination",
+        "Products page with filtering",
+        "RFQ page with status management",
+        "Real API integration",
+        "TypeScript support"
       ]
     }
   },
   "mcpQuickCommands": {
-    "generate-page": "node mcp-ultra-fast-simple.js page",
-    "generate-multiple": "node mcp-ultra-fast-simple.js multiple",
-    "generate-all": "node mcp-ultra-fast-simple.js all",
-    "vibe-code": "node mcp-vibe-coding-simple.js vibe",
-    "github-push": "node mcp-github-ultra-simple.js page"
+    "generate-page": "node scripts/hybrid-generator.js page",
+    "generate-all": "node scripts/hybrid-generator.js all",
+    "generate-api": "npm run gen:api",
+    "setup-hybrid": "node scripts/setup-hybrid.js"
   },
   "mcpTemplates": {
     "available": [
       "suppliers",
-      "products",
-      "rfq",
-      "dashboard",
-      "admin",
-      "profile"
+      "products", 
+      "rfq"
     ],
     "features": [
-      "search",
-      "filter",
-      "responsive",
       "api-integration",
+      "search-functionality",
+      "pagination",
+      "filtering",
+      "responsive-design",
       "loading-states",
-      "accessibility"
+      "error-handling",
+      "typescript-support"
     ]
   },
   "mcpAutoStart": true,
-  "mcpPerformanceMode": true
+  "mcpPerformanceMode": true,
+  "mcpLogLevel": "info",
+  "mcpTimeout": 10000
 }

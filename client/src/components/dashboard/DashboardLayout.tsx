@@ -16,6 +16,8 @@ import {
   Truck,
   Video,
   Wallet,
+  Users,
+  Zap,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -24,6 +26,9 @@ import { useState } from 'react';
 const navigationItems = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Categories', href: '/categories', icon: Square }, // PRESERVE
+  { name: 'CRM Management', href: '/dashboard/crm', icon: Users },
+  { name: 'N8N Automation', href: '/dashboard/n8n', icon: Zap },
+  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
   { name: 'Wallet & Payments', href: '/dashboard/wallet', icon: Wallet },
   { name: 'RFQ Management', href: '/dashboard/rfq', icon: FileText },
   { name: 'AI Matching', href: '/dashboard/ai-matching', icon: Brain },

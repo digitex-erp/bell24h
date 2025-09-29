@@ -1,103 +1,75 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Mock OTP storage (in production, use Redis or database)
-const otpStorage = new Map<string, { otp: string, timestamp: number }>();
-
-// Mock user database (in production, use real database)
-const users = new Map<string, any>([
-  ['9876543210', {
-    id: '1',
-    mobile: '9876543210',
-    name: 'Test User',
-    companyName: 'Test Company',
-    businessType: 'manufacturer',
-    verified: true
-  }]
-]);
+// In-memory storage for OTPs (in production, use Redis or database)
+const otpStorage = new Map<string, { otp: string; expires: number }>();
 
 export async function POST(request: NextRequest) {
   try {
-    const { mobile, otp } = await request.json();
+    const { phone, otp } = await request.json();
 
-    // Validate inputs
-    if (!mobile || !otp) {
+    if (!phone || !otp) {
       return NextResponse.json(
-        { success: false, error: 'Mobile number and OTP are required' },
+        { success: false, message: 'Phone number and OTP are required' },
         { status: 400 }
       );
     }
 
-    if (!/^\d{10}$/.test(mobile)) {
+    // Get stored OTP
+    const storedData = otpStorage.get(phone);
+
+    if (!storedData) {
       return NextResponse.json(
-        { success: false, error: 'Invalid mobile number format' },
+        { success: false, message: 'OTP not found. Please request a new OTP.' },
         { status: 400 }
       );
     }
 
-    if (!/^\d{6}$/.test(otp)) {
+    // Check if OTP has expired
+    if (Date.now() > storedData.expires) {
+      otpStorage.delete(phone);
       return NextResponse.json(
-        { success: false, error: 'Invalid OTP format' },
-        { status: 400 }
-      );
-    }
-
-    // Check if OTP exists and is valid
-    const storedOtp = otpStorage.get(mobile);
-    
-    if (!storedOtp) {
-      return NextResponse.json(
-        { success: false, error: 'OTP not found. Please request a new OTP.' },
-        { status: 400 }
-      );
-    }
-
-    // Check if OTP is expired (5 minutes)
-    const isExpired = Date.now() - storedOtp.timestamp > 5 * 60 * 1000;
-    if (isExpired) {
-      otpStorage.delete(mobile);
-      return NextResponse.json(
-        { success: false, error: 'OTP has expired. Please request a new OTP.' },
+        { success: false, message: 'OTP has expired. Please request a new OTP.' },
         { status: 400 }
       );
     }
 
     // Verify OTP
-    if (storedOtp.otp !== otp) {
+    if (storedData.otp !== otp) {
       return NextResponse.json(
-        { success: false, error: 'Invalid OTP. Please try again.' },
+        { success: false, message: 'Invalid OTP' },
         { status: 400 }
       );
     }
 
-    // OTP is valid - remove it
-    otpStorage.delete(mobile);
+    // OTP is valid, remove it from storage
+    otpStorage.delete(phone);
 
-    // Check if user exists
-    const existingUser = users.get(mobile);
-    
-    if (existingUser) {
-      // Existing user - login successful
-      return NextResponse.json({
-        success: true,
-        message: 'Login successful',
-        isNewUser: false,
-        user: existingUser,
-        redirectUrl: '/dashboard'
-      });
-    } else {
-      // New user - need registration
-      return NextResponse.json({
-        success: true,
-        message: 'OTP verified. Please complete registration.',
-        isNewUser: true,
-        mobile
-      });
-    }
+    // Generate mock user data and token
+    const user = {
+      id: 'user_' + Date.now(),
+      name: 'User Name',
+      email: 'user@example.com',
+      phone: phone,
+      role: 'user',
+      verified: true
+    };
+
+    const token = 'mock_jwt_token_' + Date.now();
+
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    return NextResponse.json({
+      success: true,
+      message: 'Login successful',
+      user: user,
+      token: token
+    });
 
   } catch (error) {
-    console.error('OTP verification error:', error);
+    console.error('Verify OTP error:', error);
     return NextResponse.json(
-      { success: false, error: 'OTP verification failed' },
+      { success: false, message: 'Internal server error' },
       { status: 500 }
     );
   }

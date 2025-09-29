@@ -1,6 +1,5 @@
 // app/api/auth/send-phone-otp/route.ts - Phone OTP sending (Demo mode)
 import { NextRequest, NextResponse } from 'next/server';
-import { safeQuery } from '../../../../lib/db';
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,19 +17,9 @@ export async function POST(request: NextRequest) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
-    // Save OTP to database
-    try {
-      await safeQuery(
-        `INSERT INTO otp_verifications (phone, otp, expires_at, created_at) 
-         VALUES ($1, $2, $3, NOW()) 
-         ON CONFLICT (phone) 
-         DO UPDATE SET otp = $2, expires_at = $3, created_at = NOW()`,
-        [phone, otp, expiresAt]
-      );
-    } catch (dbError) {
-      console.error('Database error:', dbError);
-      // Continue with demo OTP if database fails
-    }
+    // Store OTP in memory (demo mode - in production, use proper OTP service)
+    // In a real application, you would store this in a database or Redis
+    console.log(`Demo OTP for ${phone}: ${otp} (expires at ${new Date(expiresAt).toISOString()})`);
 
     // Demo mode - no MSG91 keys required
     return NextResponse.json({

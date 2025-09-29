@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import DynamicPricingCalculator from '@/components/DynamicPricingCalculator';
 
 interface PricingTier {
   id: string;
@@ -218,6 +219,7 @@ export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [showComparison, setShowComparison] = useState(false);
+  const [showCalculator, setShowCalculator] = useState(false);
 
   const getDiscountedPrice = (tier: PricingTier) => {
     if (billingPeriod === 'yearly') {
@@ -269,6 +271,20 @@ export default function PricingPage() {
                   Save 17%
                 </span>
               )}
+            </div>
+
+            {/* Dynamic Pricing Calculator Toggle */}
+            <div className="flex justify-center mb-8">
+              <button
+                onClick={() => setShowCalculator(!showCalculator)}
+                className={`px-8 py-3 rounded-lg font-medium transition-colors ${
+                  showCalculator
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-purple-600 text-white hover:bg-purple-700'
+                }`}
+              >
+                {showCalculator ? 'Hide Calculator' : '🎯 Dynamic Pricing Calculator'}
+              </button>
             </div>
           </div>
         </div>
@@ -456,6 +472,16 @@ export default function PricingPage() {
           </div>
         </div>
       </div>
+
+      {/* Dynamic Pricing Calculator */}
+      {showCalculator && (
+        <div className="py-16 bg-gray-50">
+          <DynamicPricingCalculator 
+            onPlanSelect={handleTierSelect}
+            showRevenueProjection={true}
+          />
+        </div>
+      )}
 
       {/* Add-ons */}
       <div className="py-16">
