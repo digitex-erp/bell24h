@@ -4,6 +4,7 @@ interface NLPAnalysis {
   confidence: number;
   keywords: string[];
   urgency?: 'low' | 'medium' | 'high';
+  sentiment?: 'positive' | 'negative' | 'neutral';
 }
 
 // Supplier Matching Interfaces
