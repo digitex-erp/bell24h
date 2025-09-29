@@ -205,7 +205,7 @@ function generateServices(category: string) {
     'default': ['Customer Support', 'Technical Services', 'Quality Assurance', 'Delivery']
   };
 
-  const servs = services[category] || services['default'];
+  const servs = services[category as keyof typeof services] || services['default'];
   return servs.slice(0, Math.floor(Math.random() * 3) + 2);
 }
 
