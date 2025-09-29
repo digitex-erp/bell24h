@@ -25,8 +25,8 @@ export async function POST(request: NextRequest) {
     const trackingRecord = await prisma.benefitsTracking.create({
       data: {
         userId,
-        benefitType,
-        action,
+        benefitType: benefitType.toUpperCase() as any,
+        action: action.toUpperCase() as any,
         value: value || 0,
         metadata: metadata || {},
         trackedAt: new Date()
