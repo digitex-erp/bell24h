@@ -5,6 +5,11 @@ interface NLPAnalysis {
   keywords: string[];
   urgency?: 'low' | 'medium' | 'high';
   sentiment?: 'positive' | 'negative' | 'neutral';
+  extractedEntities?: {
+    locations?: string[];
+    products?: string[];
+    quantities?: string[];
+  };
 }
 
 // Supplier Matching Interfaces
