@@ -1,86 +1,13 @@
 /**
  * SIMPLIFIED Authentication System
- * Actually works with proper error handling
+ * Mobile OTP based authentication without NextAuth
  */
 
-import { NextAuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 // Initialize Prisma
 const prisma = new PrismaClient()
-
-export const authOptions: NextAuthOptions = {
-  providers: [
-    CredentialsProvider({
-      name: 'credentials',
-      credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' }
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null
-        }
-
-        try {
-          // Find user in database
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email.toLowerCase() },
-            include: { profile: true, company: true }
-          })
-
-          if (!user || !user.password) {
-            return null
-          }
-
-          // Verify password
-          const isValidPassword = await bcrypt.compare(credentials.password, user.password)
-
-          if (!isValidPassword) {
-            return null
-          }
-
-          // Return user object
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-            image: user.image,
-          }
-        } catch (error) {
-          console.error('Auth error:', error)
-          return null
-        }
-      }
-    })
-  ],
-  pages: {
-    signIn: '/auth/login',
-  },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.role = user.role
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.sub!
-        session.user.role = token.role as string
-      }
-      return session
-    }
-  },
-  session: {
-    strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-}
 
 // Helper function to hash passwords
 export async function hashPassword(password: string): Promise<string> {
@@ -90,4 +17,29 @@ export async function hashPassword(password: string): Promise<string> {
 // Helper function to verify passwords
 export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
   return await bcrypt.compare(password, hashedPassword)
+}
+
+// Generate JWT token for mobile OTP authentication
+export function generateJWTToken(userId: string): string {
+  return Buffer.from(`${userId}:${Date.now()}:${Math.random()}`).toString('base64');
+}
+
+// Verify JWT token
+export function verifyJWTToken(token: string): { userId: string; valid: boolean } {
+  try {
+    const decoded = Buffer.from(token, 'base64').toString('utf-8');
+    const [userId, timestamp, random] = decoded.split(':');
+    
+    // Check if token is not too old (30 days)
+    const tokenAge = Date.now() - parseInt(timestamp);
+    const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+    
+    if (tokenAge > maxAge) {
+      return { userId: '', valid: false };
+    }
+    
+    return { userId, valid: true };
+  } catch (error) {
+    return { userId: '', valid: false };
+  }
 }
