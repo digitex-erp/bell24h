@@ -166,7 +166,7 @@ function generateBusinessType(category: string) {
     'default': ['Manufacturer', 'Supplier', 'Service Provider', 'Trading Company']
   };
 
-  const types = businessTypes[category] || businessTypes['default'];
+  const types = businessTypes[category as keyof typeof businessTypes] || businessTypes['default'];
   return types[Math.floor(Math.random() * types.length)];
 }
 
