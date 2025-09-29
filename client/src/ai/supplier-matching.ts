@@ -1,4 +1,9 @@
-import { NLPAnalysis } from './nlp-categorization';
+// NLPAnalysis interface moved here for simplicity
+interface NLPAnalysis {
+  categories: string[];
+  confidence: number;
+  keywords: string[];
+}
 
 // Supplier Matching Interfaces
 export interface SupplierFeatures {
