@@ -81,7 +81,7 @@ const AdminKPICard = ({ title, value, subValue, trend, icon: Icon, color = 'blue
   title: string;
   value: string;
   subValue?: string;
-  trend?: { value: number; isPositive: boolean };
+  trend?: string;
   icon: any;
   color?: string;
 }) => (
