@@ -1,326 +1,240 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-
-interface RFQ {
-  id: string;
-  title: string;
-  category: string;
-  description: string;
-  quantity: string;
-  unit: string;
-  minBudget: string;
-  maxBudget: string;
-  timeline: string;
-  status: 'active' | 'quoted' | 'completed' | 'cancelled';
-  urgency: 'low' | 'normal' | 'high' | 'urgent';
-  createdBy: string;
-  createdAt: string;
-  views: number;
-  quotes: number;
-  suppliers: number;
-  tags: string[];
-  location: string;
-  priority: number;
-  estimatedValue: number;
-}
+import { useState } from 'react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function RFQPage() {
-  const [rfqs, setRfqs] = useState<RFQ[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    category: 'all',
-    status: 'all',
-    search: '',
-    sortBy: 'createdAt',
-    sortOrder: 'desc'
+  const [formData, setFormData] = useState({
+    title: '',
+    category: '',
+    quantity: '',
+    budget: '',
+    deadline: '',
+    description: '',
+    specifications: ''
   });
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 10,
-    total: 0,
-    totalPages: 0,
-    hasNextPage: false,
-    hasPrevPage: false
-  });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    fetchRFQs();
-  }, [filters, pagination.page]);
+  const categories = [
+    { value: '', label: 'Select Category' },
+    { value: 'steel', label: 'Steel & Metals' },
+    { value: 'textiles', label: 'Textiles' },
+    { value: 'electronics', label: 'Electronics' },
+    { value: 'machinery', label: 'Machinery' },
+    { value: 'chemicals', label: 'Chemicals' }
+  ];
 
-  const fetchRFQs = async () => {
-    try {
-      setIsLoading(true);
-      const params = new URLSearchParams({
-        page: pagination.page.toString(),
-        limit: pagination.limit.toString(),
-        ...filters
-      });
-
-      const response = await fetch(`/api/rfq/list?${params}`);
-      if (response.ok) {
-        const data = await response.json();
-        setRfqs(data.rfqs || []);
-        setPagination(prev => ({ ...prev, ...data.pagination }));
-      }
-    } catch (error) {
-      console.error('Error fetching RFQs:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleFilterChange = (key: string, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-    setPagination(prev => ({ ...prev, page: 1 }));
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'badge-success';
-      case 'quoted': return 'badge-info';
-      case 'completed': return 'badge-warning';
-      case 'cancelled': return 'badge-error';
-      default: return 'badge-info';
-    }
-  };
-
-  const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
-      case 'urgent': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'normal': return 'text-blue-600 bg-blue-100';
-      case 'low': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
     });
   };
 
-  if (isLoading) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const response = await fetch('/api/rfq/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        setSuccess(true);
+        setFormData({
+          title: '',
+          category: '',
+          quantity: '',
+          budget: '',
+          deadline: '',
+          description: '',
+          specifications: ''
+        });
+      }
+    } catch (error) {
+      console.error('Error creating RFQ:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (success) {
     return (
-      <div className="page-container">
-        <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-neutral-600">Loading RFQs...</p>
+      <>
+        <Header />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-md p-8 text-center max-w-md">
+            <div className="text-green-500 text-6xl mb-4">✅</div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">RFQ Created Successfully!</h2>
+            <p className="text-gray-600 mb-6">
+              Your RFQ has been submitted and suppliers will be notified.
+            </p>
+            <button
+              onClick={() => setSuccess(false)}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Create Another RFQ
+            </button>
+          </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   return (
-    <div className="page-container">
-      <div className="page-content">
-        {/* Header */}
-        <div className="page-header">
-          <h1 className="page-title">RFQ Management</h1>
-          <p className="page-subtitle">
-            Manage your Request for Quotations and track supplier responses
-          </p>
-        </div>
-
-        {/* Filters and Actions */}
-        <div className="card mb-8">
-          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-            <div className="flex flex-wrap gap-4">
-              {/* Search */}
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search RFQs..."
-                  value={filters.search}
-                  onChange={(e) => handleFilterChange('search', e.target.value)}
-                  className="form-input pl-10"
-                />
-                <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-
-              {/* Category Filter */}
-              <select
-                value={filters.category}
-                onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="form-input"
-              >
-                <option value="all">All Categories</option>
-                <option value="manufacturing">Manufacturing</option>
-                <option value="textiles">Textiles</option>
-                <option value="electronics">Electronics</option>
-                <option value="construction">Construction</option>
-                <option value="chemicals">Chemicals</option>
-                <option value="machinery">Machinery</option>
-                <option value="packaging">Packaging</option>
-                <option value="automotive">Automotive</option>
-              </select>
-
-              {/* Status Filter */}
-              <select
-                value={filters.status}
-                onChange={(e) => handleFilterChange('status', e.target.value)}
-                className="form-input"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="quoted">Quoted</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-
-              {/* Sort */}
-              <select
-                value={filters.sortBy}
-                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                className="form-input"
-              >
-                <option value="createdAt">Sort by Date</option>
-                <option value="priority">Sort by Priority</option>
-                <option value="estimatedValue">Sort by Value</option>
-                <option value="quotes">Sort by Quotes</option>
-              </select>
-            </div>
-
-            <Link
-              href="/rfq/create"
-              className="btn-primary flex items-center gap-2"
-            >
-              <span>+</span>
-              <span>Create RFQ</span>
-            </Link>
+    <>
+      <Header />
+      <div className="min-h-screen bg-gray-50">
+        <section className="bg-white py-12">
+          <div className="container mx-auto px-4">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Create RFQ</h1>
+            <p className="text-lg text-gray-600 mb-8">
+              Submit your requirements and get quotes from verified suppliers
+            </p>
           </div>
-        </div>
+        </section>
 
-        {/* RFQ List */}
-        <div className="space-y-4">
-          {rfqs.length > 0 ? (
-            rfqs.map((rfq) => (
-              <div key={rfq.id} className="card card-hover">
-                <div className="flex flex-col lg:flex-row gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-neutral-900">{rfq.title}</h3>
-                      <div className="flex items-center gap-2">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(rfq.status)}`}>
-                          {rfq.status.charAt(0).toUpperCase() + rfq.status.slice(1)}
-                        </span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(rfq.urgency)}`}>
-                          {rfq.urgency.charAt(0).toUpperCase() + rfq.urgency.slice(1)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <p className="text-neutral-600 mb-3">{rfq.description}</p>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <span className="text-neutral-500">Quantity:</span>
-                        <span className="ml-1 font-semibold">{rfq.quantity} {rfq.unit}</span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500">Budget:</span>
-                        <span className="ml-1 font-semibold">
-                          {formatCurrency(parseInt(rfq.minBudget))} - {formatCurrency(parseInt(rfq.maxBudget))}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500">Timeline:</span>
-                        <span className="ml-1 font-semibold">{rfq.timeline}</span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500">Location:</span>
-                        <span className="ml-1 font-semibold">{rfq.location}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {rfq.tags.map((tag, index) => (
-                        <span key={index} className="bg-neutral-100 text-neutral-700 text-xs px-2 py-1 rounded">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+        <section className="py-12">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto">
+              <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                      RFQ Title *
+                    </label>
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter RFQ title"
+                    />
                   </div>
 
-                  <div className="lg:w-48 flex flex-col justify-between">
-                    <div className="text-sm text-neutral-500 mb-2">
-                      <div>Created: {formatDate(rfq.createdAt)}</div>
-                      <div>Views: {rfq.views}</div>
-                      <div>Quotes: {rfq.quotes}</div>
-                      <div>Suppliers: {rfq.suppliers}</div>
-                    </div>
+                  <div>
+                    <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                      Category *
+                    </label>
+                    <select
+                      id="category"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      {categories.map(category => (
+                        <option key={category.value} value={category.value}>{category.label}</option>
+                      ))}
+                    </select>
+                  </div>
 
-                    <div className="flex gap-2">
-                      <Link
-                        href={`/rfq/${rfq.id}`}
-                        className="btn-outline text-sm px-4 py-2 flex-1 text-center"
-                      >
-                        View Details
-                      </Link>
-                      <Link
-                        href={`/rfq/${rfq.id}/quotes`}
-                        className="btn-primary text-sm px-4 py-2 flex-1 text-center"
-                      >
-                        View Quotes
-                      </Link>
-                    </div>
+                  <div>
+                    <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
+                      Quantity *
+                    </label>
+                    <input
+                      type="text"
+                      id="quantity"
+                      name="quantity"
+                      value={formData.quantity}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g., 100 pieces"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
+                      Budget (₹) *
+                    </label>
+                    <input
+                      type="number"
+                      id="budget"
+                      name="budget"
+                      value={formData.budget}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter budget amount"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="deadline" className="block text-sm font-medium text-gray-700 mb-2">
+                      Deadline *
+                    </label>
+                    <input
+                      type="date"
+                      id="deadline"
+                      name="deadline"
+                      value={formData.deadline}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
                   </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">📋</div>
-              <h3 className="text-xl font-semibold text-neutral-900 mb-2">No RFQs Found</h3>
-              <p className="text-neutral-600 mb-6">Create your first RFQ to get started</p>
-              <Link href="/rfq/create" className="btn-primary">
-                Create RFQ
-              </Link>
-            </div>
-          )}
-        </div>
 
-        {/* Pagination */}
-        {pagination.totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-8">
-            <button
-              onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
-              disabled={!pagination.hasPrevPage}
-              className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Previous
-            </button>
-            
-            <span className="px-4 py-2 text-sm text-neutral-600">
-              Page {pagination.page} of {pagination.totalPages}
-            </span>
-            
-            <button
-              onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-              disabled={!pagination.hasNextPage}
-              className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-            </button>
+                <div className="mt-6">
+                  <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                    Description *
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Describe your requirements in detail"
+                  />
+                </div>
+
+                <div className="mt-6">
+                  <label htmlFor="specifications" className="block text-sm font-medium text-gray-700 mb-2">
+                    Technical Specifications
+                  </label>
+                  <textarea
+                    id="specifications"
+                    name="specifications"
+                    value={formData.specifications}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Add technical specifications if any"
+                  />
+                </div>
+
+                <div className="mt-8">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? 'Creating RFQ...' : 'Submit RFQ'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        )}
+        </section>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

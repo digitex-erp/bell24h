@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -13,84 +10,150 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const role = searchParams.get('role');
     const search = searchParams.get('search');
-    const sortBy = searchParams.get('sortBy') || 'createdAt';
-    const sortOrder = searchParams.get('sortOrder') || 'desc';
 
-    const skip = (page - 1) * limit;
-
-    // Build where clause
-    const where: any = {};
-    
-    if (role) {
-      where.role = role;
-    }
-    
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search, mode: 'insensitive' } }
-      ];
-    }
-
-    // Fetch users with pagination
-    const [users, totalCount] = await Promise.all([
-      prisma.user.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: {
-          [sortBy]: sortOrder
-        },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-          role: true,
-          isActive: true,
-          createdAt: true,
-          updatedAt: true,
-          _count: {
-            select: {
-              rfqs: true,
-              leads: true,
-              transactions: true
-            }
-          }
+    // Mock users data
+    const mockUsers = [
+      {
+        id: '1',
+        name: 'Rajesh Kumar',
+        email: 'rajesh@techsolutions.com',
+        phone: '+91-9876543210',
+        role: 'SUPPLIER',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        _count: {
+          rfqs: 12,
+          leads: 8,
+          transactions: 5
         }
-      }),
-      prisma.user.count({ where })
-    ]);
+      },
+      {
+        id: '2',
+        name: 'Priya Sharma',
+        email: 'priya@steelworks.com',
+        phone: '+91-9876543211',
+        role: 'SUPPLIER',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        _count: {
+          rfqs: 8,
+          leads: 15,
+          transactions: 3
+        }
+      },
+      {
+        id: '3',
+        name: 'Amit Patel',
+        email: 'amit@textilemills.com',
+        phone: '+91-9876543212',
+        role: 'SUPPLIER',
+        isActive: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        _count: {
+          rfqs: 5,
+          leads: 3,
+          transactions: 1
+        }
+      },
+      {
+        id: '4',
+        name: 'Sunita Singh',
+        email: 'sunita@machineryhub.com',
+        phone: '+91-9876543213',
+        role: 'SUPPLIER',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        _count: {
+          rfqs: 20,
+          leads: 12,
+          transactions: 8
+        }
+      },
+      {
+        id: '5',
+        name: 'Vikram Reddy',
+        email: 'vikram@chemicalind.com',
+        phone: '+91-9876543214',
+        role: 'SUPPLIER',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        _count: {
+          rfqs: 15,
+          leads: 9,
+          transactions: 6
+        }
+      },
+      {
+        id: '6',
+        name: 'Anita Gupta',
+        email: 'anita@buyer.com',
+        phone: '+91-9876543215',
+        role: 'BUYER',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        _count: {
+          rfqs: 3,
+          leads: 0,
+          transactions: 2
+        }
+      },
+      {
+        id: '7',
+        name: 'Ravi Verma',
+        email: 'ravi@buyer.com',
+        phone: '+91-9876543216',
+        role: 'BUYER',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        _count: {
+          rfqs: 7,
+          leads: 0,
+          transactions: 4
+        }
+      }
+    ];
 
-    // Calculate additional stats
-    const stats = await Promise.all([
-      prisma.user.count({ where: { role: 'BUYER' } }),
-      prisma.user.count({ where: { role: 'SUPPLIER' } }),
-      prisma.user.count({ where: { isActive: true } }),
-      prisma.user.count({ 
-        where: { 
-          createdAt: { 
-            gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) 
-          } 
-        } 
-      })
-    ]);
+    // Filter users based on search criteria
+    let filteredUsers = mockUsers;
+
+    if (role) {
+      filteredUsers = filteredUsers.filter(u => u.role === role);
+    }
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      filteredUsers = filteredUsers.filter(u => 
+        u.name.toLowerCase().includes(searchLower) ||
+        u.email.toLowerCase().includes(searchLower) ||
+        u.phone.includes(search)
+      );
+    }
+
+    // Apply pagination
+    const skip = (page - 1) * limit;
+    const paginatedUsers = filteredUsers.slice(skip, skip + limit);
 
     const response = {
-      users,
+      users: paginatedUsers,
       pagination: {
         page,
         limit,
-        total: totalCount,
-        pages: Math.ceil(totalCount / limit)
+        total: filteredUsers.length,
+        pages: Math.ceil(filteredUsers.length / limit)
       },
       stats: {
-        totalUsers: totalCount,
-        buyers: stats[0],
-        suppliers: stats[1],
-        activeUsers: stats[2],
-        newUsersThisWeek: stats[3]
+        totalUsers: mockUsers.length,
+        buyers: mockUsers.filter(u => u.role === 'BUYER').length,
+        suppliers: mockUsers.filter(u => u.role === 'SUPPLIER').length,
+        activeUsers: mockUsers.filter(u => u.isActive).length,
+        newUsersThisWeek: 3
       }
     };
 
