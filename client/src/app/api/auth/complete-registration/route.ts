@@ -158,7 +158,7 @@ async function sendWelcomeEmail(user: any) {
     return { success: true, messageId: `welcome_${Date.now()}` };
   } catch (error) {
     console.error('Welcome email error:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
 
