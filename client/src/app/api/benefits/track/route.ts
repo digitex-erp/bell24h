@@ -188,7 +188,7 @@ async function calculateTotalValueUsed(userId: string): Promise<number> {
     const trackingRecords = await prisma.benefitsTracking.findMany({
       where: {
         userId,
-        action: 'used'
+        action: 'USED'
       }
     })
 
