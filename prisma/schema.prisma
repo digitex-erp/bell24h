@@ -30,7 +30,8 @@ model User {
   // Relations
   rfqs        RFQ[]
   quotes      Quote[]
-  transactions Transaction[]
+  buyerTransactions Transaction[] @relation("BuyerTransactions")
+  supplierTransactions Transaction[] @relation("SupplierTransactions")
   otpVerifications OTPVerification[]
   leads       Lead[]
   notifications Notification[]
@@ -131,8 +132,8 @@ model Transaction {
   // Relations
   rfq         RFQ      @relation(fields: [rfqId], references: [id])
   quote       Quote?   @relation(fields: [quoteId], references: [id])
-  buyer       User     @relation(fields: [buyerId], references: [id])
-  supplier    User     @relation(fields: [supplierId], references: [id])
+  buyer       User     @relation("BuyerTransactions", fields: [buyerId], references: [id])
+  supplier    User     @relation("SupplierTransactions", fields: [supplierId], references: [id])
 
   @@map("transactions")
 }
