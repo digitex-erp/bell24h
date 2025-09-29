@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+// NextAuth removed - using mobile OTP authentication
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
