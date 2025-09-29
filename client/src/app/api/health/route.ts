@@ -93,7 +93,7 @@ async function checkDatabaseHealth() {
     return {
       healthy: true,
       responseTime,
-      poolStatus: poolStatus[0],
+      poolStatus: (poolStatus as any)[0],
       message: 'Database connection healthy',
     }
   } catch (error) {
