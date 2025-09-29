@@ -15,9 +15,9 @@ export const prisma = new PrismaClient({
 export async function verifyMobileOTP(phone: string, otp: string): Promise<boolean> {
   // In production, this would verify OTP with MSG91
   // For now, return true for any OTP
-  return true
-}
-
+    return true
+  }
+  
 export async function sendMobileOTP(phone: string): Promise<boolean> {
   // In production, this would send OTP via MSG91
   // For now, return true
