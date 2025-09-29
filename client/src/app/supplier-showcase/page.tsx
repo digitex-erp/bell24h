@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Search,
   Filter,
-  Grid3X3,
+  Grid,
   List,
   Star,
   MapPin,
@@ -629,7 +629,7 @@ export default function SupplierShowcasePage() {
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
                 >
-                  <Grid3X3 className="w-4 h-4" />
+                  <Grid className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
