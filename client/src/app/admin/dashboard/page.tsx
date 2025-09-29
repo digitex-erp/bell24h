@@ -96,7 +96,7 @@ const AdminKPICard = ({ title, value, subValue, trend, icon: Icon, color = 'blue
 );
 
 // System Health Panel
-const SystemHealthPanel = ({ insights }) => (
+const SystemHealthPanel = ({ insights, alerts = [] }) => (
   <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border border-green-200">
     <div className="flex items-center justify-between mb-4">
       <h3 className="text-lg font-semibold text-gray-900 flex items-center">
@@ -135,9 +135,9 @@ const SystemHealthPanel = ({ insights }) => (
     </div>
 
     <div className="mt-4">
-      <h4 className="text-sm font-medium text-gray-900 mb-2">System Alerts</h4>
-      <div className="space-y-1">
-        {insights.alerts.map((alert, index) => (
+      <h4 className="text-sm font-medium text-gray-900 mb-2">Live System Alerts</h4>
+      <div className="space-y-1 max-h-32 overflow-y-auto">
+        {alerts.length > 0 ? alerts.map((alert, index) => (
           <div key={index} className={`text-xs px-2 py-1 rounded ${
             alert.type === 'success' ? 'text-green-600 bg-green-100' :
             alert.type === 'warning' ? 'text-yellow-600 bg-yellow-100' :
@@ -145,7 +145,9 @@ const SystemHealthPanel = ({ insights }) => (
           }`}>
             {alert.message}
           </div>
-        ))}
+        )) : (
+          <div className="text-xs text-gray-500 italic">No active alerts</div>
+        )}
       </div>
     </div>
   </div>
@@ -189,6 +191,8 @@ const FeatureCard = ({ feature }) => (
 export default function AdminDashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
+  const [liveData, setLiveData] = useState(mockAdminData);
+  const [systemAlerts, setSystemAlerts] = useState(mockAdminData.systemInsights.alerts);
 
   // Update time every second for live feel
   useEffect(() => {
@@ -196,6 +200,40 @@ export default function AdminDashboard() {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Simulate live data updates
+  useEffect(() => {
+    const dataUpdateInterval = setInterval(() => {
+      setLiveData(prev => ({
+        ...prev,
+        kpis: {
+          ...prev.kpis,
+          totalUsers: prev.kpis.totalUsers + Math.floor(Math.random() * 3),
+          activeRFQs: prev.kpis.activeRFQs + Math.floor(Math.random() * 2) - 1,
+          systemHealth: Math.min(100, prev.kpis.systemHealth + (Math.random() - 0.5) * 0.1),
+        },
+        systemInsights: {
+          ...prev.systemInsights,
+          dataProcessed: prev.systemInsights.dataProcessed + Math.floor(Math.random() * 50),
+        }
+      }));
+    }, 5000);
+
+    return () => clearInterval(dataUpdateInterval);
+  }, []);
+
+  // Simulate new alerts
+  useEffect(() => {
+    const alertInterval = setInterval(() => {
+      const newAlert = {
+        type: Math.random() > 0.7 ? 'warning' : 'info',
+        message: `System update: ${new Date().toLocaleTimeString()} - ${Math.random() > 0.5 ? 'New user registered' : 'Workflow completed'}`
+      };
+      setSystemAlerts(prev => [newAlert, ...prev.slice(0, 4)]);
+    }, 30000);
+
+    return () => clearInterval(alertInterval);
   }, []);
 
   const formatCurrency = (amount: number) => {
@@ -239,18 +277,18 @@ export default function AdminDashboard() {
 
             {/* Admin Actions */}
             <div className="hidden md:flex items-center space-x-4">
-              <button className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+              <a href="/admin/crm" className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
                 <Users className="w-4 h-4 mr-2" />
                 CRM Management
-              </button>
-              <button className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+              </a>
+              <a href="/admin/n8n" className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
                 <Zap className="w-4 h-4 mr-2" />
                 N8N Workflows
-              </button>
-              <button className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              </a>
+              <a href="/admin/analytics" className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Analytics
-              </button>
+              </a>
             </div>
 
             {/* Right Side */}
@@ -307,29 +345,29 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <AdminKPICard 
             title="Total Users" 
-            value={mockAdminData.kpis.totalUsers.toLocaleString()} 
-            subValue={`${mockAdminData.kpis.totalSuppliers} suppliers, ${mockAdminData.kpis.totalBuyers} buyers`}
+            value={liveData.kpis.totalUsers.toLocaleString()} 
+            subValue={`${liveData.kpis.totalSuppliers} suppliers, ${liveData.kpis.totalBuyers} buyers`}
             trend="+15% this month"
             icon={Users}
             color="blue"
           />
           <AdminKPICard 
             title="Total Revenue" 
-            value={formatCurrency(mockAdminData.kpis.totalRevenue)} 
+            value={formatCurrency(liveData.kpis.totalRevenue)} 
             trend="+22% this month"
             icon={DollarSign}
             color="green"
           />
           <AdminKPICard 
             title="Active RFQs" 
-            value={mockAdminData.kpis.activeRFQs} 
-            subValue={`${mockAdminData.kpis.completedRFQs} completed`}
+            value={liveData.kpis.activeRFQs} 
+            subValue={`${liveData.kpis.completedRFQs} completed`}
             icon={FileText}
             color="purple"
           />
           <AdminKPICard 
             title="System Health" 
-            value={`${mockAdminData.kpis.systemHealth}%`} 
+            value={`${liveData.kpis.systemHealth.toFixed(1)}%`} 
             subValue="All systems operational"
             icon={Shield}
             color="green"
@@ -338,8 +376,8 @@ export default function AdminDashboard() {
 
         {/* System Health Panel */}
         <div className="mb-8">
-          <SystemHealthPanel insights={mockAdminData.systemInsights} />
-              </div>
+          <SystemHealthPanel insights={liveData.systemInsights} alerts={systemAlerts} />
+        </div>
 
         {/* Feature Management */}
         <div className="mb-8">
