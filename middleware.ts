@@ -6,7 +6,7 @@ import { securityHeaders, apiSecurityMiddleware, logSecurityEvent } from './lib/
 import { rateLimiters } from './lib/rate-limit';
 
 // Middleware configuration
-const config = {
+const middlewareConfig = {
   // Routes that should be protected
   protectedRoutes: [
     '/admin',
@@ -83,7 +83,7 @@ function handleAPIRoute(request: NextRequest, response: NextResponse): NextRespo
   response = apiSecurityMiddleware(request);
   
   // Apply rate limiting based on route
-  const rateLimitType = config.rateLimitedRoutes[pathname as keyof typeof config.rateLimitedRoutes];
+  const rateLimitType = middlewareConfig.rateLimitedRoutes[pathname as keyof typeof middlewareConfig.rateLimitedRoutes];
   if (rateLimitType) {
     // Note: Rate limiting logic would be applied here
     // For now, we'll add rate limit headers
