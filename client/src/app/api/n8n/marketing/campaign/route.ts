@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
         message: validatedData.message,
         subject: validatedData.subject,
         scheduledAt: validatedData.scheduledAt || new Date(),
-        priority: validatedData.priority,
+        priority: validatedData.priority?.toUpperCase() as any,
         status: 'SCHEDULED',
         stats: {
           totalSent: 0,
