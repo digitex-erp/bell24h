@@ -20,16 +20,12 @@ export async function GET(request: NextRequest) {
     // Fetch supplier profile
     const supplier = await prisma.company.findFirst({
       where: {
-        OR: [
-          { id: supplierId || undefined },
-          { slug: slug || undefined }
-        ]
+        id: supplierId || undefined
       },
       include: {
         products: true,
-        reviews: true,
-        certifications: true,
-        locations: true
+        users: true,
+        rfqs: true
       }
     });
 
