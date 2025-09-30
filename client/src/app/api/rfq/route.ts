@@ -199,7 +199,7 @@ export async function GET(request: NextRequest) {
                 select: {
                   id: true,
                   name: true,
-                  slug: true,
+                  // slug: true, // Field doesn't exist in Company model
                 },
               },
             },
