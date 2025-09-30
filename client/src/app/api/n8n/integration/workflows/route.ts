@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       integrationStatus,
       integrationPoints: {
         email: {
-          workflowId: existingWorkflows.email?.id,
+          workflowId: (existingWorkflows as any).email?.id,
           status: integrationStatus.email,
           enhancements: [
             'Scraped company data enrichment',
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
           ]
         },
         sms: {
-          workflowId: existingWorkflows.sms?.id,
+          workflowId: (existingWorkflows as any).sms?.id,
           status: integrationStatus.sms,
           enhancements: [
             'Targeted SMS campaigns',
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
           ]
         },
         crm: {
-          workflowId: existingWorkflows.crm?.id,
+          workflowId: (existingWorkflows as any).crm?.id,
           status: integrationStatus.crm,
           enhancements: [
             'Automatic lead scoring',
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
           ]
         },
         analytics: {
-          workflowId: existingWorkflows.analytics?.id,
+          workflowId: (existingWorkflows as any).analytics?.id,
           status: integrationStatus.analytics,
           enhancements: [
             'Scraping ROI tracking',
