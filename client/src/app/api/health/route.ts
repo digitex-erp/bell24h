@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/database'
 import { healthCheck } from '@/lib/monitoring'
+import { safeJson } from '@/lib/json-bigint'
 
 /**
  * GET /api/health - Production health check endpoint
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
     
     const statusCode = isHealthy ? 200 : 503
     
-    return NextResponse.json(healthStatus, { 
+    return NextResponse.json(safeJson(healthStatus), { 
       status: statusCode,
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -53,12 +54,12 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Health check failed:', error)
     
-    return NextResponse.json({
+    return NextResponse.json(safeJson({
       status: 'unhealthy',
       timestamp: new Date().toISOString(),
       error: 'Health check failed',
       message: error instanceof Error ? error.message : 'Unknown error',
-    }, { 
+    }), { 
       status: 503,
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',

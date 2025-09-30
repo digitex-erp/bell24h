@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { safeJson } from '@/lib/json-bigint';
 
 export async function GET(request: NextRequest) {
   try {
@@ -46,15 +47,15 @@ export async function GET(request: NextRequest) {
         }
       ];
 
-      return NextResponse.json({
+      return NextResponse.json(safeJson({
         success: true,
         data: transactions,
         message: 'Transactions retrieved successfully'
-      });
+      }));
     }
 
     // Mock wallet data
-    return NextResponse.json({
+    return NextResponse.json(safeJson({
       success: true,
       data: {
         balance: 50000,
@@ -67,18 +68,15 @@ export async function GET(request: NextRequest) {
         availableBalance: 38000
       },
       message: 'Wallet information retrieved successfully'
-    });
+    }));
 
   } catch (error) {
     console.error('Wallet API Error:', error);
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to retrieve wallet information',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    return NextResponse.json(safeJson({ 
+      success: false, 
+      error: 'Failed to retrieve wallet information',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }), { status: 500 });
   }
 }
 
@@ -94,7 +92,7 @@ export async function POST(request: NextRequest) {
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    return NextResponse.json({
+    return NextResponse.json(safeJson({
       success: true,
       data: {
         action,
@@ -105,17 +103,14 @@ export async function POST(request: NextRequest) {
         timestamp
       },
       message: 'Wallet action processed successfully'
-    });
+    }));
 
   } catch (error) {
     console.error('Wallet POST API Error:', error);
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Failed to process wallet action',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    return NextResponse.json(safeJson({ 
+      success: false, 
+      error: 'Failed to process wallet action',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }), { status: 500 });
   }
 }
