@@ -27,7 +27,7 @@ import {
   Lightbulb,
   Activity,
 } from 'lucide-react';
-import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
+// Remove UserDashboardLayout import - we'll use the main layout from layout.tsx
 
 // Mock data for live dashboard
 const mockLiveData = {
@@ -225,7 +225,7 @@ export default function UserDashboard() {
   const user = mockLiveData.user;
 
   return (
-    <UserDashboardLayout user={user}>
+    <div className="w-full">
       {/* Welcome Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -359,6 +359,6 @@ export default function UserDashboard() {
               Invoice Discounting
             </button>
       </div>
-    </UserDashboardLayout>
+    </div>
   );
 }

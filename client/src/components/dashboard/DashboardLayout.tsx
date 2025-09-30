@@ -53,7 +53,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 lg:static lg:inset-0`}
+        } lg:translate-x-0 lg:static lg:inset-0 flex-shrink-0`}
       >
         {/* Sidebar Header */}
         <div className='flex items-center justify-between h-16 px-6 border-b border-gray-200'>
@@ -109,9 +109,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       {/* Main Content */}
-      <div className='flex-1 flex flex-col overflow-hidden'>
+      <div className='flex-1 flex flex-col overflow-hidden min-w-0'>
         {/* Top Header */}
-        <header className='bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-6'>
+        <header className='bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-6 flex-shrink-0'>
           <button
             onClick={() => setSidebarOpen(true)}
             className='lg:hidden text-gray-500 hover:text-gray-700'
@@ -136,7 +136,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Main Content Area */}
-        <main className='flex-1 overflow-y-auto bg-gray-50 p-4 lg:p-6'>{children}</main>
+        <main className='flex-1 overflow-y-auto bg-gray-50 p-4 lg:p-6 w-full'>{children}</main>
       </div>
 
       {/* Mobile Sidebar Overlay */}
