@@ -355,7 +355,7 @@ async function createLeadFromScrapedCompany(companyData: any, leadData: any) {
       company: companyData.name,
       category: companyData.category,
       source: 'SCRAPING',
-      status: 'new',
+      status: 'NEW',
       score: calculateLeadScore(companyData),
       scrapedCompanyId: companyData.id
     }
