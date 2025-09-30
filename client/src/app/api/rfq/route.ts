@@ -199,7 +199,7 @@ export async function GET(request: NextRequest) {
                 select: {
                   id: true,
                   name: true,
-                  // slug: true, // Field doesn't exist in Company model
+                  //// Field doesn't exist in Company model
                 },
               },
             },
@@ -208,7 +208,7 @@ export async function GET(request: NextRequest) {
             select: {
               id: true,
               name: true,
-              // slug: true, // Field doesn't exist in Company model
+              //// Field doesn't exist in Company model
             },
           },
           quotes: {
@@ -225,7 +225,7 @@ export async function GET(request: NextRequest) {
                     select: {
                       id: true,
                       name: true,
-                      trustScore: true,
+                      //// Field doesn't exist in Company model
                     },
                   },
                 },
@@ -330,7 +330,7 @@ export async function POST(request: NextRequest) {
               select: {
                 id: true,
                 name: true,
-                // slug: true, // Field doesn't exist in Company model
+                //// Field doesn't exist in Company model
               },
             },
           },
@@ -338,9 +338,7 @@ export async function POST(request: NextRequest) {
         company: {
           select: {
             id: true,
-            name: true,
-            slug: true,
-          },
+            name: true,},
         },
         _count: {
           select: {
