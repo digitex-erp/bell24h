@@ -281,10 +281,10 @@ function MarketplaceContent() {
                 </Link>
               </div>
               <Link
-                href='/dashboard'
+                href='/auth/register?type=business'
                 className='bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold text-sm hover:bg-blue-700'
               >
-                My Business Hub
+                Join as Business
               </Link>
             </div>
           </div>
