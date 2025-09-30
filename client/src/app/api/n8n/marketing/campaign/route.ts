@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     // Create campaign record
     const campaign = await prisma.marketingCampaign.create({
       data: {
-        campaignType: validatedData.campaignType,
+        campaignType: validatedData.campaignType.toUpperCase() as any,
         targetCompanies: validatedData.targetCompanies,
         templateId: validatedData.templateId,
         message: validatedData.message,
