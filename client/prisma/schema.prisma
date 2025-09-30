@@ -46,6 +46,12 @@ model User {
   // New relations for scraping system
   benefitsTracking BenefitsTracking[]
   
+  // Commission and chat relations
+  commissions     Commission[]
+  payoutRequests  PayoutRequest[]
+  sentMessages    ChatMessage[] @relation("MessageSender")
+  receivedMessages ChatMessage[] @relation("MessageReceiver")
+  
   @@map("users")
 }
 
@@ -441,6 +447,7 @@ model RFQ {
   
   // Relations
   quotes      Quote[]
+  chatMessages ChatMessage[]
   
   @@map("rfqs")
 }
@@ -800,4 +807,93 @@ enum LeadActivityType {
   DEAL_LOST
   FOLLOW_UP_SCHEDULED
   NOTE_ADDED
+}
+
+// Commission and Payout Models
+model Commission {
+  id              String          @id @default(cuid())
+  userId          String
+  type            CommissionType
+  baseAmount      Float
+  commissionAmount Float
+  platformFee     Float
+  netAmount       Float
+  currency        String          @default("INR")
+  status          CommissionStatus @default(PENDING)
+  metadata        Json?
+  calculatedAt    DateTime        @default(now())
+  paidAt          DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  // Relations
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("commissions")
+}
+
+model PayoutRequest {
+  id              String          @id @default(cuid())
+  userId          String
+  amount          Float
+  currency        String          @default("INR")
+  status          PayoutStatus    @default(PENDING)
+  bankDetails     Json?
+  requestedAt     DateTime        @default(now())
+  processedAt     DateTime?
+  failureReason   String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  // Relations
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("payout_requests")
+}
+
+model ChatMessage {
+  id          String      @id @default(cuid())
+  senderId    String
+  receiverId  String
+  rfqId       String?
+  message     String
+  type        MessageType @default(TEXT)
+  read        Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // Relations
+  sender      User        @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    User        @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  rfq         RFQ?        @relation(fields: [rfqId], references: [id], onDelete: SetNull)
+  
+  @@map("chat_messages")
+}
+
+// Enums for new models
+enum CommissionType {
+  RFQ
+  TRANSACTION
+  SUBSCRIPTION
+  PREMIUM_FEATURE
+}
+
+enum CommissionStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  SYSTEM
 }
