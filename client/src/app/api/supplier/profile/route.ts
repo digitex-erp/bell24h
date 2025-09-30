@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch supplier profile
-    const supplier = await prisma.supplier.findFirst({
+    const supplier = await prisma.company.findFirst({
       where: {
         OR: [
           { id: supplierId || undefined },
@@ -123,7 +123,7 @@ export async function PUT(request: NextRequest) {
       }, {} as any);
 
     // Update supplier profile
-    const updatedSupplier = await prisma.supplier.update({
+    const updatedSupplier = await prisma.company.update({
       where: { id: supplierId },
       data: {
         ...filteredUpdates,
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
       .replace(/(^-|-$)/g, '');
 
     // Create supplier profile
-    const newSupplier = await prisma.supplier.create({
+    const newSupplier = await prisma.company.create({
       data: {
         name,
         slug,
