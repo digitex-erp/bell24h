@@ -351,7 +351,7 @@ export async function POST(request: NextRequest) {
     // Log RFQ creation
     await prisma.auditLog.create({
       data: {
-        userId: session.user.id,
+        userId: 'mock-user-id', // TODO: Get from JWT token
         action: 'RFQ_CREATED',
         details: {
           rfqId: rfq.id,
