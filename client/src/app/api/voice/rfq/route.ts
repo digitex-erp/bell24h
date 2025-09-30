@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       const voiceRFQs = await prisma.rFQ.findMany({
         where: {
           // Filter for voice RFQs (you can add a voiceRecording field to your schema)
-          description: { not: null }
+          description: { not: null as any }
         },
         take: 10,
         orderBy: { createdAt: 'desc' },
