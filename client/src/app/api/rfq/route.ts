@@ -300,7 +300,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create RFQ
-    const rfq = await prisma.rfq.create({
+    const rfq = await prisma.rFQ.create({
       data: {
         title: finalData.title,
         description: finalData.description,
