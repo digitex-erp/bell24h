@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
           totalCompaniesScraped: scrapingStats.totalScraped,
           totalClaims: claimStats.totalClaims,
           claimRate: claimStats.claimRate,
-          totalRevenue: revenueProjections.totalRevenue,
+          totalRevenue: revenueProjections.mrr * 12, // Annual revenue from MRR
           monthlyRecurringRevenue: revenueProjections.mrr
         }
       }
