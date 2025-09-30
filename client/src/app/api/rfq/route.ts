@@ -314,8 +314,8 @@ export async function POST(request: NextRequest) {
         deadline: finalData.deadline ? new Date(finalData.deadline) : null,
         urgency: finalData.urgency,
         status: 'OPEN',
-        buyerId: session.user.id,
-        companyId: session.user.companyId,
+        buyerId: 'mock-user-id', // TODO: Get from JWT token
+        companyId: 'mock-company-id', // TODO: Get from JWT token
         audioFile: validatedData.audioFile,
         videoFile: validatedData.videoFile,
         transcript: finalData.transcript,
