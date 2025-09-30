@@ -1,184 +1,80 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { api } from '@/lib/apiClient';
+'use client';
+
+import { useState, useEffect } from 'react';
 
 interface User {
   id: string;
-  email: string;
   name: string;
-  role: string;
+  email: string;
+  phone?: string;
+  role: 'buyer' | 'supplier' | 'admin';
 }
 
-interface AuthTokens {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
-}
-
-export const useAuth = () => {
+export function useAuth() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-  // Load user from localStorage on mount
   useEffect(() => {
-    const loadUser = async () => {
+    // Check for authentication token in localStorage or cookies
+    const checkAuth = () => {
       try {
-        setIsLoading(true);
-        const tokens = getStoredTokens();
-
-        if (tokens?.accessToken) {
-          // Verify token and fetch user data
-          const userData = await fetchCurrentUser(tokens.accessToken);
-          setUser(userData);
+        const token = localStorage.getItem('auth-token') || 
+                     localStorage.getItem('user-token') ||
+                     localStorage.getItem('next-auth.session-token');
+        
+        if (token) {
+          // Parse user data from token or fetch from API
+          const userData = localStorage.getItem('user-data');
+          if (userData) {
+            const parsedUser = JSON.parse(userData);
+            setUser(parsedUser);
+            setIsAuthenticated(true);
+          } else {
+            // Mock user data for demo
+            setUser({
+              id: 'demo-user',
+              name: 'Rajesh Kumar',
+              email: 'rajesh@example.com',
+              phone: '+91 98765 43210',
+              role: 'buyer'
+            });
+            setIsAuthenticated(true);
+          }
         }
       } catch (error) {
-        console.error('Failed to load user:', error);
-        clearStoredTokens();
+        console.error('Auth check error:', error);
+        setIsAuthenticated(false);
+        setUser(null);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    loadUser();
+    checkAuth();
   }, []);
 
-  // Helper function to fetch current user
-  const fetchCurrentUser = async (token: string): Promise<User> => {
-    try {
-      const response = await fetch('/api/auth/me', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch user data');
-      }
-
-      return response.json();
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      throw error;
-    }
+  const login = (userData: User, token: string) => {
+    localStorage.setItem('auth-token', token);
+    localStorage.setItem('user-data', JSON.stringify(userData));
+    setUser(userData);
+    setIsAuthenticated(true);
   };
 
-  // Login function
-  const login = async (email: string, password: string): Promise<void> => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const data = await api.post<{
-        user: User;
-        tokens: AuthTokens;
-      }>('/auth/login', { email, password });
-
-      // Store tokens
-      storeTokens(data.tokens);
-      setUser(data.user);
-
-      // Redirect to dashboard or intended URL
-      router.push('/dashboard');
-    } catch (error: any) {
-      setError(error.message || 'Login failed');
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
+  const logout = () => {
+    localStorage.removeItem('auth-token');
+    localStorage.removeItem('user-token');
+    localStorage.removeItem('next-auth.session-token');
+    localStorage.removeItem('user-data');
+    setUser(null);
+    setIsAuthenticated(false);
   };
 
-  // Register function
-  const register = async (name: string, email: string, password: string): Promise<void> => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const data = await api.post<{
-        user: User;
-        tokens: AuthTokens;
-      }>('/auth/register', { name, email, password });
-
-      // Store tokens
-      storeTokens(data.tokens);
-      setUser(data.user);
-
-      // Redirect to dashboard
-      router.push('/dashboard');
-    } catch (error: any) {
-      setError(error.message || 'Registration failed');
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
+  return { 
+    isAuthenticated, 
+    user, 
+    loading, 
+    login, 
+    logout 
   };
-
-  // Logout function
-  const logout = async (): Promise<void> => {
-    try {
-      await api.post('/auth/logout');
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      // Clear auth state
-      clearStoredTokens();
-      setUser(null);
-
-      // Redirect to login
-      router.push('/login');
-    }
-  };
-
-  // Refresh token function
-  const refreshToken = useCallback(async (): Promise<AuthTokens | null> => {
-    try {
-      const tokens = getStoredTokens();
-      if (!tokens?.refreshToken) return null;
-
-      const data = await api.post<{ tokens: AuthTokens }>('/auth/refresh', {
-        refreshToken: tokens.refreshToken,
-      });
-
-      // Store new tokens
-      storeTokens(data.tokens);
-      return data.tokens;
-    } catch (error) {
-      console.error('Token refresh failed:', error);
-      await logout();
-      return null;
-    }
-  }, []);
-
-  // Helper functions for token management
-  const storeTokens = (tokens: AuthTokens) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_tokens', JSON.stringify(tokens));
-    }
-  };
-
-  const getStoredTokens = (): AuthTokens | null => {
-    if (typeof window === 'undefined') return null;
-    const tokens = localStorage.getItem('auth_tokens');
-    return tokens ? JSON.parse(tokens) : null;
-  };
-
-  const clearStoredTokens = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_tokens');
-    }
-  };
-
-  return {
-    user,
-    isAuthenticated: !!user,
-    isLoading,
-    error,
-    login,
-    register,
-    logout,
-    refreshToken,
-  };
-};
-
-export default useAuth;
+}
