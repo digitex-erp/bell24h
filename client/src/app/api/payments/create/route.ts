@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Log payment creation
-      console.log(`Payment order created for user ${session.user.id}: ${orderId}`)
+      console.log(`Payment order created: ${orderId}`)
 
       return NextResponse.json({
         success: true,
