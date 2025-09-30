@@ -112,7 +112,7 @@ const MatchCard = ({ match, index }) => (
           <span className="flex items-center">
             <MapPin className="w-4 h-4 mr-1" />
             {match.location}
-          </span>
+            </span>
           <span>•</span>
           <span>{match.experience} years experience</span>
           <span>•</span>
@@ -126,30 +126,30 @@ const MatchCard = ({ match, index }) => (
           <div className="flex items-center">
             <Brain className="w-4 h-4 text-blue-500 mr-1" />
             <span className="text-sm font-medium text-blue-600">{match.confidence}% match</span>
+              </div>
+            </div>
           </div>
-        </div>
       </div>
-    </div>
     
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
       <div>
         <p className="text-xs text-gray-500">Price</p>
         <p className="text-sm font-medium text-gray-900">₹{match.price.toLocaleString()}</p>
-      </div>
+          </div>
       <div>
         <p className="text-xs text-gray-500">Delivery</p>
         <p className="text-sm font-medium text-gray-900">{match.deliveryTime}</p>
-      </div>
+          </div>
       <div>
         <p className="text-xs text-gray-500">Rating</p>
         <p className="text-sm font-medium text-gray-900">{match.rating}/5</p>
-      </div>
+          </div>
       <div>
         <p className="text-xs text-gray-500">Match Score</p>
         <p className="text-sm font-medium text-blue-600">{match.confidence}%</p>
+        </div>
       </div>
-    </div>
-    
+
     <div className="mb-4">
       <h4 className="text-sm font-medium text-gray-900 mb-2">AI Insights</h4>
       <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">{match.aiInsights}</p>
@@ -167,7 +167,7 @@ const MatchCard = ({ match, index }) => (
           ))}
         </ul>
       </div>
-      <div>
+          <div>
         <h4 className="text-sm font-medium text-gray-900 mb-2">Considerations</h4>
         <ul className="space-y-1">
           {match.weaknesses.map((weakness, idx) => (
@@ -177,9 +177,9 @@ const MatchCard = ({ match, index }) => (
             </li>
           ))}
         </ul>
-      </div>
-    </div>
-    
+            </div>
+          </div>
+
     <div className="flex items-center justify-between">
       <div className="flex space-x-2">
         <button className="flex items-center px-3 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
@@ -190,12 +190,12 @@ const MatchCard = ({ match, index }) => (
           <Mail className="w-4 h-4 mr-1" />
           Email
         </button>
-      </div>
+                  </div>
       <button className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
         Send Quote Request
       </button>
-    </div>
-  </div>
+            </div>
+          </div>
 );
 
 export default function AIMatchingPage() {
@@ -229,7 +229,7 @@ export default function AIMatchingPage() {
           <h1 className="text-2xl font-bold text-gray-900">AI Matching</h1>
           <p className="text-gray-600">Find the best suppliers using AI-powered matching</p>
         </div>
-        <button 
+        <button
           onClick={handleRefresh}
           disabled={isRefreshing}
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
@@ -263,8 +263,8 @@ export default function AIMatchingPage() {
         <div className="mt-4">
           <p className="text-sm text-gray-600">Description</p>
           <p className="text-sm text-gray-800 mt-1">{matchingData.currentRFQ.description}</p>
+          </div>
         </div>
-      </div>
 
       {/* Filters */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -291,15 +291,15 @@ export default function AIMatchingPage() {
               <option value="medium">Medium (70-89%)</option>
               <option value="low">Low (Below 70%)</option>
             </select>
-          </div>
+                </div>
           
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-600">
               {filteredMatches.length} matches found
             </span>
-          </div>
-        </div>
-      </div>
+                  </div>
+                </div>
+              </div>
 
       {/* AI Matches */}
       <div className="space-y-6">
@@ -309,7 +309,7 @@ export default function AIMatchingPage() {
             <Brain className="w-5 h-5 text-blue-600" />
             <span className="text-sm text-gray-600">Powered by AI</span>
           </div>
-        </div>
+                  </div>
         
         {filteredMatches.length > 0 ? (
           <div className="space-y-4">
@@ -325,8 +325,8 @@ export default function AIMatchingPage() {
             <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
               Refresh Matches
             </button>
-          </div>
-        )}
+                  </div>
+                )}
       </div>
     </div>
   );
