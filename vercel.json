@@ -81,10 +81,10 @@
       "permanent": true
     }
   ],
-  "rewrites": [
-    {
-      "source": "/api/health",
-      "destination": "/api/health/route.ts"
-    }
-  ]
+      "rewrites": [
+        {
+          "source": "/api/health",
+          "destination": "/api/health/simple"
+        }
+      ]
 }
