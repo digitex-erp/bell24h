@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
         state: validatedData.state,
         category: validatedData.category,
         subcategory: validatedData.subcategory,
-        source: validatedData.source,
+        source: validatedData.source.toUpperCase() as any,
         sourceUrl: validatedData.sourceUrl,
         description: validatedData.description,
         employeeCount: validatedData.employeeCount,
