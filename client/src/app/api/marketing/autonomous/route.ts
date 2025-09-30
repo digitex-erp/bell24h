@@ -99,7 +99,7 @@ async function executeMarketingCampaign(campaignType: string, targetCompanies: a
           companyId: company.id,
           companyName: company.name,
           status: 'FAILED',
-          error: result.error,
+          error: result?.error || 'Unknown error',
           timestamp: new Date()
         });
       }
