@@ -58,7 +58,7 @@ async function processVoiceRFQ(audioFile?: string, videoFile?: string, transcrip
     if (audioFile && !transcript) {
       try {
         const response = await openai.audio.transcriptions.create({
-          file: audioFile,
+          file: audioFile as any,
           model: 'whisper-1',
           language: 'en', // Can be made dynamic based on user preference
         })
