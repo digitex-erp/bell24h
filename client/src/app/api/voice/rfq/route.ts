@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
           duration: '2:00', // This will be calculated from actual audio
           status: rfq.status.toLowerCase(),
           createdAt: rfq.createdAt,
-          responses: rfq._count.responses
+          responses: rfq._count.quotes
         })),
         message: 'Voice RFQs retrieved successfully'
       });
