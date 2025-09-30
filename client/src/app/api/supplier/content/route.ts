@@ -55,14 +55,19 @@ export async function GET(request: NextRequest) {
         supplier: {
           id: supplier.id,
           name: supplier.name,
-          slug: supplier.slug,
-          services: supplier.services || [],
-          capabilities: supplier.capabilities || [],
-          gallery: supplier.gallery || [],
+          email: supplier.email,
+          phone: supplier.phone,
+          website: supplier.website,
+          description: supplier.description,
+          category: supplier.category,
+          subcategory: supplier.subcategory,
+          address: supplier.address,
+          city: supplier.city,
+          state: supplier.state,
+          country: supplier.country,
           products: supplier.products,
-          reviews: supplier.reviews,
-          certifications: supplier.certifications,
-          locations: supplier.locations
+          users: supplier.users,
+          rfqs: supplier.rfqs
         }
       }
     });
