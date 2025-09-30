@@ -187,7 +187,7 @@ export async function GET(request: NextRequest) {
 
     // Get RFQs with pagination
     const [rfqs, total] = await Promise.all([
-      prisma.rfq.findMany({
+      prisma.rFQ.findMany({
         where,
         include: {
           buyer: {
@@ -243,7 +243,7 @@ export async function GET(request: NextRequest) {
         skip: (page - 1) * limit,
         take: limit,
       }),
-      prisma.rfq.count({ where }),
+      prisma.rFQ.count({ where }),
     ])
 
     return NextResponse.json({
