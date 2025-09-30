@@ -93,7 +93,6 @@ export async function POST(request: NextRequest) {
         quantity: 1,
         deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
         status: 'OPEN',
-        priority: 'MEDIUM',
         buyerId: 'default-buyer-id' // This will be updated when user auth is implemented
       }
     });
