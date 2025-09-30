@@ -192,14 +192,8 @@ export async function POST(request: NextRequest) {
         pincode: pincode || '',
         gstNumber: gstNumber || '',
         panNumber: panNumber || '',
-        userId,
-        rating: 0,
-        reviewCount: 0,
         isVerified: false,
-        isPremium: false,
-        services: [],
-        capabilities: [],
-        gallery: []
+        isActive: true
       }
     });
 
