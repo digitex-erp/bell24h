@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
         claimedByName: validatedData.claimedByName,
         claimedByPhone: validatedData.claimedByPhone,
         claimedByRole: validatedData.claimedByRole,
-        verificationMethod: validatedData.verificationMethod,
+        verificationMethod: validatedData.verificationMethod.toUpperCase() as any,
         companyDocuments: validatedData.companyDocuments || [],
         additionalInfo: validatedData.additionalInfo,
         status: 'PENDING',
