@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         priority,
         campaignId,
         status: 'sent',
-        messageId: smsResponse.messageId
+        messageId: smsResponse.messageId || 'unknown'
       })
 
       return NextResponse.json({
