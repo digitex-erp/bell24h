@@ -154,11 +154,13 @@ async function getExistingN8NWorkflows() {
 async function getIntegrationStatus() {
   try {
     // Check integration status from database
-    const integrations = await prisma.n8NIntegration.findMany({
-      where: {
-        isActive: true
-      }
-    })
+    // TODO: Add n8NIntegration model to Prisma schema
+    const integrations: any[] = []
+    // const integrations = await prisma.n8NIntegration.findMany({
+    //   where: {
+    //     isActive: true
+    //   }
+    // })
 
     const status = {
       email: integrations.find(i => i.workflowType === 'EMAIL') ? 'connected' : 'disconnected',
