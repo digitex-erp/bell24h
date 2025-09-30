@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       const analysis = await analyzeTranscript(transcript)
 
       // Log processing event
-      console.log(`Voice processing completed for user ${session.user.id}: ${processingTime}ms`)
+      console.log(`Voice processing completed for user mock-user-id: ${processingTime}ms`)
 
       return NextResponse.json({
         success: true,
