@@ -81,7 +81,6 @@ export async function GET(request: NextRequest) {
             select: {
               rfqs: true,
               quotes: true,
-              orders: true,
             },
           },
         },
