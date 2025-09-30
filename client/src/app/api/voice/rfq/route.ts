@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
             select: { name: true, email: true }
           },
           _count: {
-            select: { responses: true }
+            select: { quotes: true }
           }
         }
       });
