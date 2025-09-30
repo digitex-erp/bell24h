@@ -181,7 +181,6 @@ export async function POST(request: NextRequest) {
     const newSupplier = await prisma.company.create({
       data: {
         name,
-        slug,
         description: description || '',
         category,
         subcategory: subcategory || '',
