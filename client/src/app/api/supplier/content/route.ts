@@ -24,9 +24,8 @@ export async function GET(request: NextRequest) {
       where: { id: supplierId },
       include: {
         products: true,
-        reviews: true,
-        certifications: true,
-        locations: true
+        users: true,
+        rfqs: true
       }
     });
 
