@@ -86,7 +86,7 @@ async function executeMarketingCampaign(campaignType: string, targetCompanies: a
         result = await sendWhatsApp(company, messageData);
       }
 
-      if (result.success) {
+      if (result?.success) {
         messagesSent++;
         results.push({
           companyId: company.id,
