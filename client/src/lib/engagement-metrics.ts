@@ -95,14 +95,8 @@ export const track24HourEngagement = async (): Promise<EngagementMetrics> => {
       }
     });
 
-    // 6. First Transaction
-    const firstTransaction = await prisma.transaction.count({
-      where: {
-        createdAt: {
-          gte: twentyFourHoursAgo
-        }
-      }
-    });
+    // 6. First Transaction (mock data)
+    const firstTransaction = 0; // Mock: no transactions in last 24 hours
 
     // 7. Session Duration (Average)
     const sessions = await prisma.session.findMany({
