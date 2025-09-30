@@ -386,15 +386,17 @@ async function triggerCRMFollowUp(companyData: any) {
 
 async function trackScrapingMetrics(metrics: any) {
   // Track scraping performance metrics
-  await prisma.scrapingMetrics.create({
-    data: {
-      date: new Date(),
-      companiesScraped: metrics.companiesScraped,
-      categoriesProcessed: metrics.categoriesProcessed,
-      successRate: metrics.successRate,
-      averageTrustScore: metrics.averageTrustScore
-    }
-  })
+  // TODO: Add scrapingMetrics model to Prisma schema
+  console.log('Scraping metrics:', metrics)
+  // await prisma.scrapingMetrics.create({
+  //   data: {
+  //     date: new Date(),
+  //     companiesScraped: metrics.companiesScraped,
+  //     categoriesProcessed: metrics.categoriesProcessed,
+  //     successRate: metrics.successRate,
+  //     averageTrustScore: metrics.averageTrustScore
+  //   }
+  // })
 }
 
 async function calculateScrapingROI(results: any) {
