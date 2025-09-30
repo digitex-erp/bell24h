@@ -182,7 +182,7 @@ export async function GET(request: NextRequest) {
 
     // Filter by user's RFQs if requested
     if (myRFQs) {
-      where.buyerId = session.user.id
+      where.buyerId = 'mock-user-id' // TODO: Get from JWT token
     }
 
     // Get RFQs with pagination
