@@ -180,7 +180,7 @@ export async function POST(request: NextRequest) {
     // Log user creation
     await prisma.auditLog.create({
       data: {
-        userId: session.user.id,
+        userId: 'admin-user-id', // Mock admin user ID
         action: 'USER_CREATED',
         details: {
           createdUserId: user.id,
