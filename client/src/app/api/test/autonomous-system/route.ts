@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
       }
     };
 
-    let responseData = mockData;
+    let responseData: any = mockData;
 
     if (testType === 'scraping') {
       responseData = { scraping: mockData.scraping };
