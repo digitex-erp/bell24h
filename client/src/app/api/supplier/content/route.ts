@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch supplier with all content
-    const supplier = await prisma.supplier.findUnique({
+    const supplier = await prisma.company.findUnique({
       where: { id: supplierId },
       include: {
         products: true,
@@ -109,7 +109,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Get current supplier data
-    const supplier = await prisma.supplier.findUnique({
+    const supplier = await prisma.company.findUnique({
       where: { id: supplierId }
     });
 
@@ -132,7 +132,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update supplier record
-    const updatedSupplier = await prisma.supplier.update({
+    const updatedSupplier = await prisma.company.update({
       where: { id: supplierId },
       data: updatedContent
     });
