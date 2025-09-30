@@ -7,17 +7,13 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type');
 
     if (type === 'transactions') {
-      // Get real transactions from database
-      const transactions = await prisma.transaction.findMany({
+      // Get real transactions from database - using Payment model instead
+      const transactions = await prisma.payment.findMany({
         take: 10,
         orderBy: { createdAt: 'desc' },
         include: {
-          wallet: {
-            include: {
-              user: {
-                select: { name: true, email: true }
-              }
-            }
+          user: {
+            select: { name: true, email: true }
           }
         }
       });
