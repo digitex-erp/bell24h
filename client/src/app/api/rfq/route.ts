@@ -75,7 +75,7 @@ async function processVoiceRFQ(audioFile?: string, videoFile?: string, transcrip
         // Note: This would require video processing service
         // For now, we'll assume the video contains audio that can be extracted
         const response = await openai.audio.transcriptions.create({
-          file: videoFile,
+          file: videoFile as any,
           model: 'whisper-1',
           language: 'en',
         })
