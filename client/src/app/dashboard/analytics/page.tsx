@@ -39,9 +39,9 @@ const analyticsData = {
 };
 
 const KPICard = ({ title, value, change, icon: Icon, color = 'blue' }) => (
-  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-    <div className="flex items-center justify-between">
-      <div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
         <p className="text-sm text-gray-600">{title}</p>
         <p className="text-2xl font-bold text-gray-900">{value}</p>
         {change && (
@@ -49,14 +49,14 @@ const KPICard = ({ title, value, change, icon: Icon, color = 'blue' }) => (
             {change}
           </p>
         )}
-      </div>
+              </div>
       <Icon className={`w-8 h-8 text-${color}-600`} />
-    </div>
-  </div>
+            </div>
+          </div>
 );
 
 const ChartCard = ({ title, children }) => (
-  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
     <h3 className="text-lg font-semibold text-gray-900 mb-4">{title}</h3>
     {children}
   </div>
@@ -66,11 +66,11 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
+            <div className="flex items-center justify-between">
+              <div>
           <h1 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
           <p className="text-gray-600">Comprehensive insights into your B2B marketplace performance</p>
-        </div>
+              </div>
         <div className="flex space-x-3">
           <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
             Export Report
@@ -78,8 +78,8 @@ export default function AnalyticsPage() {
           <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
             Refresh Data
           </button>
-        </div>
-      </div>
+            </div>
+          </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -111,7 +111,7 @@ export default function AnalyticsPage() {
           icon={TrendingUp}
           color="orange"
         />
-      </div>
+          </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -136,7 +136,7 @@ export default function AnalyticsPage() {
             </div>
           </div>
         </ChartCard>
-      </div>
+        </div>
 
       {/* Top Suppliers Table */}
       <ChartCard title="Top Performing Suppliers">
@@ -170,7 +170,7 @@ export default function AnalyticsPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                       {supplier.successRate}%
-                    </span>
+                  </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     ₹{(supplier.revenue / 100000).toFixed(1)}L
@@ -179,30 +179,30 @@ export default function AnalyticsPage() {
               ))}
             </tbody>
           </table>
-        </div>
+          </div>
       </ChartCard>
 
       {/* Additional Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Response Time</h3>
           <div className="text-center">
             <p className="text-3xl font-bold text-blue-600">{analyticsData.kpis.avgResponseTime}</p>
             <p className="text-sm text-gray-500">Average response time</p>
+            </div>
           </div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Category</h3>
           <div className="text-center">
             <p className="text-2xl font-bold text-green-600">{analyticsData.kpis.topCategory}</p>
             <p className="text-sm text-gray-500">Most active category</p>
+            </div>
           </div>
-        </div>
-        
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Activity Score</h3>
-          <div className="text-center">
+              <div className="text-center">
             <p className="text-3xl font-bold text-purple-600">94</p>
             <p className="text-sm text-gray-500">Platform activity score</p>
           </div>
