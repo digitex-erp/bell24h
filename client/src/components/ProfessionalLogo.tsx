@@ -67,17 +67,17 @@ export default function ProfessionalLogo({
         <div
           className={`${
             sizes[size].icon
-          } bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-xl group-hover:shadow-blue-500/40 transition-all duration-300 ${
+          } rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-xl group-hover:shadow-blue-500/40 transition-all duration-300 ${
             isPlaying ? 'animate-pulse scale-110' : ''
           }`}
         >
-          <span
-            className={`text-white ${sizes[size].emoji} font-bold ${
+          <img
+            src="/bell-logo.jpeg"
+            alt="BELL Logo"
+            className={`${sizes[size].icon} object-contain rounded-2xl ${
               isPlaying ? 'animate-bounce' : ''
             }`}
-          >
-            🔔
-          </span>
+          />
         </div>
 
         {/* Admin Indicator */}
@@ -94,7 +94,7 @@ export default function ProfessionalLogo({
           <h1
             className={`${sizes[size].text} font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent tracking-tight leading-none`}
           >
-            Bell24H
+            BELL
           </h1>
           {size === 'lg' && (
             <p className='text-sm text-gray-600 font-medium -mt-1'>Enterprise Platform</p>
