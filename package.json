@@ -40,6 +40,7 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@types/axios": "^0.14.0",
+    "@types/pg": "^8.15.5",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.0.0"
   }
