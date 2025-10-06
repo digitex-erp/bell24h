@@ -50,7 +50,6 @@ import {
   Package,
   Factory,
   Wrench,
-  Wrench,
   Cog,
   Zap as Lightning
 } from 'lucide-react';
