@@ -424,7 +424,7 @@ const Bell24hComprehensiveAssessment = () => {
     }
   };
 
-  const getPriorityColor = (priority) => {
+  const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'critical':
         return 'border-red-500 bg-red-50';
