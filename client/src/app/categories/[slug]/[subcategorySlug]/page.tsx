@@ -72,10 +72,10 @@ export async function generateMetadata({ params }: SubcategoryPageProps): Promis
   }
 
   return {
-    title: `${data.name} in ${data.categories.name} - Bell24h B2B Marketplace`,
-    description: data.description || `Browse ${data.name} products and suppliers in ${data.categories.name} category on Bell24h`,
+    title: `${data.name} in ${data.categories[0]?.name || 'Category'} - Bell24h B2B Marketplace`,
+    ddescription: data.description || `Browse ${data.name} products and suppliers in ${data.categories[0]?.name || 'Category'} category on Bell24h`,
     openGraph: {
-      title: `${data.name} - ${data.categories.name}`,
+      title: `${data.name} - ${data.categories[0]?.name || 'Category'}`,
       description: data.description || `Browse ${data.name} products and suppliers`,
       url: `https://bell24h-v1.vercel.app/categories/${params.slug}/${params.subcategorySlug}`,
     }
