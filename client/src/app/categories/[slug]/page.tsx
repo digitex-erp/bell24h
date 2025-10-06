@@ -146,7 +146,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               Explore {category.name} Subcategories
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {category.subcategories.map((subcategory) => (
+              {category.subcategories.map((subcategory: any) => (
                 <Link
                   key={subcategory.id}
                   href={`/categories/${params.slug}/${subcategory.slug}`}
