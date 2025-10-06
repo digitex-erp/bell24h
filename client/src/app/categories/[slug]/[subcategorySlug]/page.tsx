@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: SubcategoryPageProps): Promis
 
   return {
     title: `${data.name} in ${data.categories[0]?.name || 'Category'} - Bell24h B2B Marketplace`,
-    ddescription: data.description || `Browse ${data.name} products and suppliers in ${data.categories[0]?.name || 'Category'} category on Bell24h`,
+    description: data.description || `Browse ${data.name} products and suppliers in ${data.categories[0]?.name || 'Category'} category on Bell24h`,
     openGraph: {
       title: `${data.name} - ${data.categories[0]?.name || 'Category'}`,
       description: data.description || `Browse ${data.name} products and suppliers`,
