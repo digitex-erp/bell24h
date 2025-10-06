@@ -411,7 +411,7 @@ const Bell24hComprehensiveAssessment = () => {
     }
   ];
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'complete':
         return <CheckCircle className="w-5 h-5 text-green-500" />;
