@@ -12,8 +12,8 @@ function ResetPasswordForm() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const errorParam = searchParams.get('error');
-    const messageParam = searchParams.get('message');
+    const errorParam = searchParams?.get('error');
+    const messageParam = searchParams?.get('message');
 
     if (errorParam && messageParam) {
       setError(decodeURIComponent(messageParam));
