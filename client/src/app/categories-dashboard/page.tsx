@@ -368,7 +368,7 @@ export default function CategoriesDashboard() {
         </div>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+        <Tabs defaultValue={activeTab} className="mb-8">
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="all">All Categories</TabsTrigger>
             <TabsTrigger value="trending">Trending</TabsTrigger>
