@@ -56,7 +56,7 @@ import {
 
 const Bell24hComprehensiveAssessment = () => {
   const [selectedTab, setSelectedTab] = useState('current-status');
-  const [selectedRole, setSelectedRole] = useState('buyer');
+  const [selectedRole, setSelectedRole] = useState<keyof typeof userRoles | null>(null);
 
   // Current Bell24h Status Assessment
   const currentFeatures = {
@@ -164,7 +164,14 @@ const Bell24hComprehensiveAssessment = () => {
   };
 
   // Multi-Role User System Requirements
-  const userRoles = {
+  interface RoleDetails {
+    icon: React.ReactNode;
+    color: string;
+    features: string[];
+    dashboard: string[];
+  }
+
+  const userRoles: { [key: string]: RoleDetails } = {
     buyer: {
       icon: <ShoppingCart className="w-6 h-6" />,
       color: 'bg-blue-500',
@@ -635,39 +642,41 @@ const Bell24hComprehensiveAssessment = () => {
             </div>
 
             {/* Selected Role Details */}
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6 capitalize">
-                {selectedRole} Dashboard & Features
-              </h3>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Core Features */}
-                <div>
-                  <h4 className="text-xl font-semibold text-gray-900 mb-4">Core Features</h4>
-                  <div className="space-y-3">
-                    {userRoles[selectedRole].features.map((feature, index) => (
-                      <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                        <CheckCircle className="w-5 h-5 text-green-500" />
-                        <span className="text-gray-700">{feature}</span>
-                      </div>
-                    ))}
+            {selectedRole && (
+              <div className="bg-white p-8 rounded-xl shadow-lg">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6 capitalize">
+                  {selectedRole} Dashboard & Features
+                </h3>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Core Features */}
+                  <div>
+                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Core Features</h4>
+                    <div className="space-y-3">
+                      {userRoles[selectedRole].features.map((feature, index) => (
+                        <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                          <CheckCircle className="w-5 h-5 text-green-500" />
+                          <span className="text-gray-700">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* Dashboard Components */}
-                <div>
-                  <h4 className="text-xl font-semibold text-gray-900 mb-4">Dashboard Components</h4>
-                  <div className="space-y-3">
-                    {userRoles[selectedRole].dashboard.map((component, index) => (
-                      <div key={index} className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                        <BarChart3 className="w-5 h-5 text-blue-500" />
-                        <span className="text-blue-700">{component}</span>
-                      </div>
-                    ))}
+                  {/* Dashboard Components */}
+                  <div>
+                    <h4 className="text-xl font-semibold text-gray-900 mb-4">Dashboard Components</h4>
+                    <div className="space-y-3">
+                      {userRoles[selectedRole].dashboard.map((component, index) => (
+                        <div key={index} className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                          <BarChart3 className="w-5 h-5 text-blue-500" />
+                          <span className="text-blue-700">{component}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         )}
 

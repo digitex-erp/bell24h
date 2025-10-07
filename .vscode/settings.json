@@ -80,5 +80,8 @@
   "mcpAutoStart": true,
   "mcpPerformanceMode": true,
   "mcpLogLevel": "info",
-  "mcpTimeout": 10000
+  "mcpTimeout": 10000,
+  "terminal.integrated.automationProfile.linux": {
+    
+  }
 }
