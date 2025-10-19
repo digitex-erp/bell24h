@@ -13,11 +13,10 @@ const nextConfig = {
   // Skip problematic features during build
   eslint: {
     ignoreDuringBuilds: true,
-    dirs: [], // Disable ESLint completely
   },
 
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
 
   // Optimized experimental features

@@ -1,9 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
+import formidable from 'formidable';
+import fs from 'fs';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -11,16 +19,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const formData = await req.formData();
-    const audioFile = formData.get('audio') as File;
+    const form = new formidable.IncomingForm();
+    
+    const [fields, files] = await form.parse(req);
+    const audioFile = files.audio?.[0];
 
     if (!audioFile) {
       return res.status(400).json({ error: 'No audio file provided' });
     }
 
-    // Convert File to Buffer
-    const arrayBuffer = await audioFile.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // Read the file buffer
+    const buffer = fs.readFileSync(audioFile.filepath);
 
     // Create a File-like object for OpenAI
     const file = new File([buffer], 'recording.wav', { type: 'audio/wav' });

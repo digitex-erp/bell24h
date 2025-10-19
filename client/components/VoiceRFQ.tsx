@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useWeb3 } from '@/lib/web3';
-import { useBellEscrow } from '@/lib/web3';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useWeb3, useBellEscrow } from '../lib/web3';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Mic, MicOff, Play, Pause, Square, Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -245,11 +244,11 @@ export const VoiceRFQ: React.FC<VoiceRFQProps> = ({ onRFQCreated }) => {
       if (rfqData.milestones.length > 0 && rfqData.milestoneAmounts.some(amount => amount)) {
         const milestoneAmounts = rfqData.milestoneAmounts
           .filter(amount => amount)
-          .map(amount => amount);
+          .map(amount => amount.toString());
         
         const tx = await createEscrow(
           '0x0000000000000000000000000000000000000000', // Placeholder supplier address
-          rfqData.milestones.filter(milestone => milestone),
+          rfqData.milestones.filter(milestone => milestone).map(milestone => Number(milestone)),
           milestoneAmounts
         );
         
