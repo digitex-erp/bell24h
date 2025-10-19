@@ -1,12 +1,12 @@
 import React from 'react';
-import { Web3Provider } from '@/lib/web3';
-import { VoiceRFQ } from '@/components/VoiceRFQ';
-import { PredictiveAnalytics } from '@/components/PredictiveAnalytics';
-import { SupplierRiskScoring } from '@/components/SupplierRiskScoring';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Web3Provider } from '../lib/web3';
+import { VoiceRFQ } from '../components/VoiceRFQ';
+import { PredictiveAnalytics } from '../components/PredictiveAnalytics';
+import { SupplierRiskScoring } from '../components/SupplierRiskScoring';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
 import { 
   Mic, 
   BarChart3, 
