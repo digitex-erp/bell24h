@@ -1,0 +1,28 @@
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/*.log
+backend/*.err
+
+# Node / Next
+frontend/node_modules/
+.next/
+dist/
+
+# Cypress / local test output
+cypress/screenshots/
+cypress/videos/
+
+# IDEs / OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Keys / local secrets
+keys/
+ssh-*.txt
+*.pem
+*.key
+
+# Other big local assets
+backend/app/models/*.pkl
