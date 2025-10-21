@@ -243,7 +243,10 @@ export default function AIFeaturesDashboard() {
                     </div>
                   </div>
                   <div>
-                    <VoiceRFQ />
+                    <VoiceRFQ onRFQCreated={(rfqData) => {
+                      console.log('RFQ Created:', rfqData);
+                      // Handle RFQ creation
+                    }} />
                   </div>
                 </div>
               </div>
