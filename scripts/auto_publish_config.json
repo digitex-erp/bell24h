@@ -1,0 +1,19 @@
+{
+  "default_remote": "origin",
+  "repo_owner": "ORG",
+  "repo_name": "REPO",
+  "branch": "dev/live-e2e-stable",
+  "gitignore_entries": [
+    "backend/.venv/",
+    "frontend/node_modules/",
+    ".next/",
+    "dist/",
+    "cypress/screenshots/",
+    "cypress/videos/",
+    "keys/",
+    "ssh-*.txt",
+    "*.pem",
+    "*.key",
+    "backend/app/models/*.pkl"
+  ]
+}
