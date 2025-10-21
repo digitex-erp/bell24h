@@ -24,7 +24,7 @@ const pool =
     : new Pool({
         connectionString: DATABASE_URL,
         ssl: NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
-      });
+      } as any);
 
 export async function GET() {
   try {
