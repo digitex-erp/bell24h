@@ -10,9 +10,10 @@ const nextConfig = {
     domains: ['localhost', 'vercel.app'],
   },
 
-  // Skip problematic features during build
+  // ESLint configuration
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
+    dirs: ['pages', 'utils', 'components', 'lib', 'src']
   },
 
   typescript: {
