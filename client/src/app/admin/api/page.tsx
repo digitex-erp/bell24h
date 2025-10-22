@@ -199,7 +199,7 @@ export default function APIManagementPage() {
     }
   };
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
         return <CheckCircle className="w-4 h-4" />;
