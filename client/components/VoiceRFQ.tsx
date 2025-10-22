@@ -27,7 +27,7 @@ interface RFQData {
   milestoneAmounts: string[];
 }
 
-export const VoiceRFQ: React.FC<VoiceRFQProps> = ({ onRFQCreated }) => {
+export const VoiceRFQ: React.FC<VoiceRFQProps> = ({ onRFQCreated, userId }) => {
   const { isConnected, connect } = useWeb3();
   const { createEscrow } = useBellEscrow();
   
