@@ -1,0 +1,119 @@
+name: Production Deployment
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  # Run tests before deployment
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: ./client
+        run: npx prisma generate
+
+      - name: Run linting
+        working-directory: ./client
+        run: npm run lint
+
+      - name: Run type checking
+        working-directory: ./client
+        run: npx tsc --noEmit
+
+      - name: Build application
+        working-directory: ./client
+        run: npm run build
+
+  # Deploy to Vercel
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        working-directory: ./client
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+  # Run E2E tests after deployment
+  e2e-tests:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: ./client
+        run: npx prisma generate
+
+      - name: Run Cypress E2E tests
+        working-directory: ./client
+        run: npm run cypress:run
+        env:
+          CYPRESS_BASE_URL: https://bell24h.vercel.app
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: https://bell24h.vercel.app
+
+  # Health check after deployment
+  health-check:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Health check
+        run: |
+          curl -f https://bell24h.vercel.app/api/health || exit 1
+          curl -f https://bell24h.vercel.app/api/health/db || exit 1
+          curl -f https://bell24h.vercel.app/api/health/ai || exit 1
+
+      - name: Notify deployment success
+        run: |
+          echo "✅ BELL24h successfully deployed to production!"
+          echo "🌐 URL: https://bell24h.vercel.app"
+          echo "📊 Admin: https://bell24h.vercel.app/admin"
+          echo "🤖 AI Insights: https://bell24h.vercel.app/dashboard/ai-insights"
