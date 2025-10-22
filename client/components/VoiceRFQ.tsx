@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 
 interface VoiceRFQProps {
   onRFQCreated?: (rfqData: any) => void;
+  userId?: string;
 }
 
 interface RFQData {
