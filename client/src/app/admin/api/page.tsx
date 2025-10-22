@@ -186,7 +186,7 @@ export default function APIManagementPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [levelFilter, setLevelFilter] = useState('all');
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
         return 'text-green-600 bg-green-100';
@@ -373,7 +373,7 @@ export default function APIManagementPage() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <select
+                  <select aria-label="Filter by status"
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -383,7 +383,7 @@ export default function APIManagementPage() {
                     <option value="maintenance">Maintenance</option>
                     <option value="inactive">Inactive</option>
                   </select>
-                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center">
+                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center" aria-label="Open more filters">
                     <Filter className="w-4 h-4 mr-2" />
                     More Filters
                   </button>
@@ -457,10 +457,10 @@ export default function APIManagementPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
-                            <button className="text-blue-600 hover:text-blue-900">
+                            <button className="text-blue-600 hover:text-blue-900" aria-label="View endpoint details">
                               <Eye className="w-4 h-4" />
                             </button>
-                            <button className="text-green-600 hover:text-green-900">
+                            <button className="text-green-600 hover:text-green-900" aria-label="Configure endpoint">
                               <Settings className="w-4 h-4" />
                             </button>
                           </div>
@@ -550,7 +550,7 @@ export default function APIManagementPage() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <select
+                  <select aria-label="Filter by level"
                     value={levelFilter}
                     onChange={(e) => setLevelFilter(e.target.value)}
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -560,7 +560,7 @@ export default function APIManagementPage() {
                     <option value="warning">Warning</option>
                     <option value="error">Error</option>
                   </select>
-                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center">
+                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center" aria-label="Open more log filters">
                     <Filter className="w-4 h-4 mr-2" />
                     More Filters
                   </button>
@@ -635,7 +635,7 @@ export default function APIManagementPage() {
                           <span className="text-sm text-gray-900">{log.message}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button className="text-blue-600 hover:text-blue-900">
+                          <button className="text-blue-600 hover:text-blue-900" aria-label="View log details">
                             <Eye className="w-4 h-4" />
                           </button>
                         </td>
