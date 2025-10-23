@@ -7,6 +7,9 @@
     "build": "prisma generate && next build",
     "build:vercel": "prisma generate && next build",
     "build:memory": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" prisma generate && next build",
+    "build:analyze": "cross-env ANALYZE=true npm run build",
+    "build:production": "cross-env NODE_ENV=production NODE_OPTIONS=\"--max-old-space-size=4096\" npm run build",
+    "start:production": "cross-env NODE_ENV=production npm run start",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
@@ -77,7 +80,6 @@
     "formidable": "^3.5.4",
     "framer-motion": "^12.23.24",
     "hardhat-gas-reporter": "^2.3.0",
-    "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.263.1",
     "msg91-api": "^1.1.0",
@@ -107,6 +109,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/bcryptjs": "^2.4.6",
+    "@types/ioredis": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.19.22",
     "@types/react": "^18.3.23",
@@ -118,13 +121,15 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.30",
     "express": "^5.1.0",
+    "ioredis": "^5.8.2",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "postcss": "^8.4.47",
     "prisma": "^5.22.0",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.20.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
