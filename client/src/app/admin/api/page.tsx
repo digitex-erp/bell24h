@@ -212,7 +212,7 @@ export default function APIManagementPage() {
     }
   };
 
-  const getMethodColor = (method) => {
+  const getMethodColor = (method: string) => {
     switch (method) {
       case 'GET':
         return 'text-green-600 bg-green-100';
@@ -227,7 +227,7 @@ export default function APIManagementPage() {
     }
   };
 
-  const getLevelColor = (level) => {
+  const getLevelColor = (level: string) => {
     switch (level) {
       case 'info':
         return 'text-blue-600 bg-blue-100';
