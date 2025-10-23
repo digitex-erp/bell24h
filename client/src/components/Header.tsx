@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ArrowLeft, Home, MessageSquare, CreditCard, Wallet } from 'lucide-react';
+import { ArrowLeft, Home, MessageSquare, CreditCard, Wallet, Brain } from 'lucide-react';
 
 interface HeaderProps {
   title: string;
@@ -47,6 +47,10 @@ export default function Header({ title, showBackButton = true, backUrl = '/' }: 
             <Link href="/" className="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
               <Home className="h-4 w-4 mr-1" />
               Home
+            </Link>
+            <Link href="/dashboard/ai-insights" className="flex items-center text-gray-600 hover:text-blue-600 transition-colors">
+              <Brain className="h-4 w-4 mr-1" />
+              AI Insights
             </Link>
             <Link href="/suppliers" className="text-gray-600 hover:text-blue-600 transition-colors">
               Suppliers
