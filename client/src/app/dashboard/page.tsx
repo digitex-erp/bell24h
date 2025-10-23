@@ -98,7 +98,12 @@ const AISummaryPanel = ({ insights }) => (
         <Lightbulb className="w-5 h-5 mr-2 text-blue-600" />
         Today's AI Insights
       </h3>
-      <span className="text-sm text-gray-500">Updated 2 minutes ago</span>
+      <a 
+        href="/dashboard/ai-insights"
+        className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+      >
+        View Details →
+      </a>
     </div>
     
     <div className="space-y-4">

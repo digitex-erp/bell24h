@@ -33,9 +33,6 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
     serverComponentsExternalPackages: ['ioredis', '@prisma/client'],
-    // Memory optimization
-    memoryBasedWorkers: true,
-    workerThreads: false,
     // Performance features
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
@@ -107,9 +104,11 @@ const nextConfig = {
       sideEffects: false,
     };
 
-    // Tree shaking optimization
-    config.optimization.usedExports = true;
-    config.optimization.sideEffects = false;
+    // Tree shaking optimization (only in production)
+    if (!dev) {
+      config.optimization.usedExports = true;
+      config.optimization.sideEffects = false;
+    }
 
     // Bundle analyzer in development
     if (dev && process.env.ANALYZE === 'true') {
