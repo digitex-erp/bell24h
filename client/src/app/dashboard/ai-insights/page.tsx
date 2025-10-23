@@ -223,7 +223,10 @@ export default function AIInsightsDashboard() {
                 <Eye className="w-4 h-4 mr-2" />
                 {viewMode === 'overview' ? 'Detailed View' : 'Overview'}
               </button>
-              <button className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+              <button 
+                className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                data-testid="export-button"
+              >
                 <Download className="w-4 h-4 mr-2" />
                 Export Report
               </button>
@@ -238,24 +241,26 @@ export default function AIInsightsDashboard() {
               <div className="p-6 border-b">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Suppliers</h2>
                 
-                {/* Search and Filters */}
-                <div className="space-y-4">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                    <input
-                      type="text"
-                      placeholder="Search suppliers..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
+              {/* Search and Filters */}
+              <div className="space-y-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Search suppliers..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    data-testid="search-input"
+                  />
+                </div>
                   
                   <div className="flex space-x-2">
                     <select
                       value={statusFilter}
                       onChange={(e) => setStatusFilter(e.target.value)}
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      data-testid="status-filter"
                     >
                       <option value="all">All Status</option>
                       <option value="active">Active</option>
@@ -278,7 +283,7 @@ export default function AIInsightsDashboard() {
               </div>
 
               {/* Supplier List */}
-              <div className="max-h-96 overflow-y-auto">
+              <div className="max-h-96 overflow-y-auto" data-testid="supplier-list">
                 {sortedSuppliers.map((supplier) => (
                   <div
                     key={supplier.id}
@@ -286,6 +291,7 @@ export default function AIInsightsDashboard() {
                     className={`p-4 border-b cursor-pointer hover:bg-gray-50 ${
                       selectedSupplier?.id === supplier.id ? 'bg-blue-50 border-blue-200' : ''
                     }`}
+                    data-testid="supplier-item"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-medium text-gray-900">{supplier.name}</h3>
@@ -391,11 +397,11 @@ export default function AIInsightsDashboard() {
                 {/* SHAP/LIME Visualizations */}
                 {loading ? (
                   <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-                    <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+                    <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" data-testid="loading-spinner" />
                     <p className="text-gray-600">Loading AI insights...</p>
                   </div>
                 ) : aiInsights ? (
-                  <div className="space-y-6">
+                  <div className="space-y-6" data-testid="ai-insights">
                     {/* SHAP Visualization */}
                     <div className="bg-white rounded-lg shadow-sm border p-6">
                       <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -427,7 +433,7 @@ export default function AIInsightsDashboard() {
                     </div>
 
                     {/* AI Recommendation */}
-                    <div className="bg-white rounded-lg shadow-sm border p-6">
+                    <div className="bg-white rounded-lg shadow-sm border p-6" data-testid="prediction-summary">
                       <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                         <Zap className="w-5 h-5 mr-2 text-purple-600" />
                         AI Recommendation
@@ -440,7 +446,15 @@ export default function AIInsightsDashboard() {
                           </span>
                         </div>
                         <div className="bg-gray-50 rounded-lg p-4">
-                          <p className="text-gray-800">{aiInsights.prediction.recommendation}</p>
+                          <p className="text-gray-800" data-testid="recommendation">{aiInsights.prediction.recommendation}</p>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Overall Score:</span>
+                          <span className="font-medium" data-testid="overall-score">{aiInsights.prediction.score}/100</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Confidence:</span>
+                          <span className="font-medium" data-testid="confidence">{(aiInsights.prediction.confidence * 100).toFixed(1)}%</span>
                         </div>
                       </div>
                     </div>

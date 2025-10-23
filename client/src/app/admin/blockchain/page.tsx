@@ -168,7 +168,7 @@ export default function BlockchainManagementPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
       case 'success':
@@ -184,7 +184,7 @@ export default function BlockchainManagementPage() {
     }
   };
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
       case 'success':
@@ -200,11 +200,11 @@ export default function BlockchainManagementPage() {
     }
   };
 
-  const formatAddress = (address) => {
+  const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
-  const formatValue = (value, decimals = 18) => {
+  const formatValue = (value: number, decimals: number = 18) => {
     return (value / Math.pow(10, decimals)).toFixed(4);
   };
 
