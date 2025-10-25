@@ -39,7 +39,7 @@ export function useRFQs() {
   });
 
   // Get single RFQ by ID
-  const getRFQ = (id: number) => {
+  const useGetRFQ = (id: number) => {
     return useQuery<RFQ>({
       queryKey: [`/api/rfqs/${id}`],
     });
@@ -118,7 +118,7 @@ export function useRFQs() {
     rfqsError,
     refetchRFQs,
     createRFQMutation,
-    getRFQ,
+    getRFQ: useGetRFQ,
     updateRFQMutation,
     voiceRFQMutation,
     analyzeRFQMutation,

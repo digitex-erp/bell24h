@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { Award } from 'lucide-react';
 
 export default function SearchResultsPage() {
   const [searchTerm, setSearchTerm] = useState('');

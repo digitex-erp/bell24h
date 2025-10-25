@@ -1,5 +1,5 @@
 'use client';
-import { AlertTriangle, Unlock } from 'lucide-react';
+import { AlertTriangle, Unlock, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
 interface EscrowTransaction {

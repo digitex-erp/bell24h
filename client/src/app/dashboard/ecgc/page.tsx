@@ -1,6 +1,6 @@
 'use client';
 
-import { Building, BarChart3, Shield, Globe, FileText, AlertTriangle, Target } from 'lucide-react';
+import { Building, BarChart3, Shield, Globe, FileText, AlertTriangle, Target, Info } from 'lucide-react';
 import { useState } from 'react';
 
 interface ECGCPolicy {

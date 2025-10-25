@@ -27,6 +27,7 @@ import {
   Zap,
   Shield,
   Award,
+  XCircle,
 } from 'lucide-react';
 import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
 

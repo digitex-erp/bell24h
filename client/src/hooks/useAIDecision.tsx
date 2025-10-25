@@ -163,10 +163,14 @@ export const withAIDecision = <P extends object>(
   WrappedComponent: React.ComponentType<P & AIDecisionState>,
   options: AIDecisionOptions
 ) => {
-  return (props: P) => {
+  const WithAIDecisionComponent = (props: P) => {
     const aiDecision = useAIDecision(options);
     return <WrappedComponent {...props} {...aiDecision} />;
   };
+  
+  WithAIDecisionComponent.displayName = `withAIDecision(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+  
+  return WithAIDecisionComponent;
 };
 
 export default useAIDecision;

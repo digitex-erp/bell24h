@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Database, AlertCircle } from 'lucide-react';
 
 export default function PrivacyPage() {
   const [hasMounted, setHasMounted] = useState(false);

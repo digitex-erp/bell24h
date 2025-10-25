@@ -36,10 +36,10 @@ export class CacheManager {
       
       if (process.env.REDIS_URL) {
         this.redis = new Redis(process.env.REDIS_URL, {
-          retryDelayOnFailover: 100,
-          enableReadyCheck: false,
+      retryDelayOnFailover: 100,
+      enableReadyCheck: false,
           maxRetriesPerRequest: 3,
-          lazyConnect: true,
+      lazyConnect: true,
         });
 
         this.redis.on('connect', () => {
@@ -52,15 +52,15 @@ export class CacheManager {
           this.isRedisAvailable = false;
         });
       }
-    } catch (error) {
+  } catch (error) {
       console.warn('Redis not available, using memory cache:', error);
       this.isRedisAvailable = false;
     }
   }
 
   async get<T>(key: string): Promise<T | null> {
-    try {
-      // Try Redis first
+  try {
+    // Try Redis first
       if (this.isRedisAvailable && this.redis) {
         const cached = await this.redis.get(key);
         if (cached) {
@@ -71,9 +71,9 @@ export class CacheManager {
           }
           return item.data;
         }
-      }
-
-      // Fallback to memory cache
+  }
+  
+  // Fallback to memory cache
       const item = this.memoryCache.get(key);
       if (item && !this.isExpired(item)) {
         return item.data;
@@ -140,8 +140,8 @@ export class CacheManager {
         if (item.tags.includes(tag)) {
           this.memoryCache.delete(key);
         }
-      }
-    } catch (error) {
+    }
+  } catch (error) {
       console.error('Cache invalidation error:', error);
     }
   }

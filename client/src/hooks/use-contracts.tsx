@@ -17,7 +17,7 @@ export function useContracts() {
   });
 
   // Get single contract by ID
-  const getContract = (id: number) => {
+  const useGetContract = (id: number) => {
     return useQuery<Contract>({
       queryKey: [`/api/contracts/${id}`],
     });
@@ -92,7 +92,7 @@ export function useContracts() {
     isLoadingContracts,
     contractsError,
     refetchContracts,
-    getContract,
+    getContract: useGetContract,
     createContractMutation,
     updateContractStatusMutation,
   };
