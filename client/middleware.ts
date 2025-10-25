@@ -18,12 +18,10 @@ export function middleware(request: NextRequest) {
       pathname
     });
     
-    // Allow dashboard access even without authentication for testing
-    // In production, you might want to redirect to login
+    // SECURITY: Require authentication for dashboard access
     if (!token && !session) {
-      console.log('⚠️ No authentication found, but allowing dashboard access for testing');
-      // Uncomment next line for production authentication enforcement:
-      // return NextResponse.redirect(new URL('/auth/login', request.url));
+      console.log('🔒 No authentication found, redirecting to login');
+      return NextResponse.redirect(new URL('/auth/login', request.url));
     }
     
     return NextResponse.next();
