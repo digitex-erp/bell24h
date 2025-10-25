@@ -63,9 +63,9 @@ export class PerformanceMonitor {
         for (const entry of list.getEntries()) {
           if (!(entry as any).hadRecentInput) {
             this.recordMetric('CLS', (entry as any).value);
-          }
         }
-      });
+      }
+    });
       clsObserver.observe({ entryTypes: ['layout-shift'] });
       this.observers.push(clsObserver);
     } catch (error) {
