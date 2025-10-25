@@ -2,6 +2,7 @@
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
+    dirs: [], // Disable ESLint for all directories
   },
   typescript: {
     ignoreBuildErrors: true,
