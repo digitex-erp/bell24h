@@ -52,8 +52,7 @@ class MockDB {
 // Ensure the instance persists across hot reloads and in any runtime (edge or node)
 // by attaching it to globalThis. Next.js clears the module cache between requests
 // in edge runtimes, so relying on static module state is not enough.
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-const globalWithMockDB = globalThis as unknown as { __mock_db?: MockDB };
+const globalWithMockDB = globalThis as any;
 
 if (!globalWithMockDB.__mock_db) {
   globalWithMockDB.__mock_db = MockDB.getInstance();

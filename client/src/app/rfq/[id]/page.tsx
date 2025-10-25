@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { IndianRupee, MessageCircle, Building } from 'lucide-react';
 import {
   demoRFQs,
   demoSuppliers,

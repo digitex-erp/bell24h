@@ -1,6 +1,6 @@
 'use client';
 
-import { Info } from 'lucide-react';
+import { Info, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { Suspense, lazy, useState } from 'react';
 

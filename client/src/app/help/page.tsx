@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { ChevronUp, ChevronDown, MessageSquare, BookOpen } from 'lucide-react';
 
 export default function HelpPage() {
   const [hasMounted, setHasMounted] = useState(false);

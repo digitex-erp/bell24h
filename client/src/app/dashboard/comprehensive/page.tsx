@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Brain, AlertTriangle, AlertCircle, CheckCircle } from 'lucide-react';
 import MinimalLayout from '@/components/layouts/MinimalLayout';
 
 // **REMOVE ALL COLORFUL CARDS - IMPLEMENT MINIMALIST DESIGN**
@@ -438,7 +439,10 @@ export default function ComprehensiveDashboard() {
                     <label className='block text-sm font-medium text-gray-700 mb-2'>
                       Product Category
                     </label>
-                    <select className='w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600'>
+                    <select 
+                      className='w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600'
+                      aria-label="Product Category Selection"
+                    >
                       <option>Select category...</option>
                       <option>Electronics</option>
                       <option>Machinery</option>
