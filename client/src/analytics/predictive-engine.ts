@@ -457,7 +457,7 @@ export class PredictiveAnalyticsEngine {
   }
 
   private generateSupplierRecommendations(reliability: number, riskFactors: any[]): string[] {
-    const recommendations = [];
+    const recommendations: string[] = [];
 
     if (reliability < 0.6) {
       recommendations.push('Implement enhanced monitoring protocols');
