@@ -437,7 +437,7 @@ export class PredictiveAnalyticsEngine {
   }
 
   private generateRFQRecommendations(probability: number, features: number[]): string[] {
-    const recommendations = [];
+    const recommendations: string[] = [];
 
     if (probability < 0.5) {
       recommendations.push('Consider increasing budget by 15-20%');
