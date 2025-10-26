@@ -597,7 +597,14 @@ export class StockMarketAPI {
 
   private getMockPriceHistory(symbol: string, period: string): PriceHistory {
     const days = period === '1D' ? 1 : period === '1W' ? 7 : period === '1M' ? 30 : 90;
-    const data = [];
+    const data: Array<{
+      date: Date;
+      open: number;
+      high: number;
+      low: number;
+      close: number;
+      volume: number;
+    }> = [];
 
     for (let i = days; i >= 0; i--) {
       const date = subDays(new Date(), i);
