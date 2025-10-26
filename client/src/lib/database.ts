@@ -90,14 +90,14 @@ export function getDatabaseStatus() {
     healthy: isHealthy,
     lastHealthCheck: new Date(lastHealthCheck),
     primaryPool: {
-      totalCount: primaryPool.totalCount,
-      idleCount: primaryPool.idleCount,
-      waitingCount: primaryPool.waitingCount,
+      totalCount: (primaryPool as any).totalCount || 0,
+      idleCount: (primaryPool as any).idleCount || 0,
+      waitingCount: (primaryPool as any).waitingCount || 0,
     },
     readPool: readPool ? {
-      totalCount: readPool.totalCount,
-      idleCount: readPool.idleCount,
-      waitingCount: readPool.waitingCount,
+      totalCount: (readPool as any).totalCount || 0,
+      idleCount: (readPool as any).idleCount || 0,
+      waitingCount: (readPool as any).waitingCount || 0,
     } : null,
   }
 }
@@ -160,7 +160,7 @@ export async function executeTransaction<T>(
   callback: (tx: any) => Promise<T>
 ): Promise<T> {
   const client = await primaryPool.connect()
-  
+
   try {
     await client.query('BEGIN')
     const result = await callback(client)
@@ -170,7 +170,7 @@ export async function executeTransaction<T>(
     await client.query('ROLLBACK')
     throw error
   } finally {
-    client.release()
+    (client as any).release()
   }
 }
 
@@ -183,7 +183,7 @@ export async function batchInsert(
   values: any[][],
   chunkSize: number = 1000
 ): Promise<void> {
-  const chunks = []
+  const chunks: any[][] = []
   for (let i = 0; i < values.length; i += chunkSize) {
     chunks.push(values.slice(i, i + chunkSize))
   }
