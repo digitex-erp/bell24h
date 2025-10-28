@@ -56,10 +56,13 @@ export async function GET(request: Request) {
     // Add market sentiment analysis
     stockData.sentiment = {
       overall: 'positive',
-      newsScore: 0.75,
-      socialMediaScore: 0.68,
-      institutionalActivity: 'bullish',
-      retailSentiment: 'neutral'
+      confidence: 0.75,
+      factors: [
+        'Positive news coverage',
+        'Strong institutional buying',
+        'Above key moving averages',
+        'Bullish technical indicators'
+      ]
     };
 
     // Add risk metrics
