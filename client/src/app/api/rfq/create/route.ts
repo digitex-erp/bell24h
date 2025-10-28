@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     };
 
     // TODO: Replace with actual database save
-    // const savedRFQ = await prisma.rfq.create({ data: rfqData });
+    // const savedRFQ = await prisma.rFQ.create({ data: rfqData });
     
     // TODO: Trigger AI matching process
     // await triggerAIMatching(rfqData);
