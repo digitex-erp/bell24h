@@ -65,13 +65,7 @@ export async function GET(request: Request) {
       ]
     };
 
-    // Add risk metrics
-    stockData.riskMetrics = {
-      volatility: calculateVolatility(stockData.prices),
-      beta: calculateBeta(stockData.prices),
-      sharpeRatio: calculateSharpeRatio(stockData.prices),
-      maxDrawdown: calculateMaxDrawdown(stockData.prices)
-    };
+    // NOTE: riskMetrics removed - not defined in StockData interface
 
     return NextResponse.json({
       success: true,
