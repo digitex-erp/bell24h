@@ -130,7 +130,7 @@ export default function PaymentGatewaysPage() {
   const [data, setData] = useState(mockPaymentData);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [selectedGateway, setSelectedGateway] = useState(null);
+  const [selectedGateway, setSelectedGateway] = useState<any>(null);
 
   const getStatusColor = (status) => {
     switch (status) {

@@ -7,8 +7,8 @@ export default function VoiceRFQPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
-  const [audioBlob, setAudioBlob] = useState(null);
-  const [audioUrl, setAudioUrl] = useState(null);
+  const [audioBlob, setAudioBlob] = useState<any>(null);
+  const [audioUrl, setAudioUrl] = useState<any>(null);
   const [rfqTitle, setRfqTitle] = useState('');
   const [rfqDescription, setRfqDescription] = useState('');
   const [category, setCategory] = useState('');

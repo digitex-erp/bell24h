@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Shield, AlertTriangle, CheckCircle, Clock, MapPin, Star, Phone, Mail, TrendingUp, TrendingDown } from 'lucide-react';
 
 export default function SupplierRiskPage() {
-  const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [selectedSupplier, setSelectedSupplier] = useState<any>(null);
 
   const suppliers = [
     {

@@ -166,7 +166,7 @@ const mockN8NData = {
 export default function N8NDashboard() {
   const [workflows, setWorkflows] = useState(mockN8NData.workflows);
   const [executions, setExecutions] = useState(mockN8NData.executions);
-  const [selectedWorkflow, setSelectedWorkflow] = useState(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
   const [showCreateWorkflow, setShowCreateWorkflow] = useState(false);
 
   const getStatusColor = (status: string) => {

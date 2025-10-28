@@ -7,12 +7,12 @@ export default function VideoRFQPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
-  const [videoBlob, setVideoBlob] = useState(null);
-  const [videoUrl, setVideoUrl] = useState(null);
+  const [videoBlob, setVideoBlob] = useState<any>(null);
+  const [videoUrl, setVideoUrl] = useState<any>(null);
   const [rfqTitle, setRfqTitle] = useState('');
   const [rfqDescription, setRfqDescription] = useState('');
   const [category, setCategory] = useState('');
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState<any>(null);
   
   const mediaRecorderRef = useRef(null);
   const videoRef = useRef(null);
