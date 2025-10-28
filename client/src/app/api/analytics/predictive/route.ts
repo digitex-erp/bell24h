@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     const category = searchParams.get('category');
 
     // Query RFQ and quote data for predictive analytics
-    const rfqData = await prisma.rfq.findMany({
+    const rfqData = await prisma.rFQ.findMany({
       where: category ? { category: category } : {},
       select: {
         id: true,
