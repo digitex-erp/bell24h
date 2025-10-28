@@ -184,7 +184,7 @@ export default function OnboardingTrainingPage() {
   const [data, setData] = useState(mockOnboardingData);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [selectedProgram, setSelectedProgram] = useState(null);
+  const [selectedProgram, setSelectedProgram] = useState<any>(null);
 
   const getStatusColor = (status) => {
     switch (status) {
