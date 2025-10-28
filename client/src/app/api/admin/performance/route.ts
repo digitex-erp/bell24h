@@ -72,7 +72,7 @@ const performanceHandler = async (req: NextRequest) => {
     };
     
     const response = {
-      ...metrics,
+      ...(metrics ?? {}),
       realTime: realTimeData,
       cache: cache.getStats(),
       database: dbOptimizer.getPoolStats(),
