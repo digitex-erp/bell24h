@@ -134,7 +134,7 @@ export default function AdminCRMDashboard() {
   const [interactions, setInteractions] = useState(mockCRMData.interactions);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
   const [showAddCustomer, setShowAddCustomer] = useState(false);
 
   const formatCurrency = (amount: number) => {

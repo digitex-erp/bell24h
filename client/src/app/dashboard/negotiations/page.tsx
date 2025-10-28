@@ -386,7 +386,7 @@ const ChatInterface = ({ negotiation, isOpen, onClose }) => {
 };
 
 export default function NegotiationsPage() {
-  const [selectedNegotiation, setSelectedNegotiation] = useState(null);
+  const [selectedNegotiation, setSelectedNegotiation] = useState<any>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
