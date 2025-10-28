@@ -1,5 +1,33 @@
 import { NextResponse } from 'next/server';
 
+// Define proper interface for stock data
+interface StockData {
+  prices: number[];
+  timestamps: string[];
+  volume: number[];
+  currentPrice: number;
+  change24h: number;
+  changePercent24h: number;
+  high24h: number;
+  low24h: number;
+  volume24h: number;
+  technical?: {
+    rsi: number | null;
+    macd: any;
+    sma20: number[];
+    sma50: number[];
+    ema12: number[];
+    ema26: number[];
+    bollingerBands: any;
+    volumeAnalysis: any;
+  };
+  sentiment?: {
+    overall: string;
+    confidence: number;
+    factors: string[];
+  };
+}
+
 export async function GET(request: Request) {
   try {
     // Get URL parameters for filtering
@@ -9,7 +37,7 @@ export async function GET(request: Request) {
     const includeTechnical = searchParams.get('technical') === 'true';
 
     // Mock stock data - in production, integrate with actual APIs
-    const stockData = generateMockStockData(symbol, timeframe);
+    const stockData: StockData = generateMockStockData(symbol, timeframe);
 
     // Add technical indicators if requested
     if (includeTechnical) {
@@ -65,7 +93,7 @@ export async function GET(request: Request) {
   }
 }
 
-function generateMockStockData(symbol: string, timeframe: string) {
+function generateMockStockData(symbol: string, timeframe: string): StockData {
   let dataPoints = 100; // Default for 1D
   let intervalMs = 60000; // 1 minute for intraday
 
