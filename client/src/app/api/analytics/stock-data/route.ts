@@ -14,10 +14,10 @@ interface StockData {
   technical?: {
     rsi: number | null;
     macd: any;
-    sma20: number[];
-    sma50: number[];
-    ema12: number[];
-    ema26: number[];
+    sma20: number | null;
+    sma50: number | null;
+    ema12: number | null;
+    ema26: number | null;
     bollingerBands: any;
     volumeAnalysis: any;
   };
