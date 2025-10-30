@@ -155,7 +155,7 @@ async function getIntegrationStatus() {
   try {
     // Check integration status from database
     // TODO: Add n8NIntegration model to Prisma schema
-    const integrations: any[] = []
+    const integrations: any[] = [];
     // const integrations = await prisma.n8NIntegration.findMany({
     //   where: {
     //     isActive: true

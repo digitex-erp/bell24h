@@ -25,7 +25,7 @@ export default function VideoRFQPage() {
         mediaRecorderRef.current = new MediaRecorder(stream, {
           mimeType: 'video/webm'
         });
-        const chunks = [];
+        const chunks: any[] = [];
 
         mediaRecorderRef.current.ondataavailable = (event) => {
           chunks.push(event.data);

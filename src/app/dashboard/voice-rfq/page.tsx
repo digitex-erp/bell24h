@@ -21,7 +21,7 @@ export default function VoiceRFQPage() {
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
         mediaRecorderRef.current = new MediaRecorder(stream);
-        const chunks = [];
+        const chunks: any[] = [];
 
         mediaRecorderRef.current.ondataavailable = (event) => {
           chunks.push(event.data);
