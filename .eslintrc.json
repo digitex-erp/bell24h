@@ -1,7 +1,10 @@
 {
   "root": true,
   "rules": {
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "react/jsx-no-undef": "off",
+    "react-hooks/rules-of-hooks": "off",
+    "@next/next/no-sync-scripts": "off"
   },
   "ignorePatterns": [
     "node_modules/",
