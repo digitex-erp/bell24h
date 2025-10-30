@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
 // Validate claim data
 async function validateClaimData(claimData: any) {
-  const errors: string[] = [];
+  const errors: any[] = [];
   
   if (!claimData.companyName) errors.push('Company name is required');
   if (!claimData.contactEmail) errors.push('Contact email is required');
