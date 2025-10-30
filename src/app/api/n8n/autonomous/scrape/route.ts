@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
 // Simulate company scraping from various sources
 async function scrapeCompanies(category: string, source: string) {
-  const companies = [];
+  const companies: any[] = [];
   const sources = ['IndiaMART', 'JustDial', 'TradeIndia', 'ExportersIndia'];
   
   for (let i = 1; i <= 10; i++) {
