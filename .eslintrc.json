@@ -1,5 +1,5 @@
 {
-  "extends": ["next/core-web-vitals"],
+  "extends": ["next"],
   "rules": {
     "react/no-unescaped-entities": "off",
     "react/jsx-no-undef": "warn",
@@ -7,8 +7,6 @@
     "react-hooks/exhaustive-deps": "warn",
     "@next/next/no-img-element": "warn",
     "@next/next/no-sync-scripts": "warn",
-    "react/jsx-key": "warn",
-    "react-hooks/rules-of-hooks": "error"
-  },
-  "ignorePatterns": ["**/*.config.js", "**/dist/", "**/build/"]
+    "react/jsx-key": "warn"
+  }
 }
