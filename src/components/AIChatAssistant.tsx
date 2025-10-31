@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { MessageCircle, Send, X } from 'lucide-react';;
 
 export default function AIChatAssistant() {
   const [isOpen, setIsOpen] = useState(false);
@@ -99,7 +99,7 @@ export default function AIChatAssistant() {
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                onKeyPress={(e) => e.key === Enter && sendMessage()}
                 placeholder="Ask about suppliers, RFQs, pricing..."
                 className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />

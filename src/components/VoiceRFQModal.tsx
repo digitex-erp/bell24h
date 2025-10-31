@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, Blob, HTMLAudioElement, Languages, Loader2, MediaRecorder } from 'lucide-react';;\n'use client';
 import { useState, useRef, useEffect } from 'react';
 
 interface VoiceRFQModalProps {
@@ -11,10 +11,10 @@ export default function VoiceRFQModal({ isOpen, onClose, onRFQCreated }: VoiceRF
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [transcription, setTranscription] = useState('');
+  const [transcription, setTranscription] = useState(&apos;');
   const [extractedData, setExtractedData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [language, setLanguage] = useState('auto');
+  const [language, setLanguage] = useState(&apos;auto');
   const [recordingTime, setRecordingTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -229,7 +229,7 @@ export default function VoiceRFQModal({ isOpen, onClose, onRFQCreated }: VoiceRF
             <div>
               <h2 className='text-xl font-bold text-white'>Voice RFQ Creation</h2>
               <p className='text-slate-400 text-sm'>
-                Speak your requirements and we'll create an RFQ
+                Speak your requirements and we&apos;ll create an RFQ
               </p>
             </div>
           </div>

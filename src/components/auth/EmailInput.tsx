@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, CheckCircle, Loader2, Mail, X } from 'lucide-react';
+import { ArrowRight, CheckCircle, Loader2, Mail, X } from 'lucide-react';;
 import { useState } from 'react';
 
 interface EmailInputProps {
@@ -41,7 +41,7 @@ export default function EmailInput({ phone, onEmailSubmit, onSkip }: EmailInputP
         setError(data.error);
       }
     } catch (err) {
-      setError('Failed to send email OTP');
+      setError(Failed to send email OTP);
     } finally {
       setLoading(false);
     }

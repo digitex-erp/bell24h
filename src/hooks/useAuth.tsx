@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from 'react';
+import { AuthContextType, User } from 'lucide-react';;\nimport React, { useState, useEffect, useContext, createContext } from 'react';
 
 // User type definition
 interface User {

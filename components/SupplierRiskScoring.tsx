@@ -6,20 +6,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  DollarSign, 
-  Star, 
-  TrendingUp, 
-  TrendingDown,
-  Shield,
-  FileText,
-  Users,
-  Calendar,
-  BarChart3
-} from 'lucide-react';
+import { AlertTriangle, Badge, Bar, BarChart3, Calendar, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, DollarSign, FileText, Line, Progress, RiskFactors, Shield, Star, SupplierData, Tabs, TabsContent, TabsList, TabsTrigger, TrendingDown, TrendingUp, Users } from 'lucide-react';;;
 import { Line, Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -137,9 +124,9 @@ export const SupplierRiskScoring: React.FC = () => {
   // Get risk icon
   const getRiskIcon = (level: 'low' | 'medium' | 'high') => {
     switch (level) {
-      case 'low': return <CheckCircle className="h-4 w-4" />;
-      case 'medium': return <Clock className="h-4 w-4" />;
-      case 'high': return <AlertTriangle className="h-4 w-4" />;
+      case 'low: return <CheckCircle className="h-4 w-4" />;
+      case medium&apos;: return <Clock className="h-4 w-4" />;
+      case &apos;high': return <AlertTriangle className="h-4 w-4" />;
     }
   };
 

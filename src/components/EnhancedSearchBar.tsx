@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { EnhancedSearchBarProps, HTMLInputElement, HTMLDivElement, HistoryIcon, TrendingUpIcon, SearchIcon, Box, Paper, Box, TextField, CircularProgress, Box, CategoryIcon, MenuItem, Divider, TextField, InputAdornment, SearchIcon, InputAdornment, IconButton, CloseIcon, Button, SearchIcon, ClickAwayListener, Popper, Fade, Paper, Box, CircularProgress, List, ListItemButton, ListItemIcon, ListItemText, Chip, TrendingUpIcon } from "lucide-react";\nimport React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box,
@@ -177,9 +177,9 @@ const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
     switch (type) {
       case 'recent':
         return <HistoryIcon fontSize='small' color='action' />;
-      case 'popular':
-        return <TrendingUpIcon fontSize='small' color='primary' />;
-      case 'suggestion':
+      case &apos;popular:
+        return <TrendingUpIcon fontSize=small' color='primary' />;
+      case &apos;suggestion':
       default:
         return <SearchIcon fontSize='small' color='action' />;
     }

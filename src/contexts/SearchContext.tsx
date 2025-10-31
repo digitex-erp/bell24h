@@ -1,4 +1,4 @@
-'use client';
+import { SearchFilters, SearchFilters, SearchFilters, SearchFilters, SearchProviderProps, SearchFilters, SearchFilters, SearchFilters } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { SearchResult, SearchSuggestion, SearchFilters } from '../services/search/types';

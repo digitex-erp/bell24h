@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Info, TrendingUp, TrendingDown, Shield, Clock, Star, Award, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Award, Bar, BarChart, CartesianGrid, Clock, ExplainabilityData, Info, ResponsiveContainer, Shield, Star, Tooltip, TrendingDown, TrendingUp, XAxis, YAxis } from 'lucide-react';;;
 
 interface ExplainabilityData {
   matchScore: number;
@@ -179,7 +179,7 @@ export default function AIExplainability({ rfqId, supplierId, matchScore, onClos
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="feature" />
                 <YAxis />
-                <Tooltip formatter={(value) => [`${value}%`, 'Importance']} />
+                <Tooltip formatter={(value) => [`${value}%`, Importance]} />
                 <Bar dataKey="importance" fill="#3B82F6" />
               </BarChart>
             </ResponsiveContainer>

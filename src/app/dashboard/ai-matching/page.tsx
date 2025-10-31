@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Brain, Search, Star, MapPin, Phone, Mail, CheckCircle, XCircle, Filter, RefreshCw } from 'lucide-react';
+import { Brain, CheckCircle, Filter, Mail, MapPin, MatchCard, Phone, RefreshCw, Search, Star, XCircle } from 'lucide-react';;;
 
 // Mock data for AI matching
 const matchingData = {
@@ -235,7 +235,7 @@ export default function AIMatchingPage() {
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-          {isRefreshing ? 'Refreshing...' : 'Refresh Matches'}
+          {isRefreshing ? 'Refreshing...' : Refresh Matches}
         </button>
       </div>
 

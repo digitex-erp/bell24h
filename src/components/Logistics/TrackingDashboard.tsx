@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Truck, Package, MapPin, Clock, AlertTriangle, CheckCircle, Eye, Download, Filter, Search, Navigation } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Clock, Download, Eye, Filter, MapPin, Navigation, Package, Search, Truck } from 'lucide-react';;
 
 interface Shipment {
   id: string;
@@ -50,9 +50,9 @@ export default function LogisticsTracking() {
   const [filteredShipments, setFilteredShipments] = useState<Shipment[]>([]);
   const [deliveryAlerts, setDeliveryAlerts] = useState<DeliveryAlert[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [selectedCarrier, setSelectedCarrier] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState(&apos;');
+  const [selectedStatus, setSelectedStatus] = useState<string>(&apos;all);
+  const [selectedCarrier, setSelectedCarrier] = useState<string>(all&apos;);
   const [selectedSeverity, setSelectedSeverity] = useState<string>('all');
 
   useEffect(() => {
@@ -310,15 +310,15 @@ export default function LogisticsTracking() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending':
+      case 'pending:
         return <Clock className="w-4 h-4 text-yellow-600" />;
-      case 'in_transit':
+      case in_transit&apos;:
         return <Truck className="w-4 h-4 text-blue-600" />;
-      case 'delivered':
+      case &apos;delivered:
         return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'delayed':
+      case delayed&apos;:
         return <AlertTriangle className="w-4 h-4 text-orange-600" />;
-      case 'cancelled':
+      case &apos;cancelled':
         return <AlertTriangle className="w-4 h-4 text-red-600" />;
       default:
         return <Package className="w-4 h-4 text-gray-600" />;

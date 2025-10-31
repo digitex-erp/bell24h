@@ -1,4 +1,4 @@
-'use client';
+import { Bar, BarChart, CartesianGrid, Cell, CustomTooltip, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'lucide-react';;\n'use client';
 import { useState, useMemo } from 'react';
 import {
   BarChart,

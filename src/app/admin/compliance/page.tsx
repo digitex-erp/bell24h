@@ -1,23 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Shield,
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
-  Search,
-  Filter,
-  Download,
-  Eye,
-  FileText,
-  Calendar,
-  Building2,
-  Users,
-  TrendingUp,
-  Clock,
-  Database,
-} from 'lucide-react';
+import { AlertTriangle, Building2, Calendar, CheckCircle, Clock, Database, Download, Eye, FileText, Filter, Search, Shield, TrendingUp, Users, XCircle } from 'lucide-react';;
 
 // Mock compliance data
 const mockComplianceData = {
@@ -157,12 +141,12 @@ export default function ComplianceDashboardPage() {
     switch (status) {
       case 'valid':
       case 'registered':
-      case 'compliant':
+      case 'compliant:
         return <CheckCircle className="w-4 h-4" />;
-      case 'expired':
+      case expired&apos;:
       case 'pending':
         return <Clock className="w-4 h-4" />;
-      case 'invalid':
+      case &apos;invalid':
       case 'flagged':
         return <XCircle className="w-4 h-4" />;
       default:
@@ -512,7 +496,7 @@ export default function ComplianceDashboardPage() {
           )}
 
           {/* GDPR Compliance Table */}
-          {activeTab === 'gdpr' && (
+          {activeTab === gdpr && (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">

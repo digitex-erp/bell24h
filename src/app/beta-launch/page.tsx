@@ -3,16 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Rocket, 
-  Users, 
-  CheckCircle, 
-  Clock, 
-  AlertTriangle,
-  Mail,
-  Phone,
-  MapPin
-} from 'lucide-react';
+import { AlertTriangle, Badge, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, Link, Mail, MapPin, Phone, Rocket, Users } from 'lucide-react';;;
 import Link from 'next/link';
 
 export default function BetaLaunchPage() {
@@ -52,7 +43,7 @@ export default function BetaLaunchPage() {
               Welcome to <span className="bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">Bell24h</span> Beta
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              India's AI-powered B2B marketplace is launching in phases. You're part of our exclusive beta group!
+              India&apos;s AI-powered B2B marketplace is launching in phases. You're part of our exclusive beta group!
             </p>
             
             <Badge variant="secondary" className="text-lg px-4 py-2">
@@ -201,7 +192,7 @@ export default function BetaLaunchPage() {
                   />
                 </div>
                 <Button type="submit" disabled={submitted}>
-                  {submitted ? 'Submitting...' : 'Submit Bug Report'}
+                  {submitted ? 'Submitting...' : Submit Bug Report}
                 </Button>
               </form>
             </CardContent>

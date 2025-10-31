@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle, EscrowTransaction, Link } from 'lucide-react';;\n'use client';
 import { getMockEscrowTransactions } from '@/services/escrowService';
 import { EscrowTransaction } from '@/types/escrow';
 import Link from 'next/link';
@@ -31,13 +31,13 @@ const EscrowDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'completed:
         return <span>✅</span>;
-      case 'pending_delivery':
+      case pending_delivery&apos;:
         return <span>🕐</span>;
-      case 'funded':
+      case &apos;funded:
         return <span>🔒</span>;
-      case 'disputed':
+      case disputed&apos;:
         return <AlertTriangle className='text-red-600' size={16} />;
       default:
         return <span>🕐</span>;
@@ -72,10 +72,10 @@ const EscrowDashboard: React.FC = () => {
   const activeEscrows = escrows.filter(
     e => e.status !== 'completed' && e.status !== 'disputed'
   ).length;
-  const completedEscrows = escrows.filter(e => e.status === 'completed').length;
+  const completedEscrows = escrows.filter(e => e.status === &apos;completed).length;
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-slate-50 to-blue-50'>
+    <div className=min-h-screen bg-gradient-to-br from-slate-50 to-blue-50'>
       {/* Header */}
       <div className='bg-white shadow-sm border-b'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>
@@ -178,9 +178,9 @@ const EscrowDashboard: React.FC = () => {
               <select
                 value={filterStatus}
                 onChange={e => setFilterStatus(e.target.value)}
-                className='px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                className='px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
               >
-                <option value='all'>All Status</option>
+                <option value=all'>All Status</option>
                 <option value='funded'>Funded</option>
                 <option value='pending_delivery'>Pending Delivery</option>
                 <option value='completed'>Completed</option>
@@ -370,7 +370,7 @@ const EscrowDashboard: React.FC = () => {
                 🔒 Smart Contract Escrow Platform - Blockchain Security Demo
               </h3>
               <p className='text-blue-800 leading-relaxed'>
-                This comprehensive escrow management system demonstrates Bell24H's
+                This comprehensive escrow management system demonstrates Bell24H&apos;s
                 blockchain-powered transaction security capabilities including milestone-based
                 payments, automated dispute resolution, and smart contract automation for
                 enterprise-grade transaction security.

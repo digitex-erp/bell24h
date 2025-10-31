@@ -1,11 +1,11 @@
-'use client';
+import { Database, Rocket, Smartphone, Sparkles, Target } from 'lucide-react';;\n'use client';
 import React, { useState } from 'react';
 
 const FutureReadySection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('uli');
+  const [activeTab, setActiveTab] = useState('uli);
 
   return (
-    <section className='py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 relative overflow-hidden'>
+    <section className=py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 relative overflow-hidden'>
       {/* Background Pattern */}
       <div className='absolute inset-0 opacity-10'>
         <div className='absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20'></div>
@@ -168,7 +168,7 @@ const FutureReadySection: React.FC = () => {
               </div>
             </div>
             <p className='text-blue-100 mb-4'>
-              Integration with India's Open Network for Digital Commerce for seamless, interoperable
+              Integration with India&apos;s Open Network for Digital Commerce for seamless, interoperable
               B2B transactions across the entire ecosystem.
             </p>
             <div className='text-purple-300 text-sm'>
@@ -188,7 +188,7 @@ const FutureReadySection: React.FC = () => {
               </div>
             </div>
             <p className='text-blue-100 mb-4'>
-              First B2B marketplace to support RBI's Central Bank Digital Currency for instant,
+              First B2B marketplace to support RBI&apos;s Central Bank Digital Currency for instant,
               settlement-free business transactions.
             </p>
             <div className='text-yellow-300 text-sm'>
@@ -222,7 +222,7 @@ const FutureReadySection: React.FC = () => {
           <div className='text-center mb-8'>
             <h3 className='text-3xl font-bold text-white mb-4'>The New Trinity: JAM-UPI-ULI</h3>
             <p className='text-indigo-200 text-lg'>
-              Bell24H leverages India's complete digital infrastructure stack for unprecedented
+              Bell24H leverages India&apos;s complete digital infrastructure stack for unprecedented
               business capabilities
             </p>
           </div>
@@ -306,9 +306,9 @@ const FutureReadySection: React.FC = () => {
         {/* CTA */}
         <div className='text-center mt-12'>
           <p className='text-blue-200 text-lg mb-6'>
-            Join Bell24H today and be ready for India's digital transformation
+            Join Bell24H today and be ready for Indias digital transformation
           </p>
-          <button className='inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'>
+          <button className=inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1'>
             Get Early Access
             <span>→</span>
           </button>

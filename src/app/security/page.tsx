@@ -1,4 +1,4 @@
-'use client';
+import { Box, CircularProgress, Box, CircularProgress, Container, Typography, Typography, AppBar, Tabs, Tab, Tab, Box, Suspense, Box, CircularProgress, DeviceManagement, MFASetup } from "lucide-react";\n'use client';
 
 import React, { Suspense, useState } from 'react';
 import { Box, Container, Typography, Tab, Tabs, AppBar, CircularProgress } from '@mui/material';

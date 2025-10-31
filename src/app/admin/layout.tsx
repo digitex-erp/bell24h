@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from "lucide-react";\nimport { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ReactNode } from 'react';
 
 interface AdminLayoutProps {

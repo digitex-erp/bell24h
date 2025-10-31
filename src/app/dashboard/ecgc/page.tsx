@@ -1,6 +1,6 @@
 'use client';
 
-import { Building, BarChart3, Shield, Globe, FileText, AlertTriangle, Target, Info } from 'lucide-react';
+import { AlertTriangle, BarChart3, Building, FileText, Globe, Info, Shield, Target } from 'lucide-react';;
 import { useState } from 'react';
 
 interface ECGCPolicy {
@@ -211,8 +211,8 @@ export default function ECGCDashboard() {
         </div>
 
         {/* Overview Tab */}
-        {activeTab === 'overview' && (
-          <div className='space-y-8'>
+        {activeTab === 'overview && (
+          <div className=space-y-8'>
             {/* Key Metrics */}
             <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6'>
               <div className='bg-white p-6 rounded-lg shadow-lg'>
@@ -366,8 +366,8 @@ export default function ECGCDashboard() {
         )}
 
         {/* Active Policies Tab */}
-        {activeTab === 'policies' && (
-          <div className='bg-white rounded-lg shadow-lg'>
+        {activeTab === 'policies && (
+          <div className=bg-white rounded-lg shadow-lg'>
             <div className='p-6 border-b border-gray-200'>
               <h3 className='text-xl font-bold text-gray-900'>Active ECGC Policies</h3>
               <p className='text-gray-600'>Manage your current export credit insurance policies</p>
@@ -442,8 +442,8 @@ export default function ECGCDashboard() {
         )}
 
         {/* Country Coverage Tab */}
-        {activeTab === 'coverage' && (
-          <div className='space-y-6'>
+        {activeTab === 'coverage && (
+          <div className=space-y-6'>
             <div className='bg-white rounded-lg shadow-lg p-6'>
               <h3 className='text-xl font-bold text-gray-900 mb-6'>
                 Country-wise Coverage Analysis
@@ -485,8 +485,8 @@ export default function ECGCDashboard() {
         )}
 
         {/* Apply for Coverage Tab */}
-        {activeTab === 'apply' && (
-          <div className='bg-white rounded-lg shadow-lg p-6'>
+        {activeTab === 'apply && (
+          <div className=bg-white rounded-lg shadow-lg p-6'>
             <h3 className='text-xl font-bold text-gray-900 mb-6'>Apply for ECGC Coverage</h3>
             <div className='max-w-2xl'>
               <div className='space-y-6'>
@@ -583,8 +583,8 @@ export default function ECGCDashboard() {
         )}
 
         {/* Claims Management Tab */}
-        {activeTab === 'claims' && (
-          <div className='bg-white rounded-lg shadow-lg p-6'>
+        {activeTab === 'claims && (
+          <div className=bg-white rounded-lg shadow-lg p-6'>
             <h3 className='text-xl font-bold text-gray-900 mb-6'>Claims Management</h3>
             <div className='space-y-6'>
               <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>

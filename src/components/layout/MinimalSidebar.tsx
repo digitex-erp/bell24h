@@ -1,16 +1,6 @@
 'use client';
 
-import {
-  BarChart3,
-  Home,
-  Leaf,
-  Mic,
-  Settings,
-  ShoppingCart,
-  TrendingUp,
-  Users,
-  Wallet,
-} from 'lucide-react';
+import { BarChart3, Home, Leaf, Mic, Settings, ShoppingCart, TrendingUp, Users, Wallet, , Link, Icon } from "lucide-react";;
 import Link from 'next/link';
 
 const sidebarItems = [

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { HTMLCanvasElement } from "lucide-react";\nimport { useEffect, useRef, useState } from 'react';
 
 export default function CanvasBackground({
   className = '',

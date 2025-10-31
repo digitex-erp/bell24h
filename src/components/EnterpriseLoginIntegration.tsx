@@ -4,16 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  Phone, 
-  Mail, 
-  Shield, 
-  CheckCircle, 
-  ArrowRight,
-  Building2,
-  Star,
-  Crown
-} from 'lucide-react';
+import { ArrowRight, Building2, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Crown, Input, LoginState, Mail, Phone, Shield, Star } from 'lucide-react';;;
 
 interface LoginState {
   step: 'choice' | 'mobile' | 'email' | 'register' | 'claim';

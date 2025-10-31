@@ -1,4 +1,4 @@
-'use client';
+import { HTMLInputElement } from "lucide-react";\n'use client';
 
 import { useState, useEffect } from 'react';
 import { validateGSTNumber, formatGSTNumber, getGSTStateInfo, getEntityTypeInfo } from '@/utils/gst-validator';
@@ -23,7 +23,7 @@ export default function GSTValidation({
   className = ''
 }: GSTValidationProps) {
   const [isValid, setIsValid] = useState<boolean | null>(null);
-  const [validationMessage, setValidationMessage] = useState<string>('');
+  const [validationMessage, setValidationMessage] = useState<string>(&apos;');
   const [showDetails, setShowDetails] = useState(false);
   const [validationResult, setValidationResult] = useState<any>(null);
 
@@ -125,7 +125,7 @@ export default function GSTValidation({
               onClick={() => setShowDetails(!showDetails)}
               className="text-sm text-green-600 hover:text-green-800"
             >
-              {showDetails ? 'Hide Details' : 'Show Details'}
+              {showDetails ? 'Hide Details' : Show Details}
             </button>
           </div>
           

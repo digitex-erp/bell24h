@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, Grid, List, TrendingUp, Users, Package, ShoppingCart } from 'lucide-react'
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, CategoriesData, Grid, Input, List, Package, Search, ShoppingCart, TrendingUp, Users } from 'lucide-react';;
 
 interface MockOrder {
   title: string
@@ -41,8 +41,8 @@ interface CategoriesData {
 
 export default function CategoriesSimplePage() {
   const [categoriesData, setCategoriesData] = useState<CategoriesData | null>(null)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [searchTerm, setSearchTerm] = useState(&apos;)
+  const [viewMode, setViewMode] = useState<grid' | 'list'>('grid')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

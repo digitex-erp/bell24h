@@ -208,10 +208,10 @@ export default function ClientMarquee() {
           <h2 className='text-3xl font-bold text-gray-900 mb-4'>
             Powering Procurement for
             <span className='block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600'>
-              India's Industrial Giants
+              Indias Industrial Giants
             </span>
           </h2>
-          <p className='text-lg text-gray-600 max-w-3xl mx-auto'>
+          <p className=text-lg text-gray-600 max-w-3xl mx-auto'>
             Join Fortune 500 companies, unicorns, and government enterprises who trust Bell24H for
             their critical procurement operations and supply chain management.
           </p>

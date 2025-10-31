@@ -52,7 +52,7 @@ interface FilterOptions {
 export default function EnhancedProductShowcasePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'showcase'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'showcase'>(&apos;grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -624,7 +624,7 @@ export default function EnhancedProductShowcasePage() {
                 </div>
               ))}
             </div>
-          ) : viewMode === 'list' ? (
+          ) : viewMode === &apos;list' ? (
             <div className="space-y-4">
               {paginatedProducts.map(product => (
                 <div

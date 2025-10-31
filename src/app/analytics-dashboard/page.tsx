@@ -1,4 +1,4 @@
-'use client';
+import { MinimalLayout } from "lucide-react";\n'use client';
 
 import React, { useState } from 'react';
 import MinimalLayout from '@/components/layouts/MinimalLayout';
@@ -159,8 +159,8 @@ export default function AnalyticsDashboardPage() {
         )}
 
         {/* **PERFORMANCE TAB** */}
-        {activeTab === 'performance' && (
-          <div className='space-y-6'>
+        {activeTab === 'performance && (
+          <div className=space-y-6'>
             <div className='bg-white border border-gray-200 rounded-md'>
               <div className='px-4 py-3 border-b border-gray-200'>
                 <h2 className='text-lg font-medium text-gray-900'>Performance Targets</h2>
@@ -197,8 +197,8 @@ export default function AnalyticsDashboardPage() {
         )}
 
         {/* **AI FEATURES TAB** */}
-        {activeTab === 'ai-features' && (
-          <div className='space-y-6'>
+        {activeTab === 'ai-features && (
+          <div className=space-y-6'>
             <div className='bg-white border border-gray-200 rounded-md'>
               <div className='px-4 py-3 border-b border-gray-200'>
                 <h2 className='text-lg font-medium text-gray-900'>AI Features Status</h2>

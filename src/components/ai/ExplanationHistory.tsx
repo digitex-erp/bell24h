@@ -1,4 +1,4 @@
-'use client';
+import { ChevronDown, ExplanationFilter, SortConfig } from 'lucide-react';;\n'use client';
 import { useState, useEffect } from 'react';
 import { AIExplanation, DecisionType, ExplanationFilter } from '@/types/aiExplanation';
 import { aiExplanationService } from '@/services/aiExplanation';
@@ -270,8 +270,8 @@ export function ExplanationHistory({
                   onClick={() => handleSort('decisionType')}
                 >
                   Type
-                  {sortConfig.key === 'decisionType' && (
-                    <span className='ml-1'>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                  {sortConfig.key === 'decisionType && (
+                    <span className=ml-1'>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
                   )}
                 </th>
                 <th
@@ -279,8 +279,8 @@ export function ExplanationHistory({
                   onClick={() => handleSort('confidence')}
                 >
                   Confidence
-                  {sortConfig.key === 'confidence' && (
-                    <span className='ml-1'>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                  {sortConfig.key === 'confidence && (
+                    <span className=ml-1'>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
                   )}
                 </th>
                 <th
@@ -288,8 +288,8 @@ export function ExplanationHistory({
                   onClick={() => handleSort('timestamp')}
                 >
                   Date
-                  {sortConfig.key === 'timestamp' && (
-                    <span className='ml-1'>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
+                  {sortConfig.key === 'timestamp && (
+                    <span className=ml-1'>{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>
                   )}
                 </th>
                 <th className='px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider'>
@@ -453,11 +453,11 @@ export function ExplanationHistory({
           <button
             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
-            className='px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 rounded text-sm transition-colors'
+            className='px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-600 rounded text-sm transition-colors
           >
             Previous
           </button>
-          <span className='text-sm text-slate-400'>
+          <span className=text-sm text-slate-400'>
             Page {currentPage} of {Math.ceil(totalCount / pageSize)}
           </span>
           <button

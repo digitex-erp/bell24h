@@ -16,11 +16,11 @@ export default function TrustMarquee() {
     <section className='py-16 bg-white overflow-hidden'>
       <div className='container mx-auto px-4 mb-8'>
         <h3 className='text-2xl font-bold text-gray-900 text-center'>
-          Trusted by India's Largest Enterprises
+          Trusted by Indias Largest Enterprises
         </h3>
       </div>
 
-      <div className='relative'>
+      <div className=relative'>
         <div className='flex animate-scroll space-x-12'>
           {[...companies, ...companies].map((company, index) => (
             <div

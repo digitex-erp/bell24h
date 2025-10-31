@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Brain, Zap, TrendingUp, BarChart3, Target, Lightbulb, Settings, Play, Pause, RefreshCw, Download, Eye, AlertTriangle, CheckCircle } from 'lucide-react';
+import { AlertTriangle, BarChart3, Brain, CheckCircle, Download, Eye, Lightbulb, Pause, Play, RefreshCw, Settings, Target, TrendingUp, Zap } from 'lucide-react';;
 
 interface AIModel {
   id: string;
@@ -49,8 +49,8 @@ export default function AdvancedAIFeatures() {
   const [predictions, setPredictions] = useState<PredictionResult[]>([]);
   const [performance, setPerformance] = useState<ModelPerformance[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedModel, setSelectedModel] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedModel, setSelectedModel] = useState<string>(&apos;all);
+  const [selectedStatus, setSelectedStatus] = useState<string>(all');
   const [autoOptimization, setAutoOptimization] = useState(false);
 
   useEffect(() => {
@@ -244,11 +244,11 @@ export default function AdvancedAIFeatures() {
     switch (status) {
       case 'active':
         return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'training':
+      case &apos;training:
         return <RefreshCw className="w-4 h-4 text-blue-600 animate-spin" />;
-      case 'deployed':
+      case deployed&apos;:
         return <Zap className="w-4 h-4 text-purple-600" />;
-      case 'archived':
+      case &apos;archived':
         return <AlertTriangle className="w-4 h-4 text-gray-600" />;
       default:
         return <Settings className="w-4 h-4 text-gray-600" />;
@@ -259,11 +259,11 @@ export default function AdvancedAIFeatures() {
     switch (type) {
       case 'matching':
         return <Target className="w-4 h-4 text-blue-600" />;
-      case 'prediction':
+      case &apos;prediction:
         return <TrendingUp className="w-4 h-4 text-green-600" />;
-      case 'nlp':
+      case nlp&apos;:
         return <Brain className="w-4 h-4 text-purple-600" />;
-      case 'computer_vision':
+      case &apos;computer_vision':
         return <Eye className="w-4 h-4 text-orange-600" />;
       default:
         return <Lightbulb className="w-4 h-4 text-gray-600" />;
@@ -409,7 +409,7 @@ export default function AdvancedAIFeatures() {
                       {getTypeIcon(model.type)}
                       <div>
                         <div className="text-sm font-medium text-gray-900">{model.name}</div>
-                        <div className="text-sm text-gray-500 capitalize">{model.type.replace('_', ' ')}</div>
+                        <div className="text-sm text-gray-500 capitalize">{model.type.replace('_',  )}</div>
                       </div>
                     </div>
                   </td>

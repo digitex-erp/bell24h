@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { FileText, ShoppingCart, Users, DollarSign, Plus, Search, BarChart3, Calendar, AlertCircle, TrendingUp } from 'lucide-react';
+import { AlertCircle, BarChart3, Calendar, DollarSign, FileText, Plus, Search, ShoppingCart, TrendingUp, Users } from 'lucide-react';;
 
 interface User {
   id: string;
@@ -69,12 +69,12 @@ export default function UserDashboard({ user, onLogout }: UserDashboardProps) {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success':
+      case 'success:
         return <span>✅</span>;
-      case 'pending':
+      case pending&apos;:
         return <span>🕐</span>;
-      case 'error':
-        return <AlertCircle className='h-4 w-4 text-red-400' />;
+      case &apos;error:
+        return <AlertCircle className=h-4 w-4 text-red-400' />;
       default:
         return <span>✅</span>;
     }
@@ -155,15 +155,15 @@ export default function UserDashboard({ user, onLogout }: UserDashboardProps) {
 
       {/* Main Content */}
       <main className='container mx-auto px-4 py-8'>
-        {activeTab === 'dashboard' && (
-          <div className='space-y-8'>
+        {activeTab === 'dashboard && (
+          <div className=space-y-8'>
             {/* Welcome Section */}
             <div className='bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
               <h1 className='text-3xl font-bold text-white mb-2'>
                 Welcome back, {user.name.split(' ')[0]}! 👋
               </h1>
               <p className='text-slate-400'>
-                Here's what's happening with your Global B2B Operating System today.
+                Here&apos;s what's happening with your Global B2B Operating System today.
               </p>
             </div>
 
@@ -277,29 +277,29 @@ export default function UserDashboard({ user, onLogout }: UserDashboardProps) {
           </div>
         )}
 
-        {activeTab === 'rfqs' && (
-          <div className='bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
+        {activeTab === 'rfqs && (
+          <div className=bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
             <h2 className='text-2xl font-bold text-white mb-6'>My RFQs</h2>
             <p className='text-slate-400'>RFQ management interface coming soon...</p>
           </div>
         )}
 
-        {activeTab === 'suppliers' && (
-          <div className='bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
+        {activeTab === 'suppliers && (
+          <div className=bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
             <h2 className='text-2xl font-bold text-white mb-6'>Suppliers</h2>
             <p className='text-slate-400'>Supplier management interface coming soon...</p>
           </div>
         )}
 
-        {activeTab === 'orders' && (
-          <div className='bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
+        {activeTab === 'orders && (
+          <div className=bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
             <h2 className='text-2xl font-bold text-white mb-6'>Orders</h2>
             <p className='text-slate-400'>Order management interface coming soon...</p>
           </div>
         )}
 
-        {activeTab === 'analytics' && (
-          <div className='bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
+        {activeTab === 'analytics && (
+          <div className=bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-6'>
             <h2 className='text-2xl font-bold text-white mb-6'>Analytics</h2>
             <p className='text-slate-400'>Analytics dashboard coming soon...</p>
           </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
-import { TrendingUp, TrendingDown, DollarSign, Activity, Globe, BarChart3, Target, AlertTriangle } from 'lucide-react';
+import { Activity, AlertTriangle, Bar, BarChart, BarChart3, CartesianGrid, DollarSign, Globe, MarketInsights, MarketTrends, ResponsiveContainer, Target, Tooltip, TrendingDown, TrendingUp, XAxis, YAxis } from 'lucide-react';;;
 
 interface StockData {
   symbol: string;
@@ -58,8 +58,8 @@ export default function StockMarketDashboard({ onClose }: StockMarketDashboardPr
   const [marketData, setMarketData] = useState<MarketTrends | null>(null);
   const [insights, setInsights] = useState<MarketInsights | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [selectedSector, setSelectedSector] = useState<string>('');
+  const [error, setError] = useState(&apos;);
+  const [selectedSector, setSelectedSector] = useState<string>(');
 
   useEffect(() => {
     fetchMarketData();

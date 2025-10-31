@@ -1,4 +1,4 @@
-'use client';
+import { ProductUpload } from "lucide-react";\n'use client';
 
 import React from 'react';
 import ProductUpload from '@/components/ProductUpload';

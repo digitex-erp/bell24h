@@ -1,4 +1,4 @@
-'use client';
+import { RFQFormData, RFQFormData } from "lucide-react";\n'use client';
 
 import React, { useState } from 'react';
 
@@ -169,29 +169,29 @@ export default function MobileRFQForm({ onSubmit, onSave, initialData = {} }: Mo
           value={formData.title}
           onChange={e => handleInputChange('title', e.target.value)}
           className='w-full p-2 border rounded'
-          placeholder='Enter RFQ title'
+          placeholder='Enter RFQ title
         />
       </div>
 
       <div>
-        <label className='block text-sm font-medium mb-1'>Description *</label>
+        <label className=block text-sm font-medium mb-1'>Description *</label>
         <textarea
           value={formData.description}
           onChange={e => handleInputChange('description', e.target.value)}
           className='w-full p-2 border rounded'
           rows={4}
-          placeholder='Describe your requirements'
+          placeholder='Describe your requirements
         />
       </div>
 
       <div>
-        <label className='block text-sm font-medium mb-1'>Category *</label>
+        <label className=block text-sm font-medium mb-1'>Category *</label>
         <select
           value={formData.category}
           onChange={e => handleInputChange('category', e.target.value)}
-          className='w-full p-2 border rounded'
+          className='w-full p-2 border rounded
         >
-          <option value=''>Select category</option>
+          <option value='>Select category</option>
           {categories.map(category => (
             <option key={category} value={category}>
               {category}
@@ -208,33 +208,33 @@ export default function MobileRFQForm({ onSubmit, onSave, initialData = {} }: Mo
             value={formData.quantity}
             onChange={e => handleInputChange('quantity', e.target.value)}
             className='w-full p-2 border rounded'
-            placeholder='Enter quantity'
+            placeholder='Enter quantity
           />
         </div>
         <div>
-          <label className='block text-sm font-medium mb-1'>Budget</label>
+          <label className=block text-sm font-medium mb-1'>Budget</label>
           <input
             type='number'
             value={formData.budget}
             onChange={e => handleInputChange('budget', e.target.value)}
             className='w-full p-2 border rounded'
-            placeholder='Enter budget'
+            placeholder='Enter budget
           />
         </div>
       </div>
 
       <div>
-        <label className='block text-sm font-medium mb-1'>Deadline</label>
+        <label className=block text-sm font-medium mb-1'>Deadline</label>
         <input
           type='date'
           value={formData.deadline}
           onChange={e => handleInputChange('deadline', e.target.value)}
-          className='w-full p-2 border rounded'
+          className='w-full p-2 border rounded
         />
       </div>
 
       <div>
-        <label className='block text-sm font-medium mb-1'>Requirements</label>
+        <label className=block text-sm font-medium mb-1'>Requirements</label>
         <div className='flex gap-2 mb-2'>
           <input
             type='text'

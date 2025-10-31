@@ -2,17 +2,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { 
-  Bell, 
-  Menu, 
-  X, 
-  User, 
-  Wallet, 
-  Settings,
-  LogOut,
-  Shield,
-  Crown
-} from 'lucide-react';
+import { Bell, Button, Crown, Link, LogOut, Menu, Settings, Shield, User, Wallet, X } from 'lucide-react';;;
 
 interface EnterpriseHeaderProps {
   title?: string;

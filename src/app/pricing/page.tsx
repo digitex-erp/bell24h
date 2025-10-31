@@ -1,16 +1,7 @@
 import { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
-  Check, 
-  Star, 
-  Crown, 
-  Zap, 
-  Shield, 
-  Users,
-  TrendingUp,
-  Award
-} from 'lucide-react';
+import { Award, Button, Card, CardContent, CardHeader, CardTitle, Check, Crown, Shield, Star, TrendingUp, Users, Zap } from 'lucide-react';;;
 
 export const metadata: Metadata = {
   title: 'Pricing - Bell24h | Transparent B2B Marketplace Pricing',
@@ -268,7 +259,7 @@ export default function PricingPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">534K+ Verified Suppliers</h3>
                 <p className="text-gray-600">
-                  Access India's largest network of verified B2B suppliers across 50+ categories.
+                  Access India&apos;s largest network of verified B2B suppliers across 50+ categories.
                 </p>
               </CardContent>
             </Card>
@@ -308,7 +299,7 @@ export default function PricingPage() {
                 <h3 className="text-lg font-semibold mb-2">Can I change my plan anytime?</h3>
                 <p className="text-gray-600">
                   Absolutely! You can upgrade, downgrade, or cancel your plan at any time. 
-                  Changes take effect immediately, and we'll prorate any billing adjustments.
+                  Changes take effect immediately, and we&apos;ll prorate any billing adjustments.
                 </p>
               </CardContent>
             </Card>

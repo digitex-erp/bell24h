@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CreditCard, Shield, TrendingUp, FileText, DollarSign, Clock, CheckCircle, AlertCircle, Calculator, Briefcase } from 'lucide-react';
+import { AlertCircle, Briefcase, Calculator, CheckCircle, Clock, CreditCard, DollarSign, FileText, Shield, TrendingUp } from 'lucide-react';;
 
 interface InvoiceData {
   id: string;

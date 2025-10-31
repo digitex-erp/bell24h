@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { RFQCategorizer, NLPAnalysis } from '@/ai/nlp-categorization';
-import { BarChart3, Brain, Target, Award, AlertTriangle, LineChart, Info, TestTube, Activity, TrendingUp, Eye } from "lucide-react";
+import { Activity, AlertTriangle, Award, BarChart3, Brain, Eye, Info, LineChart, Target, TestTube, TrendingUp } from 'lucide-react';;
 import { SupplierMatcher, SupplierRecommendation } from '@/ai/supplier-matching';
 import AITestRunner from '@/components/AITestRunner';
 import AILoadingStates, {
@@ -31,12 +31,12 @@ export function AIInsightsDashboard({
   const [analysis, setAnalysis] = useState<NLPAnalysis | null>(null);
   const [recommendations, setRecommendations] = useState<SupplierRecommendation[]>([]);
   const [loading, setLoading] = useState(false);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState(&apos;);
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'nlp' | 'shap' | 'recommendations' | 'testing' | 'performance' | 'predictive'
-  >('overview');
+    overview' | 'nlp' | 'shap' | 'recommendations' | 'testing' | 'performance' | 'predictive'
+  >(&apos;overview');
   const [error, setError] = useState<string | null>(null);
-  const [loadingStage, setLoadingStage] = useState<string>('');
+  const [loadingStage, setLoadingStage] = useState<string>(&apos;');
   const [progress, setProgress] = useState<number>(0);
   const [tensorFlowInitialized, setTensorFlowInitialized] = useState(false);
   const [initializationError, setInitializationError] = useState<string | null>(null);
@@ -348,8 +348,8 @@ export function AIInsightsDashboard({
           </div>
 
           {/* Tab Content */}
-          {activeTab === 'overview' && (
-            <div className='space-y-6'>
+          {activeTab === 'overview && (
+            <div className=space-y-6'>
               {/* Quick Stats */}
               <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
                 <div className='bg-blue-50 rounded-lg p-4'>
@@ -458,8 +458,8 @@ export function AIInsightsDashboard({
             </div>
           )}
 
-          {activeTab === 'nlp' && (
-            <div className='space-y-6'>
+          {activeTab === 'nlp && (
+            <div className=space-y-6'>
               {/* Category Classification */}
               <div className='bg-blue-50 rounded-lg p-6'>
                 <h4 className='font-semibold text-blue-900 mb-4 flex items-center space-x-2'>
@@ -660,8 +660,8 @@ export function AIInsightsDashboard({
             </div>
           )}
 
-          {activeTab === 'recommendations' && (
-            <div className='space-y-6'>
+          {activeTab === 'recommendations && (
+            <div className=space-y-6'>
               {/* AI Recommendations Summary */}
               <div className='bg-purple-50 rounded-lg p-6'>
                 <h4 className='font-semibold text-purple-900 mb-4 flex items-center space-x-2'>
@@ -736,8 +736,8 @@ export function AIInsightsDashboard({
             </div>
           )}
 
-          {activeTab === 'testing' && (
-            <div className='space-y-6'>
+          {activeTab === 'testing && (
+            <div className=space-y-6'>
               {/* AI Testing Header */}
               <div className='bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200'>
                 <h4 className='font-semibold text-gray-900 mb-2 flex items-center space-x-2'>
@@ -756,8 +756,8 @@ export function AIInsightsDashboard({
             </div>
           )}
 
-          {activeTab === 'performance' && (
-            <div className='space-y-6'>
+          {activeTab === 'performance && (
+            <div className=space-y-6'>
               {/* TensorFlow Performance Header */}
               <div className='bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 border border-green-200'>
                 <h4 className='font-semibold text-gray-900 mb-2 flex items-center space-x-2'>
@@ -828,8 +828,8 @@ export function AIInsightsDashboard({
             </div>
           )}
 
-          {activeTab === 'predictive' && (
-            <div className='space-y-6'>
+          {activeTab === 'predictive && (
+            <div className=space-y-6'>
               {/* Predictive Analytics Header */}
               <div className='bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6 border border-blue-200'>
                 <h4 className='font-semibold text-gray-900 mb-2 flex items-center space-x-2'>

@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Video, VideoOff, Upload, Play, Square, Trash2, Camera, FileVideo } from 'lucide-react'
+import { Blob, Button, Camera, Card, CardContent, CardHeader, CardTitle, File, FileVideo, HTMLInputElement, HTMLVideoElement, MediaRecorder, Play, Square, Trash2, Upload, Video, VideoOff } from 'lucide-react';;
 
 export default function TestVideoRFQPage() {
   const [isRecording, setIsRecording] = useState(false)
@@ -11,9 +11,9 @@ export default function TestVideoRFQPage() {
   const [videoBlob, setVideoBlob] = useState<Blob | null>(null)
   const [videoUrl, setVideoUrl] = useState<string | null>(null)
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
-  const [transcription, setTranscription] = useState('')
+  const [transcription, setTranscription] = useState(&apos;)
   const [rfqData, setRfqData] = useState<any>(null)
-  const [error, setError] = useState('')
+  const [error, setError] = useState(&apos;)
   const [recordingTime, setRecordingTime] = useState(0)
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
@@ -405,7 +405,7 @@ export default function TestVideoRFQPage() {
                   <li>Click "Start Recording" to record a video with your camera</li>
                   <li>Or click "Choose File" to upload an existing video file</li>
                   <li>Click "Process Video RFQ" to analyze the video</li>
-                  <li>You'll see transcription and extracted RFQ data</li>
+                  <li>You&apos;ll see transcription and extracted RFQ data</li>
                 </ul>
               </div>
               

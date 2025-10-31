@@ -1,4 +1,4 @@
-import { addDays, format } from 'date-fns';
+import { HTMLDivElement, DateRange, Popover, PopoverTrigger, Button, PopoverContent } from "lucide-react";\nimport { addDays, format } from 'date-fns';
 import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
@@ -42,7 +42,7 @@ export function DateRangePicker({ className, date, onDateChange }: DateRangePick
                   {format(dateRange.from, 'LLL dd, y')} - {format(dateRange.to, 'LLL dd, y')}
                 </>
               ) : (
-                format(dateRange.from, 'LLL dd, y')
+                format(dateRange.from, &apos;LLL dd, y')
               )
             ) : (
               <span>Pick a date</span>

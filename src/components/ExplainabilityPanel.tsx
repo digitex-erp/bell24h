@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, Brain, ChevronDown, ChevronUp, FullExplanationResult, Loader } from 'lucide-react';;\n'use client';
 
 import React, { useState, useEffect } from 'react';
 
@@ -54,9 +54,9 @@ export default function ExplainabilityPanel({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'shap' | 'lime' | 'perplexity'>(
-    'overview'
+    &apos;overview
   );
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['confidence']));
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set([confidence']));
 
   useEffect(() => {
     if (text.trim().length > 10) {
@@ -227,8 +227,8 @@ export default function ExplainabilityPanel({
         ) : explanation ? (
           <div>
             {/* Overview Tab */}
-            {activeTab === 'overview' && (
-              <div className='space-y-6'>
+            {activeTab === 'overview && (
+              <div className=space-y-6'>
                 {/* Combined Confidence */}
                 <div className='bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg'>
                   <div className='flex items-center justify-between mb-3'>
@@ -254,18 +254,18 @@ export default function ExplainabilityPanel({
                 <div className='border border-gray-200 rounded-lg p-4'>
                   <button
                     onClick={() => toggleSection('perplexity-overview')}
-                    className='w-full flex items-center justify-between'
+                    className='w-full flex items-center justify-between
                   >
-                    <h4 className='font-semibold text-gray-900'>Text Complexity Analysis</h4>
-                    {expandedSections.has('perplexity-overview') ? (
-                      <ChevronUp className='h-4 w-4' />
+                    <h4 className=font-semibold text-gray-900'>Text Complexity Analysis</h4>
+                    {expandedSections.has('perplexity-overview) ? (
+                      <ChevronUp className=h-4 w-4' />
                     ) : (
                       <ChevronDown className='h-4 w-4' />
                     )}
                   </button>
 
-                  {expandedSections.has('perplexity-overview') && (
-                    <div className='mt-3 space-y-3'>
+                  {expandedSections.has('perplexity-overview) && (
+                    <div className=mt-3 space-y-3'>
                       <div className='grid grid-cols-2 gap-4'>
                         <div>
                           <div className='text-2xl font-bold text-gray-900'>
@@ -311,8 +311,8 @@ export default function ExplainabilityPanel({
             )}
 
             {/* SHAP Tab */}
-            {activeTab === 'shap' && explanation.shap && (
-              <div className='space-y-4'>
+            {activeTab === 'shap && explanation.shap && (
+              <div className=space-y-4'>
                 <div className='flex items-center justify-between'>
                   <h4 className='font-semibold text-gray-900'>SHAP Feature Attribution</h4>
                   <div className='text-sm text-gray-500'>
@@ -333,8 +333,8 @@ export default function ExplainabilityPanel({
             )}
 
             {/* LIME Tab */}
-            {activeTab === 'lime' && explanation.lime && (
-              <div className='space-y-4'>
+            {activeTab === 'lime && explanation.lime && (
+              <div className=space-y-4'>
                 <div className='flex items-center justify-between'>
                   <h4 className='font-semibold text-gray-900'>LIME Local Explanation</h4>
                   <div className='text-sm text-gray-500'>
@@ -355,8 +355,8 @@ export default function ExplainabilityPanel({
             )}
 
             {/* Perplexity Tab */}
-            {activeTab === 'perplexity' && (
-              <div className='space-y-4'>
+            {activeTab === 'perplexity && (
+              <div className=space-y-4'>
                 <h4 className='font-semibold text-gray-900'>Detailed Perplexity Analysis</h4>
 
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>

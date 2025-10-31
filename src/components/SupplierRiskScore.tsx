@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
-import { Shield, AlertTriangle, CheckCircle, Clock, Award, TrendingUp, TrendingDown, Info } from 'lucide-react';
+import { AlertTriangle, Award, CheckCircle, Clock, Info, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, RiskScore, Shield, TrendingDown, TrendingUp } from 'lucide-react';;;
 
 interface RiskFactors {
   financialHealth: number;
@@ -210,7 +210,7 @@ export default function SupplierRiskScore({ supplierId, onClose }: SupplierRiskS
                   <div className="flex items-center space-x-2">
                     {getScoreIcon(data.score)}
                     <span className="font-medium text-gray-900">
-                      {factor.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      {factor.replace(/([A-Z])/g,  $1).replace(/^./, str => str.toUpperCase())}
                     </span>
                   </div>
                   <div className={`font-semibold ${getScoreColor(data.score)}`}>

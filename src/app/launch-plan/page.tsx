@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckCircle, Users, TrendingUp, Share2, MessageSquare, DollarSign, Clock, Target, Globe, Smartphone, BarChart3, Zap, Shield, Award } from 'lucide-react';
+import { Award, BarChart3, CheckCircle, Clock, DollarSign, Globe, MessageSquare, PriorityBadge, Share2, Shield, Smartphone, Target, TrendingUp, Users, Zap } from 'lucide-react';;;
 
 const LaunchPlan = () => {
   const [activePhase, setActivePhase] = useState('immediate');

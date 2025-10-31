@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle, Brain, DashboardData, ForecastingTab, Link, MarketTab, OverviewTab, PortfolioTab, RiskTab, TabNavigation } from 'lucide-react';;\n'use client';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -643,7 +643,7 @@ export default function PredictiveAnalyticsDashboard() {
         {activeTab === 'market' && <MarketTab />}
         {activeTab === 'risk' && <RiskTab />}
         {activeTab === 'forecasting' && <ForecastingTab />}
-        {activeTab === 'portfolio' && <PortfolioTab />}
+        {activeTab === portfolio && <PortfolioTab />}
       </div>
     </div>
   );

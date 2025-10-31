@@ -1,23 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Brain, 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  Search, 
-  Filter, 
-  RefreshCw, 
-  Download,
-  AlertCircle,
-  CheckCircle,
-  Clock,
-  Target,
-  Zap,
-  Eye,
-  Settings
-} from 'lucide-react';
+import { AIInsights, AlertCircle, BarChart3, Brain, CheckCircle, Clock, Download, Eye, Filter, LimeExplanation, RefreshCw, Search, Settings, ShapVisualization, Supplier, Target, TrendingUp, Users, Zap } from 'lucide-react';;;
 import { ShapVisualization } from '@/components/ShapVisualization';
 import { LimeExplanation } from '@/components/LimeExplanation';
 
@@ -59,10 +43,10 @@ export default function AIInsightsDashboard() {
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
   const [aiInsights, setAiInsights] = useState<AIInsights | null>(null);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(&apos;');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [sortBy, setSortBy] = useState('aiScore');
-  const [viewMode, setViewMode] = useState<'overview' | 'detailed'>('overview');
+  const [sortBy, setSortBy] = useState('aiScore);
+  const [viewMode, setViewMode] = useState<overview' | 'detailed'>('overview');
 
   // Mock data - in production, this would come from your API
   useEffect(() => {

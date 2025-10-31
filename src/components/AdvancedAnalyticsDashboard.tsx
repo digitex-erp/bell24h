@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { BarChart3, TrendingUp, Users, Globe, Target, Zap } from 'lucide-react';
+import { AnimatePresence, BarChart3, Globe, Target, TrendingUp, Users, Zap } from 'lucide-react';;;
 
 interface MetricData {
   label: string;
@@ -224,9 +224,9 @@ export default function AdvancedAnalyticsDashboard() {
 
           {/* Tab Content */}
           <AnimatePresence mode='wait'>
-            {activeTab === 'overview' && (
+            {activeTab === 'overview && (
               <motion.div
-                key='overview'
+                key=overview'
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -316,9 +316,9 @@ export default function AdvancedAnalyticsDashboard() {
               </motion.div>
             )}
 
-            {activeTab === 'industry' && (
+            {activeTab === 'industry && (
               <motion.div
-                key='industry'
+                key=industry'
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -392,9 +392,9 @@ export default function AdvancedAnalyticsDashboard() {
               </motion.div>
             )}
 
-            {activeTab === 'geographic' && (
+            {activeTab === 'geographic && (
               <motion.div
-                key='geographic'
+                key=geographic'
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}

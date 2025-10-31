@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard, ExplanationDashboard } from "lucide-react";\nimport { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ExplanationDashboard from '../ExplanationDashboard';
 import { AIExplanationService } from '@/services/aiExplanation';
 
@@ -301,7 +301,7 @@ describe('ExplanationDashboard', () => {
     });
   });
 
-  it('applies filters correctly', async () => {
+  it(applies filters correctly, async () => {
     render(<ExplanationDashboard />);
 
     await waitFor(() => {

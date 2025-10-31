@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, Blob, MediaRecorder, MediaStream, RecordingOptions, Square, Timer } from 'lucide-react';;\n'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
@@ -17,8 +17,8 @@ export default function ScreenRecorder() {
   const [isPaused, setIsPaused] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [previewUrl, setPreviewUrl] = useState<string>(&apos;);
+  const [error, setError] = useState<string>(&apos;);
   const [options, setOptions] = useState<RecordingOptions>({
     audio: true,
     microphone: true,

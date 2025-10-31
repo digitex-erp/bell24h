@@ -1,4 +1,4 @@
-'use client'
+import { Head, Head, Head } from "lucide-react";\n'use client'
 
 import Head from 'next/head'
 import { Category } from '@/data/complete-categories'

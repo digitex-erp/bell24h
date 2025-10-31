@@ -1,4 +1,4 @@
-'use client';
+import { Suspense, MarketplaceContent, Link, Link, Link, Link, Link } from "lucide-react";\n'use client';
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -41,7 +41,7 @@ function MarketplaceContent() {
       rating: 4.8,
       reviews: 234,
       orders: 2340,
-      responseTime: '<2hrs',
+      responseTime: <2hrs,
       aiMatchScore: 98.7,
       verified: true,
       ecgcApproved: true,
@@ -234,10 +234,10 @@ function MarketplaceContent() {
   }, [searchTerm, selectedCategory, selectedLocation, sortBy]);
 
   const categories = ['all', 'Electronics', 'Textiles', 'Machinery', 'Chemicals', 'Automotive'];
-  const locations = ['all', 'Mumbai', 'Bangalore', 'Pune', 'Ahmedabad', 'Chennai'];
+  const locations = ['all', 'Mumbai', 'Bangalore', 'Pune', 'Ahmedabad', 'Chennai];
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className=min-h-screen bg-gray-50'>
       {/* Header */}
       <div className='bg-white shadow-lg border-b border-gray-100'>
         <div className='container mx-auto px-4 py-6'>
@@ -352,9 +352,9 @@ function MarketplaceContent() {
               <select
                 value={sortBy}
                 onChange={e => setSortBy(e.target.value)}
-                className='px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500'
+                className='px-3 py-1 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500
               >
-                <option value='rating'>Rating</option>
+                <option value=rating'>Rating</option>
                 <option value='orders'>Orders</option>
                 <option value='aiMatchScore'>AI Match Score</option>
                 <option value='name'>Name</option>

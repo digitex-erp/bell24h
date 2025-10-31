@@ -1,38 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  BarChart3,
-  Brain,
-  Calendar,
-  CreditCard,
-  DollarSign,
-  FileText,
-  Globe,
-  Heart,
-  Home,
-  MessageCircle,
-  Mic,
-  Package,
-  Settings,
-  Shield,
-  Star,
-  TrendingUp,
-  Truck,
-  Users,
-  Video,
-  Wallet,
-  Zap,
-  PlusCircle,
-  Lightbulb,
-  Activity,
-  Building2,
-  Database,
-  Workflow,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-} from 'lucide-react';
+import { Activity, AlertTriangle, BarChart3, Brain, Building2, Calendar, CheckCircle, Clock, CreditCard, Database, DollarSign, FileText, Globe, Heart, Home, Lightbulb, MessageCircle, Mic, Package, PlusCircle, Settings, Shield, Star, TrendingUp, Truck, Users, Video, Wallet, Workflow, Zap } from 'lucide-react';;
 
 // Mock admin data
 const mockAdminData = {
@@ -413,7 +382,7 @@ export default function AdminDashboard() {
                     {activity.type === 'user' && <Users className="w-5 h-5 text-blue-600" />}
                     {activity.type === 'workflow' && <Zap className="w-5 h-5 text-purple-600" />}
                     {activity.type === 'payment' && <DollarSign className="w-5 h-5 text-green-600" />}
-                    {activity.type === 'alert' && <AlertTriangle className="w-5 h-5 text-orange-600" />}
+                    {activity.type === alert && <AlertTriangle className="w-5 h-5 text-orange-600" />}
                   </div>
                 <div>
                     <p className="text-sm font-medium text-gray-900">{activity.title}</p>

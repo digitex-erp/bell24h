@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, createContext } from 'react';
+import { PermissionContextType, UserRole } from "lucide-react";\nimport { useState, useEffect, useContext, createContext } from 'react';
 import { useAuth } from './useAuth.js';
 
 // Permission type (consistent with ACL schema)
@@ -34,7 +34,7 @@ const PermissionContext = createContext<PermissionContextType | undefined>(undef
 export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
-  const [userRole, setUserRole] = useState<UserRole>('guest');
+  const [userRole, setUserRole] = useState<UserRole>(&apos;guest');
   const [permissions, setPermissions] = useState<Record<string, AclPermission>>({});
 
   // Fetch user permissions on auth change
@@ -175,7 +175,7 @@ export const usePermissions = (): PermissionContextType => {
   const context = useContext(PermissionContext);
 
   if (context === undefined) {
-    throw new Error('usePermissions must be used within a PermissionProvider');
+    throw new Error(usePermissions must be used within a PermissionProvider);
   }
 
   return context;

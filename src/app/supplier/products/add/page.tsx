@@ -1,4 +1,4 @@
-'use client';
+import { HTMLInputElement, HTMLInputElement } from "lucide-react";\n'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -255,7 +255,7 @@ export default function AddProductPage() {
                 disabled={loading}
                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50"
               >
-                {loading ? 'Adding Product...' : 'Add Product'}
+                {loading ? 'Adding Product...' : Add Product}
               </button>
             </div>
           </form>

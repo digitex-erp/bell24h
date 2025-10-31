@@ -1,4 +1,4 @@
-'use client';
+import { ChevronDown, ChevronUp, Cookie, Info } from 'lucide-react';;\n'use client';
 
 import React, { useState, useEffect } from 'react';
 import { gdprConsent, COOKIE_CATEGORIES, CookieCategory } from '@/lib/gdpr-cookie-consent';

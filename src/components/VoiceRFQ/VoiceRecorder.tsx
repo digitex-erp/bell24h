@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { Mic, MicOff, Play, Pause, Square, FileText, Upload, CheckCircle, AlertCircle } from 'lucide-react';
+import { AlertCircle, Blob, CheckCircle, FileText, HTMLAudioElement, MediaRecorder, MediaStream, Mic, MicOff, Pause, Play, Square, Upload, VoiceRFQData } from 'lucide-react';;;
 
 interface VoiceRFQData {
   title: string;
@@ -18,10 +18,10 @@ export default function VoiceRFQ() {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [audioUrl, setAudioUrl] = useState<string>('');
+  const [audioUrl, setAudioUrl] = useState<string>(&apos;');
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentStep, setCurrentStep] = useState<'recording' | 'details' | 'review'>('recording');
-  const [recognitionError, setRecognitionError] = useState<string>('');
+  const [currentStep, setCurrentStep] = useState<'recording' | 'details' | 'review'>(&apos;recording');
+  const [recognitionError, setRecognitionError] = useState<string>(&apos;');
   const [isProcessing, setIsProcessing] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);

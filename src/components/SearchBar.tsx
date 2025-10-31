@@ -1,4 +1,4 @@
-'use client';
+import { HTMLDivElement } from "lucide-react";\n'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useCategories } from '../hooks/useCategories';
@@ -147,7 +147,7 @@ export default function SearchBar({ onSearch, className = '' }: SearchBarProps) 
         {process.env.NODE_ENV === 'development' && (
           <div className='mt-2 text-xs text-gray-500'>
             API Status:{' '}
-            {loading ? 'Loading...' : error ? 'Error' : `${categories.length} categories loaded`}
+            {loading ? 'Loading...' : error ? Error : `${categories.length} categories loaded`}
           </div>
         )}
       </div>

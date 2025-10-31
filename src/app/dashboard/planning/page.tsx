@@ -1,32 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  TrendingUp,
-  Target,
-  BarChart3,
-  Users,
-  Package,
-  DollarSign,
-  Calendar,
-  Clock,
-  ArrowUpRight,
-  ArrowDownRight,
-  Minus,
-  Download,
-  RefreshCw,
-  Filter,
-  Eye,
-  Settings,
-  Zap,
-  Activity,
-  Globe,
-  Building2,
-  Star,
-  CheckCircle,
-  AlertTriangle,
-  Lightbulb,
-} from 'lucide-react';
+import { AIPredictionCard, Activity, AlertTriangle, ArrowDownRight, ArrowUpRight, BarChart3, Building2, Calendar, CheckCircle, Clock, DollarSign, Download, Eye, Filter, Globe, Icon, KPICard, Lightbulb, MarketTrendCard, Minus, Package, ProjectionCard, RefreshCw, Settings, Star, Target, TrendingUp, UserDashboardLayout, Users, Zap } from 'lucide-react';;;
 import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import {
@@ -145,8 +120,8 @@ const ProjectionCard = ({ title, current, projected, change, icon: Icon, color =
   };
 
   const getTrendColor = () => {
-    if (change > 0) return 'text-green-600';
-    if (change < 0) return 'text-red-600';
+    if (change > 0) return &apos;text-green-600;
+    if (change < 0) return text-red-600';
     return 'text-gray-600';
   };
 
@@ -178,8 +153,8 @@ const ProjectionCard = ({ title, current, projected, change, icon: Icon, color =
 // Market Trend Card Component
 const MarketTrendCard = ({ trend }) => {
   const getTrendIcon = () => {
-    if (trend.trend === 'up') return <ArrowUpRight className="w-4 h-4 text-green-600" />;
-    if (trend.trend === 'down') return <ArrowDownRight className="w-4 h-4 text-red-600" />;
+    if (trend.trend === 'up) return <ArrowUpRight className="w-4 h-4 text-green-600" />;
+    if (trend.trend === down&apos;) return <ArrowDownRight className="w-4 h-4 text-red-600" />;
     return <Minus className="w-4 h-4 text-gray-600" />;
   };
 
@@ -263,7 +238,7 @@ const AIPredictionCard = ({ prediction }) => {
 const KPICard = ({ kpi }) => {
   const getTrendIcon = () => {
     if (kpi.trend === 'up') return <ArrowUpRight className="w-4 h-4 text-green-600" />;
-    if (kpi.trend === 'down') return <ArrowDownRight className="w-4 h-4 text-red-600" />;
+    if (kpi.trend === &apos;down') return <ArrowDownRight className="w-4 h-4 text-red-600" />;
     return <Minus className="w-4 h-4 text-gray-600" />;
   };
 
@@ -496,7 +471,7 @@ export default function PlanningPage() {
             )}
 
             {/* Business Analytics Tab */}
-            {activeTab === 'analytics' && (
+            {activeTab === analytics && (
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-6">Key Performance Indicators</h3>

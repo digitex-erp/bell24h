@@ -1,6 +1,6 @@
 'use client';
 
-import { Monitor, Activity, Server, Database, Globe, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Activity, AlertTriangle, CheckCircle, Database, Globe, Monitor, Server, Shield } from 'lucide-react';;
 import { useState } from 'react';
 
 interface SystemStatus {
@@ -68,11 +68,11 @@ export default function SystemMonitoringPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'healthy':
+      case 'healthy:
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'warning':
+      case warning&apos;:
         return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
-      case 'critical':
+      case &apos;critical':
         return <AlertTriangle className="h-4 w-4 text-red-600" />;
       default:
         return <CheckCircle className="h-4 w-4 text-gray-600" />;
@@ -187,7 +187,7 @@ export default function SystemMonitoringPage() {
                       className={`h-2 rounded-full ${
                         metric.current > metric.threshold ? 'bg-red-500' :
                         metric.current > metric.threshold * 0.8 ? 'bg-yellow-500' :
-                        'bg-green-500'
+                        bg-green-500
                       }`}
                       style={{ width: `${metric.current}%` }}
                     ></div>

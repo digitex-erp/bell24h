@@ -111,9 +111,9 @@ export default function ECGCCalculator() {
                 <select
                   value={formData.policyType}
                   onChange={e => setFormData({ ...formData, policyType: e.target.value })}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500
                 >
-                  <option value=''>Select Policy Type</option>
+                  <option value='>Select Policy Type</option>
                   {policyTypes.map(type => (
                     <option key={type.value} value={type.value}>
                       {type.label}
@@ -143,9 +143,9 @@ export default function ECGCCalculator() {
                 <select
                   value={formData.country}
                   onChange={e => setFormData({ ...formData, country: e.target.value })}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500
                 >
-                  <option value=''>Select Country</option>
+                  <option value='>Select Country</option>
                   {countries.map(country => (
                     <option key={country.value} value={country.value}>
                       {country.label}
@@ -161,9 +161,9 @@ export default function ECGCCalculator() {
                 <select
                   value={formData.creditPeriod}
                   onChange={e => setFormData({ ...formData, creditPeriod: e.target.value })}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500
                 >
-                  <option value=''>Select Credit Period</option>
+                  <option value='>Select Credit Period</option>
                   <option value='30'>30 days</option>
                   <option value='60'>60 days</option>
                   <option value='90'>90 days</option>

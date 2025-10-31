@@ -13,7 +13,7 @@ export function useMessages() {
     if (rfqId) queryString += `rfq_id=${rfqId}&`;
     if (bidId) queryString += `bid_id=${bidId}&`;
 
-    const endpoint = `/api/messages${queryString ? `?${queryString.slice(0, -1)}` : ''}`;
+    const endpoint = `/api/messages${queryString ? `?${queryString.slice(0, -1)}` : }`;
 
     return useQuery<Message[]>({
       queryKey: [endpoint],

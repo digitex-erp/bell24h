@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangleIcon, AnimatePresence, CalculatorIcon, IndianRupee, LogisticsAnalytics, ShipIcon, Shipment } from 'lucide-react';;\n'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -63,13 +63,13 @@ interface ShippingRate {
 
 export default function LogisticsDashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'shipments' | 'analytics' | 'calculator'>(
-    'overview'
+    &apos;overview'
   );
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [analytics, setAnalytics] = useState<LogisticsAnalytics | null>(null);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState(&apos;');
+  const [statusFilter, setStatusFilter] = useState<string>(&apos;all');
   const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [hasMounted, setHasMounted] = useState(false);
@@ -305,19 +305,19 @@ export default function LogisticsDashboard() {
 
   const getStatusIcon = (status: Shipment['status']) => {
     switch (status) {
-      case 'DELIVERED':
+      case 'DELIVERED:
         return <span>✅</span>;
-      case 'IN_TRANSIT':
+      case IN_TRANSIT&apos;:
         return <span>🚚</span>;
-      case 'OUT_FOR_DELIVERY':
-        return <ShipIcon className='w-4 h-4' />;
-      case 'PICKED':
+      case &apos;OUT_FOR_DELIVERY:
+        return <ShipIcon className=w-4 h-4' />;
+      case &apos;PICKED':
         return <span>📦</span>;
-      case 'NEW':
+      case &apos;NEW:
         return <span>🕐</span>;
-      case 'EXCEPTION':
+      case EXCEPTION&apos;:
         return <AlertTriangleIcon className='w-4 h-4' />;
-      case 'CANCELLED':
+      case &apos;CANCELLED':
         return <span>❌</span>;
       default:
         return <span>📦</span>;
@@ -428,9 +428,9 @@ export default function LogisticsDashboard() {
         {/* Tab Content */}
         <div className='mt-6'>
           <AnimatePresence mode='wait'>
-            {activeTab === 'overview' && (
+            {activeTab === 'overview && (
               <motion.div
-                key='overview'
+                key=overview'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -523,9 +523,9 @@ export default function LogisticsDashboard() {
               </motion.div>
             )}
 
-            {activeTab === 'shipments' && (
+            {activeTab === 'shipments && (
               <motion.div
-                key='shipments'
+                key=shipments'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -550,9 +550,9 @@ export default function LogisticsDashboard() {
                       <select
                         value={statusFilter}
                         onChange={e => setStatusFilter(e.target.value)}
-                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                       >
-                        <option value='all'>All Status</option>
+                        <option value=all'>All Status</option>
                         <option value='NEW'>New</option>
                         <option value='PICKED'>Picked</option>
                         <option value='IN_TRANSIT'>In Transit</option>
@@ -649,9 +649,9 @@ export default function LogisticsDashboard() {
               </motion.div>
             )}
 
-            {activeTab === 'calculator' && (
+            {activeTab === 'calculator && (
               <motion.div
-                key='calculator'
+                key=calculator'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -822,9 +822,9 @@ export default function LogisticsDashboard() {
               </motion.div>
             )}
 
-            {activeTab === 'analytics' && analytics && (
+            {activeTab === 'analytics && analytics && (
               <motion.div
-                key='analytics'
+                key=analytics'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -1014,7 +1014,7 @@ export default function LogisticsDashboard() {
                               )}
                             </div>
                             <p className='text-sm text-gray-500'>
-                              {new Date(checkpoint.time).toLocaleDateString()}{' '}
+                              {new Date(checkpoint.time).toLocaleDateString()}{ }
                               {new Date(checkpoint.time).toLocaleTimeString()}
                             </p>
                           </div>

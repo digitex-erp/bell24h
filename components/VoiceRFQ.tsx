@@ -8,7 +8,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Mic, MicOff, Play, Pause, Square, Send, Loader2 } from 'lucide-react';
+import { Blob, Button, Card, CardContent, CardHeader, CardTitle, HTMLAudioElement, Input, Label, Loader2, MediaRecorder, Mic, MicOff, Pause, Play, RFQData, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Send, Square, Textarea, VoiceRFQProps } from 'lucide-react';;;
 import { toast } from 'sonner';
 
 interface VoiceRFQProps {
@@ -36,7 +36,7 @@ export const VoiceRFQ: React.FC<VoiceRFQProps> = ({ onRFQCreated, userId }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [transcript, setTranscript] = useState<string>('');
+  const [transcript, setTranscript] = useState<string>(&apos;');
   const [rfqData, setRfqData] = useState<RFQData>({
     title: '',
     description: '',

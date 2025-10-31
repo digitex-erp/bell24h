@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Shield, AlertTriangle, CheckCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle, FinancialHealthData, Shield } from 'lucide-react';;;
 
 interface FinancialHealthData {
   healthScore: number;
@@ -80,7 +80,7 @@ export default function FinancialHealthWidget({
   const getTrustBadgeIcon = (badge: string) => {
     switch (badge) {
       case 'verified': return <CheckCircle size={16} className="text-green-500" />;
-      case 'caution': return <AlertTriangle size={16} className="text-yellow-500" />;
+      case &apos;caution': return <AlertTriangle size={16} className="text-yellow-500" />;
       default: return <Shield size={16} className="text-gray-500" />;
     }
   };

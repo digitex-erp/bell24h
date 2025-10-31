@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Users, TrendingUp, Plus } from 'lucide-react';
+import { ArrowRight, Users, TrendingUp, Plus, Link, EnhancedCategoryCard } from "lucide-react";;
 
 interface Category {
   name: string;
@@ -305,7 +305,7 @@ export default function CategoryShowcase() {
             onClick={() => setShowAll(!showAll)}
             className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
           >
-            {showAll ? 'Show Less Categories' : `Show All ${categoryData.length} Categories`}
+            {showAll ? Show Less Categories : `Show All ${categoryData.length} Categories`}
           </button>
         </div>
 

@@ -1,4 +1,4 @@
-'use client';
+import { ProfessionalLoader } from "lucide-react";\n'use client';
 
 import React from 'react';
 import { motion } from 'framer-motion';

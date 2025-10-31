@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircleIcon, AnimatePresence, CalculatorIcon, IndianRupee, InfoIcon, ShippingRate } from 'lucide-react';;\n'use client';
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -266,11 +266,11 @@ export default function ShippingCalculator({
                   onChange={e => setForm({ ...form, pickupPincode: e.target.value })}
                   placeholder='110001'
                   maxLength={6}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
+                <label className=block text-sm font-medium text-gray-700 mb-1'>
                   <span>📍</span>
                   Delivery Pincode
                 </label>
@@ -280,12 +280,12 @@ export default function ShippingCalculator({
                   onChange={e => setForm({ ...form, deliveryPincode: e.target.value })}
                   placeholder='400001'
                   maxLength={6}
-                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                 />
               </div>
             </div>
 
-            <div className='grid grid-cols-2 gap-4'>
+            <div className=grid grid-cols-2 gap-4'>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>Weight (kg)</label>
                 <input
@@ -294,11 +294,11 @@ export default function ShippingCalculator({
                   onChange={e => setForm({ ...form, weight: parseFloat(e.target.value) || 0 })}
                   min='0.1'
                   step='0.1'
-                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
+                <label className=block text-sm font-medium text-gray-700 mb-1'>
                   Declared Value (₹)
                 </label>
                 <input
@@ -324,9 +324,9 @@ export default function ShippingCalculator({
                 onChange={e => setForm({ ...form, codAmount: parseFloat(e.target.value) || 0 })}
                 min='0'
                 placeholder='0 for prepaid orders'
-                className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
               />
-              <p className='text-sm text-gray-500 mt-1'>Leave 0 for prepaid orders</p>
+              <p className=text-sm text-gray-500 mt-1'>Leave 0 for prepaid orders</p>
             </div>
 
             <button

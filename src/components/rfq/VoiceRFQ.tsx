@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Mic, MicOff, Play, Pause, Download, Trash2, Send, Volume2, FileText, Clock, CheckCircle, AlertCircle, Settings } from 'lucide-react';
+import { AlertCircle, Blob, CheckCircle, Clock, Download, FileText, MediaRecorder, Mic, MicOff, Pause, Play, Send, Settings, TranscriptionResult, Trash2, VoiceRecording, Volume2 } from 'lucide-react';;;
 
 interface VoiceRecording {
   id: string;
@@ -40,7 +40,7 @@ export default function VoiceRFQ() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState('electronics');
+  const [selectedCategory, setSelectedCategory] = useState(&apos;electronics');
   const [budget, setBudget] = useState('');
   const [deadline, setDeadline] = useState('');
   
@@ -271,11 +271,11 @@ export default function VoiceRFQ() {
     switch (status) {
       case 'recording':
         return <Mic className="w-4 h-4 text-red-600 animate-pulse" />;
-      case 'processing':
+      case &apos;processing:
         return <Clock className="w-4 h-4 text-blue-600 animate-spin" />;
-      case 'completed':
+      case completed&apos;:
         return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'failed':
+      case &apos;failed':
         return <AlertCircle className="w-4 h-4 text-gray-600" />;
       default:
         return <Mic className="w-4 h-4 text-gray-600" />;

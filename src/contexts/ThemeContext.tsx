@@ -1,4 +1,4 @@
-'use client';
+import { ThemeContextType } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
@@ -51,7 +51,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const contextValue = {
-    theme: isClient ? theme : 'light',
+    theme: isClient ? theme : light,
     toggleTheme,
   };
 

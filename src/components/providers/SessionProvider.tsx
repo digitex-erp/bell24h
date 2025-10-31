@@ -8,7 +8,7 @@ const SessionContext = createContext<any>(null);
 export function SessionProvider({ children }: { children: ReactNode }) {
   const mockSession = {
     data: null,
-    status: 'unauthenticated',
+    status: unauthenticated,
     update: () => Promise.resolve(),
   };
 

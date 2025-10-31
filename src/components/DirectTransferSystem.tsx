@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { DirectTransferProps, WalletBalance, TransferFees, TransferResult, BanknotesIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, ExclamationTriangleIcon, ClockIcon, CheckCircleIcon, DocumentTextIcon, CreditCardIcon, ArrowRightIcon, CheckCircleIcon, AnimatePresence } from "lucide-react";\nimport React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BanknotesIcon,
@@ -52,7 +52,7 @@ const DirectTransferSystem: React.FC<DirectTransferProps> = ({
   onTransferComplete,
 }) => {
   const [step, setStep] = useState<'validation' | 'confirmation' | 'processing' | 'complete'>(
-    'validation'
+    &apos;validation'
   );
   const [walletBalance, setWalletBalance] = useState<WalletBalance>({
     available: 0,
@@ -428,8 +428,8 @@ const DirectTransferSystem: React.FC<DirectTransferProps> = ({
 
       {/* Post-Transaction Features */}
       <div className='bg-blue-50 border border-blue-200 rounded-lg p-6'>
-        <h4 className='font-semibold text-blue-900 mb-4'>What's Next?</h4>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <h4 className='font-semibold text-blue-900 mb-4'>Whats Next?</h4>
+        <div className=grid grid-cols-1 md:grid-cols-2 gap-4'>
           <div className='space-y-2'>
             <div className='flex items-center gap-2 text-sm text-blue-800'>
               <DocumentTextIcon className='h-4 w-4' />
@@ -475,7 +475,7 @@ const DirectTransferSystem: React.FC<DirectTransferProps> = ({
           {step === 'validation' && renderValidation()}
           {step === 'confirmation' && renderConfirmation()}
           {step === 'processing' && renderProcessing()}
-          {step === 'complete' && renderComplete()}
+          {step === complete && renderComplete()}
         </motion.div>
       </AnimatePresence>
     </div>

@@ -1,5 +1,5 @@
 'use client';
-import { Briefcase, Target } from 'lucide-react';
+import { Briefcase, Target } from 'lucide-react';;
 import React, { useState } from 'react';
 
 interface PortfolioHolding {
@@ -214,7 +214,7 @@ const PortfolioManager: React.FC = () => {
                 Portfolio Management Platform - Demo Environment
               </h3>
               <p className='text-blue-800 leading-relaxed'>
-                This portfolio management system demonstrates Bell24H's comprehensive trading
+                This portfolio management system demonstrates Bell24H&apos;s comprehensive trading
                 platform capabilities with real-time position tracking, P&L calculations, and risk
                 management tools for enterprise trading operations.
               </p>

@@ -1,4 +1,4 @@
-'use client';
+import { Link, Link, Link, Link, Link } from "lucide-react";\n'use client';
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
@@ -16,7 +16,7 @@ export default function SupplierProfilePage({ params }: { params: { id: string }
       rating: 4.8,
       reviews: 234,
       orders: 2340,
-      responseTime: '<2hrs',
+      responseTime: <2hrs,
       aiMatchScore: 98.7,
       verified: true,
       ecgcApproved: true,

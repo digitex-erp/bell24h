@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { Video, VideoOff, Play, Pause, Square, Upload, FileText, Clock, CheckCircle, Camera, Trash2 } from 'lucide-react';
+import { Camera, CheckCircle, Clock, FileText, Pause, Play, Square, Trash2, Upload, Video, VideoOff } from 'lucide-react';;
 
 export default function VideoRFQPage() {
   const [isRecording, setIsRecording] = useState(false);

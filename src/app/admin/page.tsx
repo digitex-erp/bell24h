@@ -1,20 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { 
-  Users, 
-  Building2, 
-  TrendingUp, 
-  DollarSign, 
-  Activity, 
-  Shield, 
-  Settings, 
-  BarChart3,
-  FileText,
-  MessageSquare,
-  Database,
-  Monitor
-} from 'lucide-react';
+import { Users, Building2, TrendingUp, DollarSign, Activity, Shield, Settings, BarChart3, FileText, MessageSquare, Database, Monitor, Link } from "lucide-react";;
 
 export default function AdminIndexPage() {
   const adminModules = [

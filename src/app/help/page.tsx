@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ChevronUp, ChevronDown, MessageSquare, BookOpen } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronUp, MessageSquare } from 'lucide-react';;
 
 export default function HelpPage() {
   const [hasMounted, setHasMounted] = useState(false);
@@ -163,9 +163,9 @@ export default function HelpPage() {
                     <div key={index} className='border border-gray-200 rounded-lg'>
                       <button
                         onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                        className='w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors'
+                        className='w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors
                       >
-                        <span className='font-medium text-gray-900'>{faq.question}</span>
+                        <span className=font-medium text-gray-900'>{faq.question}</span>
                         {expandedFaq === index ? (
                           <ChevronUp className='w-5 h-5 text-gray-500' />
                         ) : (

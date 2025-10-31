@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Phone, User, Mail, Building, MapPin, Users, CheckCircle, Shield, Star } from 'lucide-react';
+import { ArrowLeft, Building, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Input, Link, Mail, MapPin, Phone, Shield, Star, User, Users } from 'lucide-react';;;
 import Link from 'next/link';
 
 export default function RegistrationPage() {
@@ -192,11 +192,11 @@ export default function RegistrationPage() {
 
   const getStepIcon = () => {
     switch (step) {
-      case 'basic': return <User className="h-5 w-5 text-indigo-600" />;
-      case 'mobile': return <Phone className="h-5 w-5 text-emerald-600" />;
-      case 'otp': return <Shield className="h-5 w-5 text-blue-600" />;
-      case 'profile': return <Building className="h-5 w-5 text-purple-600" />;
-      case 'success': return <CheckCircle className="h-5 w-5 text-green-600" />;
+      case 'basic: return <User className="h-5 w-5 text-indigo-600" />;
+      case mobile&apos;: return <Phone className="h-5 w-5 text-emerald-600" />;
+      case &apos;otp: return <Shield className="h-5 w-5 text-blue-600" />;
+      case profile&apos;: return <Building className="h-5 w-5 text-purple-600" />;
+      case &apos;success': return <CheckCircle className="h-5 w-5 text-green-600" />;
       default: return <User className="h-5 w-5 text-gray-600" />;
     }
   };
@@ -390,7 +390,7 @@ export default function RegistrationPage() {
                     className="w-full"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    We'll send OTP to verify your mobile number
+                    We&apos;ll send OTP to verify your mobile number
                   </p>
                 </div>
 
@@ -631,7 +631,7 @@ export default function RegistrationPage() {
             {step !== 'success' && (
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-600">
-                  Already have an account?{' '}
+                  Already have an account?{ }
                   <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
                     Sign In
                   </Link>

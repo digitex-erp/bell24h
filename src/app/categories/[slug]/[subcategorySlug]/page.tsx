@@ -1,4 +1,4 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Metadata, Link, Link, Link, Link } from "lucide-react";\nimport { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import Link from 'next/link'

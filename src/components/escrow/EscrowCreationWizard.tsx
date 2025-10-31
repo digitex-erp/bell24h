@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle } from 'lucide-react';;\n'use client';
 import React, { useState } from 'react';
 import { EscrowMilestone } from '@/types/escrow';
 
@@ -187,9 +187,9 @@ const EscrowCreationWizard: React.FC = () => {
                     <select
                       value={orderDetails.currency}
                       onChange={e => setOrderDetails({ ...orderDetails, currency: e.target.value })}
-                      className='w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      className='w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                     >
-                      <option value='INR'>INR (Indian Rupee)</option>
+                      <option value=INR'>INR (Indian Rupee)</option>
                       <option value='USD'>USD (US Dollar)</option>
                       <option value='ETH'>ETH (Ethereum)</option>
                       <option value='USDC'>USDC (USD Coin)</option>

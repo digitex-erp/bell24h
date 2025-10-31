@@ -1,4 +1,4 @@
-'use client';
+import { AnimatePresence, Building, Crown, SupportAgent, SupportTier } from 'lucide-react';;\n'use client';
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -95,7 +95,7 @@ export default function PremiumSupportConcierge() {
         'SLA guarantees',
         'On-site support available',
       ],
-      responseTime: '< 2 hours',
+      responseTime: < 2 hours,
       availability: '24/7',
       channels: ['All channels', 'Direct line', 'Emergency escalation'],
       benefits: [
@@ -330,9 +330,9 @@ export default function PremiumSupportConcierge() {
 
         {/* Tab Content */}
         <AnimatePresence mode='wait'>
-          {activeTab === 'overview' && (
+          {activeTab === 'overview && (
             <motion.div
-              key='overview'
+              key=overview'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -468,9 +468,9 @@ export default function PremiumSupportConcierge() {
             </motion.div>
           )}
 
-          {activeTab === 'experts' && (
+          {activeTab === 'experts && (
             <motion.div
-              key='experts'
+              key=experts'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -549,9 +549,9 @@ export default function PremiumSupportConcierge() {
             </motion.div>
           )}
 
-          {activeTab === 'success' && (
+          {activeTab === 'success && (
             <motion.div
-              key='success'
+              key=success'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}

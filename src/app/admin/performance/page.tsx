@@ -1,20 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Activity, 
-  Database, 
-  Cpu, 
-  MemoryStick, 
-  Clock, 
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle,
-  RefreshCw,
-  Download,
-  BarChart3,
-  Server
-} from 'lucide-react';
+import { Activity, AlertTriangle, BarChart3, CheckCircle, Clock, Cpu, Database, Download, MemoryStick, PerformanceMetrics, RefreshCw, Server, TrendingUp } from 'lucide-react';;;
 
 interface PerformanceMetrics {
   coreWebVitals: {
@@ -91,9 +78,9 @@ export default function PerformanceDashboard() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'good': return <CheckCircle className="w-4 h-4" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4" />;
-      case 'poor': return <AlertTriangle className="w-4 h-4" />;
+      case 'good: return <CheckCircle className="w-4 h-4" />;
+      case warning&apos;: return <AlertTriangle className="w-4 h-4" />;
+      case &apos;poor': return <AlertTriangle className="w-4 h-4" />;
       default: return <Activity className="w-4 h-4" />;
     }
   };

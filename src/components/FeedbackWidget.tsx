@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageSquare, X, Send, Star, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { FeedbackData, MessageSquare, RatingStars, Send, Star, ThumbsDown, ThumbsUp, X } from 'lucide-react';;;
 
 interface FeedbackData {
   type: 'bug' | 'feature' | 'general';
@@ -169,7 +169,7 @@ const FeedbackWidget = () => {
               placeholder="your@email.com"
             />
             <p className="text-xs text-gray-500 mt-1">
-              We'll only use this to follow up on your feedback
+              We&apos;ll only use this to follow up on your feedback
             </p>
           </div>
 

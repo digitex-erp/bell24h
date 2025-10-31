@@ -1,4 +1,4 @@
-'use client';
+import { PageHeader, Link, Link, Link } from "lucide-react";\n'use client';
 
 import Link from 'next/link';
 import PageHeader from '@/components/common/PageHeader';
@@ -329,8 +329,8 @@ export default function SuppliersPage() {
             </div>
           </div>
 
-          {viewMode === 'grid' ? (
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+          {viewMode === 'grid ? (
+            <div className=grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
               {filteredAndSortedSuppliers.map(supplier => (
                 <div
                   key={supplier.id}

@@ -1,4 +1,4 @@
-'use client';
+import { Suspense, ResetPasswordForm } from "lucide-react";\n'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -164,7 +164,7 @@ function ResetPasswordForm() {
               <button
                 type='button'
                 onClick={() => router.push('/login')}
-                className='text-sm text-blue-600 hover:text-blue-500 transition-colors'
+                className=text-sm text-blue-600 hover:text-blue-500 transition-colors
               >
                 Back to login
               </button>

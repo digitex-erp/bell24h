@@ -1,4 +1,4 @@
-'use client';
+import { EnterpriseMetricProps, EnterpriseCard, Icon } from "lucide-react";\n'use client';
 
 import React from 'react';
 import EnterpriseCard from './EnterpriseCard';

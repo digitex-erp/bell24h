@@ -29,7 +29,7 @@ interface GSTInvoice {
 export default function GSTTest() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
-  const [gstNumber, setGstNumber] = useState('27AAPFU0939F1Z5');
+  const [gstNumber, setGstNumber] = useState(&apos;27AAPFU0939F1Z5');
   const [invoiceData, setInvoiceData] = useState<GSTInvoice>({
     invoiceNumber: 'INV-2024-000001',
     invoiceDate: new Date().toISOString().split('T')[0],
@@ -198,7 +198,7 @@ export default function GSTTest() {
 
       const data = await response.json();
       alert(
-        `GST Validation Result: ${data.isValid ? 'Valid' : 'Invalid'}\nState: ${
+        `GST Validation Result: ${data.isValid ? 'Valid' : 'Invalid'}\import { GSTInvoice } from "lucide-react";\nnState: ${
           data.stateName || 'Unknown'
         }`
       );
@@ -274,29 +274,29 @@ export default function GSTTest() {
                   invoiceNumber: e.target.value,
                 })
               }
-              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
             />
           </div>
           <div>
-            <label className='block text-sm font-medium text-gray-700 mb-1'>Invoice Date</label>
+            <label className=block text-sm font-medium text-gray-700 mb-1'>Invoice Date</label>
             <input
               type='date'
               value={invoiceData.invoiceDate}
               onChange={e => setInvoiceData({ ...invoiceData, invoiceDate: e.target.value })}
-              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
             />
           </div>
           <div>
-            <label className='block text-sm font-medium text-gray-700 mb-1'>Supplier GST</label>
+            <label className=block text-sm font-medium text-gray-700 mb-1'>Supplier GST</label>
             <input
               type='text'
               value={invoiceData.supplierGST}
               onChange={e => setInvoiceData({ ...invoiceData, supplierGST: e.target.value })}
-              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
             />
           </div>
           <div>
-            <label className='block text-sm font-medium text-gray-700 mb-1'>Buyer GST</label>
+            <label className=block text-sm font-medium text-gray-700 mb-1'>Buyer GST</label>
             <input
               type='text'
               value={invoiceData.buyerGST || ''}

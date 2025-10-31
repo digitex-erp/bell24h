@@ -1,4 +1,4 @@
-'use client';
+import { AIExplanationErrorBoundary, AlertTriangle, Bug, Component, Error, Props } from 'lucide-react';;\n'use client';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -303,7 +303,7 @@ export function useAIExplanationError() {
       (window as any).Sentry.captureException(error, {
         tags: {
           component: 'AIExplanation',
-          hook: 'useAIExplanationError',
+          hook: useAIExplanationError,
         },
       });
     }

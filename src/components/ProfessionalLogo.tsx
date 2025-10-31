@@ -1,4 +1,4 @@
-'use client';
+import { HTMLAudioElement } from "lucide-react";\n'use client';
 
 import React, { useRef, useState } from 'react';
 
@@ -96,8 +96,8 @@ export default function ProfessionalLogo({
           >
             BELL
           </h1>
-          {size === 'lg' && (
-            <p className='text-sm text-gray-600 font-medium -mt-1'>Enterprise Platform</p>
+          {size === 'lg && (
+            <p className=text-sm text-gray-600 font-medium -mt-1'>Enterprise Platform</p>
           )}
         </div>
       )}

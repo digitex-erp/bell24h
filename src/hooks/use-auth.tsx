@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext } from 'react';
+import { AuthContextType, User } from 'lucide-react';;\nimport { createContext, ReactNode, useContext } from 'react';
 import { useQuery, useMutation, UseMutationResult } from '@tanstack/react-query';
 import { getQueryFn, apiRequest, queryClient } from '../lib/queryClient';
 import { useToast } from './use-toast';
@@ -131,7 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       toast({
         title: 'Logout failed',
         description: error.message,
-        variant: 'destructive',
+        variant: destructive,
       });
     },
   });

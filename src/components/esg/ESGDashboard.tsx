@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle, Award, Building, CompanyESGProfile, ESGDashboardProps, Leaf } from 'lucide-react';;\n'use client';
 import React, { useState, useEffect } from 'react';
 import { getDemoESGData } from '@/services/esg/esgScoringService';
 import { CompanyESGProfile, ESGScore } from '@/types/esg';
@@ -56,7 +56,7 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ companyId = 'TATA_STEEL_001
     switch (trend) {
       case 'improving':
         return <span>📈</span>;
-      case 'declining':
+      case &apos;declining':
         return <span>📉</span>;
       default:
         return <span>📊</span>;
@@ -314,7 +314,7 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ companyId = 'TATA_STEEL_001
                 🌱 ESG Scoring Platform - Demo Environment
               </h3>
               <p className='text-green-800 leading-relaxed mb-4'>
-                This comprehensive ESG scoring dashboard demonstrates Bell24H's enterprise
+                This comprehensive ESG scoring dashboard demonstrates Bell24H&apos;s enterprise
                 sustainability compliance capabilities. Our platform offers automated ESG scoring,
                 SEBI BRSR reporting, and industry benchmarking for comprehensive sustainability
                 management and compliance.

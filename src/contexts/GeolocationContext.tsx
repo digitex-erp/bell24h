@@ -1,4 +1,4 @@
-'use client';
+import { GeolocationContextType, Location, GeolocationPosition } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 

@@ -1,4 +1,4 @@
-'use client';
+import { SessionContextType, Session } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 

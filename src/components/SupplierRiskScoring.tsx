@@ -1,4 +1,4 @@
-import { ThumbsUp, ThumbsDown, AlertCircle, Building, Target } from "lucide-react";
+import { AlertCircle, Building, Target, ThumbsDown, ThumbsUp } from 'lucide-react';;
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
@@ -242,11 +242,11 @@ export default function SupplierRiskScoring() {
           supplier.overallRiskScore >= 80
             ? 'excellent'
             : supplier.overallRiskScore >= 60
-            ? 'good'
+            ? &apos;good'
             : 'average',
         trend: 'stable',
         details: [
-          'Response time: < 2 hours',
+          Response time: < 2 hours,
           'Dedicated account manager: Yes',
           '24/7 support availability: Yes',
           'Technical support quality: High',
@@ -294,13 +294,13 @@ export default function SupplierRiskScoring() {
     switch (status) {
       case 'excellent':
         return <span>✅</span>;
-      case 'good':
-        return <ThumbsUp className='w-5 h-5 text-blue-500' />;
-      case 'average':
+      case &apos;good:
+        return <ThumbsUp className=w-5 h-5 text-blue-500' />;
+      case &apos;average':
         return <span>➖</span>;
-      case 'poor':
-        return <ThumbsDown className='w-5 h-5 text-orange-500' />;
-      case 'critical':
+      case &apos;poor:
+        return <ThumbsDown className=w-5 h-5 text-orange-500' />;
+      case &apos;critical':
         return <span>❌</span>;
       default:
         return <AlertCircle className='w-5 h-5 text-gray-500' />;
@@ -309,11 +309,11 @@ export default function SupplierRiskScoring() {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving':
+      case 'improving:
         return <span>📈</span>;
-      case 'declining':
+      case declining&apos;:
         return <span>📉</span>;
-      case 'stable':
+      case &apos;stable':
         return <span>➖</span>;
       default:
         return <span>📊</span>;

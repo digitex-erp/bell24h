@@ -1,34 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  MessageCircle,
-  Send,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  Star,
-  DollarSign,
-  Calendar,
-  User,
-  Building2,
-  Phone,
-  Mail,
-  FileText,
-  Download,
-  Eye,
-  Edit,
-  Trash2,
-  Plus,
-  Filter,
-  Search,
-  TrendingUp,
-  TrendingDown,
-  Zap,
-  Shield,
-  Award,
-  XCircle,
-} from 'lucide-react';
+import { AIInsightsPanel, AlertCircle, Award, Building2, Calendar, ChatInterface, CheckCircle, Clock, DollarSign, Download, Edit, Eye, FileText, Filter, Mail, MessageCircle, NegotiationCard, Phone, Plus, Search, Send, Shield, Star, Trash2, TrendingDown, TrendingUp, User, UserDashboardLayout, XCircle, Zap } from 'lucide-react';;;
 import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
 
 // Mock negotiations data

@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity, BarChart3, DollarSign, TrendingUp } from 'lucide-react';
+import { Activity, BarChart3, DollarSign, TrendingUp, CommodityData, Icon } from "lucide-react";;
 import { useEffect, useState } from 'react';
 
 interface CommodityData {
@@ -249,8 +249,8 @@ export default function TradingPlatformPage() {
 
         <div className='p-6'>
           {/* Overview Tab */}
-          {selectedTab === 'overview' && (
-            <div className='space-y-6'>
+          {selectedTab === 'overview && (
+            <div className=space-y-6'>
               {/* Portfolio Summary Cards */}
               <div className='grid grid-cols-1 md:grid-cols-4 gap-6'>
                 <div className='bg-white p-6 rounded-lg border border-gray-200'>
@@ -382,8 +382,8 @@ export default function TradingPlatformPage() {
           )}
 
           {/* Portfolio Tab */}
-          {selectedTab === 'portfolio' && (
-            <div className='bg-white rounded-lg border border-gray-200'>
+          {selectedTab === 'portfolio && (
+            <div className=bg-white rounded-lg border border-gray-200'>
               <div className='px-6 py-4 border-b border-gray-200'>
                 <h3 className='text-lg font-semibold text-gray-900'>Portfolio Holdings</h3>
               </div>
@@ -455,8 +455,8 @@ export default function TradingPlatformPage() {
           )}
 
           {/* Market Data Tab */}
-          {selectedTab === 'market' && (
-            <div className='bg-white rounded-lg border border-gray-200'>
+          {selectedTab === 'market && (
+            <div className=bg-white rounded-lg border border-gray-200'>
               <div className='px-6 py-4 border-b border-gray-200 flex items-center justify-between'>
                 <h3 className='text-lg font-semibold text-gray-900'>Live Market Data</h3>
                 <button

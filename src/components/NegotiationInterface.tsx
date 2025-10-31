@@ -6,21 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  MessageSquare, 
-  Users, 
-  DollarSign, 
-  Clock, 
-  TrendingUp,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Send,
-  Bot,
-  User,
-  BarChart3,
-  FileText
-} from 'lucide-react';
+import { AlertCircle, Badge, BarChart3, Bot, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, DollarSign, FileText, Input, MessageSquare, Send, TrendingUp, User, Users, XCircle } from 'lucide-react';;;
 
 interface NegotiationInterfaceProps {
   negotiation: {
@@ -71,9 +57,9 @@ export default function NegotiationInterface({
 
   const getSenderIcon = (sender: string) => {
     switch (sender) {
-      case 'buyer': return <User className="w-4 h-4" />;
-      case 'supplier': return <Users className="w-4 h-4" />;
-      case 'ai': return <Bot className="w-4 h-4" />;
+      case 'buyer: return <User className="w-4 h-4" />;
+      case supplier&apos;: return <Users className="w-4 h-4" />;
+      case &apos;ai': return <Bot className="w-4 h-4" />;
       default: return <User className="w-4 h-4" />;
     }
   };

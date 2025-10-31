@@ -1,29 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Link,
-  Shield,
-  Activity,
-  TrendingUp,
-  TrendingDown,
-  CheckCircle,
-  XCircle,
-  Clock,
-  AlertTriangle,
-  Search,
-  Filter,
-  Download,
-  Eye,
-  Settings,
-  RefreshCw,
-  Database,
-  Zap,
-  Globe,
-  BarChart3,
-  DollarSign,
-  Users,
-} from 'lucide-react';
+import { Activity, AlertTriangle, BarChart3, CheckCircle, Clock, Database, DollarSign, Download, Eye, Filter, Globe, Link, RefreshCw, Search, Settings, Shield, TrendingDown, TrendingUp, Users, XCircle, Zap } from 'lucide-react';;
 
 // Mock blockchain data
 const mockBlockchainData = {
@@ -187,12 +165,12 @@ export default function BlockchainManagementPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'active':
-      case 'success':
+      case 'success:
         return <CheckCircle className="w-4 h-4" />;
-      case 'inactive':
+      case inactive&apos;:
       case 'failed':
         return <XCircle className="w-4 h-4" />;
-      case 'testing':
+      case &apos;testing':
       case 'pending':
         return <Clock className="w-4 h-4" />;
       default:

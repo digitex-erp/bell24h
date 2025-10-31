@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { Head } from "lucide-react";\nimport Head from 'next/head';
 
 interface SEOProps {
   title?: string;

@@ -1,5 +1,5 @@
 'use client';
-import { ArrowRight, CheckCircle, Building, Users, TrendingUp, Star, Shield, Clock, Phone, Mail, MapPin, Quote } from 'lucide-react';
+import { ArrowRight, BetaBanner, Building, CheckCircle, Clock, Link, Mail, MapPin, Phone, Quote, Shield, Star, TrendingUp, Users } from 'lucide-react';;;
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect } from 'react';
@@ -494,7 +494,7 @@ export default function HomePage() {
                 <span className="text-xl font-bold">Bell24h</span>
               </div>
               <p className="text-gray-400 text-sm">
-                India's fastest B2B match-making engine connecting verified suppliers and buyers.
+                India&apos;s fastest B2B match-making engine connecting verified suppliers and buyers.
               </p>
             </div>
 

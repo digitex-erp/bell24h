@@ -1,32 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Leaf,
-  TreePine,
-  Recycle,
-  Sun,
-  Wind,
-  Droplets,
-  Zap,
-  TrendingUp,
-  TrendingDown,
-  CheckCircle,
-  XCircle,
-  Clock,
-  AlertTriangle,
-  Search,
-  Filter,
-  Download,
-  Eye,
-  Settings,
-  RefreshCw,
-  BarChart3,
-  Globe,
-  Users,
-  DollarSign,
-  Activity,
-} from 'lucide-react';
+import { Activity, AlertTriangle, BarChart3, CheckCircle, Clock, DollarSign, Download, Droplets, Eye, Filter, Globe, Leaf, Recycle, RefreshCw, Search, Settings, Sun, TreePine, TrendingDown, TrendingUp, Users, Wind, XCircle, Zap } from 'lucide-react';;
 
 // Mock sustainability data
 const mockSustainabilityData = {
@@ -253,18 +228,18 @@ export default function SustainabilityMetricsPage() {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'excellent':
-      case 'completed':
+      case 'completed:
         return <CheckCircle className="w-4 h-4" />;
-      case 'good':
+      case good&apos;:
       case 'active':
         return <Sun className="w-4 h-4" />;
-      case 'on_track':
-      case 'in_progress':
+      case &apos;on_track':
+      case 'in_progress:
         return <Clock className="w-4 h-4" />;
-      case 'needs_improvement':
+      case needs_improvement&apos;:
       case 'planned':
         return <AlertTriangle className="w-4 h-4" />;
-      case 'draft':
+      case &apos;draft':
         return <Clock className="w-4 h-4" />;
       default:
         return <AlertTriangle className="w-4 h-4" />;
@@ -279,13 +254,13 @@ export default function SustainabilityMetricsPage() {
 
   const getImpactIcon = (impact) => {
     switch (impact) {
-      case 'economic_growth':
+      case 'economic_growth:
         return <DollarSign className="w-4 h-4" />;
-      case 'employment':
+      case employment&apos;:
         return <Users className="w-4 h-4" />;
-      case 'rural_development':
+      case &apos;rural_development:
         return <Globe className="w-4 h-4" />;
-      case 'gender_equality':
+      case gender_equality&apos;:
         return <Users className="w-4 h-4" />;
       default:
         return <Activity className="w-4 h-4" />;
@@ -570,7 +545,7 @@ export default function SustainabilityMetricsPage() {
           )}
 
           {/* Reports Tab */}
-          {activeTab === 'reports' && (
+          {activeTab === reports && (
             <div className="space-y-4">
               {data.reports.map((report) => (
                 <div key={report.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">

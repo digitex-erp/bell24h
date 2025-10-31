@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation';
+import { HTMLFormElement } from "lucide-react";\nimport { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -27,7 +27,7 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
   };
 
   const handleGoogleLogin = () => signIn('google');
-  const handleLinkedInLogin = () => signIn('linkedin');
+  const handleLinkedInLogin = () => signIn(&apos;linkedin');
 
   return (
     <div className='auth-modal'>
@@ -36,11 +36,11 @@ export default function AuthModal({ onClose }: { onClose: () => void }) {
           type='email'
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder='Email'
+          placeholder='Email
           required
         />
         <input
-          type='password'
+          type=password'
           value={password}
           onChange={e => setPassword(e.target.value)}
           placeholder='Password'

@@ -6,21 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Building2, 
-  Home, 
-  Users, 
-  Briefcase, 
-  Factory, 
-  ShoppingBag,
-  CheckCircle,
-  ArrowRight,
-  Shield,
-  FileText,
-  CreditCard,
-  AlertCircle,
-  Info
-} from 'lucide-react';
+import { AlertCircle, ArrowRight, Badge, Briefcase, Building2, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, CreditCard, Factory, FileText, Header, Home, IconComponent, Info, Input, Label, Link, RegistrationData, Shield, ShoppingBag, Users } from 'lucide-react';;;
 import Link from 'next/link';
 import Header from '@/components/Header';
 
@@ -118,7 +104,7 @@ interface RegistrationData {
 
 export default function RegistrationPage() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedBusinessType, setSelectedBusinessType] = useState<string>('');
+  const [selectedBusinessType, setSelectedBusinessType] = useState<string>(&apos;');
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
     businessType: '',
     personalInfo: {

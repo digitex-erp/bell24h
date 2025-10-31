@@ -1,4 +1,4 @@
-'use client';
+import { Link, Link, Link } from "lucide-react";\n'use client';
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -177,7 +177,7 @@ export default function ForgotPasswordPage() {
             Reset Your Password
           </h2>
           <p className='text-gray-600'>
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we&apos;ll send you a link to reset your password.
           </p>
         </div>
 
@@ -281,7 +281,7 @@ export default function ForgotPasswordPage() {
           <div className='mt-6 pt-6 border-t border-gray-200'>
             <div className='text-center'>
               <p className='text-gray-600 text-sm mb-3'>
-                Didn't receive the email?
+                Didn&apos;t receive the email?
               </p>
               <button
                 onClick={() => setShowManualReset(!showManualReset)}
@@ -340,8 +340,8 @@ export default function ForgotPasswordPage() {
         <div className='mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200'>
           <h3 className='text-sm font-semibold text-blue-800 mb-3'>💡 Need Help?</h3>
           <div className='space-y-2 text-sm text-blue-700'>
-            <p>• Check your spam folder if you don't receive the email</p>
-            <p>• Make sure you're using the email address you registered with</p>
+            <p>• Check your spam folder if you dont receive the email</p>
+            <p>• Make sure youre using the email address you registered with</p>
             <p>• Contact support if you continue having issues</p>
           </div>
         </div>

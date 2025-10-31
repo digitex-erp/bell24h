@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, CreditCard, Paypal, IndianRupee, CheckCircle, XCircle } from 'lucide-react';
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, CreditCard, IndianRupee, Label, Loader2, Paypal, XCircle } from 'lucide-react';;;
 import { toast } from 'sonner';
 
 interface PaymentGatewayProps {
@@ -31,9 +31,9 @@ interface PaymentProvider {
 const PAYMENT_PROVIDERS: PaymentProvider[] = [
   {
     id: 'stripe',
-    name: 'Stripe',
+    name: 'Stripe,
     icon: <CreditCard className="w-5 h-5" />,
-    description: 'Credit/Debit Cards, UPI, Net Banking',
+    description: Credit/Debit Cards, UPI, Net Banking',
     supportedCurrencies: ['INR', 'USD', 'EUR', 'GBP'],
     processingFee: 2.9,
   },
@@ -47,9 +47,9 @@ const PAYMENT_PROVIDERS: PaymentProvider[] = [
   },
   {
     id: 'razorpay',
-    name: 'Razorpay',
+    name: 'Razorpay,
     icon: <IndianRupee className="w-5 h-5" />,
-    description: 'UPI, Cards, Net Banking, Wallets',
+    description: UPI, Cards, Net Banking, Wallets',
     supportedCurrencies: ['INR'],
     processingFee: 2.5,
   },
@@ -63,7 +63,7 @@ export default function EnhancedPaymentGateway({
   onSuccess,
   onFailure,
 }: PaymentGatewayProps) {
-  const [selectedProvider, setSelectedProvider] = useState<string>('');
+  const [selectedProvider, setSelectedProvider] = useState<string>(&apos;');
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle');
   const [cardDetails, setCardDetails] = useState({

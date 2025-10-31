@@ -160,9 +160,9 @@ export default function LogisticsPage() {
                       type='checkbox'
                       checked={rateRequest.cod}
                       onChange={e => setRateRequest(prev => ({ ...prev, cod: e.target.checked }))}
-                      className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'
+                      className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded
                     />
-                    <span className='ml-2 text-sm text-gray-700'>Enable COD</span>
+                    <span className=ml-2 text-sm text-gray-700'>Enable COD</span>
                   </div>
                 </div>
               </div>
@@ -237,8 +237,8 @@ export default function LogisticsPage() {
         )}
 
         {/* Tracking Tab */}
-        {activeTab === 'tracking' && (
-          <div className='bg-white rounded-lg shadow-md p-6'>
+        {activeTab === 'tracking && (
+          <div className=bg-white rounded-lg shadow-md p-6'>
             <h3 className='text-lg font-semibold text-gray-900 mb-4'>Track Your Shipment</h3>
             <div className='flex gap-4 mb-6'>
               <input
@@ -246,9 +246,9 @@ export default function LogisticsPage() {
                 value={trackingCode}
                 onChange={e => setTrackingCode(e.target.value)}
                 placeholder='Enter tracking number'
-                className='flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500'
+                className='flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500
               />
-              <button className='bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2'>
+              <button className=bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2'>
                 <span>📍</span>
                 Track
               </button>
@@ -270,7 +270,7 @@ export default function LogisticsPage() {
                 Shiprocket Logistics Integration - Demo Environment
               </h3>
               <p className='text-blue-800 leading-relaxed'>
-                This logistics hub demonstrates Bell24H's integrated shipping solution with
+                This logistics hub demonstrates Bell24H&apos;s integrated shipping solution with
                 Shiprocket API for real-time rate calculation, order management, and tracking
                 capabilities supporting Rs.5+ crore annual logistics volume.
               </p>

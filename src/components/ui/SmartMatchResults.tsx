@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, Award } from 'lucide-react';;\n'use client';
 
 import React from 'react';
 import { MatchResult } from '@/lib/ai-matching';
@@ -72,9 +72,9 @@ export function SmartMatchResults({
 
   const getVerificationIcon = (level: string) => {
     switch (level) {
-      case 'premium':
-        return <Award className='h-4 w-4 text-yellow-500' />;
-      case 'verified':
+      case 'premium:
+        return <Award className=h-4 w-4 text-yellow-500' />;
+      case &apos;verified':
         return <span>✅</span>;
       default:
         return <span>👤</span>;

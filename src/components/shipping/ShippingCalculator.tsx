@@ -1,4 +1,4 @@
-'use client';
+import { ShippingFormData, ShippingRate } from "lucide-react";\n'use client';
 
 import { useState, useEffect } from 'react';
 
@@ -33,7 +33,7 @@ export default function ShippingCalculator() {
 
   const [rates, setRates] = useState<ShippingRate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(&apos;');
   const [selectedCourier, setSelectedCourier] = useState<ShippingRate | null>(null);
 
   const calculateRates = async () => {

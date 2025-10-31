@@ -1,4 +1,4 @@
-import { Security, LockOpen, Warning, ExpandMore } from "lucide-react";
+import { Alert, ExpandMore, LockOpen, Security, Warning } from 'lucide-react';;
 'use client';
 
 import {
@@ -69,7 +69,7 @@ export default function EscrowSystem() {
   const [processing, setProcessing] = useState(false);
 
   // Form states
-  const [rfqId, setRfqId] = useState('');
+  const [rfqId, setRfqId] = useState(&apos;');
   const [amount, setAmount] = useState('');
   const [milestones, setMilestones] = useState<Partial<Milestone>[]>([
     { name: '', description: '', amount: 0, percentage: 0 },
@@ -368,9 +368,9 @@ export default function EscrowSystem() {
                               {milestone.description}
                             </Typography>
                             <Box display='flex' gap={1}>
-                              {milestone.status === 'pending' && (
+                              {milestone.status === 'pending && (
                                 <Button
-                                  size='small'
+                                  size=small'
                                   variant='outlined'
                                   onClick={() => handleMilestoneComplete(escrow.id, milestone.id)}
                                   disabled={processing}
@@ -378,9 +378,9 @@ export default function EscrowSystem() {
                                   Start Milestone
                                 </Button>
                               )}
-                              {milestone.status === 'in_progress' && (
+                              {milestone.status === 'in_progress && (
                                 <Button
-                                  size='small'
+                                  size=small'
                                   variant='contained'
                                   onClick={() => handleMilestoneComplete(escrow.id, milestone.id)}
                                   disabled={processing}
@@ -388,8 +388,8 @@ export default function EscrowSystem() {
                                   Complete Milestone
                                 </Button>
                               )}
-                              {milestone.status === 'completed' && (
-                                <Chip label='Completed' color='success' size='small' />
+                              {milestone.status === 'completed && (
+                                <Chip label=Completed' color='success' size='small' />
                               )}
                             </Box>
                           </StepContent>
@@ -412,9 +412,9 @@ export default function EscrowSystem() {
                       Release Funds
                     </Button>
                   )}
-                  {escrow.status === 'active' && (
+                  {escrow.status === 'active && (
                     <Button
-                      variant='outlined'
+                      variant=outlined'
                       color='error'
                       startIcon={<Warning />}
                       onClick={() => {
@@ -561,7 +561,7 @@ export default function EscrowSystem() {
         <DialogActions>
           <Button onClick={() => setDisputeOpen(false)}>Cancel</Button>
           <Button variant='contained' color='error' disabled={processing}>
-            {processing ? <CircularProgress size={20} /> : 'Create Dispute'}
+            {processing ? <CircularProgress size={20} /> : Create Dispute}
           </Button>
         </DialogActions>
       </Dialog>

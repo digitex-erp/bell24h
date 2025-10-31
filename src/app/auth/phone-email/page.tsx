@@ -4,17 +4,17 @@ import EmailInput from '@/components/auth/EmailInput';
 import EmailOTPVerification from '@/components/auth/EmailOTPVerification';
 import OTPVerification from '@/components/auth/OTPVerification';
 import PhoneInput from '@/components/auth/PhoneInput';
-import { CheckCircle, Shield } from 'lucide-react';
+import { AuthStep, CheckCircle, EmailInput, EmailOTPVerification, OTPVerification, PhoneInput, Shield } from 'lucide-react';;;
 import { useState } from 'react';
 
 type AuthStep = 'phone' | 'phoneOtp' | 'email' | 'emailOtp' | 'success';
 
 export default function PhoneEmailAuth() {
-  const [step, setStep] = useState<AuthStep>('phone');
+  const [step, setStep] = useState<AuthStep>(&apos;phone');
   const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(');
   const [user, setUser] = useState<any>(null);
-  const [demoOTP, setDemoOTP] = useState('');
+  const [demoOTP, setDemoOTP] = useState(');
 
   const handlePhoneSubmit = (phoneNumber: string, demoOTP?: string) => {
     setPhone(phoneNumber);
@@ -60,7 +60,7 @@ export default function PhoneEmailAuth() {
         <div className="flex items-center justify-between mb-8">
           <div className={`flex items-center ${step === 'phoneOtp' || step === 'email' || step === 'emailOtp' || step === 'success' ? 'text-green-600' : 'text-gray-400'}`}>
             <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${step === 'phoneOtp' || step === 'email' || step === 'emailOtp' || step === 'success' ? 'bg-green-100 border-green-600' : 'border-gray-300'}`}>
-              {step === 'phoneOtp' || step === 'email' || step === 'emailOtp' || step === 'success' ? <CheckCircle className="w-5 h-5" /> : '1'}
+              {step === 'phoneOtp' || step === 'email' || step === 'emailOtp' || step === 'success ? <CheckCircle className="w-5 h-5" /> : 1'}
             </div>
             <span className="ml-2 text-sm font-medium">Phone</span>
           </div>
@@ -69,7 +69,7 @@ export default function PhoneEmailAuth() {
 
           <div className={`flex items-center ${step === 'emailOtp' || step === 'success' ? 'text-green-600' : 'text-gray-400'}`}>
             <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${step === 'emailOtp' || step === 'success' ? 'bg-green-100 border-green-600' : 'border-gray-300'}`}>
-              {step === 'emailOtp' || step === 'success' ? <CheckCircle className="w-5 h-5" /> : '2'}
+              {step === 'emailOtp' || step === 'success ? <CheckCircle className="w-5 h-5" /> : 2'}
             </div>
             <span className="ml-2 text-sm font-medium">Email</span>
           </div>
@@ -159,7 +159,7 @@ export default function PhoneEmailAuth() {
             </div>
 
             <button
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => window.location.href = /dashboard}
               className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
             >
               Go to Dashboard

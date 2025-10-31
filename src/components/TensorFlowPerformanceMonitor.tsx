@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle, Brain, Cpu, Gauge, HardDrive, Monitor, Server } from 'lucide-react';;\n'use client';
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -146,12 +146,12 @@ export default function TensorFlowPerformanceMonitor({
 
   const getBackendIcon = (backend: string) => {
     switch (backend) {
-      case 'webgl':
+      case 'webgl:
         return <span>⚡</span>;
-      case 'cpu':
+      case cpu&apos;:
         return <Cpu className='h-4 w-4' />;
-      case 'webgpu':
-        return <Monitor className='h-4 w-4' />;
+      case &apos;webgpu:
+        return <Monitor className=h-4 w-4' />;
       default:
         return <Server className='h-4 w-4' />;
     }
@@ -261,8 +261,8 @@ export default function TensorFlowPerformanceMonitor({
 
         {/* Tab Content */}
         <div className='p-6'>
-          {activeTab === 'performance' && (
-            <div className='space-y-4'>
+          {activeTab === 'performance && (
+            <div className=space-y-4'>
               <div className='flex items-center gap-2 mb-4'>
                 <span>📊</span>
                 <h4 className='text-lg font-semibold'>Performance Metrics</h4>
@@ -343,8 +343,8 @@ export default function TensorFlowPerformanceMonitor({
             </div>
           )}
 
-          {activeTab === 'memory' && (
-            <div className='space-y-4'>
+          {activeTab === 'memory && (
+            <div className=space-y-4'>
               <div className='flex items-center gap-2 mb-4'>
                 <HardDrive className='h-5 w-5' />
                 <h4 className='text-lg font-semibold'>Memory Usage</h4>
@@ -402,8 +402,8 @@ export default function TensorFlowPerformanceMonitor({
             </div>
           )}
 
-          {activeTab === 'optimization' && (
-            <div className='space-y-4'>
+          {activeTab === 'optimization && (
+            <div className=space-y-4'>
               <div className='flex items-center gap-2 mb-4'>
                 <Gauge className='h-5 w-5' />
                 <h4 className='text-lg font-semibold'>Optimization Tools</h4>

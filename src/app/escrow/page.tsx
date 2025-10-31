@@ -1,5 +1,5 @@
 'use client';
-import { AlertTriangle, Unlock, AlertCircle } from 'lucide-react';
+import { AlertCircle, AlertTriangle, EscrowTransaction, Unlock } from 'lucide-react';;;
 import { useState } from 'react';
 
 interface EscrowTransaction {
@@ -106,13 +106,13 @@ export default function EscrowPage() {
     switch (status) {
       case 'funded':
         return <span>🛡️</span>;
-      case 'in_progress':
+      case &apos;in_progress:
         return <span>🕐</span>;
-      case 'disputed':
+      case disputed&apos;:
         return <AlertTriangle className='h-5 w-5' />;
-      case 'released':
+      case &apos;released:
         return <span>✅</span>;
-      case 'cancelled':
+      case cancelled&apos;:
         return <AlertCircle className='h-5 w-5' />;
       default:
         return <span>🕐</span>;
@@ -152,10 +152,10 @@ export default function EscrowPage() {
   const activeTransactions = escrowTransactions.filter(
     t => t.status === 'funded' || t.status === 'in_progress'
   ).length;
-  const disputedTransactions = escrowTransactions.filter(t => t.status === 'disputed').length;
+  const disputedTransactions = escrowTransactions.filter(t => t.status === &apos;disputed).length;
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className=min-h-screen bg-gray-50'>
       {/* Header */}
       <div className='bg-white shadow-sm border-b'>
         <div className='container mx-auto px-4 py-6'>
@@ -310,15 +310,15 @@ export default function EscrowPage() {
                             <button
                               onClick={() => handleDispute(transaction.id)}
                               disabled={isLoading}
-                              className='px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors flex items-center space-x-2'
+                              className='px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors flex items-center space-x-2
                             >
-                              <AlertTriangle className='h-4 w-4' />
+                              <AlertTriangle className=h-4 w-4' />
                               <span>Dispute</span>
                             </button>
                           </>
                         )}
-                        {transaction.status === 'disputed' && (
-                          <button className='px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors'>
+                        {transaction.status === 'disputed && (
+                          <button className=px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors'>
                             Resolve Dispute
                           </button>
                         )}

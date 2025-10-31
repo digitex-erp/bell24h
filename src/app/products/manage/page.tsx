@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { useState } from 'react';
-import { Tag } from 'lucide-react';
+import { Tag, ProductForm } from "lucide-react";;
 
 interface FileUpload {
   name: string;
@@ -133,9 +133,9 @@ export default function ProductManagement() {
                       onChange={e =>
                         setProductForm(prev => ({ ...prev, category: e.target.value }))
                       }
-                      className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                     >
-                      <option value=''>Select Category</option>
+                      <option value='>Select Category</option>
                       <option value='chemicals'>Chemicals & Materials</option>
                       <option value='automotive'>Automotive & Transportation</option>
                       <option value='electronics'>Electronics & Technology</option>
@@ -202,9 +202,9 @@ export default function ProductManagement() {
                     <select
                       value={productForm.unit}
                       onChange={e => setProductForm(prev => ({ ...prev, unit: e.target.value }))}
-                      className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                      className='w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                     >
-                      <option value='pieces'>Pieces</option>
+                      <option value=pieces'>Pieces</option>
                       <option value='kg'>Kilograms</option>
                       <option value='tons'>Tons</option>
                       <option value='meters'>Meters</option>
@@ -264,10 +264,10 @@ export default function ProductManagement() {
                     accept='image/*'
                     onChange={e => e.target.files && handleFileUpload(e.target.files, 'images')}
                     className='hidden'
-                    id='image-upload'
+                    id='image-upload
                   />
                   <label
-                    htmlFor='image-upload'
+                    htmlFor=image-upload'
                     className='bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors'
                   >
                     Choose Images
@@ -311,10 +311,10 @@ export default function ProductManagement() {
                     accept='video/*'
                     onChange={e => e.target.files && handleFileUpload(e.target.files, 'videos')}
                     className='hidden'
-                    id='video-upload'
+                    id='video-upload
                   />
                   <label
-                    htmlFor='video-upload'
+                    htmlFor=video-upload'
                     className='bg-red-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-red-700 transition-colors'
                   >
                     Choose Videos
@@ -365,10 +365,10 @@ export default function ProductManagement() {
                     accept='.pdf,.doc,.docx,.xls,.xlsx'
                     onChange={e => e.target.files && handleFileUpload(e.target.files, 'documents')}
                     className='hidden'
-                    id='document-upload'
+                    id='document-upload
                   />
                   <label
-                    htmlFor='document-upload'
+                    htmlFor=document-upload'
                     className='bg-green-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-green-700 transition-colors'
                   >
                     Choose Documents

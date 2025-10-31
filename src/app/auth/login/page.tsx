@@ -4,14 +4,14 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Phone, MessageSquare, Mail, Shield, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Input, Link, Mail, MessageSquare, Phone, Shield } from 'lucide-react';;;
 import Link from 'next/link';
 
 export default function LoginPage() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
-  const [step, setStep] = useState<'phone' | 'otp' | 'email' | 'success'>('phone');
+  const [step, setStep] = useState<'phone' | 'otp' | 'email' | 'success'>(&apos;phone');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -204,9 +204,9 @@ export default function LoginPage() {
   const getStepIcon = () => {
     switch (step) {
       case 'phone': return <Phone className="h-5 w-5 text-indigo-600" />;
-      case 'otp': return <MessageSquare className="h-5 w-5 text-emerald-600" />;
-      case 'email': return <Mail className="h-5 w-5 text-blue-600" />;
-      case 'success': return <CheckCircle className="h-5 w-5 text-green-600" />;
+      case &apos;otp: return <MessageSquare className="h-5 w-5 text-emerald-600" />;
+      case email&apos;: return <Mail className="h-5 w-5 text-blue-600" />;
+      case &apos;success': return <CheckCircle className="h-5 w-5 text-green-600" />;
       default: return <Shield className="h-5 w-5 text-gray-600" />;
     }
   };
@@ -267,7 +267,7 @@ export default function LoginPage() {
                     pattern="[0-9+\-\s()]{10,15}"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    We'll send OTP to your mobile first (saves money)
+                    We&apos;ll send OTP to your mobile first (saves money)
                   </p>
                 </div>
 
@@ -360,7 +360,7 @@ export default function LoginPage() {
                     disabled={loading}
                     className="text-sm text-indigo-600 hover:text-indigo-800"
                   >
-                    Didn't receive OTP? Resend
+                    Didn&apos;t receive OTP? Resend
                   </button>
                 </div>
               </form>
@@ -438,7 +438,7 @@ export default function LoginPage() {
                     disabled={loading}
                     className="text-sm text-blue-600 hover:text-blue-800"
                   >
-                    Didn't receive email OTP? Resend
+                    Didn&apos;t receive email OTP? Resend
                   </button>
                 </div>
               </form>
@@ -461,7 +461,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            {step !== 'success' && (
+            {step !== success && (
               <div className="mt-6 text-center">
                 <Link 
                   href="/" 

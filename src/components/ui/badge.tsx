@@ -1,4 +1,4 @@
-import * as React from "react"
+import { HTMLDivElement } from "lucide-react";\nimport * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 

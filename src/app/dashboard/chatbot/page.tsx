@@ -1,33 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  MessageCircle,
-  Send,
-  Bot,
-  User,
-  Mic,
-  MicOff,
-  Phone,
-  Video,
-  FileText,
-  BarChart3,
-  Package,
-  TrendingUp,
-  Search,
-  Lightbulb,
-  Zap,
-  Brain,
-  HelpCircle,
-  Settings,
-  Download,
-  RefreshCw,
-  Star,
-  ThumbsUp,
-  ThumbsDown,
-  Copy,
-  Share2,
-} from 'lucide-react';
+import { BarChart3, Bot, Brain, Copy, Download, FileText, HelpCircle, Icon, Lightbulb, Message, MessageCircle, Mic, MicOff, Package, Phone, QuickActionButton, RefreshCw, Search, Send, Settings, Share2, Star, SuggestionChip, ThumbsDown, ThumbsUp, TrendingUp, User, UserDashboardLayout, Video, Zap } from 'lucide-react';;;
 import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
 
 // Mock AI responses
@@ -408,7 +382,7 @@ export default function ChatbotPage() {
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onKeyPress={(e) => e.key === Enter && handleSendMessage()}
                   placeholder="Ask me anything about suppliers, analytics, orders..."
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
                 />

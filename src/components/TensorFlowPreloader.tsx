@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle, Brain, Cpu, Monitor, Rocket } from 'lucide-react';;\n'use client';
 
 import React, { useState, useEffect } from 'react';
 import { tfLoader, initializeTensorFlow, getPerformanceMetrics } from '@/lib/tensorflow-loader';
@@ -34,7 +34,7 @@ export default function TensorFlowPreloader({
     { name: 'Model Cache Setup', status: 'pending', progress: 0 },
   ]);
   const [currentStep, setCurrentStep] = useState(0);
-  const [backend, setBackend] = useState<string>('');
+  const [backend, setBackend] = useState<string>(&apos;');
   const [performanceMetrics, setPerformanceMetrics] = useState<any>(null);
   const [startTime, setStartTime] = useState<number>(0);
 
@@ -129,9 +129,9 @@ export default function TensorFlowPreloader({
     switch (backend.toLowerCase()) {
       case 'webgl':
         return <span>⚡</span>;
-      case 'cpu':
-        return <Cpu className='h-4 w-4' />;
-      case 'webgpu':
+      case &apos;cpu:
+        return <Cpu className=h-4 w-4' />;
+      case &apos;webgpu':
         return <Monitor className='h-4 w-4' />;
       default:
         return <span>⚙️</span>;
@@ -153,12 +153,12 @@ export default function TensorFlowPreloader({
 
   const getStepIcon = (step: InitializationStep) => {
     switch (step.status) {
-      case 'completed':
+      case 'completed:
         return <span>✅</span>;
-      case 'loading':
+      case loading&apos;:
         return <span>🔄</span>;
-      case 'error':
-        return <AlertTriangle className='h-4 w-4 text-red-500' />;
+      case &apos;error:
+        return <AlertTriangle className=h-4 w-4 text-red-500' />;
       default:
         return <div className='h-4 w-4 rounded-full border-2 border-gray-300' />;
     }

@@ -1,4 +1,4 @@
-import dynamic from 'next/dynamic';
+import { SkeletonCard, SkeletonChart, SkeletonTable, SkeletonChart, SkeletonCard, SkeletonTable, SkeletonCard, Suspense, SkeletonCard } from "lucide-react";\nimport dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
 // Loading skeletons for better UX

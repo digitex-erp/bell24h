@@ -1,16 +1,5 @@
 import Link from 'next/link';
-import { 
-  Bell, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Shield, 
-  Award,
-  Users,
-  Globe,
-  FileText,
-  CreditCard
-} from 'lucide-react';
+import { Award, Bell, CreditCard, FileText, Globe, Link, Mail, MapPin, Phone, Shield, Users } from 'lucide-react';;;
 
 export default function EnterpriseFooter() {
   return (
@@ -30,7 +19,7 @@ export default function EnterpriseFooter() {
               </div>
             </div>
             <p className="text-gray-300 text-sm">
-              India's fastest B2B match-making engine for MSMEs. 
+              India&apos;s fastest B2B match-making engine for MSMEs. 
               Connect with verified suppliers using AI matching and secure escrow payments.
             </p>
             <div className="flex items-center space-x-2">

@@ -1,4 +1,4 @@
-'use client';
+import { Blob, MediaRecorder, HTMLAudioElement, HelpCircle, Square, MicrophonePermissionGuide } from "lucide-react";\n'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import MicrophonePermissionGuide from './MicrophonePermissionGuide';
@@ -27,13 +27,13 @@ export default function VoiceRecorder({
   const [isPlaying, setIsPlaying] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [transcript, setTranscript] = useState('');
+  const [transcript, setTranscript] = useState(&apos;');
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [speechSupported, setSpeechSupported] = useState(true);
   const [permissionState, setPermissionState] = useState<
     'granted' | 'denied' | 'prompt' | 'checking'
-  >('checking');
+  >(&apos;checking');
   const [permissionError, setPermissionError] = useState<string | null>(null);
   const [showPermissionGuide, setShowPermissionGuide] = useState(false);
 
@@ -297,7 +297,7 @@ export default function VoiceRecorder({
       <div className='text-center mb-6'>
         <h3 className='text-xl font-bold text-gray-900 mb-2'>Voice RFQ Recorder</h3>
         <p className='text-gray-600 text-sm'>
-          Record your requirements in voice and we'll transcribe it automatically
+          Record your requirements in voice and we&apos;ll transcribe it automatically
         </p>
       </div>
 
@@ -307,8 +307,8 @@ export default function VoiceRecorder({
       </div>
 
       {/* Permission Status */}
-      {permissionState === 'checking' && (
-        <div className='mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-center'>
+      {permissionState === 'checking && (
+        <div className=mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-center'>
           <div className='flex items-center justify-center'>
             <span>🔄</span>
             <span className='text-blue-800 text-sm'>Checking microphone permissions...</span>
@@ -316,8 +316,8 @@ export default function VoiceRecorder({
         </div>
       )}
 
-      {permissionState === 'denied' && (
-        <div className='mb-4 p-4 bg-red-50 border border-red-200 rounded-lg'>
+      {permissionState === 'denied && (
+        <div className=mb-4 p-4 bg-red-50 border border-red-200 rounded-lg'>
           <div className='flex items-start'>
             <span>🎤</span>
             <div>
@@ -346,9 +346,9 @@ export default function VoiceRecorder({
                 </button>
                 <button
                   onClick={() => setShowPermissionGuide(true)}
-                  className='px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition flex items-center'
+                  className='px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition flex items-center
                 >
-                  <HelpCircle className='h-4 w-4 mr-1' />
+                  <HelpCircle className=h-4 w-4 mr-1' />
                   Help
                 </button>
                 <a
@@ -364,8 +364,8 @@ export default function VoiceRecorder({
         </div>
       )}
 
-      {permissionState === 'prompt' && (
-        <div className='mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-center'>
+      {permissionState === 'prompt && (
+        <div className=mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-center'>
           <div className='flex items-center justify-center'>
             <span>🎤</span>
             <span className='text-yellow-800 text-sm'>
@@ -375,8 +375,8 @@ export default function VoiceRecorder({
         </div>
       )}
 
-      {permissionState === 'granted' && !isRecording && !audioUrl && (
-        <div className='mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-center'>
+      {permissionState === 'granted && !isRecording && !audioUrl && (
+        <div className=mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-center'>
           <div className='flex items-center justify-center'>
             <span>🎤</span>
             <span className='text-green-800 text-sm'>
@@ -497,7 +497,7 @@ export default function VoiceRecorder({
           ref={audioRef}
           src={audioUrl}
           onEnded={() => setIsPlaying(false)}
-          className='hidden'
+          className=hidden
         />
       )}
 

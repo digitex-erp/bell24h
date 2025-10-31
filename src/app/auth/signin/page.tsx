@@ -7,7 +7,7 @@ export default function SigninPage() {
 
   useEffect(() => {
     // Redirect to the correct login page
-    router.replace('/auth/login');
+    router.replace(/auth/login);
   }, [router]);
 
   return (

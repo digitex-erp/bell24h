@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle, Award, Info, SHAPValue, Target } from 'lucide-react';;\n'use client';
 
 import { useState } from 'react';
 
@@ -55,12 +55,12 @@ export default function InteractiveSHAPCharts({
 
   const getImportanceIcon = (category: 'high' | 'medium' | 'low') => {
     switch (category) {
-      case 'high':
-        return <Target className='h-4 w-4 text-red-600' />;
-      case 'medium':
+      case 'high:
+        return <Target className=h-4 w-4 text-red-600' />;
+      case &apos;medium':
         return <span>📈</span>;
-      case 'low':
-        return <Info className='h-4 w-4 text-gray-600' />;
+      case &apos;low:
+        return <Info className=h-4 w-4 text-gray-600' />;
     }
   };
 
@@ -114,9 +114,9 @@ export default function InteractiveSHAPCharts({
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value as any)}
-              className='px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent'
+              className='px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent
             >
-              <option value='importance'>Feature Importance</option>
+              <option value=importance'>Feature Importance</option>
               <option value='impact'>SHAP Impact</option>
               <option value='alphabetical'>Alphabetical</option>
             </select>
@@ -327,7 +327,7 @@ export default function InteractiveSHAPCharts({
             <h5 className='font-semibold text-gray-900 mb-3'>SHAP Explanation Summary</h5>
             <div className='space-y-2 text-sm text-gray-700'>
               <p>
-                <strong>SHAP values</strong> explain how each feature contributes to the supplier's
+                <strong>SHAP values</strong> explain how each feature contributes to the supplier&apos;s
                 overall score. Positive values increase the score, while negative values decrease
                 it.
               </p>

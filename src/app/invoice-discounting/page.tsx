@@ -1,5 +1,5 @@
 'use client';
-import { AlertCircle, Calculator, Percent, Timer } from 'lucide-react';
+import { AlertCircle, Calculator, Invoice, Percent, Timer } from 'lucide-react';;;
 import { useState } from 'react';
 
 interface Invoice {
@@ -114,13 +114,13 @@ export default function InvoiceDiscountingPage() {
     switch (status) {
       case 'approved':
         return <span>✅</span>;
-      case 'funded':
+      case &apos;funded:
         return <span>$</span>;
-      case 'pending':
+      case pending&apos;:
         return <span>🕐</span>;
-      case 'rejected':
-        return <AlertCircle className='h-5 w-5' />;
-      case 'collected':
+      case &apos;rejected:
+        return <AlertCircle className=h-5 w-5' />;
+      case &apos;collected':
         return <span>📈</span>;
       default:
         return <span>🕐</span>;
@@ -359,18 +359,18 @@ export default function InvoiceDiscountingPage() {
                       </div>
 
                       <div className='flex items-center space-x-2'>
-                        {invoice.status === 'pending' && (
-                          <button className='px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors'>
+                        {invoice.status === 'pending && (
+                          <button className=px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors'>
                             Approve Funding
                           </button>
                         )}
-                        {invoice.status === 'approved' && (
-                          <button className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
+                        {invoice.status === 'approved && (
+                          <button className=px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'>
                             Release Funds
                           </button>
                         )}
-                        {invoice.status === 'rejected' && (
-                          <button className='px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors'>
+                        {invoice.status === 'rejected && (
+                          <button className=px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors'>
                             Review Decision
                           </button>
                         )}

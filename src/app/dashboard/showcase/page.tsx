@@ -1,6 +1,6 @@
 'use client';
 
-import { Award, Star, Eye, Heart } from 'lucide-react';
+import { Award, Eye, Heart, Icon, Star } from 'lucide-react';;;
 
 export default function SupplierShowcasePage() {
   const showcaseItems = [

@@ -1,4 +1,4 @@
-'use client';
+import { Alert, Box, Button, Card, CardContent, Chip, Device, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from 'lucide-react';;\n'use client';
 
 import {
   Alert,

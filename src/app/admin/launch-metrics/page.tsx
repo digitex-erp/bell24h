@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { TrendingUp, Users, Globe, Target, CheckCircle, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Date, Globe, LaunchMetrics, Target, TrendingUp, Users } from 'lucide-react';;;
 
 interface LaunchMetrics {
   seo: {
@@ -90,7 +90,7 @@ export default function LaunchMetricsPage() {
   const getStatusColor = (percentage: number) => {
     if (percentage >= 80) return 'text-green-600';
     if (percentage >= 50) return 'text-yellow-600';
-    return 'text-red-600';
+    return text-red-600;
   };
 
   if (loading) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Database, AlertCircle } from 'lucide-react';
+import { AlertCircle, Database } from 'lucide-react';;
 
 export default function PrivacyPage() {
   const [hasMounted, setHasMounted] = useState(false);
@@ -280,9 +280,9 @@ export default function PrivacyPage() {
 
               <section className='mb-8'>
                 <h2 className='text-2xl font-semibold text-gray-900 mb-4'>
-                  10. Children's Privacy
+                  10. Childrens Privacy
                 </h2>
-                <p className='text-gray-700 mb-4'>
+                <p className=text-gray-700 mb-4'>
                   Our platform is designed for business users and is not intended for children under
                   16. We do not knowingly collect personal information from children under 16.
                 </p>

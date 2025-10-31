@@ -59,10 +59,10 @@ const services: Service[] = [
 ];
 
 export default function ServicesPage() {
-  const [selectedPlan, setSelectedPlan] = useState<string>('professional');
+  const [selectedPlan, setSelectedPlan] = useState<string>(&apos;professional);
 
   return (
-    <div className='min-h-screen bg-slate-900 text-white'>
+    <div className=min-h-screen bg-slate-900 text-white'>
       <div className='max-w-7xl mx-auto px-4 py-16'>
         {/* Header */}
         <div className='text-center mb-16'>

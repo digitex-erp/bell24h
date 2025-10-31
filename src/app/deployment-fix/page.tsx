@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, AlertTriangle, Database, Server, Code, Settings, Terminal, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Badge, Card, CardContent, CardHeader, CardTitle, CheckCircle, Code, Database, RefreshCw, Server, Settings, StepCard, Terminal } from 'lucide-react';;;
 
 const DeploymentFix = () => {
   const [completedSteps, setCompletedSteps] = useState(new Set());

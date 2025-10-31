@@ -1,4 +1,4 @@
-'use client';
+import { SmartTransactionRouterProps, TransactionPreview, TransactionResponse, BanknotesIcon, ShieldCheckIcon, ArrowRightIcon, AnimatePresence, ExclamationTriangleIcon, AnimatePresence, ExclamationTriangleIcon, ShieldCheckIcon, BanknotesIcon, CheckCircleIcon } from "lucide-react";\n'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -49,10 +49,10 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
   onTransactionComplete,
 }) => {
   const [step, setStep] = useState<'amount' | 'preview' | 'milestones' | 'processing' | 'complete'>(
-    'amount'
+    &apos;amount
   );
-  const [amount, setAmount] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [amount, setAmount] = useState<string>(&apos;);
+  const [description, setDescription] = useState<string>(&apos;');
   const [useEscrowOverride, setUseEscrowOverride] = useState<boolean>(false);
   const [preview, setPreview] = useState<TransactionPreview | null>(null);
   const [milestones, setMilestones] = useState<
@@ -347,8 +347,8 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
           ].map((stepItem, index) => {
             const isActive = step === stepItem.id;
             const isCompleted =
-              ['amount', 'milestones', 'preview', 'processing'].indexOf(stepItem.id) <
-              ['amount', 'milestones', 'preview', 'processing', 'complete'].indexOf(step);
+              ['amount', 'milestones', 'preview', 'processing].indexOf(stepItem.id) <
+              [amount', 'milestones', 'preview', 'processing', 'complete'].indexOf(step);
             const isVisible =
               stepItem.id !== 'milestones' || preview?.flowType === 'escrow_creation';
 
@@ -406,8 +406,8 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
           transition={{ duration: 0.3 }}
         >
           {/* Amount Input Step */}
-          {step === 'amount' && (
-            <div className='bg-white rounded-xl shadow-sm p-8 border'>
+          {step === 'amount && (
+            <div className=bg-white rounded-xl shadow-sm p-8 border'>
               <h2 className='text-xl font-semibold text-slate-900 mb-6'>Transaction Amount</h2>
 
               {error && (
@@ -430,9 +430,9 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
                     onChange={e => setAmount(e.target.value)}
                     className='w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg'
                     placeholder='Enter amount in rupees'
-                    min='1000'
+                    min='1000
                   />
-                  <p className='mt-2 text-sm text-slate-500'>Minimum transaction amount: ₹1,000</p>
+                  <p className=mt-2 text-sm text-slate-500'>Minimum transaction amount: ₹1,000</p>
                 </div>
 
                 <div>
@@ -453,8 +453,8 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
                     <h3 className='font-medium text-slate-900 mb-4'>Smart Routing Decision</h3>
                     <div className='space-y-3'>
                       <div className='flex items-center gap-2'>
-                        {preview.flowType === 'escrow_creation' ? (
-                          <ShieldCheckIcon className='h-5 w-5 text-green-600' />
+                        {preview.flowType === 'escrow_creation ? (
+                          <ShieldCheckIcon className=h-5 w-5 text-green-600' />
                         ) : (
                           <BanknotesIcon className='h-5 w-5 text-blue-600' />
                         )}
@@ -487,9 +487,9 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
                     id='escrow-override'
                     checked={useEscrowOverride}
                     onChange={e => setUseEscrowOverride(e.target.checked)}
-                    className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded'
+                    className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded
                   />
-                  <label htmlFor='escrow-override' className='text-sm text-slate-700'>
+                  <label htmlFor=escrow-override' className='text-sm text-slate-700'>
                     Use escrow even for amounts below ₹5 lakh (additional security)
                   </label>
                 </div>
@@ -505,8 +505,8 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
           )}
 
           {/* Milestones Setup Step */}
-          {step === 'milestones' && (
-            <div className='bg-white rounded-xl shadow-sm p-8 border'>
+          {step === 'milestones && (
+            <div className=bg-white rounded-xl shadow-sm p-8 border'>
               <h2 className='text-xl font-semibold text-slate-900 mb-6'>Setup Escrow Milestones</h2>
 
               <div className='space-y-6'>
@@ -551,11 +551,11 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
                           className='w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                           placeholder='0'
                           min='1'
-                          max='100'
+                          max='100
                         />
                       </div>
 
-                      <div className='md:col-span-2'>
+                      <div className=md:col-span-2'>
                         <label className='block text-sm font-medium text-slate-700 mb-2'>
                           Description *
                         </label>
@@ -627,8 +627,8 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
           )}
 
           {/* Preview Step */}
-          {step === 'preview' && preview && (
-            <div className='bg-white rounded-xl shadow-sm p-8 border'>
+          {step === 'preview && preview && (
+            <div className=bg-white rounded-xl shadow-sm p-8 border'>
               <h2 className='text-xl font-semibold text-slate-900 mb-6'>Transaction Preview</h2>
 
               <div className='space-y-6'>
@@ -688,8 +688,8 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
                 </div>
 
                 {/* Milestones Preview (for escrow) */}
-                {preview.flowType === 'escrow_creation' && milestones.length > 0 && (
-                  <div className='bg-blue-50 rounded-lg p-6'>
+                {preview.flowType === 'escrow_creation && milestones.length > 0 && (
+                  <div className=bg-blue-50 rounded-lg p-6'>
                     <h3 className='font-medium text-slate-900 mb-4'>Escrow Milestones</h3>
                     <div className='space-y-3'>
                       {milestones.map((milestone, index) => (
@@ -749,8 +749,8 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
           )}
 
           {/* Processing Step */}
-          {step === 'processing' && (
-            <div className='bg-white rounded-xl shadow-sm p-8 border text-center'>
+          {step === 'processing && (
+            <div className=bg-white rounded-xl shadow-sm p-8 border text-center'>
               <div className='animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-6'></div>
               <h2 className='text-xl font-semibold text-slate-900 mb-4'>Processing Transaction</h2>
               <p className='text-slate-600 mb-6'>
@@ -767,8 +767,8 @@ export const SmartTransactionRouter: React.FC<SmartTransactionRouterProps> = ({
           )}
 
           {/* Complete Step */}
-          {step === 'complete' && result && (
-            <div className='bg-white rounded-xl shadow-sm p-8 border text-center'>
+          {step === 'complete && result && (
+            <div className=bg-white rounded-xl shadow-sm p-8 border text-center'>
               <div className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6'>
                 <CheckCircleIcon className='h-10 w-10 text-green-600' />
               </div>

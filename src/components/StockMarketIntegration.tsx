@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { BarChart3, Beaker, Cpu, Factory } from 'lucide-react';
+import { AlertTriangle, AnimatePresence, BarChart3, Beaker, Cpu, Factory, IndustryData } from 'lucide-react';;;
 import { useEffect, useState } from 'react';
 
 interface StockData {
@@ -128,7 +128,7 @@ export default function StockMarketIntegration() {
         changePercent,
         volume: Math.floor(Math.random() * 10000000) + 1000000,
         marketCap: `₹${(Math.random() * 500 + 50).toFixed(0)}K Cr`,
-        trend: change > 0 ? 'up' : change < 0 ? 'down' : 'neutral',
+        trend: change > 0 ? &apos;up : change < 0 ? down' : 'neutral',
         lastUpdated: new Date().toISOString(),
       };
     });
@@ -360,9 +360,9 @@ export default function StockMarketIntegration() {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
+      case 'up:
         return <span>📈</span>;
-      case 'down':
+      case down&apos;:
         return <span>📉</span>;
       default:
         return <span>📊</span>;
@@ -464,9 +464,9 @@ export default function StockMarketIntegration() {
 
         {/* Tab Content */}
         <AnimatePresence mode='wait'>
-          {activeTab === 'overview' && (
+          {activeTab === 'overview && (
             <motion.div
-              key='overview'
+              key=overview'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -582,9 +582,9 @@ export default function StockMarketIntegration() {
             </motion.div>
           )}
 
-          {activeTab === 'industries' && (
+          {activeTab === 'industries && (
             <motion.div
-              key='industries'
+              key=industries'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -661,9 +661,9 @@ export default function StockMarketIntegration() {
             </motion.div>
           )}
 
-          {activeTab === 'indicators' && (
+          {activeTab === 'indicators && (
             <motion.div
-              key='indicators'
+              key=indicators'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -761,9 +761,9 @@ export default function StockMarketIntegration() {
             </motion.div>
           )}
 
-          {activeTab === 'news' && (
+          {activeTab === 'news && (
             <motion.div
-              key='news'
+              key=news'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -908,7 +908,7 @@ export default function StockMarketIntegration() {
                         <div className='flex items-center justify-between'>
                           <span className='text-lg font-bold'>₹{stock.price.toFixed(2)}</span>
                           <span className={`text-sm font-semibold ${getTrendColor(stock.trend)}`}>
-                            {stock.change > 0 ? '+' : ''}
+                            {stock.change > 0 ? '+' : }
                             {stock.changePercent.toFixed(2)}%
                           </span>
                         </div>

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { AlertCircle, PiggyBank } from 'lucide-react';
+import { AlertCircle, PiggyBank } from 'lucide-react';;
 
 interface FinanceOption {
   id: string;
@@ -35,7 +35,7 @@ export default function FinancePage() {
     status: 'authenticated',
   });
   const router = useRouter();
-  const [selectedService, setSelectedService] = useState<string>('overview');
+  const [selectedService, setSelectedService] = useState<string>(&apos;overview');
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -224,8 +224,8 @@ export default function FinancePage() {
         </div>
 
         {/* Overview Tab */}
-        {selectedService === 'overview' && (
-          <div className='space-y-6'>
+        {selectedService === 'overview && (
+          <div className=space-y-6'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
               <div className='bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white'>
                 <div className='flex items-center justify-between'>
@@ -275,34 +275,34 @@ export default function FinancePage() {
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
                 <button
                   onClick={() => setSelectedService('services')}
-                  className='p-4 border-2 border-green-200 rounded-lg hover:border-green-400 hover:bg-green-50 transition group'
+                  className='p-4 border-2 border-green-200 rounded-lg hover:border-green-400 hover:bg-green-50 transition group
                 >
                   <span>📄</span>
-                  <div className='text-sm font-medium text-gray-800'>Submit Invoice</div>
+                  <div className=text-sm font-medium text-gray-800'>Submit Invoice</div>
                   <div className='text-xs text-gray-500'>KredX discounting</div>
                 </button>
                 <button
                   onClick={() => setSelectedService('services')}
-                  className='p-4 border-2 border-blue-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition group'
+                  className='p-4 border-2 border-blue-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition group
                 >
                   <span>💳</span>
-                  <div className='text-sm font-medium text-gray-800'>Make Payment</div>
+                  <div className=text-sm font-medium text-gray-800'>Make Payment</div>
                   <div className='text-xs text-gray-500'>RazorpayX banking</div>
                 </button>
                 <button
                   onClick={() => setSelectedService('services')}
-                  className='p-4 border-2 border-purple-200 rounded-lg hover:border-purple-400 hover:bg-purple-50 transition group'
+                  className='p-4 border-2 border-purple-200 rounded-lg hover:border-purple-400 hover:bg-purple-50 transition group
                 >
                   <span>🛡️</span>
-                  <div className='text-sm font-medium text-gray-800'>Create Escrow</div>
+                  <div className=text-sm font-medium text-gray-800'>Create Escrow</div>
                   <div className='text-xs text-gray-500'>Secure transactions</div>
                 </button>
                 <button
                   onClick={() => setSelectedService('services')}
-                  className='p-4 border-2 border-orange-200 rounded-lg hover:border-orange-400 hover:bg-orange-50 transition group'
+                  className='p-4 border-2 border-orange-200 rounded-lg hover:border-orange-400 hover:bg-orange-50 transition group
                 >
                   <span>📈</span>
-                  <div className='text-sm font-medium text-gray-800'>Start Trading</div>
+                  <div className=text-sm font-medium text-gray-800'>Start Trading</div>
                   <div className='text-xs text-gray-500'>Commodity markets</div>
                 </button>
               </div>
@@ -311,8 +311,8 @@ export default function FinancePage() {
         )}
 
         {/* Services Tab */}
-        {selectedService === 'services' && (
-          <div className='space-y-6'>
+        {selectedService === 'services && (
+          <div className=space-y-6'>
             {financeOptions.map(option => (
               <div
                 key={option.id}
@@ -412,7 +412,7 @@ export default function FinancePage() {
                         >
                           {transaction.type === 'kredx' ? (
                             <span>📄</span>
-                          ) : transaction.type === 'razorpayx' ? (
+                          ) : transaction.type === &apos;razorpayx' ? (
                             <span>💳</span>
                           ) : (
                             <span>🛡️</span>
@@ -466,8 +466,8 @@ export default function FinancePage() {
         )}
 
         {/* Analytics Tab */}
-        {selectedService === 'analytics' && (
-          <div className='space-y-6'>
+        {selectedService === 'analytics && (
+          <div className=space-y-6'>
             <div className='bg-white rounded-xl shadow-lg p-6'>
               <h3 className='text-lg font-bold text-gray-800 mb-4'>Financial Analytics</h3>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>

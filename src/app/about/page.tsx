@@ -1,15 +1,6 @@
 import { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  Building2, 
-  Target, 
-  Users, 
-  Globe, 
-  Shield, 
-  Award,
-  TrendingUp,
-  Heart
-} from 'lucide-react';
+import { Award, Building2, Card, CardContent, CardHeader, CardTitle, Globe, Heart, Shield, Target, TrendingUp, Users } from 'lucide-react';;;
 
 export const metadata: Metadata = {
   title: 'About Us - Bell24h | India\'s Fastest B2B Match-Making Engine',
@@ -27,7 +18,7 @@ export default function AboutPage() {
             About Bell24h
           </h1>
           <p className="text-xl text-indigo-100 max-w-3xl mx-auto">
-            India's Fastest B2B Match-Making Engine for MSMEs. 
+            India&apos;s Fastest B2B Match-Making Engine for MSMEs. 
             Connecting verified suppliers with buyers using AI-powered matching and secure escrow payments.
           </p>
         </div>
@@ -61,7 +52,7 @@ export default function AboutPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 text-lg leading-relaxed">
-                  To become India's most trusted B2B operating system, empowering 1 million+ MSMEs 
+                  To become India&apos;s most trusted B2B operating system, empowering 1 million+ MSMEs 
                   with intelligent procurement solutions and creating ₹100 Crore in economic value by 2026.
                 </p>
               </CardContent>

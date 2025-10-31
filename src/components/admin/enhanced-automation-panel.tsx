@@ -5,28 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { 
-  Bot, 
-  Mail, 
-  Phone, 
-  Users, 
-  BarChart3, 
-  Settings, 
-  Play, 
-  Pause, 
-  RefreshCw,
-  CheckCircle,
-  AlertCircle,
-  Clock,
-  Zap,
-  Database,
-  TrendingUp,
-  DollarSign,
-  Crown,
-  Gift,
-  Target,
-  Activity
-} from 'lucide-react';
+import { Activity, AlertCircle, AutomationMetrics, Badge, BarChart3, Bot, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, Crown, Database, DollarSign, Gift, IntegrationStatus, Mail, Pause, Phone, Play, RefreshCw, Settings, Switch, Target, TrendingUp, Users, Zap } from 'lucide-react';;;
 import Header from '@/components/Header';
 
 interface WorkflowIntegration {
@@ -181,7 +160,7 @@ export default function EnhancedAutomationPanel() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'connected': return <CheckCircle className="h-4 w-4" />;
-      case 'disconnected': return <AlertCircle className="h-4 w-4" />;
+      case &apos;disconnected': return <AlertCircle className="h-4 w-4" />;
       default: return <Clock className="h-4 w-4" />;
     }
   };
@@ -600,7 +579,7 @@ export default function EnhancedAutomationPanel() {
         </div>
       )}
 
-      {activeTab === 'scraping' && (
+      {activeTab === scraping && (
         <div className="space-y-6">
           <Card>
             <CardHeader>

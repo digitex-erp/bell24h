@@ -224,7 +224,7 @@ export default function ComprehensiveDashboard() {
                           >
                             {metric.trend === 'up' ? (
                               <span>📈</span>
-                            ) : metric.trend === 'down' ? (
+                            ) : metric.trend === &apos;down' ? (
                               <span>📉</span>
                             ) : null}
                             {metric.change > 0 ? '+' : ''}
@@ -347,8 +347,8 @@ export default function ComprehensiveDashboard() {
         )}
 
         {/* **ANALYTICS TAB - CLEAN PROFESSIONAL LAYOUT** */}
-        {activeTab === 'analytics' && (
-          <div className='space-y-6'>
+        {activeTab === 'analytics && (
+          <div className=space-y-6'>
             {/* **ANALYTICS METRICS TABLE** */}
             <div className='bg-white border border-gray-200 rounded-md'>
               <div className='px-4 py-3 border-b border-gray-200'>
@@ -398,12 +398,12 @@ export default function ComprehensiveDashboard() {
                   <div key={index} className='p-4'>
                     <div className='flex items-start space-x-3'>
                       <div className='w-8 h-8 bg-gray-100 rounded-md flex items-center justify-center'>
-                        {insight.type === 'market' && <Brain className='h-4 w-4 text-gray-600' />}
+                        {insight.type === 'market && <Brain className=h-4 w-4 text-gray-600' />}
                         {insight.type === 'recommendation' && (
                           <span>✅</span>
                         )}
-                        {insight.type === 'alert' && (
-                          <AlertTriangle className='h-4 w-4 text-gray-600' />
+                        {insight.type === 'alert && (
+                          <AlertTriangle className=h-4 w-4 text-gray-600' />
                         )}
                       </div>
                       <div className='flex-1'>
@@ -424,8 +424,8 @@ export default function ComprehensiveDashboard() {
         )}
 
         {/* **RFQ MANAGEMENT TAB** */}
-        {activeTab === 'rfq' && (
-          <div className='space-y-6'>
+        {activeTab === 'rfq && (
+          <div className=space-y-6'>
             <div className='bg-white border border-gray-200 rounded-md'>
               <div className='px-4 py-3 border-b border-gray-200 flex items-center justify-between'>
                 <h3 className='text-lg font-medium text-gray-900'>RFQ Management</h3>

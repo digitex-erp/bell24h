@@ -1,4 +1,4 @@
-import PredictiveAnalyticsDashboard from '@/components/PredictiveAnalyticsDashboard';
+import { PredictiveAnalyticsDashboard } from "lucide-react";\nimport PredictiveAnalyticsDashboard from '@/components/PredictiveAnalyticsDashboard';
 
 export default function PredictiveAnalyticsPage() {
   return (

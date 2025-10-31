@@ -1,4 +1,4 @@
-'use client';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Card, CardContent, CheckCircle, Chip, ExpandMore, FormControl, Grid, Help, Info, InputLabel, Language, List, ListItem, ListItemIcon, ListItemText, MenuItem, Select, Support, TextField, Typography, VideoLibrary, WhatsApp } from 'lucide-react';;\n'use client';
 
 import { useState } from 'react';
 import { 
@@ -149,8 +149,8 @@ const VIDEO_TUTORIALS = [
 ];
 
 export default function HelpCenter() {
-  const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'hi'>('en');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'hi'>(&apos;en);
+  const [selectedCategory, setSelectedCategory] = useState<string>(all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredFAQ = FAQ_DATA.filter(item => {

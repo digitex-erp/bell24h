@@ -1,4 +1,4 @@
-'use client';
+import { ChevronDown, HTMLDivElement } from 'lucide-react';;\n'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -223,9 +223,9 @@ export default function UltraPremiumSearch() {
                       setQuery(suggestion.title);
                       setShowSuggestions(false);
                     }}
-                    className='flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0'
+                    className='flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0
                   >
-                    <div className='flex-shrink-0'>
+                    <div className=flex-shrink-0'>
                       {suggestion.type === 'product' && (
                         <span>🔍</span>
                       )}
@@ -253,9 +253,9 @@ export default function UltraPremiumSearch() {
           <div className='relative lg:w-80'>
             <button
               onClick={() => setShowCategories(!showCategories)}
-              className='w-full flex items-center justify-between px-4 py-4 bg-gray-50/80 hover:bg-gray-100/80 rounded-lg transition text-left'
+              className='w-full flex items-center justify-between px-4 py-4 bg-gray-50/80 hover:bg-gray-100/80 rounded-lg transition text-left
             >
-              <div className='flex items-center space-x-2'>
+              <div className=flex items-center space-x-2'>
                 <span>📈</span>
                 <span className='text-gray-700'>
                   {selectedCategoryData ? selectedCategoryData.name : 'All Categories'}
@@ -276,9 +276,9 @@ export default function UltraPremiumSearch() {
                     setSelectedCategory('');
                     setShowCategories(false);
                   }}
-                  className='flex items-center justify-between px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100'
+                  className='flex items-center justify-between px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100
                 >
-                  <span className='font-medium text-gray-800'>All Categories</span>
+                  <span className=font-medium text-gray-800'>All Categories</span>
                   <span className='text-sm text-gray-500'>500K+ suppliers</span>
                 </div>
                 {categories.map(category => (
@@ -288,9 +288,9 @@ export default function UltraPremiumSearch() {
                       setSelectedCategory(category.id);
                       setShowCategories(false);
                     }}
-                    className='px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0'
+                    className='px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0
                   >
-                    <div className='flex items-center justify-between mb-1'>
+                    <div className=flex items-center justify-between mb-1'>
                       <span className='font-medium text-gray-800'>{category.name}</span>
                       <span className='text-sm text-blue-600 font-semibold'>
                         {category.supplierCount.toLocaleString()}+

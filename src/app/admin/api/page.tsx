@@ -1,28 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Code,
-  Activity,
-  Zap,
-  Shield,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-  Search,
-  Filter,
-  Download,
-  Eye,
-  Settings,
-  RefreshCw,
-  Globe,
-  Database,
-  Server,
-  BarChart3,
-  TrendingUp,
-  TrendingDown,
-} from 'lucide-react';
+import { Activity, AlertTriangle, BarChart3, CheckCircle, Clock, Code, Database, Download, Eye, Filter, Globe, RefreshCw, Search, Server, Settings, Shield, TrendingDown, TrendingUp, XCircle, Zap } from 'lucide-react';;
 
 // Mock API data
 const mockAPIData = {
@@ -201,11 +180,11 @@ export default function APIManagementPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active':
+      case 'active:
         return <CheckCircle className="w-4 h-4" />;
-      case 'maintenance':
+      case maintenance&apos;:
         return <Clock className="w-4 h-4" />;
-      case 'inactive':
+      case &apos;inactive':
         return <XCircle className="w-4 h-4" />;
       default:
         return <AlertTriangle className="w-4 h-4" />;

@@ -1,4 +1,4 @@
-'use client';
+import { HTMLDivElement } from "lucide-react";\n'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';

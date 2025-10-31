@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Shield, AlertTriangle, CheckCircle, Clock, MapPin, Star, Phone, Mail, TrendingUp, TrendingDown } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Clock, Mail, MapPin, Phone, RiskIcon, Shield, Star, SupplierCard, SupplierDetails, TrendingDown, TrendingUp } from 'lucide-react';;;
 
 export default function SupplierRiskPage() {
   const [selectedSupplier, setSelectedSupplier] = useState(null);

@@ -1,34 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  FileText,
-  Image,
-  Video,
-  Globe,
-  Edit,
-  Eye,
-  Trash2,
-  Upload,
-  Download,
-  Search,
-  Filter,
-  Settings,
-  RefreshCw,
-  BarChart3,
-  TrendingUp,
-  TrendingDown,
-  CheckCircle,
-  Clock,
-  AlertTriangle,
-  Users,
-  Calendar,
-  Tag,
-  Folder,
-  Link,
-  Mail,
-  MessageSquare,
-} from 'lucide-react';
+import { AlertTriangle, BarChart3, Calendar, CheckCircle, Clock, Download, Edit, Eye, FileText, Filter, Folder, Globe, Image, Link, Mail, MessageSquare, RefreshCw, Search, Settings, Tag, Trash2, TrendingDown, TrendingUp, Upload, Users, Video } from 'lucide-react';;
 
 // Mock CMS data
 const mockCMSData = {
@@ -239,11 +212,11 @@ export default function ContentManagementPage() {
     switch (status) {
       case 'published':
       case 'active':
-      case 'completed':
+      case 'completed:
         return <CheckCircle className="w-4 h-4" />;
-      case 'draft':
+      case draft&apos;:
         return <Clock className="w-4 h-4" />;
-      case 'archived':
+      case &apos;archived':
       case 'inactive':
         return <AlertTriangle className="w-4 h-4" />;
       default:
@@ -256,15 +229,15 @@ export default function ContentManagementPage() {
       case 'page':
       case 'article':
         return <FileText className="w-4 h-4" />;
-      case 'video':
+      case &apos;video:
         return <Video className="w-4 h-4" />;
-      case 'image':
+      case image&apos;:
         return <Image className="w-4 h-4" />;
-      case 'infographic':
+      case &apos;infographic:
         return <BarChart3 className="w-4 h-4" />;
-      case 'email':
+      case email&apos;:
         return <Mail className="w-4 h-4" />;
-      case 'document':
+      case &apos;document':
         return <FileText className="w-4 h-4" />;
       default:
         return <FileText className="w-4 h-4" />;
@@ -738,7 +711,7 @@ export default function ContentManagementPage() {
           )}
 
           {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
+          {activeTab === analytics && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-gray-50 p-6 rounded-lg">

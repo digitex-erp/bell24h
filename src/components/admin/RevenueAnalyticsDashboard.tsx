@@ -30,7 +30,7 @@ interface BillingEvent {
 export default function RevenueAnalyticsDashboard() {
   const [metrics, setMetrics] = useState<RevenueMetrics | null>(null);
   const [recentEvents, setRecentEvents] = useState<BillingEvent[]>([]);
-  const [timeframe, setTimeframe] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
+  const [timeframe, setTimeframe] = useState<'week' | 'month' | 'quarter' | 'year'>(&apos;month');
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
@@ -103,7 +103,7 @@ export default function RevenueAnalyticsDashboard() {
   const generateCSVReport = (metrics: RevenueMetrics | null, events: BillingEvent[]): string => {
     if (!metrics) return '';
 
-    let csv = 'Bell24H Revenue Report\n\n';
+    let csv = 'Bell24H Revenue Report\import { AlertCircle, Date, RevenueMetrics } from 'lucide-react';;\nn\n';
     csv += 'SUMMARY METRICS\n';
     csv += `Total Revenue,${SubscriptionUtils.formatAmount(metrics.totalRevenue)}\n`;
     csv += `Monthly Recurring Revenue,${SubscriptionUtils.formatAmount(
@@ -154,9 +154,9 @@ export default function RevenueAnalyticsDashboard() {
               <select
                 value={timeframe}
                 onChange={e => setTimeframe(e.target.value as any)}
-                className='px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                className='px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
               >
-                <option value='week'>Last Week</option>
+                <option value=week'>Last Week</option>
                 <option value='month'>Last Month</option>
                 <option value='quarter'>Last Quarter</option>
                 <option value='year'>Last Year</option>
@@ -325,9 +325,9 @@ export default function RevenueAnalyticsDashboard() {
                   className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'
                 >
                   <div className='flex items-center'>
-                    {event.status === 'success' ? (
+                    {event.status === 'success ? (
                       <span>✅</span>
-                    ) : event.status === 'failed' ? (
+                    ) : event.status === failed&apos; ? (
                       <span>❌</span>
                     ) : (
                       <span>🕐</span>

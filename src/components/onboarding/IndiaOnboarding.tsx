@@ -1,4 +1,4 @@
-'use client';
+import { Alert, Box, Button, Card, CardContent, CheckCircle, FormControl, FormControlLabel, FormLabel, GSTValidation, Grid, InputLabel, List, ListItem, ListItemIcon, ListItemText, MenuItem, OnboardingData, Radio, RadioGroup, School, Select, Step, StepContent, StepLabel, Stepper, TextField, Typography, Verified } from 'lucide-react';;\n'use client';
 
 import { useState } from 'react';
 import { 
@@ -91,7 +91,7 @@ export default function IndiaOnboarding() {
         <Box>
           <Alert severity="info" sx={{ mb: 3 }}>
             <Typography variant="h6" gutterBottom>
-              🎉 Welcome to India's Premier B2B Marketplace!
+              🎉 Welcome to India&apos;s Premier B2B Marketplace!
             </Typography>
             <Typography variant="body2">
               Bell24h is designed specifically for Indian businesses with features like:
@@ -313,7 +313,7 @@ export default function IndiaOnboarding() {
                 📋 Sample RFQ Creation
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Here's how you can create a Request for Quotation (RFQ):
+                Here&apos;s how you can create a Request for Quotation (RFQ):
               </Typography>
               <List dense>
                 <ListItem>

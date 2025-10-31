@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { TanstackQueryClientProvider, ReactQueryDevtools } from "lucide-react";\nimport React, { useMemo } from 'react';
 import { QueryClientProvider as TanstackQueryClientProvider } from '@tanstack/react-query';
 import { getClientQueryClient } from './queryClient.ts';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -86,7 +86,7 @@ export const QueryClientProvider = ({ children }: { children: React.ReactNode })
   return (
     <TanstackQueryClientProvider client={queryClient}>
       {children}
-      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      {process.env.NODE_ENV === development && <ReactQueryDevtools initialIsOpen={false} />}
     </TanstackQueryClientProvider>
   );
 };

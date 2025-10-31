@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle, ChevronDown, ChevronUp, Database, DeletionReason, DeletionScope, Info } from 'lucide-react';;\n'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -21,7 +21,7 @@ export default function DataDeletionManager({ className }: DataDeletionManagerPr
   const { showSuccess, showError, showWarning } = useToast();
 
   // State management
-  const [activeTab, setActiveTab] = useState<'request' | 'status' | 'history'>('request');
+  const [activeTab, setActiveTab] = useState<'request' | 'status' | 'history'>(&apos;request');
   const [deletionRequests, setDeletionRequests] = useState<DeletionRequest[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showReasonDetails, setShowReasonDetails] = useState(false);
@@ -147,9 +147,9 @@ export default function DataDeletionManager({ className }: DataDeletionManagerPr
           <h4 className='text-lg font-semibold text-gray-900'>Reason for Deletion</h4>
           <button
             onClick={() => setShowReasonDetails(!showReasonDetails)}
-            className='text-blue-600 hover:text-blue-800 flex items-center space-x-1'
+            className='text-blue-600 hover:text-blue-800 flex items-center space-x-1
           >
-            <Info className='h-4 w-4' />
+            <Info className=h-4 w-4' />
             <span>{showReasonDetails ? 'Hide' : 'Show'} Details</span>
             {showReasonDetails ? (
               <ChevronUp className='h-4 w-4' />
@@ -236,9 +236,9 @@ export default function DataDeletionManager({ className }: DataDeletionManagerPr
           <h4 className='text-lg font-semibold text-gray-900'>Data to Delete</h4>
           <button
             onClick={() => setShowScopeDetails(!showScopeDetails)}
-            className='text-blue-600 hover:text-blue-800 flex items-center space-x-1'
+            className='text-blue-600 hover:text-blue-800 flex items-center space-x-1
           >
-            <Database className='h-4 w-4' />
+            <Database className=h-4 w-4' />
             <span>{showScopeDetails ? 'Hide' : 'Show'} Details</span>
             {showScopeDetails ? (
               <ChevronUp className='h-4 w-4' />
@@ -402,7 +402,7 @@ export default function DataDeletionManager({ className }: DataDeletionManagerPr
         <div className='text-center py-8'>
           <span>🗑️</span>
           <h3 className='text-lg font-semibold text-gray-900 mb-2'>No Active Deletion Requests</h3>
-          <p className='text-gray-600'>You don't have any pending deletion requests.</p>
+          <p className='text-gray-600'>You don&apos;t have any pending deletion requests.</p>
         </div>
       );
     }
@@ -460,8 +460,8 @@ export default function DataDeletionManager({ className }: DataDeletionManagerPr
               </div>
             </div>
 
-            {request.status === 'pending' && (
-              <div className='flex justify-end space-x-3'>
+            {request.status === 'pending && (
+              <div className=flex justify-end space-x-3'>
                 <button
                   onClick={() => handleCancelRequest(request.id)}
                   disabled={isLoading}
@@ -487,7 +487,7 @@ export default function DataDeletionManager({ className }: DataDeletionManagerPr
         <div className='text-center py-8'>
           <span>📄</span>
           <h3 className='text-lg font-semibold text-gray-900 mb-2'>No Deletion History</h3>
-          <p className='text-gray-600'>You haven't completed any deletion requests yet.</p>
+          <p className='text-gray-600'>You haven&apos;t completed any deletion requests yet.</p>
         </div>
       );
     }
@@ -570,7 +570,7 @@ export default function DataDeletionManager({ className }: DataDeletionManagerPr
       {/* Tab Content */}
       {activeTab === 'request' && renderDeletionRequestForm()}
       {activeTab === 'status' && renderDeletionStatus()}
-      {activeTab === 'history' && renderDeletionHistory()}
+      {activeTab === history && renderDeletionHistory()}
     </div>
   );
 }

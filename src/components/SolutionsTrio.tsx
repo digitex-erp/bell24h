@@ -1,4 +1,4 @@
-'use client';
+import { Icon } from "lucide-react";\n'use client';
 
 import { motion } from 'framer-motion';
 

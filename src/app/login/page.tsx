@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 export default function LoginPage() {
-  const [step, setStep] = useState<'phone' | 'otp'>('phone');
+  const [step, setStep] = useState<'phone' | 'otp'>(&apos;phone');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
@@ -60,15 +60,15 @@ export default function LoginPage() {
       <div className='sm:mx-auto sm:w-full sm:max-w-md'>
         <div className='text-center'>
           <h1 className='text-3xl font-bold text-gray-900'>Bell24h</h1>
-          <p className='text-sm text-gray-600 mt-2'>India's First AI B2B Marketplace</p>
+          <p className='text-sm text-gray-600 mt-2'>Indias First AI B2B Marketplace</p>
         </div>
-        <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Mobile OTP Login</h2>
+        <h2 className=mt-6 text-center text-3xl font-extrabold text-gray-900'>Mobile OTP Login</h2>
       </div>
 
       <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
         <div className='bg-white py-8 px-4 shadow-xl rounded-lg sm:px-10'>
-          {step === 'phone' ? (
-            <div className='space-y-6'>
+          {step === 'phone ? (
+            <div className=space-y-6'>
               <label className='block text-sm font-medium text-gray-700'>Mobile Number</label>
               <input
                 type='tel'

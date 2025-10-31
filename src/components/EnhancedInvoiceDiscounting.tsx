@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { EscrowBackedDiscountingProps, DiscountingApplication, ShieldCheckIcon, TrendingUpIcon, ClockIcon, DocumentTextIcon, ShieldCheckIcon, BanknotesIcon, ClockIcon, ArrowRightIcon, CheckCircleIcon, ShieldCheckIcon, BanknotesIcon, CheckCircleIcon, ClockIcon, CurrencyRupeeIcon, CheckCircleIcon, Icon, AnimatePresence } from "lucide-react";\nimport React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   DocumentTextIcon,
@@ -54,9 +54,9 @@ const EnhancedInvoiceDiscounting: React.FC<EscrowBackedDiscountingProps> = ({
   onApplicationSubmit,
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'platforms' | 'application' | 'status'>(
-    'overview'
+    &apos;overview
   );
-  const [selectedPlatform, setSelectedPlatform] = useState<string>('');
+  const [selectedPlatform, setSelectedPlatform] = useState<string>(&apos;);
   const [application, setApplication] = useState<DiscountingApplication>({
     invoiceAmount,
     escrowAccountId,
@@ -426,8 +426,8 @@ const EnhancedInvoiceDiscounting: React.FC<EscrowBackedDiscountingProps> = ({
               {application.invoiceAmount > 0 && (
                 <div className='mt-4 p-3 bg-blue-50 rounded-lg'>
                   <div className='text-center'>
-                    <div className='text-sm text-gray-600'>You'll Receive</div>
-                    <div className='text-lg font-bold text-blue-600'>
+                    <div className='text-sm text-gray-600'>Youll Receive</div>
+                    <div className=text-lg font-bold text-blue-600'>
                       ₹{amount.toLocaleString()}
                     </div>
                   </div>
@@ -514,11 +514,11 @@ const EnhancedInvoiceDiscounting: React.FC<EscrowBackedDiscountingProps> = ({
                   }))
                 }
                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                placeholder='Enter escrow account ID for better rates'
+                placeholder='Enter escrow account ID for better rates
               />
             </div>
 
-            <div className='space-y-3'>
+            <div className=space-y-3'>
               <div className='flex items-center gap-3'>
                 <input
                   type='checkbox'
@@ -530,9 +530,9 @@ const EnhancedInvoiceDiscounting: React.FC<EscrowBackedDiscountingProps> = ({
                       gstCompliance: e.target.checked,
                     }))
                   }
-                  className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'
+                  className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded
                 />
-                <label htmlFor='gst-compliance' className='text-sm text-gray-700'>
+                <label htmlFor=gst-compliance' className='text-sm text-gray-700'>
                   GST Compliant Invoice
                 </label>
               </div>
@@ -548,9 +548,9 @@ const EnhancedInvoiceDiscounting: React.FC<EscrowBackedDiscountingProps> = ({
                       bankVerification: e.target.checked,
                     }))
                   }
-                  className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'
+                  className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded
                 />
-                <label htmlFor='bank-verification' className='text-sm text-gray-700'>
+                <label htmlFor=bank-verification' className='text-sm text-gray-700'>
                   Bank Account Verified
                 </label>
               </div>
@@ -611,8 +611,8 @@ const EnhancedInvoiceDiscounting: React.FC<EscrowBackedDiscountingProps> = ({
                   </span>
                 </div>
                 <div className='border-t pt-2 flex justify-between font-bold'>
-                  <span>You'll Receive:</span>
-                  <span className='text-green-600'>
+                  <span>Youll Receive:</span>
+                  <span className=text-green-600'>
                     ₹{application.estimatedAmount.toLocaleString()}
                   </span>
                 </div>
@@ -770,7 +770,7 @@ const EnhancedInvoiceDiscounting: React.FC<EscrowBackedDiscountingProps> = ({
           {activeTab === 'overview' && renderOverview()}
           {activeTab === 'platforms' && renderPlatforms()}
           {activeTab === 'application' && renderApplication()}
-          {activeTab === 'status' && renderStatus()}
+          {activeTab === status && renderStatus()}
         </motion.div>
       </AnimatePresence>
     </div>

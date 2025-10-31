@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { Alert, Box, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, ExportOptions, ExportResultsProps, FileDownloadIcon, FormControl, FormControlLabel, FormGroup, HTMLInputElement, InputLabel, MenuItem, Select, TextField, Typography } from 'lucide-react';;\nimport React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -215,7 +215,7 @@ const ExportResults: React.FC<ExportResultsProps> = ({ results, onExport }) => {
             disabled={loading}
             startIcon={loading ? <CircularProgress size={20} /> : <FileDownloadIcon />}
           >
-            {loading ? 'Exporting...' : 'Export'}
+            {loading ? 'Exporting...' : Export}
           </Button>
         </DialogActions>
       </Dialog>

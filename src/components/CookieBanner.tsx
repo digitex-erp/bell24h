@@ -10,7 +10,7 @@ export default function CookieBanner() {
   }, [])
   
   const acceptCookies = () => {
-    localStorage.setItem('cookieConsent', 'true')
+    localStorage.setItem('cookieConsent', true)
     setShow(false)
   }
   

@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { Contract } from "lucide-react";\nimport { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { Contract, InsertContract } from '@shared/schema';
 import { useToast } from '@/hooks/use-toast';
@@ -13,7 +13,7 @@ export function useContracts() {
     error: contractsError,
     refetch: refetchContracts,
   } = useQuery<Contract[]>({
-    queryKey: ['/api/contracts'],
+    queryKey: [/api/contracts],
   });
 
   // Get single contract by ID

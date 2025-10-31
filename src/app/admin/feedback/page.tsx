@@ -19,24 +19,7 @@ interface FeedbackItem {
   votes: number;
   comments: number;
 }
-import {
-  MessageSquare,
-  Star,
-  ThumbsUp,
-  ThumbsDown,
-  Search,
-  Filter,
-  Download,
-  Eye,
-  Reply,
-  Flag,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  Users,
-  TrendingUp,
-  BarChart3,
-} from 'lucide-react';
+import { AlertTriangle, BarChart3, CheckCircle, Clock, Download, Eye, FeedbackItem, Filter, Flag, MessageSquare, Reply, Search, Star, ThumbsDown, ThumbsUp, TrendingUp, Users } from 'lucide-react';;;
 
 // Mock feedback data
 const mockFeedbackData = {
@@ -168,11 +151,11 @@ export default function FeedbackSystemPage() {
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'feature_request':
+      case 'feature_request:
         return <Star className="w-4 h-4" />;
-      case 'bug_report':
+      case bug_report&apos;:
         return <AlertTriangle className="w-4 h-4" />;
-      case 'general_feedback':
+      case &apos;general_feedback':
         return <MessageSquare className="w-4 h-4" />;
       default:
         return <MessageSquare className="w-4 h-4" />;
@@ -455,7 +438,7 @@ export default function FeedbackSystemPage() {
           )}
 
           {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
+          {activeTab === analytics && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-gray-50 p-6 rounded-lg">

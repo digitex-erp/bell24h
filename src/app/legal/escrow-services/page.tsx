@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Shield, Building2, Globe, FileText, Users, TrendingUp } from 'lucide-react';
+import { Building2, Card, CardContent, CardHeader, CardTitle, FileText, Globe, Header, Shield, TrendingUp, Users } from 'lucide-react';;;
 import Header from '@/components/Header';
 
 export default function EscrowServicesPage() {

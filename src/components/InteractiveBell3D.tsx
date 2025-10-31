@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { InteractiveBell3DProps, HTMLDivElement } from "lucide-react";\nimport React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface InteractiveBell3DProps {

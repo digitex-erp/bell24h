@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { IntegratedBankingSystemProps, BankAccount, CompanyDetails, WalletInfo, BanknotesIcon, ShieldCheckIcon, CreditCardIcon, CheckCircleIcon, CreditCardIcon, ShieldCheckIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CreditCardIcon, BanknotesIcon, ShieldCheckIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, CheckCircleIcon, ClockIcon, ClockIcon, DocumentTextIcon, ArrowPathIcon, Icon, AnimatePresence } from "lucide-react";\nimport React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShieldCheckIcon,
@@ -53,7 +53,7 @@ const IntegratedBankingSystem: React.FC<IntegratedBankingSystemProps> = ({
   onComplete,
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'bank' | 'gst' | 'wallet' | 'compliance'>(
-    'overview'
+    &apos;overview'
   );
   const [verificationProgress, setVerificationProgress] = useState(100);
   const [loading, setLoading] = useState(false);
@@ -596,7 +596,7 @@ const IntegratedBankingSystem: React.FC<IntegratedBankingSystemProps> = ({
           {activeTab === 'bank' && renderBankDetails()}
           {activeTab === 'gst' && renderGSTDetails()}
           {activeTab === 'wallet' && renderWalletDetails()}
-          {activeTab === 'compliance' && renderCompliance()}
+          {activeTab === compliance && renderCompliance()}
         </motion.div>
       </AnimatePresence>
     </div>

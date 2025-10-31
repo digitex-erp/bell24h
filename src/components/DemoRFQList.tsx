@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, Link, MessageSquare } from 'lucide-react';;\n'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -30,9 +30,9 @@ export default function DemoRFQList({
 
   const getRFQTypeIcon = (type: string) => {
     switch (type) {
-      case 'voice':
+      case 'voice:
         return <span>🎤</span>;
-      case 'video':
+      case video&apos;:
         return <span>🎥</span>;
       default:
         return <MessageSquare className='w-4 h-4 text-gray-500' />;

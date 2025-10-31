@@ -1,24 +1,5 @@
 'use client';
-import {
-  BarChart3,
-  Brain,
-  FileBarChart,
-  FileText,
-  HelpCircle,
-  Home,
-  MessageCircle,
-  Mic,
-  Settings,
-  Shield,
-  Square,
-  Star,
-  TrendingUp,
-  Truck,
-  Video,
-  Wallet,
-  Users,
-  Zap,
-} from 'lucide-react';
+import { BarChart3, Brain, FileBarChart, FileText, HelpCircle, Home, MessageCircle, Mic, Settings, Shield, Square, Star, TrendingUp, Truck, Video, Wallet, Users, Zap, , Link, Icon } from "lucide-react";;
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -114,12 +95,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <header className='bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4 lg:px-6 flex-shrink-0'>
           <button
             onClick={() => setSidebarOpen(true)}
-            className='lg:hidden text-gray-500 hover:text-gray-700'
+            className='lg:hidden text-gray-500 hover:text-gray-700
           >
             <span>☰</span>
           </button>
 
-          <div className='flex-1 flex justify-center lg:justify-start'>
+          <div className=flex-1 flex justify-center lg:justify-start'>
             <h1 className='text-lg font-semibold text-gray-900'>
               {navigationItems.find(item => item.href === pathname)?.name || 'Dashboard'}
             </h1>

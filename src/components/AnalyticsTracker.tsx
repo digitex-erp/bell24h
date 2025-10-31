@@ -1,6 +1,6 @@
 'use client';
 
-import { Activity, BarChart3, DollarSign, TrendingUp, Users } from 'lucide-react';
+import { Activity, AnalyticsData, BarChart3, DollarSign, TrendingUp, Users } from 'lucide-react';;;
 import { useEffect, useState } from 'react';
 
 interface AnalyticsData {
@@ -48,9 +48,9 @@ const AnalyticsTracker = () => {
 
   const metrics = [
     {
-      label: 'Total Users',
+      label: 'Total Users,
       value: analytics.totalUsers,
-      icon: <Users className='w-5 h-5' />,
+      icon: <Users className=w-5 h-5' />,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
     },
@@ -62,9 +62,9 @@ const AnalyticsTracker = () => {
       bgColor: 'bg-green-50',
     },
     {
-      label: 'RFQs Created',
+      label: 'RFQs Created,
       value: analytics.rfqsCreated,
-      icon: <TrendingUp className='w-5 h-5' />,
+      icon: <TrendingUp className=w-5 h-5' />,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
     },
@@ -76,9 +76,9 @@ const AnalyticsTracker = () => {
       bgColor: 'bg-orange-50',
     },
     {
-      label: 'Transactions',
+      label: 'Transactions,
       value: analytics.transactions,
-      icon: <DollarSign className='w-5 h-5' />,
+      icon: <DollarSign className=w-5 h-5' />,
       color: 'text-green-600',
       bgColor: 'bg-green-50',
     },

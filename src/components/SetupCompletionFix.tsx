@@ -1,4 +1,4 @@
-'use client';
+import { SetupData } from "lucide-react";\n'use client';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -104,7 +104,7 @@ export default function SetupCompletionFix() {
     <div className='setup-container max-w-md mx-auto p-6'>
       <div className='text-center mb-8'>
         <h1 className='text-3xl font-bold text-gray-900 mb-2'>Welcome to Bell24h! 🚀</h1>
-        <p className='text-gray-600'>India's First AI-Powered B2B Marketplace</p>
+        <p className='text-gray-600'>India&apos;s First AI-Powered B2B Marketplace</p>
 
         {/* Progress indicator */}
         <div className='flex justify-center mt-4'>
@@ -133,34 +133,34 @@ export default function SetupCompletionFix() {
               value={setupData.phoneNumber}
               onChange={e => handleInputChange('phoneNumber', e.target.value)}
               className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-              placeholder='+919867638113'
+              placeholder='+919867638113
             />
           </div>
 
           <div>
-            <label className='block text-sm font-medium text-gray-700 mb-1'>City *</label>
+            <label className=block text-sm font-medium text-gray-700 mb-1'>City *</label>
             <input
               type='text'
               value={setupData.city}
               onChange={e => handleInputChange('city', e.target.value)}
               className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-              placeholder='Thane'
+              placeholder='Thane
             />
           </div>
 
           <div>
-            <label className='block text-sm font-medium text-gray-700 mb-1'>State *</label>
+            <label className=block text-sm font-medium text-gray-700 mb-1'>State *</label>
             <input
               type='text'
               value={setupData.state}
               onChange={e => handleInputChange('state', e.target.value)}
               className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-              placeholder='Maharashtra'
+              placeholder='Maharashtra
             />
           </div>
         </div>
 
-        <div className='flex justify-between mt-6'>
+        <div className=flex justify-between mt-6'>
           <button
             onClick={() => router.back()}
             className='px-6 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50'
