@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 // NextAuth removed - using mobile OTP authentication
-import { prisma } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
 import { rateLimit } from '@/lib/rate-limit'
 import { z } from 'zod'
 import OpenAI from 'openai'
