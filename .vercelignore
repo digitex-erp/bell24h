@@ -59,3 +59,6 @@ Thumbs.db
 # Other
 .continue/
 .cursorrules
+
+# Client directory - Vercel should build from root src/
+client/
