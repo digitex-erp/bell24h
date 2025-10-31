@@ -1,14 +1,13 @@
-import { AuthProvider } from "lucide-react";\nimport type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '../contexts/AuthContext'
-// ErrorBoundary removed - using built-in error handling
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Bell24H - AI-Powered B2B Marketplace',
-  description: 'India\'s premier B2B marketplace connecting suppliers and buyers with AI-powered matching and analytics.',
+  title: 'Bell24h - Procurement Platform',
+  description: 'AI-Powered Procurement and Supplier Matching',
 }
 
 export default function RootLayout({
@@ -19,12 +18,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Razorpay Script for Payment Integration */}
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        {/* Razorpay Script loaded asynchronously */}
+        <script 
+          src="https://checkout.razorpay.com/v1/checkout.js" 
+          async
+          defer
+        />
       </head>
       <body className={inter.className}>
         <AuthProvider>
-          {children}
+          <main className="min-h-screen bg-background">
+            {children}
+          </main>
         </AuthProvider>
       </body>
     </html>
