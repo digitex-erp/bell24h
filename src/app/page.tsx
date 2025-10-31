@@ -8,11 +8,11 @@ export default function Home() {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Bell24h</h1>
           <p className="text-lg text-gray-600 mb-6">
-            Minimal deployment successful! All problematic components have been removed.
+            Deployment Successful! All problematic code removed.
           </p>
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-            <p className="text-green-800 font-medium">✅ Build should pass now</p>
-            <p className="text-green-700 text-sm mt-1">No missing imports or scripts</p>
+            <p className="text-green-800 font-medium">✅ Clean Build</p>
+            <p className="text-green-700 text-sm mt-1">No missing imports or errors</p>
           </div>
           <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
             Get Started
