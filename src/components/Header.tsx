@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ArrowLeft, Home, MessageSquare, CreditCard, Wallet, Brain } from 'lucide-react';
+import { ArrowLeft, Brain, CreditCard, Home, Link, MessageSquare, Wallet } from 'lucide-react';;;
 
 interface HeaderProps {
   title: string;

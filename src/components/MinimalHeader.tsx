@@ -1,4 +1,4 @@
-'use client';
+import { ChevronDown, Link } from 'lucide-react';;\n'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -112,8 +112,8 @@ export default function MinimalHeader({ className = '' }: MinimalHeaderProps) {
 
           {/* User Profile */}
           <div className='relative'>
-            {status === 'loading' ? (
-              <div className='w-8 h-8 bg-gray-200 rounded-full animate-pulse'></div>
+            {status === 'loading ? (
+              <div className=w-8 h-8 bg-gray-200 rounded-full animate-pulse'></div>
             ) : session ? (
               <button
                 onClick={toggleProfileDropdown}

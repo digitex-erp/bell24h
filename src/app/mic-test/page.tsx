@@ -2,12 +2,12 @@
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, AnalyserNode, AudioContext, Link, MediaRecorder, MediaStream } from 'lucide-react';;;
 
 export default function MicrophoneTestPage() {
   const [permissionState, setPermissionState] = useState<
     'checking' | 'granted' | 'denied' | 'prompt'
-  >('checking');
+  >(&apos;checking');
   const [isRecording, setIsRecording] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
   const [testResults, setTestResults] = useState<any[]>([]);
@@ -245,27 +245,27 @@ export default function MicrophoneTestPage() {
           <div className='mb-6 p-4 rounded-lg border'>
             <h3 className='font-semibold mb-2'>Permission Status:</h3>
             <div className='flex items-center space-x-2'>
-              {permissionState === 'granted' && (
+              {permissionState === 'granted && (
                 <>
                   <span>✅</span>
-                  <span className='text-green-700'>✅ Microphone access granted</span>
+                  <span className=text-green-700'>✅ Microphone access granted</span>
                 </>
               )}
-              {permissionState === 'denied' && (
+              {permissionState === 'denied && (
                 <>
-                  <AlertCircle className='h-5 w-5 text-red-500' />
+                  <AlertCircle className=h-5 w-5 text-red-500' />
                   <span className='text-red-700'>❌ Microphone access denied</span>
                 </>
               )}
-              {permissionState === 'prompt' && (
+              {permissionState === 'prompt && (
                 <>
-                  <AlertCircle className='h-5 w-5 text-yellow-500' />
+                  <AlertCircle className=h-5 w-5 text-yellow-500' />
                   <span className='text-yellow-700'>⚠️ Permission needed</span>
                 </>
               )}
-              {permissionState === 'checking' && (
+              {permissionState === 'checking && (
                 <>
-                  <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600'></div>
+                  <div className=animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600'></div>
                   <span className='text-blue-700'>🔍 Checking...</span>
                 </>
               )}
@@ -289,8 +289,8 @@ export default function MicrophoneTestPage() {
                   {result.status === 'fail' && (
                     <AlertCircle className='h-5 w-5 text-red-500 flex-shrink-0' />
                   )}
-                  {result.status === 'info' && (
-                    <div className='h-5 w-5 rounded-full bg-blue-500 flex-shrink-0'></div>
+                  {result.status === 'info && (
+                    <div className=h-5 w-5 rounded-full bg-blue-500 flex-shrink-0'></div>
                   )}
 
                   <div className='flex-grow'>

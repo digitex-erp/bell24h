@@ -6,23 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  Search, 
-  Filter, 
-  TrendingUp, 
-  Users, 
-  FileText, 
-  ShoppingCart,
-  ArrowRight,
-  Grid,
-  List,
-  BarChart3,
-  Award,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  XCircle
-} from 'lucide-react'
+import { AlertCircle, ArrowRight, Award, Badge, BarChart3, Button, Card, CardContent, CardHeader, CardTitle, CategoryCard, CheckCircle, Clock, FileText, Filter, Grid, Input, Link, List, Search, ShoppingCart, Tabs, TabsContent, TabsList, TabsTrigger, TrendingUp, Users, XCircle } from 'lucide-react';;
 import { ALL_50_CATEGORIES, getCategoryStatistics, getCategoryGroups } from '@/data/all-50-categories'
 import Link from 'next/link'
 
@@ -50,9 +34,9 @@ function CategoryCard({ category, viewMode, showMockOrders = true }: CategoryCar
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="w-4 h-4" />
-      case 'in_progress': return <Clock className="w-4 h-4" />
-      case 'pending': return <AlertCircle className="w-4 h-4" />
+      case 'completed: return <CheckCircle className="w-4 h-4" />
+      case in_progress&apos;: return <Clock className="w-4 h-4" />
+      case &apos;pending': return <AlertCircle className="w-4 h-4" />
       default: return <XCircle className="w-4 h-4" />
     }
   }
@@ -204,8 +188,8 @@ function CategoryCard({ category, viewMode, showMockOrders = true }: CategoryCar
 }
 
 export default function CategoriesDashboard() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [searchTerm, setSearchTerm] = useState(')
+  const [viewMode, setViewMode] = useState<grid' | 'list'>('grid')
   const [showMockOrders, setShowMockOrders] = useState(true)
   const [activeTab, setActiveTab] = useState('all')
 

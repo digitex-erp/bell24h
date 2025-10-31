@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Phone, MessageSquare, CheckCircle, XCircle, Clock, RefreshCw } from 'lucide-react';
+import { CheckCircle, Clock, MessageSquare, Phone, RefreshCw, XCircle } from 'lucide-react';;
 
 interface OTPConfig {
   authKey: string;
@@ -36,7 +36,7 @@ export default function MSG91OTPIntegration() {
     expiry: 5
   });
 
-  const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'sent' | 'verified' | 'failed'>('idle');
+  const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'sent' | 'verified' | 'failed'>(&apos;idle');
   const [verificationCode, setVerificationCode] = useState('');
   const [logs, setLogs] = useState<string[]>([]);
 
@@ -140,11 +140,11 @@ export default function MSG91OTPIntegration() {
     switch (otpStatus) {
       case 'sending':
         return <RefreshCw className="w-5 h-5 text-blue-600 animate-spin" />;
-      case 'sent':
+      case &apos;sent:
         return <MessageSquare className="w-5 h-5 text-green-600" />;
-      case 'verified':
+      case verified&apos;:
         return <CheckCircle className="w-5 h-5 text-green-600" />;
-      case 'failed':
+      case &apos;failed':
         return <XCircle className="w-5 h-5 text-red-600" />;
       default:
         return <Phone className="w-5 h-5 text-gray-600" />;
@@ -303,7 +303,7 @@ export default function MSG91OTPIntegration() {
               </button>
             </div>
 
-            {otpStatus === 'sent' && (
+            {otpStatus === sent && (
               <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Verification Code

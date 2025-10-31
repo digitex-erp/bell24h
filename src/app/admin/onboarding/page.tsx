@@ -1,32 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  GraduationCap,
-  Users,
-  BookOpen,
-  Play,
-  CheckCircle,
-  Clock,
-  AlertTriangle,
-  Search,
-  Filter,
-  Download,
-  Eye,
-  Settings,
-  RefreshCw,
-  BarChart3,
-  TrendingUp,
-  TrendingDown,
-  FileText,
-  Video,
-  Globe,
-  Target,
-  Award,
-  Calendar,
-  UserPlus,
-  Send,
-} from 'lucide-react';
+import { AlertTriangle, Award, BarChart3, BookOpen, Calendar, CheckCircle, Clock, Download, Eye, FileText, Filter, Globe, GraduationCap, Play, RefreshCw, Search, Send, Settings, Target, TrendingDown, TrendingUp, UserPlus, Users, Video } from 'lucide-react';;
 
 // Mock onboarding data
 const mockOnboardingData = {
@@ -206,11 +181,11 @@ export default function OnboardingTrainingPage() {
     switch (status) {
       case 'active':
       case 'completed':
-      case 'published':
+      case 'published:
         return <CheckCircle className="w-4 h-4" />;
-      case 'in_progress':
+      case in_progress&apos;:
         return <Clock className="w-4 h-4" />;
-      case 'draft':
+      case &apos;draft':
       case 'not_started':
         return <AlertTriangle className="w-4 h-4" />;
       default:
@@ -235,11 +210,11 @@ export default function OnboardingTrainingPage() {
     switch (type) {
       case 'interactive':
         return <BookOpen className="w-4 h-4" />;
-      case 'video':
+      case &apos;video:
         return <Video className="w-4 h-4" />;
-      case 'pdf':
+      case pdf&apos;:
         return <FileText className="w-4 h-4" />;
-      case 'webinar':
+      case &apos;webinar':
         return <Globe className="w-4 h-4" />;
       default:
         return <FileText className="w-4 h-4" />;
@@ -667,7 +642,7 @@ export default function OnboardingTrainingPage() {
           )}
 
           {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
+          {activeTab === analytics && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-gray-50 p-6 rounded-lg">

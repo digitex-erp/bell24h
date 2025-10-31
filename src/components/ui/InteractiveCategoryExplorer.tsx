@@ -1,4 +1,4 @@
-'use client';
+import { Building, Building2, Car, Cog, Droplets, Laptop, Shirt } from 'lucide-react';;\n'use client';
 
 import React, { useState, useEffect } from 'react';
 
@@ -32,8 +32,8 @@ export default function InteractiveCategoryExplorer() {
   const categories: Category[] = [
     {
       id: 'steel-metal',
-      name: 'Steel & Metal',
-      icon: <Building2 className='h-6 w-6' />,
+      name: 'Steel & Metal,
+      icon: <Building2 className=h-6 w-6' />,
       supplierCount: 28547,
       color: 'from-gray-600 to-gray-800',
       bgImage: 'linear-gradient(135deg, rgba(107,114,128,0.1) 0%, rgba(75,85,99,0.1) 100%)',
@@ -62,8 +62,8 @@ export default function InteractiveCategoryExplorer() {
     },
     {
       id: 'chemicals',
-      name: 'Chemicals & Pharmaceuticals',
-      icon: <Droplets className='h-6 w-6' />,
+      name: 'Chemicals & Pharmaceuticals,
+      icon: <Droplets className=h-6 w-6' />,
       supplierCount: 18923,
       color: 'from-green-600 to-green-800',
       bgImage: 'linear-gradient(135deg, rgba(34,197,94,0.1) 0%, rgba(21,128,61,0.1) 100%)',
@@ -90,8 +90,8 @@ export default function InteractiveCategoryExplorer() {
     },
     {
       id: 'automotive',
-      name: 'Automotive Parts',
-      icon: <Car className='h-6 w-6' />,
+      name: 'Automotive Parts,
+      icon: <Car className=h-6 w-6' />,
       supplierCount: 21789,
       color: 'from-red-600 to-red-800',
       bgImage: 'linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(185,28,28,0.1) 100%)',
@@ -118,8 +118,8 @@ export default function InteractiveCategoryExplorer() {
     },
     {
       id: 'construction',
-      name: 'Construction Materials',
-      icon: <Building className='h-6 w-6' />,
+      name: 'Construction Materials,
+      icon: <Building className=h-6 w-6' />,
       supplierCount: 17234,
       color: 'from-orange-600 to-orange-800',
       bgImage: 'linear-gradient(135deg, rgba(251,146,60,0.1) 0%, rgba(194,65,12,0.1) 100%)',

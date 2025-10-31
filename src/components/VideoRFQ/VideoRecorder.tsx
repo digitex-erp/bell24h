@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { Camera, Mic, Square, Play, Pause, Upload, FileText, DollarSign, Calendar } from 'lucide-react';
+import { Blob, Calendar, Camera, DollarSign, FileText, HTMLVideoElement, MediaRecorder, MediaStream, Mic, Pause, Play, Square, Upload, VideoRFQData } from 'lucide-react';;;
 
 interface VideoRFQData {
   title: string;
@@ -15,7 +15,7 @@ interface VideoRFQData {
 export default function VideoRecorder() {
   const [isRecording, setIsRecording] = useState(false);
   const [videoBlob, setVideoBlob] = useState<Blob | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string>('');
+  const [videoUrl, setVideoUrl] = useState<string>(&apos;');
   const [isPlaying, setIsPlaying] = useState(false);
   const [rfqData, setRfqData] = useState<VideoRFQData>({
     title: '',
@@ -25,7 +25,7 @@ export default function VideoRecorder() {
     category: '',
     requirements: ''
   });
-  const [currentStep, setCurrentStep] = useState<'recording' | 'details' | 'review'>('recording');
+  const [currentStep, setCurrentStep] = useState<'recording' | 'details' | 'review'>(&apos;recording');
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -332,7 +332,7 @@ export default function VideoRecorder() {
 
         <div className="flex space-x-4">
           <button
-            onClick={() => setCurrentStep('details')}
+            onClick={() => setCurrentStep(details)}
             className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
           >
             Edit Details

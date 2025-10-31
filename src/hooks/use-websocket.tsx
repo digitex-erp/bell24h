@@ -1,4 +1,4 @@
-/**
+import { UseWebSocketOptions, ConnectionStatus, WebSocketMetrics, WebSocket, WebSocketMetrics } from "lucide-react";\n/**
  * Type-safe WebSocket Hook for Bell24H.com
  *
  * Features:

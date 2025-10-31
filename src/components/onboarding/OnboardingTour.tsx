@@ -1,4 +1,4 @@
-'use client';
+import { HTMLDivElement, HTMLDivElement } from "lucide-react";\n'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';

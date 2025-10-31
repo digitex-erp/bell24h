@@ -1,4 +1,4 @@
-'use client';
+import { ShipmentData } from "lucide-react";\n'use client';
 
 import { useState } from 'react';
 
@@ -211,7 +211,7 @@ export default function ShipmentTracker() {
         <div className="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-4">
           <h3 className="font-semibold text-gray-900 mb-2">Need Help?</h3>
           <p className="text-sm text-gray-600 mb-3">
-            If you're having trouble tracking your shipment or need assistance, our support team is here to help.
+            If you&apos;re having trouble tracking your shipment or need assistance, our support team is here to help.
           </p>
           <div className="flex flex-wrap gap-3">
             <button className="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors">

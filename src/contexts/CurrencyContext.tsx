@@ -1,4 +1,4 @@
-'use client';
+import { CurrencyContextType } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, ReactNode, useState, useCallback } from 'react';
 
@@ -13,7 +13,7 @@ interface CurrencyContextType {
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
 
-const supportedCurrencies = ['USD', 'EUR', 'GBP', 'INR', 'JPY', 'AUD', 'CAD'];
+const supportedCurrencies = [&apos;USD', 'EUR', 'GBP', 'INR', 'JPY', 'AUD', 'CAD'];
 
 const mockExchangeRates: Record<string, number> = {
   USD: 1,
@@ -46,7 +46,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
         INR: new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }),
         JPY: new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }),
         AUD: new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }),
-        CAD: new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }),
+        CAD: new Intl.NumberFormat('en-CA', { style: 'currency', currency: CAD }),
       };
 
       const formatter = formatters[code] || formatters.USD;

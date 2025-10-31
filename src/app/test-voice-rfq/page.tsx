@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Mic, MicOff, Play, Square } from 'lucide-react'
+import { Button, Card, CardContent, CardHeader, CardTitle, Mic, MicOff, Play, Square } from 'lucide-react';;
 
 export default function TestVoiceRFQPage() {
   const [isRecording, setIsRecording] = useState(false)
@@ -99,7 +99,7 @@ export default function TestVoiceRFQPage() {
   const resetTest = () => {
     setTranscription('')
     setRfqData(null)
-    setError('')
+    setError()
     setRecordingTime(0)
   }
 

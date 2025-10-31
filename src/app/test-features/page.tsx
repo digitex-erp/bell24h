@@ -1,4 +1,4 @@
-'use client';
+import { ESGTestComponent, ShippingTestComponent } from "lucide-react";\n'use client';
 
 import ESGTestComponent from '@/components/esg/ESGTestComponent';
 import ShippingTestComponent from '@/components/shipping/ShippingTestComponent';
@@ -88,9 +88,9 @@ export default function TestFeaturesPage() {
             </div>
           )}
 
-          {activeTab === 'shipping' && (
+          {activeTab === 'shipping && (
             <div>
-              <div className='bg-white rounded-lg shadow-md p-6 mb-6'>
+              <div className=bg-white rounded-lg shadow-md p-6 mb-6'>
                 <h2 className='text-2xl font-semibold mb-4'>Shiprocket Integration</h2>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                   <div>
@@ -118,9 +118,9 @@ export default function TestFeaturesPage() {
             </div>
           )}
 
-          {activeTab === 'analytics' && (
+          {activeTab === 'analytics && (
             <div>
-              <div className='bg-white rounded-lg shadow-md p-6 mb-6'>
+              <div className=bg-white rounded-lg shadow-md p-6 mb-6'>
                 <h2 className='text-2xl font-semibold mb-4'>Traffic Analytics System</h2>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                   <div>

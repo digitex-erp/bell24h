@@ -1,6 +1,6 @@
 'use client';
 
-import { Award, CheckCircle, Globe, Shield, Users, Zap } from 'lucide-react';
+import { Award, CheckCircle, Globe, Icon, Shield, Users, Zap } from 'lucide-react';;;
 
 export default function EnterpriseDemoPage() {
   const demoFeatures = [

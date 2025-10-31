@@ -1,15 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  ShoppingCart, 
-  Building2, 
-  Users, 
-  Factory,
-  Settings,
-  CheckCircle,
-  AlertCircle
-} from 'lucide-react';
+import { AlertCircle, Building2, CheckCircle, Factory, Settings, ShoppingCart, UserRole, Users } from 'lucide-react';;;
 
 export type UserRole = 'buyer' | 'supplier' | 'msme' | 'manufacturer';
 
@@ -33,9 +25,9 @@ const roleConfigs: Record<UserRole, RoleConfig> = {
   buyer: {
     id: 'buyer',
     name: 'Buyer',
-    description: 'Purchase products and create RFQs',
+    description: 'Purchase products and create RFQs,
     icon: <ShoppingCart className="w-5 h-5" />,
-    color: 'bg-blue-500',
+    color: bg-blue-500',
     features: [
       'Browse product catalogs',
       'Create and manage RFQs',
@@ -61,9 +53,9 @@ const roleConfigs: Record<UserRole, RoleConfig> = {
   msme: {
     id: 'msme',
     name: 'MSME',
-    description: 'Special benefits for MSME businesses',
+    description: 'Special benefits for MSME businesses,
     icon: <Users className="w-5 h-5" />,
-    color: 'bg-purple-500',
+    color: bg-purple-500',
     features: [
       'MSME certification benefits',
       'Government scheme integration',
@@ -197,8 +189,8 @@ export default function RoleToggle({
 
 // Hook for managing role state
 export function useRoleToggle() {
-  const [currentRole, setCurrentRole] = useState<UserRole>('buyer');
-  const [availableRoles, setAvailableRoles] = useState<UserRole[]>(['buyer']);
+  const [currentRole, setCurrentRole] = useState<UserRole>(&apos;buyer);
+  const [availableRoles, setAvailableRoles] = useState<UserRole[]>([buyer']);
 
   const updateAvailableRoles = (roles: UserRole[]) => {
     setAvailableRoles(roles);

@@ -1,4 +1,4 @@
-import EscrowCreationWizard from '@/components/escrow/EscrowCreationWizard';
+import { EscrowCreationWizard } from "lucide-react";\nimport EscrowCreationWizard from '@/components/escrow/EscrowCreationWizard';
 
 export default function CreateEscrowPage() {
   return <EscrowCreationWizard />;

@@ -1,4 +1,4 @@
-'use client';
+import { AnimatePresence, HTMLAudioElement, Loader2 } from 'lucide-react';;\n'use client';
 
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -198,7 +198,7 @@ export default function CallbackBell({
                 </div>
                 <div>
                   <h3 className='font-bold text-gray-900'>Request Callback</h3>
-                  <p className='text-sm text-gray-600'>We'll call you within 30 minutes</p>
+                  <p className='text-sm text-gray-600'>We&apos;ll call you within 30 minutes</p>
                 </div>
               </div>
               <button

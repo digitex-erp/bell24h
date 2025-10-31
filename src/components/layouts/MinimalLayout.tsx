@@ -1,4 +1,4 @@
-'use client';
+import { MinimalSidebar, MinimalHeader } from "lucide-react";\n'use client';
 
 import React from 'react';
 import MinimalSidebar from '../MinimalSidebar';

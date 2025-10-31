@@ -1,4 +1,4 @@
-'use client';
+import { PaymentSuccessData, Link, Link, Link, Suspense, PaymentSuccessContent } from "lucide-react";\n'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -169,9 +169,9 @@ function PaymentSuccessContent() {
 
         {/* Next Steps */}
         <div className='bg-blue-50 rounded-lg p-8 mb-8'>
-          <h2 className='text-xl font-semibold text-gray-900 mb-4'>What's Next?</h2>
+          <h2 className='text-xl font-semibold text-gray-900 mb-4'>Whats Next?</h2>
 
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+          <div className=grid grid-cols-1 md:grid-cols-3 gap-6'>
             <div className='text-center'>
               <div className='mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4'>
                 <svg
@@ -267,9 +267,9 @@ function PaymentSuccessContent() {
         {/* Welcome Message */}
         <div className='text-center'>
           <p className='text-gray-600 mb-4'>
-            Thank you for choosing Bell24H! We're excited to help you grow your business.
+            Thank you for choosing Bell24H! Were excited to help you grow your business.
           </p>
-          <div className='flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-500'>
+          <div className=flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-500'>
             <span>📧 support@bell24h.com</span>
             <span>📞 +91-1800-BELL24</span>
             <span>💬 Live Chat Available</span>

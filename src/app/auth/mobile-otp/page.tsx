@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Phone, MessageSquare, Shield } from 'lucide-react';
+import { ArrowLeft, Button, Card, CardContent, CardHeader, CardTitle, Input, Link, MessageSquare, Phone, Shield } from 'lucide-react';;;
 import Link from 'next/link';
 
 export default function MobileOTPLoginPage() {
@@ -239,7 +239,7 @@ export default function MobileOTPLoginPage() {
                     disabled={loading}
                     className="text-sm text-indigo-600 hover:text-indigo-800"
                   >
-                    Didn't receive OTP? Resend
+                    Didn&apos;t receive OTP? Resend
                   </button>
                 </div>
               </form>

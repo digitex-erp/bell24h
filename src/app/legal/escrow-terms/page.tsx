@@ -1,4 +1,4 @@
-'use client';
+import { Header } from "lucide-react";\n'use client';
 import Header from '@/components/Header';
 
 export default function EscrowTermsPage() {

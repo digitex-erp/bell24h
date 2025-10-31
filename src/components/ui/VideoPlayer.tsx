@@ -1,4 +1,4 @@
-import React from 'react';
+import { VideoPlayerProps } from "lucide-react";\nimport React from 'react';
 
 interface VideoPlayerProps {
   src: string;
@@ -11,7 +11,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   src,
   className = '',
   controls = true,
-  preload = 'metadata',
+  preload = metadata,
 }) => {
   return <video src={src} className={className} controls={controls} preload={preload} />;
 };

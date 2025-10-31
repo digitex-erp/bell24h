@@ -1,4 +1,4 @@
-'use client';
+import { HTMLDivElement } from "lucide-react";\n'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
@@ -274,8 +274,8 @@ export default function FeatureTooltips({
   return (
     <>
       {/* Backdrop for auto tooltips */}
-      {currentConfig.trigger === 'auto' && (
-        <div className='fixed inset-0 bg-black bg-opacity-30 z-40' onClick={hideTooltip} />
+      {currentConfig.trigger === 'auto && (
+        <div className=fixed inset-0 bg-black bg-opacity-30 z-40' onClick={hideTooltip} />
       )}
 
       {/* Tooltip */}

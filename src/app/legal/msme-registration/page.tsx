@@ -4,20 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Building2, 
-  FileText, 
-  Shield, 
-  CheckCircle, 
-  AlertCircle,
-  Download,
-  Upload,
-  Info,
-  Users,
-  Home,
-  Factory,
-  Briefcase
-} from 'lucide-react';
+import { AlertCircle, Badge, Briefcase, Building2, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Download, Factory, FileText, Header, Home, Info, Shield, Tabs, TabsContent, TabsList, TabsTrigger, Upload, Users } from 'lucide-react';;;
 import Header from '@/components/Header';
 
 export default function MSMERegistrationPage() {
@@ -90,7 +77,7 @@ export default function MSMERegistrationPage() {
                         <h3 className="font-semibold text-green-800">Why Udyam Aadhaar is Mandatory?</h3>
                         <p className="text-green-700 mt-1">
                           Udyam Aadhaar is the official MSME registration certificate issued by the Government of India. 
-                          It's mandatory for all MSMEs to avail government benefits, subsidies, and participate in tenders.
+                          It&apos;s mandatory for all MSMEs to avail government benefits, subsidies, and participate in tenders.
                         </p>
                       </div>
                     </div>
@@ -178,10 +165,10 @@ export default function MSMERegistrationPage() {
                       <AlertCircle className="h-5 w-5 text-orange-600 mt-0.5" />
                       <div>
                         <h3 className="font-semibold text-orange-800">What is URD Registration?</h3>
-                        <p className="text-orange-700 mt-1">
-                          URD is NOT a certificate - it's a simple registration for businesses that don't require GST registration. 
+                        <p className="text-orange-700 mt-1"
+                          URD is NOT a certificate - it&apos;s a simple registration for businesses that don&apos;t require GST registration. 
                           It provides basic business recognition without formal certificates. Suitable for micro and mini sectors with limited turnover.
-                        </p>
+                        /p>
                       </div>
                     </div>
                   </div>

@@ -360,7 +360,7 @@ export default function AuthTest() {
               className={`w-3 h-3 rounded-full mr-2 ${
                 testResults.some(r => r.test === 'Security Headers' && r.status === 'pass')
                   ? 'bg-green-500'
-                  : 'bg-gray-300'
+                  : bg-gray-300
               }`}
             ></span>
             Security Headers

@@ -1,6 +1,6 @@
 'use client';
 
-import { Clock, Eye, TrendingUp, Users } from 'lucide-react';
+import { Clock, Eye, TrendingUp, Users, Icon, StatCard } from "lucide-react";;
 import { useState } from 'react';
 
 export default function TrafficPage() {
@@ -107,9 +107,9 @@ export default function TrafficPage() {
               <select
                 value={timeRange}
                 onChange={e => setTimeRange(e.target.value)}
-                className='px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+                className='px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
               >
-                <option value='1d'>Last 24 hours</option>
+                <option value=1d'>Last 24 hours</option>
                 <option value='7d'>Last 7 days</option>
                 <option value='30d'>Last 30 days</option>
                 <option value='90d'>Last 90 days</option>

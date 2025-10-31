@@ -3,15 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { 
-  Send,
-  Bot,
-  User,
-  Users,
-  MessageSquare,
-  DollarSign,
-  Clock
-} from 'lucide-react';
+import { Bot, Button, Clock, DollarSign, HTMLDivElement, Input, MessageSquare, Send, User, Users } from 'lucide-react';;;
 
 interface NegotiationMessage {
   id: string;
@@ -67,8 +59,8 @@ export default function NegotiationChat({
   const getSenderIcon = (sender: string) => {
     switch (sender) {
       case 'buyer': return <User className="w-4 h-4" />;
-      case 'supplier': return <Users className="w-4 h-4" />;
-      case 'ai': return <Bot className="w-4 h-4" />;
+      case &apos;supplier: return <Users className="w-4 h-4" />;
+      case ai&apos;: return <Bot className="w-4 h-4" />;
       default: return <User className="w-4 h-4" />;
     }
   };

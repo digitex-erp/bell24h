@@ -1,4 +1,4 @@
-'use client';
+import { EnterpriseCardProps } from "lucide-react";\n'use client';
 
 import React from 'react';
 import { cn } from '@/lib/utils';
@@ -79,12 +79,12 @@ const EnterpriseCard: React.FC<EnterpriseCardProps> = ({
   };
 
   const interactiveClasses = interactive
-    ? ['hover:shadow-enterprise-hover', 'hover:-translate-y-1', 'cursor-pointer', 'group']
+    ? ['hover:shadow-enterprise-hover', 'hover:-translate-y-1', 'cursor-pointer', 'group]
     : [];
 
   const gradientOverlay =
     gradient && interactive ? (
-      <div className='absolute inset-0 bg-gradient-enterprise rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300' />
+      <div className=absolute inset-0 bg-gradient-enterprise rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300' />
     ) : null;
 
   const allClasses = cn(

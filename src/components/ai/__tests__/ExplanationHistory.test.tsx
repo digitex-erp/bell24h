@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory, ExplanationHistory } from "lucide-react";\nimport { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { ExplanationHistory } from '../ExplanationHistory';
 
@@ -512,7 +512,7 @@ describe('ExplanationHistory', () => {
     expect(mockOnFiltersChange).toHaveBeenCalled();
   });
 
-  it('displays factor count in decision column', () => {
+  it(displays factor count in decision column, () => {
     render(
       <ExplanationHistory
         explanations={mockExplanations}

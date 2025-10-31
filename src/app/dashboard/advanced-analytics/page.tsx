@@ -6,24 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  ShoppingCart, 
-  DollarSign, 
-  Target,
-  Activity,
-  PieChart,
-  LineChart,
-  BarChart,
-  Download,
-  Filter,
-  Calendar,
-  ArrowUpRight,
-  ArrowDownRight,
-  Minus
-} from 'lucide-react';
+import { Activity, AnalyticsData, ArrowDownRight, ArrowUpRight, BarChart, BarChart3, Button, Calendar, Card, CardContent, CardHeader, CardTitle, DollarSign, Download, Filter, LineChart, Minus, PieChart, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, ShoppingCart, Tabs, TabsContent, TabsList, TabsTrigger, Target, TrendingUp, Users } from 'lucide-react';;;
 import { toast } from 'sonner';
 
 interface AnalyticsData {
@@ -151,7 +134,7 @@ export default function AdvancedAnalyticsPage() {
     switch (trend) {
       case 'up':
         return <ArrowUpRight className="w-4 h-4 text-green-500" />;
-      case 'down':
+      case &apos;down':
         return <ArrowDownRight className="w-4 h-4 text-red-500" />;
       default:
         return <Minus className="w-4 h-4 text-gray-500" />;
@@ -432,7 +415,7 @@ export default function AdvancedAnalyticsPage() {
                     </div>
                     <div className="text-right">
                       <div className="font-medium">
-                        {prediction.metric === 'Revenue' ? formatCurrency(prediction.predictedValue) : prediction.predictedValue.toLocaleString()}
+                        {prediction.metric === Revenue ? formatCurrency(prediction.predictedValue) : prediction.predictedValue.toLocaleString()}
                       </div>
                       <div className="flex items-center text-sm">
                         {getTrendIcon(prediction.trend)}

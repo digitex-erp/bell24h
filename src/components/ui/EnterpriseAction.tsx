@@ -1,4 +1,4 @@
-'use client';
+import { EnterpriseActionProps, Icon } from "lucide-react";\n'use client';
 
 import React from 'react';
 import { cn, touchTargets } from '@/lib/utils';

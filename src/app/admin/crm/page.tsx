@@ -1,27 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Building2,
-  Calendar,
-  Mail,
-  Phone,
-  Plus,
-  Search,
-  Star,
-  TrendingUp,
-  Users,
-  Filter,
-  Download,
-  Eye,
-  Edit,
-  Trash2,
-  MessageSquare,
-  FileText,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-} from 'lucide-react';
+import { AlertCircle, Building2, Calendar, CheckCircle, Clock, Download, Edit, Eye, FileText, Filter, Mail, MessageSquare, Phone, Plus, Search, Star, Trash2, TrendingUp, Users } from 'lucide-react';;
 
 // Mock CRM data
 const mockCRMData = {

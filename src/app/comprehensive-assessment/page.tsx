@@ -1,58 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-  Users, 
-  ShoppingCart, 
-  Building2, 
-  FileText, 
-  MessageSquare, 
-  BarChart3, 
-  Upload, 
-  Search, 
-  Zap,
-  CheckCircle,
-  AlertCircle,
-  XCircle,
-  Star,
-  TrendingUp,
-  Camera,
-  Globe,
-  Shield,
-  Cpu,
-  Brain,
-  FileImage,
-  PieChart,
-  Image,
-  Download,
-  Wallet,
-  CreditCard,
-  Database,
-  Server,
-  Lock,
-  Eye,
-  Settings,
-  Target,
-  Award,
-  Calendar,
-  Clock,
-  DollarSign,
-  Percent,
-  Activity,
-  Layers,
-  Palette,
-  Video,
-  Mic,
-  Phone,
-  Mail,
-  MapPin,
-  Truck,
-  Package,
-  Factory,
-  Wrench,
-  Cog,
-  Zap as Lightning
-} from 'lucide-react';
+import { Activity, AlertCircle, Award, BarChart3, Brain, Building2, Calendar, Camera, CheckCircle, Clock, Cog, Cpu, CreditCard, Database, DollarSign, Download, Eye, Factory, FileImage, FileText, Globe, Image, Layers, Lock, Mail, MapPin, MessageSquare, Mic, Package, Palette, Percent, Phone, PieChart, Search, Server, Settings, Shield, ShoppingCart, Star, Target, TrendingUp, Truck, Upload, Users, Video, Wallet, Wrench, XCircle, Zap, Zap as Lightning } from 'lucide-react';;
 
 const Bell24hComprehensiveAssessment = () => {
   const [selectedTab, setSelectedTab] = useState('current-status');
@@ -71,9 +20,9 @@ const Bell24hComprehensiveAssessment = () => {
       { 
         feature: 'Digital Wallet System', 
         status: 'complete', 
-        description: 'RazorpayX integration with fund management and transactions',
+        description: 'RazorpayX integration with fund management and transactions,
         icon: <Wallet className="w-5 h-5" />,
-        url: '/dashboard/wallet'
+        url: /dashboard/wallet'
       },
       { 
         feature: 'Database Schema', 
@@ -85,9 +34,9 @@ const Bell24hComprehensiveAssessment = () => {
       { 
         feature: 'Payment Processing', 
         status: 'complete', 
-        description: 'Multiple payment methods via Razorpay integration',
+        description: 'Multiple payment methods via Razorpay integration,
         icon: <CreditCard className="w-5 h-5" />,
-        url: '/api/payment'
+        url: /api/payment'
       },
       { 
         feature: 'API Infrastructure', 
@@ -99,9 +48,9 @@ const Bell24hComprehensiveAssessment = () => {
       { 
         feature: 'Compliance Documents', 
         status: 'complete', 
-        description: 'RBI-compliant terms, privacy policy, and AML documentation',
+        description: 'RBI-compliant terms, privacy policy, and AML documentation,
         icon: <FileText className="w-5 h-5" />,
-        url: '/legal'
+        url: /legal'
       },
       { 
         feature: 'Production Deployment', 
@@ -116,9 +65,9 @@ const Bell24hComprehensiveAssessment = () => {
         feature: 'Product Showcase System', 
         status: 'missing', 
         priority: 'critical', 
-        description: 'Multi-media product displays with 360° views, videos, and AR',
+        description: 'Multi-media product displays with 360° views, videos, and AR,
         icon: <Image className="w-5 h-5" />,
-        impact: 'High user engagement and conversion rates'
+        impact: High user engagement and conversion rates'
       },
       { 
         feature: 'Company Profile Management', 
@@ -132,9 +81,9 @@ const Bell24hComprehensiveAssessment = () => {
         feature: 'RFQ System with AI', 
         status: 'missing', 
         priority: 'high', 
-        description: 'Request for Quote with AI-powered negotiation and supplier matching',
+        description: 'Request for Quote with AI-powered negotiation and supplier matching,
         icon: <Brain className="w-5 h-5" />,
-        impact: 'Automated procurement and cost optimization'
+        impact: Automated procurement and cost optimization'
       },
       { 
         feature: 'Traffic-Based Pricing Plans', 
@@ -148,9 +97,9 @@ const Bell24hComprehensiveAssessment = () => {
         feature: 'Advanced Analytics Dashboard', 
         status: 'missing', 
         priority: 'medium', 
-        description: 'Business intelligence, performance metrics, and predictive analytics',
+        description: 'Business intelligence, performance metrics, and predictive analytics,
         icon: <BarChart3 className="w-5 h-5" />,
-        impact: 'Data-driven decision making and insights'
+        impact: Data-driven decision making and insights'
       },
       { 
         feature: 'AI Visual Generation', 
@@ -420,11 +369,11 @@ const Bell24hComprehensiveAssessment = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'complete':
+      case 'complete:
         return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case 'missing':
+      case missing&apos;:
         return <XCircle className="w-5 h-5 text-red-500" />;
-      case 'partial':
+      case &apos;partial':
         return <AlertCircle className="w-5 h-5 text-yellow-500" />;
       default:
         return <AlertCircle className="w-5 h-5 text-gray-500" />;

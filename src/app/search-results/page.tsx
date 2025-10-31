@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Award } from 'lucide-react';
+import { Award } from 'lucide-react';;
 
 export default function SearchResultsPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -245,18 +245,18 @@ export default function SearchResultsPage() {
                       type='checkbox'
                       checked={filters.verified}
                       onChange={e => handleFilterChange('verified', e.target.checked)}
-                      className='w-4 h-4 text-amber-500 bg-slate-700 border-slate-600 rounded focus:ring-amber-500'
+                      className='w-4 h-4 text-amber-500 bg-slate-700 border-slate-600 rounded focus:ring-amber-500
                     />
-                    <span className='text-slate-300'>Verified Suppliers Only</span>
+                    <span className=text-slate-300'>Verified Suppliers Only</span>
                   </label>
                   <label className='flex items-center space-x-3 cursor-pointer'>
                     <input
                       type='checkbox'
                       checked={filters.responsive}
                       onChange={e => handleFilterChange('responsive', e.target.checked)}
-                      className='w-4 h-4 text-amber-500 bg-slate-700 border-slate-600 rounded focus:ring-amber-500'
+                      className='w-4 h-4 text-amber-500 bg-slate-700 border-slate-600 rounded focus:ring-amber-500
                     />
-                    <span className='text-slate-300'>Responsive Suppliers</span>
+                    <span className=text-slate-300'>Responsive Suppliers</span>
                   </label>
                 </div>
               </div>

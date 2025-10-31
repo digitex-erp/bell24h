@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { BarChart3, TrendingUp, Users, DollarSign, Activity, PieChart } from 'lucide-react';
+import { Activity, BarChart3, ChartCard, DollarSign, Icon, KPICard, PieChart, TrendingUp, Users } from 'lucide-react';;;
 
 // Mock data for analytics
 const analyticsData = {

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { ScrollBar } from "lucide-react";\nimport * as React from 'react';
 
 import { cn } from '@/lib/utils';
 

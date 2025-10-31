@@ -224,10 +224,10 @@ export default function PaymentFlow({
 
   const getStepIcon = (step: PaymentStep) => {
     switch (step.status) {
-      case 'completed':
+      case 'completed:
         return (
           <svg
-            className='h-6 w-6 text-green-600'
+            className=h-6 w-6 text-green-600'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'
@@ -235,14 +235,14 @@ export default function PaymentFlow({
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
           </svg>
         );
-      case 'current':
+      case &apos;current:
         return (
-          <div className='h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin'></div>
+          <div className=h-6 w-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin'></div>
         );
-      case 'error':
+      case &apos;error:
         return (
           <svg
-            className='h-6 w-6 text-red-600'
+            className=h-6 w-6 text-red-600'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'
@@ -278,7 +278,7 @@ export default function PaymentFlow({
       {/* Header */}
       <div className='text-center mb-8'>
         <h2 className='text-2xl font-bold text-gray-900 mb-2'>Complete Your Payment</h2>
-        <p className='text-gray-600'>You're just a few steps away from accessing Bell24H</p>
+        <p className='text-gray-600'>You&apos;re just a few steps away from accessing Bell24H</p>
       </div>
 
       {/* Plan Summary */}

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { DialogPortal, DialogOverlay, HTMLDivElement, HTMLDivElement } from "lucide-react";\nimport * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -60,7 +60,7 @@ const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
     {...props}
   />
 );
-DialogFooter.displayName = 'DialogFooter';
+DialogFooter.displayName = &apos;DialogFooter';
 
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,

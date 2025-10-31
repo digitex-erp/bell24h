@@ -1,32 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  BarChart3,
-  Brain,
-  Calendar,
-  CreditCard,
-  DollarSign,
-  FileText,
-  Globe,
-  Heart,
-  Home,
-  MessageCircle,
-  Mic,
-  Package,
-  Settings,
-  Shield,
-  Star,
-  TrendingUp,
-  Truck,
-  Users,
-  Video,
-  Wallet,
-  Zap,
-  PlusCircle,
-  Lightbulb,
-  Activity,
-} from 'lucide-react';
+import { AISummaryPanel, Activity, BarChart3, Brain, Calendar, CreditCard, DollarSign, FileText, Globe, Heart, Home, Icon, KPICard, Lightbulb, MessageCircle, Mic, Package, PlusCircle, RFQActivityChart, Settings, Shield, Star, TrendingUp, Truck, Users, Video, Wallet, Zap } from 'lucide-react';;;
 // Remove UserDashboardLayout import - we'll use the main layout from layout.tsx
 
 // Mock data for live dashboard
@@ -96,7 +71,7 @@ const AISummaryPanel = ({ insights }) => (
     <div className="flex items-center justify-between mb-4">
       <h3 className="text-lg font-semibold text-gray-900 flex items-center">
         <Lightbulb className="w-5 h-5 mr-2 text-blue-600" />
-        Today's AI Insights
+        Today&apos;s AI Insights
       </h3>
       <a 
         href="/dashboard/ai-insights"
@@ -239,7 +214,7 @@ export default function UserDashboard() {
               Welcome back, {user.name}! 👋
             </h1>
             <p className="text-gray-600 mt-2">
-              Here's what's happening with your B2B activities today
+              Here&apos;s what's happening with your B2B activities today
             </p>
           </div>
           <div className="text-right">

@@ -1,4 +1,4 @@
-'use client';
+import { RFQData, HTMLVideoElement, HTMLAudioElement, MediaRecorder, HTMLInputElement } from "lucide-react";\n'use client';
 import { useState, useRef, useEffect } from 'react';
 
 interface RFQData {
@@ -29,7 +29,7 @@ interface RFQSystemProps {
 }
 
 export default function RFQSystem({ productId, supplierId, onRFQSubmit }: RFQSystemProps) {
-  const [rfqType, setRfqType] = useState<'VIDEO' | 'VOICE' | 'TEXT'>('TEXT');
+  const [rfqType, setRfqType] = useState<'VIDEO' | 'VOICE' | 'TEXT'>(&apos;TEXT');
   const [isRecording, setIsRecording] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [rfqData, setRfqData] = useState<Partial<RFQData>>({
@@ -540,7 +540,7 @@ export default function RFQSystem({ productId, supplierId, onRFQSubmit }: RFQSys
             unit: 'pieces',
             expectedPrice: 0,
             deliveryLocation: '',
-            deliveryTimeframe: '30 days',
+            deliveryTimeframe: 30 days,
             specifications: {},
             attachments: []
           })}

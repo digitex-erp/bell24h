@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, Loader2, Phone } from 'lucide-react';
+import { ArrowRight, Loader2, Phone } from 'lucide-react';;
 import { useState } from 'react';
 
 interface PhoneInputProps {

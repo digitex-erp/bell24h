@@ -1,4 +1,4 @@
-'use client';
+import { AIInsightsDashboard, ComponentLoadingState, Link, Loader2, PredictiveAnalytics, RiskScoringDashboard, Suspense, VoiceRFQComponent } from 'lucide-react';;\n'use client';
 
 import React, { useState, Suspense } from 'react';
 import dynamic from 'next/dynamic';
@@ -140,19 +140,19 @@ export function FeatureCard({
             <AIInsightsDashboard />
           </Suspense>
         );
-      case 'predictive-analytics':
+      case &apos;predictive-analytics':
         return (
           <Suspense fallback={<ComponentLoadingState />}>
             <PredictiveAnalytics />
           </Suspense>
         );
-      case 'voice-rfq':
+      case &apos;voice-rfq':
         return (
           <Suspense fallback={<ComponentLoadingState />}>
             <VoiceRFQComponent />
           </Suspense>
         );
-      case 'risk-scoring':
+      case &apos;risk-scoring':
         return (
           <Suspense fallback={<ComponentLoadingState />}>
             <RiskScoringDashboard />
@@ -204,9 +204,9 @@ export function FeatureCard({
               )}
               <button
                 onClick={() => setIsExpanded(false)}
-                className='text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100'
+                className='text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100
               >
-                <svg className='h-5 w-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <svg className=h-5 w-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path
                     strokeLinecap='round'
                     strokeLinejoin='round'
@@ -349,10 +349,10 @@ export function QuickStatsCard({
     red: 'bg-red-50 text-red-600',
   };
 
-  const changeColor = change.startsWith('+') ? 'text-green-600' : 'text-red-600';
+  const changeColor = change.startsWith('+') ? 'text-green-600' : 'text-red-600;
 
   return (
-    <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow'>
+    <div className=bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow'>
       <div className='flex items-center justify-between'>
         <div className='flex-1'>
           <p className='text-sm font-medium text-gray-600 mb-1'>{label}</p>

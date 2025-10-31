@@ -1,4 +1,4 @@
-'use client';
+import { HTMLAudioElement } from "lucide-react";\n'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 

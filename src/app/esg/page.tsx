@@ -1,7 +1,7 @@
 'use client';
 
 import MinimalLayout from '@/components/layouts/MinimalLayout';
-import { Brain, Leaf, Award } from 'lucide-react';
+import { Award, Brain, Leaf, MinimalLayout } from 'lucide-react';;;
 import { useState } from 'react';
 
 interface ESGMetrics {
@@ -32,8 +32,8 @@ interface CompanyData {
 }
 
 export default function MinimalESGDashboard() {
-  const [selectedCompany, setSelectedCompany] = useState<string>('tata-steel');
-  const [timeframe, setTimeframe] = useState<string>('12M');
+  const [selectedCompany, setSelectedCompany] = useState<string>(&apos;tata-steel);
+  const [timeframe, setTimeframe] = useState<string>(12M&apos;);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
 
@@ -151,19 +151,19 @@ export default function MinimalESGDashboard() {
 
   const getRiskBadge = (level: string) => {
     switch (level) {
-      case 'low':
-        return <span className='px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded'>Low Risk</span>;
-      case 'medium':
+      case 'low:
+        return <span className=px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded'>Low Risk</span>;
+      case &apos;medium:
         return (
-          <span className='px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded'>Medium Risk</span>
+          <span className=px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded'>Medium Risk</span>
         );
-      case 'high':
+      case &apos;high:
         return (
-          <span className='px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded'>High Risk</span>
+          <span className=px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded'>High Risk</span>
         );
-      case 'critical':
+      case &apos;critical:
         return (
-          <span className='px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded'>Critical Risk</span>
+          <span className=px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded'>Critical Risk</span>
         );
       default:
         return <span className='px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded'>Unknown</span>;
@@ -172,9 +172,9 @@ export default function MinimalESGDashboard() {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving':
+      case 'improving:
         return <span>📈</span>;
-      case 'declining':
+      case declining&apos;:
         return <span>📈</span>;
       default:
         return <span>📊</span>;
@@ -246,9 +246,9 @@ export default function MinimalESGDashboard() {
               <select
                 value={selectedCompany}
                 onChange={e => setSelectedCompany(e.target.value)}
-                className='w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600'
+                className='w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600
               >
-                <option value='tata-steel'>Tata Steel Limited</option>
+                <option value=tata-steel'>Tata Steel Limited</option>
                 <option value='infosys'>Infosys Limited</option>
                 <option value='reliance'>Reliance Industries Ltd</option>
               </select>
@@ -259,9 +259,9 @@ export default function MinimalESGDashboard() {
               <select
                 value={timeframe}
                 onChange={e => setTimeframe(e.target.value)}
-                className='w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600'
+                className='w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600
               >
-                <option value='1M'>1 Month</option>
+                <option value=1M'>1 Month</option>
                 <option value='3M'>3 Months</option>
                 <option value='6M'>6 Months</option>
                 <option value='12M'>12 Months</option>

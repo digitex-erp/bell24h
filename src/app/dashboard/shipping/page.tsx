@@ -1,4 +1,4 @@
-'use client';
+import { TabType, ShippingCalculator, ShipmentTracker, OrdersTab, AnalyticsTab, ShippingCalculator } from "lucide-react";\n'use client';
 
 import ShipmentTracker from '@/components/shipping/ShipmentTracker';
 import ShippingCalculator from '@/components/shipping/ShippingCalculator';
@@ -18,13 +18,13 @@ export default function ShippingDashboard() {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'calculator':
+      case 'calculator:
         return <ShippingCalculator />;
-      case 'tracker':
+      case tracker&apos;:
         return <ShipmentTracker />;
-      case 'orders':
+      case &apos;orders:
         return <OrdersTab />;
-      case 'analytics':
+      case analytics&apos;:
         return <AnalyticsTab />;
       default:
         return <ShippingCalculator />;

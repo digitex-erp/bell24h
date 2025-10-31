@@ -67,10 +67,10 @@ export default function MarketingCampaign({ onEmailCapture }: MarketingCampaignP
         <span>✅</span>
         <h3 className='text-2xl font-bold text-white mb-2'>Welcome to Bell24H!</h3>
         <p className='text-slate-300 mb-4'>
-          Thank you for joining the future of B2B procurement. We'll be in touch with exclusive
+          Thank you for joining the future of B2B procurement. Well be in touch with exclusive
           early access.
         </p>
-        <div className='flex items-center justify-center space-x-4 text-sm text-slate-400'>
+        <div className=flex items-center justify-center space-x-4 text-sm text-slate-400'>
           <div className='flex items-center'>
             <span>✅</span>
             <span>Early Access Granted</span>
@@ -90,7 +90,7 @@ export default function MarketingCampaign({ onEmailCapture }: MarketingCampaignP
       <div className='text-center mb-8'>
         <h2 className='text-3xl md:text-4xl font-bold text-white mb-4'>Join the B2B Revolution</h2>
         <p className='text-xl text-slate-300 mb-6'>
-          Get early access to the world's most advanced procurement platform
+          Get early access to the world&apos;s most advanced procurement platform
         </p>
 
         {/* Social Proof Metrics */}
@@ -114,12 +114,12 @@ export default function MarketingCampaign({ onEmailCapture }: MarketingCampaignP
               placeholder='Enter your work email'
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none'
+              className='w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none
               required
             />
           </div>
           <button
-            type='submit'
+            type=submit'
             disabled={isSubmitting}
             className='bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3 rounded-xl hover:from-amber-600 hover:to-orange-600 font-semibold transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center'
           >

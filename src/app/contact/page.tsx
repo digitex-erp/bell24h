@@ -3,16 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock, 
-  MessageSquare,
-  Send,
-  Users,
-  Headphones
-} from 'lucide-react';
+import { Button, Card, CardContent, CardHeader, CardTitle, Clock, Headphones, Input, Mail, MapPin, MessageSquare, Phone, Send, Textarea, Users } from 'lucide-react';;;
 
 export const metadata: Metadata = {
   title: 'Contact Us - Bell24h | Get in Touch with Our Team',
@@ -30,7 +21,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-xl text-indigo-100 max-w-3xl mx-auto">
-            Get in touch with our team. We're here to help you succeed with your B2B procurement needs.
+            Get in touch with our team. We&apos;re here to help you succeed with your B2B procurement needs.
           </p>
         </div>
       </section>
@@ -67,7 +58,7 @@ export default function ContactPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Email Support</h3>
                 <p className="text-gray-600 mb-4">
-                  Send us your queries and we'll respond quickly
+                  Send us your queries and we&apos;ll respond quickly
                 </p>
                 <div className="text-lg font-semibold text-emerald-600">
                   digitex.studio@gmail.com
@@ -109,7 +100,7 @@ export default function ContactPage() {
                 Send us a Message
               </h2>
               <p className="text-lg text-gray-600">
-                Have a question or need assistance? Fill out the form below and we'll get back to you.
+                Have a question or need assistance? Fill out the form below and we&apos;ll get back to you.
             </p>
           </div>
 

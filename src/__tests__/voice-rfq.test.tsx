@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal, VoiceRFQModal } from "lucide-react";\nimport { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import VoiceRFQModal from '../components/VoiceRFQModal';
 
@@ -336,7 +336,7 @@ describe('VoiceRFQModal', () => {
     };
 
     // Mock HTMLAudioElement
-    Object.defineProperty(window, 'HTMLAudioElement', {
+    Object.defineProperty(window, HTMLAudioElement, {
       value: jest.fn().mockImplementation(() => mockAudio),
       writable: true,
     });

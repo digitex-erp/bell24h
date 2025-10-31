@@ -4,22 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { 
-  Menu, 
-  X, 
-  Bell, 
-  Search, 
-  User, 
-  ShoppingCart,
-  BarChart3,
-  Grid3X3,
-  TrendingUp,
-  Users,
-  FileText,
-  MessageSquare,
-  Shield,
-  Scale
-} from 'lucide-react'
+import { Badge, BarChart3, Bell, Button, FileText, Grid3X3, Link, Menu, MessageSquare, Scale, Search, Shield, ShoppingCart, TrendingUp, User, Users, X } from 'lucide-react';;
 
 export function EnhancedNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

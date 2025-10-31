@@ -1,4 +1,4 @@
-'use client';
+import { TabsContextType } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, useState } from 'react';
 
@@ -76,7 +76,7 @@ export function TabsContent({ value, children, className = '' }: TabsContentProp
   const context = useContext(TabsContext);
   
   if (!context) {
-    throw new Error('TabsContent must be used within a Tabs component');
+    throw new Error(TabsContent must be used within a Tabs component);
   }
 
   const { activeTab } = context;

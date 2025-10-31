@@ -1,21 +1,6 @@
 'use client';
 
-import {
-  BarChart3,
-  Brain,
-  Building2,
-  FileText,
-  Leaf,
-  Mic,
-  Settings,
-  Shield,
-  ShoppingCart,
-  TrendingUp,
-  Truck,
-  User,
-  Video,
-  Wallet,
-} from 'lucide-react';
+import { BarChart3, Brain, Building2, FileText, Leaf, Mic, Settings, Shield, ShoppingCart, TrendingUp, Truck, User, Video, Wallet, , Link, Icon, SidebarContent } from "lucide-react";;
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';

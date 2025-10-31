@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, Brain, Loader } from 'lucide-react';;\n'use client';
 
 import React, { useState, useEffect } from 'react';
 
@@ -227,8 +227,8 @@ export default function AIExplainabilityPanel({
         ) : explanation ? (
           <div>
             {/* Overview Tab */}
-            {activeTab === 'overview' && (
-              <div className='space-y-6'>
+            {activeTab === 'overview && (
+              <div className=space-y-6'>
                 {/* Combined Confidence */}
                 <div className='bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-lg'>
                   <div className='flex items-center justify-between mb-3'>
@@ -311,8 +311,8 @@ export default function AIExplainabilityPanel({
             )}
 
             {/* SHAP Tab */}
-            {activeTab === 'shap' && explanation.shap && (
-              <div className='space-y-4'>
+            {activeTab === 'shap && explanation.shap && (
+              <div className=space-y-4'>
                 <div className='flex items-center justify-between'>
                   <h4 className='font-semibold text-gray-900'>SHAP Feature Attribution</h4>
                   <div className='text-sm text-gray-500'>
@@ -334,8 +334,8 @@ export default function AIExplainabilityPanel({
             )}
 
             {/* LIME Tab */}
-            {activeTab === 'lime' && explanation.lime && (
-              <div className='space-y-4'>
+            {activeTab === 'lime && explanation.lime && (
+              <div className=space-y-4'>
                 <div className='flex items-center justify-between'>
                   <h4 className='font-semibold text-gray-900'>LIME Local Explanation</h4>
                   <div className='text-sm text-gray-500'>
@@ -357,8 +357,8 @@ export default function AIExplainabilityPanel({
             )}
 
             {/* Perplexity Tab */}
-            {activeTab === 'perplexity' && (
-              <div className='space-y-4'>
+            {activeTab === 'perplexity && (
+              <div className=space-y-4'>
                 <h4 className='font-semibold text-gray-900'>Detailed Perplexity Analysis</h4>
 
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>

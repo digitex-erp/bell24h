@@ -1,25 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  CreditCard,
-  DollarSign,
-  TrendingUp,
-  TrendingDown,
-  CheckCircle,
-  XCircle,
-  Clock,
-  AlertTriangle,
-  Search,
-  Filter,
-  Download,
-  Eye,
-  Settings,
-  RefreshCw,
-  Shield,
-  Zap,
-  Globe,
-} from 'lucide-react';
+import { AlertTriangle, CheckCircle, Clock, CreditCard, DollarSign, Download, Eye, Filter, Globe, RefreshCw, Search, Settings, Shield, TrendingDown, TrendingUp, XCircle, Zap } from 'lucide-react';;
 
 // Mock payment gateway data
 const mockPaymentData = {
@@ -150,12 +132,12 @@ export default function PaymentGatewaysPage() {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'active':
-      case 'success':
+      case 'success:
         return <CheckCircle className="w-4 h-4" />;
-      case 'inactive':
+      case inactive&apos;:
       case 'failed':
         return <XCircle className="w-4 h-4" />;
-      case 'pending':
+      case &apos;pending':
         return <Clock className="w-4 h-4" />;
       default:
         return <AlertTriangle className="w-4 h-4" />;
@@ -166,9 +148,9 @@ export default function PaymentGatewaysPage() {
     switch (method) {
       case 'card':
         return <CreditCard className="w-4 h-4" />;
-      case 'upi':
+      case &apos;upi:
         return <Zap className="w-4 h-4" />;
-      case 'netbanking':
+      case netbanking&apos;:
         return <Shield className="w-4 h-4" />;
       default:
         return <DollarSign className="w-4 h-4" />;

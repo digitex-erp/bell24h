@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Play, Pause, Square, Upload } from 'lucide-react';
+import { Blob, MediaRecorder, Mic, MicOff, Pause, Play, RFQData, Square, Upload } from 'lucide-react';;;
 
 interface VoiceRFQProps {
   onRFQCreated: (rfqData: any) => void;
@@ -23,9 +23,9 @@ export default function VoiceRFQ({ onRFQCreated, userId }: VoiceRFQProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [transcription, setTranscription] = useState('');
+  const [transcription, setTranscription] = useState(&apos;');
   const [rfqData, setRfqData] = useState<RFQData | null>(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(&apos;');
   const [recordingTime, setRecordingTime] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -278,7 +278,7 @@ export default function VoiceRFQ({ onRFQCreated, userId }: VoiceRFQProps) {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Urgency</label>
-                <p className="text-gray-900 capitalize">{rfqData.urgency || 'Not specified'}</p>
+                <p className="text-gray-900 capitalize">{rfqData.urgency || Not specified}</p>
               </div>
             </div>
             {rfqData.specifications && (

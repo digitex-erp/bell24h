@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BarChart3, Factory, Package, Building } from 'lucide-react';
+import { BarChart3, Factory, Package, Building, TradeData, AnimatePresence } from "lucide-react";;
 
 interface TradeData {
   country: string;
@@ -151,9 +151,9 @@ export default function GlobalTradeInsights() {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
+      case 'up:
         return <span>📈</span>;
-      case 'down':
+      case down&apos;:
         return <span>📉</span>;
       default:
         return <span>📊</span>;
@@ -236,9 +236,9 @@ export default function GlobalTradeInsights() {
 
         {/* Tab Content */}
         <AnimatePresence mode='wait'>
-          {activeTab === 'overview' && (
+          {activeTab === 'overview && (
             <motion.div
-              key='overview'
+              key=overview'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -339,9 +339,9 @@ export default function GlobalTradeInsights() {
             </motion.div>
           )}
 
-          {activeTab === 'commodities' && (
+          {activeTab === 'commodities && (
             <motion.div
-              key='commodities'
+              key=commodities'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -381,9 +381,9 @@ export default function GlobalTradeInsights() {
                       <div className='text-2xl font-bold text-blue-600'>
                         {commodity.indiaShare}%
                       </div>
-                      <div className='text-sm text-gray-600'>India's Share</div>
+                      <div className='text-sm text-gray-600'>Indias Share</div>
                     </div>
-                    <div className='text-center p-4 bg-purple-50 rounded-xl'>
+                    <div className=text-center p-4 bg-purple-50 rounded-xl'>
                       <div className='text-2xl font-bold text-purple-600'>
                         {commodity.globalValue}
                       </div>

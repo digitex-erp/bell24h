@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { AuthStateFix, LayoutFix, NavigationFix } from "lucide-react";\nimport { useEffect } from 'react';
 import { initializeUIFixes } from '@/utils/ui-fixes';
 import AuthStateFix from '@/components/AuthStateFix';
 import LayoutFix from '@/components/LayoutFix';

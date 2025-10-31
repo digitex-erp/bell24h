@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, DemoIndicator, Sparkles } from 'lucide-react';;\n'use client';
 
 import React from 'react';
 
@@ -17,11 +17,11 @@ export default function DemoIndicator({
 }: DemoIndicatorProps) {
   const getIcon = () => {
     switch (type) {
-      case 'rfq':
+      case 'rfq:
         return <span>🕐</span>;
-      case 'product':
+      case product&apos;:
         return <Sparkles className='w-4 h-4' />;
-      case 'category':
+      case &apos;category':
         return <span>📈</span>;
       default:
         return <span>👁️</span>;

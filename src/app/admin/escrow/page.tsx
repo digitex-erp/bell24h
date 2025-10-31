@@ -1,23 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Shield,
-  DollarSign,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  Search,
-  Filter,
-  Download,
-  Eye,
-  MessageSquare,
-  TrendingUp,
-  Users,
-  Building2,
-  Calendar,
-  FileText,
-} from 'lucide-react';
+import { AlertTriangle, Building2, Calendar, CheckCircle, Clock, DollarSign, Download, Eye, FileText, Filter, MessageSquare, Search, Shield, TrendingUp, Users } from 'lucide-react';;
 
 // Mock escrow data
 const mockEscrowData = {

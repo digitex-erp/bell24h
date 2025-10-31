@@ -1,4 +1,4 @@
-import React from 'react';
+import { CustomGridProps, MuiGrid } from "lucide-react";\nimport React from 'react';
 import { Grid as MuiGrid, GridProps } from '@mui/material';
 
 interface CustomGridProps extends Omit<GridProps, 'component'> {

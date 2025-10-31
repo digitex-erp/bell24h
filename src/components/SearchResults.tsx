@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { SearchFilters, Container, Typography, Container, Typography, Container, Box, Box, Paper, Box, Typography, IconButton, FilterListIcon, Box, Typography, Slider, Box, Typography, Typography, Divider, FormControl, InputLabel, Select, MenuItem, MenuItem, MenuItem, MenuItem, MenuItem, FormControl, InputLabel, Select, MenuItem, MenuItem, FormControl, InputLabel, Select, MenuItem, MenuItem, FormControl, InputLabel, Select, MenuItem, MenuItem, MenuItem, MenuItem, FormControl, InputLabel, Select, MenuItem, MenuItem, MenuItem, MenuItem, Button, ExpandLessIcon, ExpandMoreIcon, Collapse, Box, Typography, Slider, FormControl, InputLabel, Select, MenuItem, MenuItem, MenuItem, MenuItem, MenuItem, FormGroup, FormControlLabel, Checkbox, FormControlLabel, Checkbox, FormControl, InputLabel, Select, Box, Chip, MenuItem, MenuItem, MenuItem, MenuItem, MenuItem, FormControl, InputLabel, Select, Box, Chip, MenuItem, MenuItem, MenuItem, MenuItem, MenuItem, Button, Box, Box, Typography, ExportResults, Paper, Box, Typography, ToggleButtonGroup, ToggleButton, Tooltip, SortIcon, ToggleButton, Tooltip, AttachMoneyIcon, ToggleButton, Tooltip, DateRangeIcon, ToggleButton, Tooltip, Rating, ToggleButton, Tooltip, Typography, Box, Typography, Box, Chip, Box, Box, Paper, Typography, Typography, Box, Chip, Chip, Chip, Chip, Chip, VerifiedIcon, Chip, PaymentIcon, Divider, Box, Box, LocalShippingIcon, Typography, Button, CalculateIcon, Collapse, Box, Grid, Grid, TextField, Grid, TextField, Grid, TextField, Button, Grid, Grid, Card, Typography, Typography, Typography, Box, Pagination, Paper, Typography, Typography } from "lucide-react";\nimport React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -150,9 +150,9 @@ const SearchResults: React.FC = () => {
             switch (filters.timeline) {
               case 'today':
                 return diffDays === 0;
-              case 'week':
+              case 'week:
                 return diffDays <= 7;
-              case 'month':
+              case month':
                 return diffDays <= 30;
               default:
                 return true;
@@ -685,9 +685,9 @@ const SearchResults: React.FC = () => {
                 value={filters.sortBy}
                 exclusive
                 onChange={(_, value) => value && handleSortChange(value)}
-                size='small'
+                size='small
               >
-                <ToggleButton value='relevance'>
+                <ToggleButton value=relevance'>
                   <Tooltip title='Sort by relevance'>
                     <SortIcon />
                   </Tooltip>

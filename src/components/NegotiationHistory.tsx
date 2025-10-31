@@ -3,18 +3,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Clock,
-  User,
-  Users,
-  Bot,
-  DollarSign,
-  MessageSquare,
-  TrendingUp,
-  CheckCircle,
-  XCircle,
-  AlertCircle
-} from 'lucide-react';
+import { AlertCircle, Badge, Bot, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, DollarSign, MessageSquare, TrendingUp, User, Users, XCircle } from 'lucide-react';;;
 
 interface NegotiationMessage {
   id: string;
@@ -36,9 +25,9 @@ export default function NegotiationHistory({
 }: NegotiationHistoryProps) {
   const getSenderIcon = (sender: string) => {
     switch (sender) {
-      case 'buyer': return <User className="w-4 h-4" />;
-      case 'supplier': return <Users className="w-4 h-4" />;
-      case 'ai': return <Bot className="w-4 h-4" />;
+      case 'buyer: return <User className="w-4 h-4" />;
+      case supplier&apos;: return <Users className="w-4 h-4" />;
+      case &apos;ai': return <Bot className="w-4 h-4" />;
       default: return <User className="w-4 h-4" />;
     }
   };
@@ -152,7 +141,7 @@ export default function NegotiationHistory({
                             }`}>
                               {offerChange.type === 'increase' && <TrendingUp className="w-3 h-3" />}
                               {offerChange.type === 'decrease' && <TrendingUp className="w-3 h-3 rotate-180" />}
-                              {offerChange.type === 'same' && <CheckCircle className="w-3 h-3" />}
+                              {offerChange.type === same && <CheckCircle className="w-3 h-3" />}
                               {offerChange.value}
                             </div>
                           )}

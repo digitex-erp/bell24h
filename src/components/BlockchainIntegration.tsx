@@ -1,4 +1,4 @@
-'use client';
+import { SmartContract, AnimatePresence, Icon, AnimatePresence, AnimatePresence } from "lucide-react";\n'use client';
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -313,9 +313,9 @@ export default function BlockchainIntegration() {
 
         {/* Tab Content */}
         <AnimatePresence mode='wait'>
-          {activeTab === 'transparency' && (
+          {activeTab === 'transparency && (
             <motion.div
-              key='transparency'
+              key=transparency'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -340,9 +340,9 @@ export default function BlockchainIntegration() {
                               : 'bg-gray-300'
                           }`}
                         >
-                          {step.status === 'completed' ? (
+                          {step.status === 'completed ? (
                             <span>✅</span>
-                          ) : step.status === 'in_progress' ? (
+                          ) : step.status === in_progress&apos; ? (
                             <span>🕐</span>
                           ) : (
                             <div className='w-3 h-3 bg-white rounded-full'></div>
@@ -424,9 +424,9 @@ export default function BlockchainIntegration() {
             </motion.div>
           )}
 
-          {activeTab === 'transactions' && (
+          {activeTab === 'transactions && (
             <motion.div
-              key='transactions'
+              key=transactions'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -504,9 +504,9 @@ export default function BlockchainIntegration() {
             </motion.div>
           )}
 
-          {activeTab === 'contracts' && (
+          {activeTab === 'contracts && (
             <motion.div
-              key='contracts'
+              key=contracts'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -582,9 +582,9 @@ export default function BlockchainIntegration() {
             </motion.div>
           )}
 
-          {activeTab === 'trust' && (
+          {activeTab === 'trust && (
             <motion.div
-              key='trust'
+              key=trust'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}

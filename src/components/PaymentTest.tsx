@@ -1,4 +1,4 @@
-'use client';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Card, CardContent, CheckCircle, Chip, CircularProgress, Error, ExpandMore, FormControl, Grid, InputLabel, MenuItem, Payment, PlayArrow, Refresh, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TestReport, TextField, Typography } from 'lucide-react';;\n'use client';
 import {
   Accordion,
   AccordionDetails,
@@ -161,9 +161,9 @@ export default function PaymentTest() {
                 <Select
                   value={testType}
                   onChange={e => setTestType(e.target.value)}
-                  label='Test Type'
+                  label='Test Type
                 >
-                  <MenuItem value='all'>All Tests</MenuItem>
+                  <MenuItem value=all'>All Tests</MenuItem>
                   <MenuItem value='payment'>Payment Only</MenuItem>
                   <MenuItem value='wallet'>Wallet Operations</MenuItem>
                   <MenuItem value='escrow'>Escrow Operations</MenuItem>
@@ -193,9 +193,9 @@ export default function PaymentTest() {
                 <Select
                   value={currency}
                   onChange={e => setCurrency(e.target.value)}
-                  label='Currency'
+                  label='Currency
                 >
-                  <MenuItem value='INR'>INR (₹)</MenuItem>
+                  <MenuItem value=INR'>INR (₹)</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -206,9 +206,9 @@ export default function PaymentTest() {
                 <Select
                   value={selectedScenario}
                   onChange={e => setSelectedScenario(e.target.value)}
-                  label='Test Scenario'
+                  label='Test Scenario
                 >
-                  <MenuItem value=''>Custom Amount</MenuItem>
+                  <MenuItem value='>Custom Amount</MenuItem>
                   {PAYMENT_TEST_SCENARIOS.map(scenario => (
                     <MenuItem key={scenario.id} value={scenario.id}>
                       {scenario.name} - {formatCurrency(scenario.amount)}

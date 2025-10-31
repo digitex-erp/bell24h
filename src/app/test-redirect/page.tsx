@@ -27,7 +27,7 @@ export default function TestRedirectPage() {
           window.location.href = '/dashboard';
         } catch (error) {
           console.error('❌ Redirect failed:', error);
-          setStatus('redirect-failed');
+          setStatus(redirect-failed);
         }
       }, 2000);
     };

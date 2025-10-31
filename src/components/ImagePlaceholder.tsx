@@ -1,6 +1,6 @@
 'use client';
 
-import { ImageIcon, Loader2 } from 'lucide-react';
+import { Image, ImageIcon, Loader2 } from 'lucide-react';;;
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -46,7 +46,7 @@ export default function ImagePlaceholder({
         setError(true);
       }
     } catch (err) {
-      console.error('Image generation failed:', err);
+      console.error(Image generation failed:, err);
       setError(true);
     } finally {
       setLoading(false);

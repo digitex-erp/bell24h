@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, Building, Bell, Shield, Cookie, Globe, Settings as SettingsIcon, MessageSquare, Smartphone, Key, Info, AlertCircle } from 'lucide-react';
+import { AlertCircle, Bell, Building, Cookie, CookiePreferencesManager, DataDeletionManager, Globe, Info, Key, MessageSquare, Settings as SettingsIcon, Shield, Smartphone, User } from 'lucide-react';;;
 import { CookiePreferencesManager } from '@/components/gdpr/CookieConsentBanner';
 import DataDeletionManager from '@/components/gdpr/DataDeletionManager';
 
@@ -173,8 +173,8 @@ export default function SettingsPage() {
           <div className='flex-1'>
             <div className='bg-white rounded-lg border border-gray-200 shadow-sm'>
               {/* Profile Tab */}
-              {activeTab === 'profile' && (
-                <div className='p-6'>
+              {activeTab === 'profile && (
+                <div className=p-6'>
                   <div className='flex items-center justify-between mb-6'>
                     <h2 className='text-lg font-semibold text-gray-900'>Profile Information</h2>
                     <span className='text-sm text-gray-500'>Update your personal details</span>
@@ -242,9 +242,9 @@ export default function SettingsPage() {
                         onChange={e =>
                           setProfileData({ ...profileData, department: e.target.value })
                         }
-                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                       >
-                        <option value=''>Select Department</option>
+                        <option value='>Select Department</option>
                         <option value='procurement'>Procurement</option>
                         <option value='operations'>Operations</option>
                         <option value='finance'>Finance</option>
@@ -258,8 +258,8 @@ export default function SettingsPage() {
               )}
 
               {/* Company Tab */}
-              {activeTab === 'company' && (
-                <div className='p-6'>
+              {activeTab === 'company && (
+                <div className=p-6'>
                   <div className='flex items-center justify-between mb-6'>
                     <h2 className='text-lg font-semibold text-gray-900'>Company Information</h2>
                     <span className='text-sm text-gray-500'>Update your company details</span>
@@ -288,9 +288,9 @@ export default function SettingsPage() {
                       <select
                         value={companyData.industry}
                         onChange={e => setCompanyData({ ...companyData, industry: e.target.value })}
-                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                       >
-                        <option value=''>Select Industry</option>
+                        <option value='>Select Industry</option>
                         <option value='manufacturing'>Manufacturing</option>
                         <option value='technology'>Technology</option>
                         <option value='agriculture'>Agriculture</option>
@@ -312,9 +312,9 @@ export default function SettingsPage() {
                         onChange={e =>
                           setCompanyData({ ...companyData, companySize: e.target.value })
                         }
-                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                        className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                       >
-                        <option value=''>Select Size</option>
+                        <option value='>Select Size</option>
                         <option value='1-10'>1-10 employees</option>
                         <option value='11-50'>11-50 employees</option>
                         <option value='51-200'>51-200 employees</option>
@@ -333,11 +333,11 @@ export default function SettingsPage() {
                         value={companyData.website}
                         onChange={e => setCompanyData({ ...companyData, website: e.target.value })}
                         className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                        placeholder='https://yourcompany.com'
+                        placeholder='https://yourcompany.com
                       />
                     </div>
 
-                    <div className='md:col-span-2'>
+                    <div className=md:col-span-2'>
                       <label className='block text-sm font-medium text-gray-700 mb-2'>
                         Company Address
                       </label>
@@ -539,8 +539,8 @@ export default function SettingsPage() {
               )}
 
               {/* Security Tab */}
-              {activeTab === 'security' && (
-                <div className='p-6'>
+              {activeTab === 'security && (
+                <div className=p-6'>
                   <div className='flex items-center justify-between mb-6'>
                     <h2 className='text-lg font-semibold text-gray-900'>Security Settings</h2>
                     <span className='text-sm text-gray-500'>Protect your account</span>
@@ -594,9 +594,9 @@ export default function SettingsPage() {
                                 sessionTimeout: e.target.value,
                               })
                             }
-                            className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                            className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           >
-                            <option value='15'>15 minutes</option>
+                            <option value=15'>15 minutes</option>
                             <option value='30'>30 minutes</option>
                             <option value='60'>1 hour</option>
                             <option value='240'>4 hours</option>
@@ -664,8 +664,8 @@ export default function SettingsPage() {
               )}
 
               {/* Privacy & Cookies Tab */}
-              {activeTab === 'privacy' && (
-                <div className='p-6'>
+              {activeTab === 'privacy && (
+                <div className=p-6'>
                   <div className='flex items-center justify-between mb-6'>
                     <h2 className='text-lg font-semibold text-gray-900'>
                       Privacy & Cookie Preferences
@@ -730,8 +730,8 @@ export default function SettingsPage() {
               )}
 
               {/* Integrations Tab */}
-              {activeTab === 'integrations' && (
-                <div className='p-6'>
+              {activeTab === 'integrations && (
+                <div className=p-6'>
                   <div className='flex items-center justify-between mb-6'>
                     <h2 className='text-lg font-semibold text-gray-900'>Integrations</h2>
                     <span className='text-sm text-gray-500'>Connect with third-party services</span>
@@ -795,8 +795,8 @@ export default function SettingsPage() {
               )}
 
               {/* Admin Tab */}
-              {activeTab === 'admin' && userRole === 'admin' && (
-                <div className='p-6'>
+              {activeTab === 'admin' && userRole === 'admin && (
+                <div className=p-6'>
                   <div className='flex items-center justify-between mb-6'>
                     <h2 className='text-lg font-semibold text-gray-900'>Admin Settings</h2>
                     <span className='text-sm text-gray-500'>System administration</span>
@@ -866,7 +866,7 @@ export default function SettingsPage() {
                     className='flex items-center space-x-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
                   >
                     <span>💾</span>
-                    <span>{saving ? 'Saving...' : 'Save Changes'}</span>
+                    <span>{saving ? 'Saving...' : Save Changes}</span>
                   </button>
                 </div>
               </div>

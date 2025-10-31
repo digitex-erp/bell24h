@@ -99,8 +99,8 @@ export default function ReportsPage() {
                   >
                     {report.status}
                   </span>
-                  {report.status === 'Ready' && (
-                    <button className='text-blue-600 hover:text-blue-800'>
+                  {report.status === 'Ready && (
+                    <button className=text-blue-600 hover:text-blue-800'>
                       <span>⬇️</span>
                     </button>
                   )}

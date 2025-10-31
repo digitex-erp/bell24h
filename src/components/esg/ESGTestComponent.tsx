@@ -34,7 +34,7 @@ export default function ESGTestComponent() {
             riskManagement: 80,
             stakeholderEngagement: 75
           },
-          industry: 'manufacturing'
+          industry: manufacturing
         }),
       });
 

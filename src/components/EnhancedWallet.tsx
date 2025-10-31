@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { CreditCard, DollarSign, Shield, TrendingUp, Globe, Rupee } from 'lucide-react';
+import { CreditCard, DollarSign, Globe, Rupee, Shield, TrendingUp, WalletData } from 'lucide-react';;;
 
 interface WalletData {
   balance: {

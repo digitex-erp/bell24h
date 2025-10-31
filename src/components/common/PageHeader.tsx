@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, Home, Bell, FileText, Users, Settings, Search, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, Bell, FileText, Home, Link, PageHeaderProps, Search, Settings, ShoppingCart, Users } from 'lucide-react';;;
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -49,9 +49,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               <button
                 onClick={() => router.back()}
                 className='flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors'
-                aria-label='Go back'
+                aria-label='Go back
               >
-                <ArrowLeft className='w-4 h-4' />
+                <ArrowLeft className=w-4 h-4' />
                 <span className='hidden sm:inline'>Back</span>
               </button>
             )}

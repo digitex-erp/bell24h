@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle, Shield } from 'lucide-react';
+import { CheckCircle, Shield } from 'lucide-react';;
 import { useState } from 'react';
 
 export default function SimpleLogin() {
@@ -163,7 +163,7 @@ export default function SimpleLogin() {
 
             <div className="flex justify-between">
               <button
-                onClick={() => setStep('phone')}
+                onClick={() => setStep(phone)}
                 className="text-blue-600 hover:text-blue-700 text-sm font-medium"
               >
                 Change Number

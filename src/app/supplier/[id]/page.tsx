@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Star, MapPin, Phone, Mail, Globe, Shield, Award, TrendingUp, Package, Users, Calendar, Download, Share2, MessageCircle, Heart } from 'lucide-react';
+import { Award, Calendar, Download, Globe, Heart, Mail, MapPin, MessageCircle, Package, Phone, Share2, Shield, Star, TrendingUp, Users } from 'lucide-react';;
 
 interface SupplierProfile {
   id: string;

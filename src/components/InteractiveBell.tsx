@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { HTMLAudioElement } from "lucide-react";\nimport { useRef } from 'react';
 
 export default function InteractiveBell({ soundOn = false, className = '' }) {
   const audioRef = useRef<HTMLAudioElement>(null);

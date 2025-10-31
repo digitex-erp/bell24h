@@ -1,4 +1,4 @@
-import useSWR, { mutate } from 'swr';
+import { TransactionHistory, DepositForm } from "lucide-react";\nimport useSWR, { mutate } from 'swr';
 import toast from 'react-hot-toast';
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());

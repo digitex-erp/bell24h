@@ -1,4 +1,4 @@
-'use client';
+import { Button, Button, Card, CardHeader, CardTitle, CardContent, Card, CardContent, Input, Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Badge, Button, Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Card, CardHeader, CardTitle, CardDescription, CardContent } from "lucide-react";\n'use client';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -184,17 +184,17 @@ export default function OrdersPage() {
                     placeholder='Search orders by ID, customer, or product...'
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className='pl-10'
+                    className='pl-10
                   />
                 </div>
               </div>
-              <div className='flex gap-4'>
+              <div className=flex gap-4'>
                 <select
                   value={statusFilter}
                   onChange={e => setStatusFilter(e.target.value)}
-                  className='px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                  className='px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
                 >
-                  <option value='all'>All Status</option>
+                  <option value=all'>All Status</option>
                   <option value='Processing'>Processing</option>
                   <option value='Shipped'>Shipped</option>
                   <option value='Delivered'>Delivered</option>

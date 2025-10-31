@@ -7,22 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  ArrowLeft,
-  MessageSquare, 
-  Users, 
-  DollarSign, 
-  Clock, 
-  TrendingUp,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Send,
-  Bot,
-  User,
-  FileText,
-  BarChart3
-} from 'lucide-react';
+import { AlertCircle, ArrowLeft, Badge, BarChart3, Bot, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, DollarSign, FileText, Input, Link, MessageSquare, NegotiationDetails, Send, TrendingUp, User, Users, XCircle } from 'lucide-react';;;
 import Link from 'next/link';
 
 interface NegotiationDetails {
@@ -66,7 +51,7 @@ export default function NegotiationDetailPage() {
   const negotiationId = params.id as string;
   
   const [negotiation, setNegotiation] = useState<NegotiationDetails | null>(null);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState(&apos;');
   const [newOffer, setNewOffer] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'chat' | 'analysis' | 'history'>('chat');
@@ -217,8 +202,8 @@ export default function NegotiationDetailPage() {
   const getSenderIcon = (sender: string) => {
     switch (sender) {
       case 'buyer': return <User className="w-4 h-4" />;
-      case 'supplier': return <Users className="w-4 h-4" />;
-      case 'ai': return <Bot className="w-4 h-4" />;
+      case &apos;supplier: return <Users className="w-4 h-4" />;
+      case ai&apos;: return <Bot className="w-4 h-4" />;
       default: return <User className="w-4 h-4" />;
     }
   };

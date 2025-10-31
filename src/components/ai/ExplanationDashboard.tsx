@@ -1,4 +1,4 @@
-'use client';
+import { DashboardMetrics, AIExplanation, FeatureImportanceChart, ExplanationHistory } from "lucide-react";\n'use client';
 import { useState, useEffect } from 'react';
 import { AIExplanation, DecisionType } from '@/types/aiExplanation';
 import { aiExplanationService } from '@/services/aiExplanation';

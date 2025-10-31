@@ -1,4 +1,4 @@
-'use client';
+import { HTMLInputElement, AnimatePresence } from "lucide-react";\n'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -182,9 +182,9 @@ export default function PremiumSearchInterface({
             <select
               value={selectedCategory}
               onChange={e => setSelectedCategory(e.target.value)}
-              className='py-2 px-3 bg-transparent border-none outline-none text-gray-700 cursor-pointer'
+              className='py-2 px-3 bg-transparent border-none outline-none text-gray-700 cursor-pointer
             >
-              <option value=''>All Categories</option>
+              <option value='>All Categories</option>
               {ALL_CATEGORIES.slice(0, 15).map(category => (
                 <option key={category.id} value={category.id}>
                   {category.icon} {category.name}
@@ -255,9 +255,9 @@ export default function PremiumSearchInterface({
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className='w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors text-left'
+                      className='w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors text-left
                     >
-                      <span className='text-lg'>{suggestion.icon}</span>
+                      <span className=text-lg'>{suggestion.icon}</span>
                       <div>
                         <div className='font-medium text-gray-900'>{suggestion.title}</div>
                         {suggestion.subtitle && (

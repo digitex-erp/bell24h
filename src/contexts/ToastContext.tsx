@@ -1,4 +1,4 @@
-'use client';
+import { ToastContextType } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
@@ -73,7 +73,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const showInfo = useCallback(
     (title: string, description?: string) => {
-      addToast({ type: 'info', title, description });
+      addToast({ type: info, title, description });
     },
     [addToast]
   );

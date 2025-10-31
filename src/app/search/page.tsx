@@ -1,4 +1,4 @@
-'use client';
+import { Link, Link, Link, Link, Suspense, SearchContent } from "lucide-react";\n'use client';
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -69,11 +69,11 @@ function SearchContent() {
     'Construction',
     'Energy & Power',
     'Healthcare',
-    'Aerospace',
+    'Aerospace,
   ];
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className=min-h-screen bg-gray-50'>
       {/* Header */}
       <header className='bg-white shadow-sm border-b'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -168,8 +168,8 @@ function SearchContent() {
                     )}
                   </div>
                   <div className='flex items-center space-x-1'>
-                    {result.type === 'supplier' && result.verified && (
-                      <span className='text-green-600' title='Verified Supplier'>
+                    {result.type === 'supplier && result.verified && (
+                      <span className=text-green-600' title='Verified Supplier'>
                         ✓
                       </span>
                     )}
@@ -197,21 +197,21 @@ function SearchContent() {
                     </div>
                   )}
 
-                  {result.type === 'supplier' && result.productCount !== undefined && (
-                    <div className='flex items-center'>
+                  {result.type === 'supplier && result.productCount !== undefined && (
+                    <div className=flex items-center'>
                       <span className='mr-2'>📦</span>
                       {result.productCount} products
                     </div>
                   )}
 
-                  {result.type === 'product' && result.price !== undefined && (
-                    <div className='flex items-center'>
+                  {result.type === 'product && result.price !== undefined && (
+                    <div className=flex items-center'>
                       <span className='mr-2'>💰</span>${result.price}
                     </div>
                   )}
 
-                  {result.type === 'product' && result.supplier && (
-                    <div className='flex items-center'>
+                  {result.type === 'product && result.supplier && (
+                    <div className=flex items-center'>
                       <span className='mr-2'>🏭</span>
                       {result.supplier.name}
                       {result.supplier.verified && <span className='ml-1 text-green-600'>✓</span>}

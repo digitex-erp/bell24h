@@ -2,18 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { 
-  Upload, 
-  Image, 
-  FileText, 
-  DollarSign, 
-  TrendingUp,
-  Building2,
-  Sparkles,
-  CheckCircle,
-  AlertCircle,
-  X
-} from 'lucide-react';
+import { AlertCircle, Building2, CheckCircle, DollarSign, FileText, Image, Sparkles, TrendingUp, Upload, X } from 'lucide-react';;
 import { calculateTrafficPricing, getPricingDisplay } from '@/lib/traffic-pricing';
 
 interface ProductUploadProps {
@@ -30,7 +19,7 @@ interface UploadedFile {
 
 export default function ProductUpload({ onUploadComplete }: ProductUploadProps) {
   const [files, setFiles] = useState<UploadedFile[]>([]);
-  const [brand, setBrand] = useState('');
+  const [brand, setBrand] = useState(&apos;');
   const [description, setDescription] = useState('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
@@ -331,7 +320,7 @@ export default function ProductUpload({ onUploadComplete }: ProductUploadProps) 
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Sparkles className="w-4 h-4" />
-              {aiGenerating ? 'Generating...' : 'Generate with AI'}
+              {aiGenerating ? 'Generating...' : Generate with AI}
             </button>
           </div>
           <textarea

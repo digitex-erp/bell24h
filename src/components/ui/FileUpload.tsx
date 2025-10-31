@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, HTMLInputElement, Loader2 } from 'lucide-react';;\n'use client';
 
 import React, { useState, useCallback, useRef } from 'react';
 import { UPLOAD_CONFIGS, validateFileType, formatFileSize } from '@/lib/cloudinary-client';
@@ -245,20 +245,20 @@ export default function FileUpload({
   // Get file icon
   const getFileIcon = (file: File) => {
     if (file.type.startsWith('image/')) return <span>🖼️</span>;
-    if (file.type.startsWith('video/')) return <span>🎥</span>;
-    if (file.type.includes('pdf')) return <span>📄</span>;
+    if (file.type.startsWith(&apos;video/)) return <span>🎥</span>;
+    if (file.type.includes(pdf&apos;)) return <span>📄</span>;
     return <span>📄</span>;
   };
 
   // Get status indicator
   const getStatusIndicator = (status: UploadedFile['status']) => {
     switch (status) {
-      case 'success':
+      case 'success:
         return <span>✅</span>;
-      case 'error':
+      case error&apos;:
         return <AlertCircle className='h-5 w-5 text-red-500' />;
-      case 'uploading':
-        return <Loader2 className='h-5 w-5 text-blue-500 animate-spin' />;
+      case &apos;uploading:
+        return <Loader2 className=h-5 w-5 text-blue-500 animate-spin' />;
       default:
         return <span>⬆️</span>;
     }
@@ -388,8 +388,8 @@ export default function FileUpload({
                   <p className='text-sm text-gray-500 mb-2'>{formatFileSize(fileData.file.size)}</p>
 
                   {/* Progress Bar */}
-                  {fileData.status === 'uploading' && (
-                    <div className='w-full bg-gray-200 rounded-full h-2 mb-2'>
+                  {fileData.status === 'uploading && (
+                    <div className=w-full bg-gray-200 rounded-full h-2 mb-2'>
                       <div
                         className='bg-blue-600 h-2 rounded-full transition-all duration-300'
                         style={{ width: `${fileData.uploadProgress}%` }}
@@ -398,13 +398,13 @@ export default function FileUpload({
                   )}
 
                   {/* Error Message */}
-                  {fileData.status === 'error' && fileData.error && (
-                    <p className='text-sm text-red-600 mb-2'>{fileData.error}</p>
+                  {fileData.status === 'error && fileData.error && (
+                    <p className=text-sm text-red-600 mb-2'>{fileData.error}</p>
                   )}
 
                   {/* Success URL */}
-                  {fileData.status === 'success' && fileData.cloudinaryUrl && (
-                    <div className='flex items-center space-x-2'>
+                  {fileData.status === 'success && fileData.cloudinaryUrl && (
+                    <div className=flex items-center space-x-2'>
                       <a
                         href={fileData.cloudinaryUrl}
                         target='_blank'
@@ -442,7 +442,7 @@ export default function FileUpload({
                     onClick={() => removeFile(fileData.id)}
                     disabled={fileData.status === 'uploading'}
                     className='p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed'
-                    title='Remove file'
+                    title=Remove file
                   >
                     <span>🗑️</span>
                   </button>

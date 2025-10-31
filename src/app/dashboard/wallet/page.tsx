@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Wallet, CreditCard, Plus, Minus, ArrowUpRight, ArrowDownLeft, History, Settings } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, CreditCard, History, Minus, PaymentMethodCard, Plus, Settings, TransactionCard, Wallet } from 'lucide-react';;;
 
 // Mock data for wallet
 const walletData = {

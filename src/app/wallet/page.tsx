@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Wallet, Shield, Clock, CheckCircle, AlertTriangle, ArrowUpRight, ArrowDownLeft, Eye, Lock, Unlock, CreditCard, Download } from 'lucide-react';
+import { AlertTriangle, ArrowDownLeft, ArrowUpRight, CheckCircle, Clock, CreditCard, Download, Eye, Lock, Shield, Unlock, Wallet } from 'lucide-react';;
 
 interface WalletTransaction {
   id: string;
@@ -123,10 +123,10 @@ export default function WalletEscrowSystem() {
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
-      case 'credit': return <ArrowDownLeft className="w-5 h-5 text-green-600" />;
-      case 'debit': return <ArrowUpRight className="w-5 h-5 text-red-600" />;
-      case 'escrow_hold': return <Lock className="w-5 h-5 text-orange-600" />;
-      case 'escrow_release': return <Unlock className="w-5 h-5 text-blue-600" />;
+      case 'credit: return <ArrowDownLeft className="w-5 h-5 text-green-600" />;
+      case debit&apos;: return <ArrowUpRight className="w-5 h-5 text-red-600" />;
+      case &apos;escrow_hold: return <Lock className="w-5 h-5 text-orange-600" />;
+      case escrow_release&apos;: return <Unlock className="w-5 h-5 text-blue-600" />;
       default: return <CreditCard className="w-5 h-5 text-gray-600" />;
     }
   };
@@ -373,7 +373,7 @@ export default function WalletEscrowSystem() {
                               }`}>
                                 {milestone.status === 'completed' ? (
                                   <CheckCircle className="w-5 h-5 text-green-600" />
-                                ) : milestone.status === 'disputed' ? (
+                                ) : milestone.status === &apos;disputed' ? (
                                   <AlertTriangle className="w-5 h-5 text-red-600" />
                                 ) : (
                                   <Clock className="w-5 h-5 text-gray-600" />

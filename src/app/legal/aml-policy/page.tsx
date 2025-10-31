@@ -1,21 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  FileText, 
-  User, 
-  Lock,
-  Eye,
-  EyeOff,
-  Download,
-  Printer,
-  Database,
-  Search,
-  Flag,
-  Activity
-} from 'lucide-react';
+import { Activity, AlertTriangle, CheckCircle, Database, Download, Eye, EyeOff, FileText, Flag, Lock, Printer, Search, Shield, User } from 'lucide-react';;
 
 export default function AMLPolicyPage() {
   const [showFullPolicy, setShowFullPolicy] = useState(false);

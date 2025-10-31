@@ -1,4 +1,4 @@
-'use client';
+import { ROIData, ROIResults, Calculator } from "lucide-react";\n'use client';
 
 import React, { useState, useEffect } from 'react';
 
@@ -151,10 +151,10 @@ export default function ROICalculator() {
                     handleInputChange('monthlyProcurementSpend', Number(e.target.value))
                   }
                   className='w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white'
-                  placeholder='5000000'
+                  placeholder='5000000
                 />
               </div>
-              <p className='text-sm text-gray-500 mt-1'>
+              <p className=text-sm text-gray-500 mt-1'>
                 Current: {formatCurrency(formData.monthlyProcurementSpend)}
               </p>
             </div>
@@ -170,10 +170,10 @@ export default function ROICalculator() {
                   value={formData.averageOrderValue}
                   onChange={e => handleInputChange('averageOrderValue', Number(e.target.value))}
                   className='w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white'
-                  placeholder='250000'
+                  placeholder='250000
                 />
               </div>
-              <p className='text-sm text-gray-500 mt-1'>
+              <p className=text-sm text-gray-500 mt-1'>
                 Current: {formatCurrency(formData.averageOrderValue)}
               </p>
             </div>

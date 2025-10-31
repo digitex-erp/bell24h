@@ -1,4 +1,4 @@
-'use client';
+import { HTMLInputElement, HTMLInputElement, Link, Link, Link, Link } from "lucide-react";\n'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -57,7 +57,7 @@ export default function CreateRFQPage() {
           <div className="text-green-500 text-6xl mb-4">✅</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">RFQ Created Successfully!</h2>
           <p className="text-gray-600 mb-6">
-            Your RFQ has been submitted and will be visible to relevant suppliers. You'll receive notifications when suppliers respond.
+            Your RFQ has been submitted and will be visible to relevant suppliers. You&apos;ll receive notifications when suppliers respond.
           </p>
           <div className="space-y-3">
             <Link 
@@ -333,7 +333,7 @@ export default function CreateRFQPage() {
                     Creating RFQ...
                   </span>
                 ) : (
-                  'Create RFQ'
+                  Create RFQ
                 )}
               </button>
               

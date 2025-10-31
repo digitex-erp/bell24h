@@ -1,4 +1,4 @@
-'use client';
+import { Expert, Date, Briefcase, MessageCircle, Award, AnimatePresence, AnimatePresence } from "lucide-react";\n'use client';
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';

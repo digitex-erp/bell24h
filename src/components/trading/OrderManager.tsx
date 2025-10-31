@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';;
 
 interface TradingOrder {
   id: string;
@@ -84,13 +84,13 @@ const OrderManager: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'executed':
+      case 'executed:
         return <span>✅</span>;
-      case 'pending':
+      case pending&apos;:
         return <span>🕐</span>;
-      case 'partial':
+      case &apos;partial':
         return <AlertCircle size={12} />;
-      case 'cancelled':
+      case &apos;cancelled':
         return <span>❌</span>;
       default:
         return <span>🕐</span>;
@@ -207,18 +207,18 @@ const OrderManager: React.FC = () => {
                   placeholder='Search orders...'
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
-                  className='pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-64'
+                  className='pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-64
                 />
               </div>
             </div>
 
-            <div className='flex items-center space-x-4'>
+            <div className=flex items-center space-x-4'>
               <select
                 value={filterStatus}
                 onChange={e => setFilterStatus(e.target.value)}
-                className='px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                className='px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
               >
-                <option value='all'>All Status</option>
+                <option value=all'>All Status</option>
                 <option value='executed'>Executed</option>
                 <option value='pending'>Pending</option>
                 <option value='partial'>Partial</option>
@@ -287,9 +287,9 @@ const OrderManager: React.FC = () => {
                     </td>
                     <td className='px-6 py-4'>
                       <div className='text-sm text-slate-900'>
-                        {order.executedQuantity > 0 && order.status !== 'executed' ? (
+                        {order.executedQuantity > 0 && order.status !== &apos;executed ? (
                           <div>
-                            <div className='font-medium'>
+                            <div className=font-medium'>
                               {order.executedQuantity}/{order.quantity} {order.unit}
                             </div>
                             <div className='text-xs text-slate-500'>
@@ -315,9 +315,9 @@ const OrderManager: React.FC = () => {
                     </td>
                     <td className='px-6 py-4'>
                       <div className='flex space-x-2'>
-                        {order.status === 'pending' || order.status === 'partial' ? (
+                        {order.status === 'pending' || order.status === 'partial ? (
                           <>
-                            <button className='px-3 py-1 bg-blue-600 text-white rounded-md text-xs hover:bg-blue-700 transition-colors font-medium'>
+                            <button className=px-3 py-1 bg-blue-600 text-white rounded-md text-xs hover:bg-blue-700 transition-colors font-medium'>
                               Modify
                             </button>
                             <button className='px-3 py-1 bg-red-600 text-white rounded-md text-xs hover:bg-red-700 transition-colors font-medium'>
@@ -347,7 +347,7 @@ const OrderManager: React.FC = () => {
                 🎯 Order Management System - Demo Environment
               </h3>
               <p className='text-green-800 leading-relaxed'>
-                This order management interface demonstrates Bell24H's comprehensive trading
+                This order management interface demonstrates Bell24H&apos;s comprehensive trading
                 platform capabilities including order tracking, execution monitoring, and portfolio
                 management for ₹8+ crore annual trading volume.
               </p>

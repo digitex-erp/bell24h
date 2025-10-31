@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart, FeatureImportanceChart } from "lucide-react";\nimport { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { FeatureImportanceChart } from '../FeatureImportanceChart';
 
 // Recharts and other mocks are handled globally in setupTests.ts
@@ -284,7 +284,7 @@ describe('FeatureImportanceChart', () => {
 
   it('handles export error gracefully', async () => {
     // Mock fetch error
-    global.fetch = vi.fn(() => Promise.reject(new Error('Export failed'))) as any;
+    global.fetch = vi.fn(() => Promise.reject(new Error(&apos;Export failed'))) as any;
 
     render(<FeatureImportanceChart explanations={mockExplanations} />);
 

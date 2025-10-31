@@ -1,4 +1,4 @@
-'use client';
+import { VoiceInput, VoiceInput } from "lucide-react";\n'use client';
 
 import { useState, useEffect, useRef } from 'react';
 

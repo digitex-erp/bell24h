@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { TeamHierarchyNode } from "lucide-react";\nimport { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './use-auth';
 import { useToast } from './use-toast';
 import { useWebSocket } from './use-websocket';

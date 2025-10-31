@@ -1,6 +1,6 @@
 'use client';
 
-import { Upload, X } from 'lucide-react';
+import { ProductDisplayProps, Upload, X } from 'lucide-react';;;
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 

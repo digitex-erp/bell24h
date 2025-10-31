@@ -1,4 +1,4 @@
-import React from 'react';
+import { SVGTimelineAnimationProps } from "lucide-react";\nimport React from 'react';
 import { motion } from 'framer-motion';
 
 interface TimelineItem {
@@ -207,7 +207,7 @@ const SVGTimelineAnimation: React.FC<SVGTimelineAnimationProps> = ({
                       : 'bg-gray-100 text-gray-800'
                   }`}
                 >
-                  {item.status.replace('-', ' ')}
+                  {item.status.replace('-',  )}
                 </span>
               </div>
             </motion.div>

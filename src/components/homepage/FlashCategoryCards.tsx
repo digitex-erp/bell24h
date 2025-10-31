@@ -1,4 +1,4 @@
-'use client';
+import { CategoryCard } from "lucide-react";\n'use client';
 import { useState, useEffect } from 'react';
 import { ALL_50_CATEGORIES, getCategoryById } from '@/data/all-50-categories';
 
@@ -195,7 +195,7 @@ export default function FlashCategoryCards({
   categoryFilter = ''
 }: FlashCategoryCardsProps) {
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(&apos;');
   const [sortBy, setSortBy] = useState<'name' | 'suppliers' | 'products' | 'rating'>('suppliers');
 
   // Filter and sort categories
@@ -264,7 +264,7 @@ export default function FlashCategoryCards({
           </h2>
           <p className="text-xl text-gray-600 mb-6">
             Discover <span className="font-semibold text-blue-600">{totalSuppliers.toLocaleString()}+ verified suppliers</span> across{' '}
-            <span className="font-semibold text-blue-600">{ALL_50_CATEGORIES.length} categories</span> with{' '}
+            <span className="font-semibold text-blue-600">{ALL_50_CATEGORIES.length} categories</span> with{ }
             <span className="font-semibold text-blue-600">{totalProducts.toLocaleString()}+ products</span>
           </p>
           

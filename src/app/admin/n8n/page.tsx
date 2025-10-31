@@ -1,32 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Zap,
-  Play,
-  Pause,
-  Settings,
-  Plus,
-  Trash2,
-  Edit,
-  Eye,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  Activity,
-  Workflow,
-  Database,
-  Mail,
-  MessageSquare,
-  FileText,
-  BarChart3,
-  Users,
-  Calendar,
-  Globe,
-  Shield,
-  RefreshCw,
-  XCircle,
-} from 'lucide-react';
+import { Activity, AlertCircle, BarChart3, Calendar, CheckCircle, Clock, Database, Edit, Eye, FileText, Globe, Mail, MessageSquare, Pause, Play, Plus, RefreshCw, Settings, Shield, Trash2, Users, Workflow, XCircle, Zap } from 'lucide-react';;
 
 // Mock N8N data
 const mockN8NData = {
@@ -198,11 +173,11 @@ export default function AdminN8NDashboard() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active':
+      case 'active:
         return <CheckCircle className="w-4 h-4" />;
-      case 'paused':
+      case paused&apos;:
         return <Pause className="w-4 h-4" />;
-      case 'error':
+      case &apos;error':
         return <AlertCircle className="w-4 h-4" />;
       default:
         return <Clock className="w-4 h-4" />;

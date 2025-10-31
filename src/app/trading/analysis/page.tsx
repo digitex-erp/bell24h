@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Target } from 'lucide-react';
+import { Target } from 'lucide-react';;
 
 export default function AnalysisPage() {
   return (

@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { TrendingUp, BarChart3, DollarSign, Activity, Globe } from 'lucide-react';
+import { Activity, BarChart3, Button, Card, CardContent, CardHeader, CardTitle, DollarSign, Globe, Header, TrendingUp } from 'lucide-react';;;
 import Header from '@/components/Header';
 
 export default function MarketDataPage() {

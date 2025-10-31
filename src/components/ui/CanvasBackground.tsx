@@ -1,4 +1,4 @@
-'use client';
+import { HTMLCanvasElement } from "lucide-react";\n'use client';
 
 import React, { useRef, useEffect } from 'react';
 

@@ -1,4 +1,4 @@
-'use client';
+import { Date, Icon, TrendIcon, Icon, TrendIcon } from "lucide-react";\n'use client';
 
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
@@ -169,7 +169,7 @@ export default function EnhancedMetricsTicker() {
                 change > 0
                   ? `+${Math.abs(change).toLocaleString()}`
                   : `-${Math.abs(change).toLocaleString()}`,
-              trend: change > 0 ? 'up' : change < 0 ? 'down' : 'stable',
+              trend: change > 0 ? &apos;up' : change < 0 ? 'down' : 'stable',
             }
           : m
       )

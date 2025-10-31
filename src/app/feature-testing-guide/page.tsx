@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, Upload, TrendingUp, PlayCircle, Code, User, DollarSign, BarChart3, CheckCircle, AlertCircle, Clock } from 'lucide-react';
+import { AlertCircle, BarChart3, CheckCircle, Clock, Code, DollarSign, MessageSquare, PlayCircle, TrendingUp, Upload, User } from 'lucide-react';;
 
 const FeatureTestingGuide = () => {
   const [activeFeature, setActiveFeature] = useState('rfq');

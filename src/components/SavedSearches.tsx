@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { SavedSearch, HTMLElement, HTMLElement, Paper, Box, Typography, Button, SaveIcon, List, ListItem, ListItemText, ListItem, ListItemText, Box, Typography, Box, Chip, NotificationsIcon, ListItemSecondaryAction, Tooltip, IconButton, NotificationsIcon, IconButton, MoreVertIcon, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Button, Dialog, DialogTitle, DialogContent, Typography, DialogActions, Button, Button, Menu, MenuItem, EditIcon, MenuItem, ShareIcon, MenuItem, DeleteIcon, Menu, MenuItem } from "lucide-react";\nimport React, { useState, useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -40,7 +40,7 @@ const SavedSearches: React.FC = () => {
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedSearch, setSelectedSearch] = useState<SavedSearch | null>(null);
-  const [searchName, setSearchName] = useState('');
+  const [searchName, setSearchName] = useState(&apos;');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationAnchorEl, setNotificationAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -270,7 +270,7 @@ const SavedSearches: React.FC = () => {
         onClose={handleNotificationClose}
       >
         <MenuItem onClick={toggleNotification}>
-          {selectedSearch?.notificationEnabled ? 'Disable' : 'Enable'} Notifications
+          {selectedSearch?.notificationEnabled ? 'Disable' : Enable} Notifications
         </MenuItem>
       </Menu>
     </Paper>

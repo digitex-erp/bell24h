@@ -1,6 +1,6 @@
 'use client';
 
-import { BarChart3, Brain, Target, Zap } from 'lucide-react';
+import { BarChart3, Brain, Target, Zap, Icon } from "lucide-react";;
 
 interface AILoadingStatesProps {
   type: 'nlp' | 'shap' | 'entity' | 'general' | 'testing';

@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, Brain, Target } from 'lucide-react';;\n'use client';
 
 import { useState } from 'react';
 
@@ -15,8 +15,8 @@ interface TestResult {
 export default function AITestRunner() {
   const [isRunning, setIsRunning] = useState(false);
   const [testResults, setTestResults] = useState<TestResult[]>([]);
-  const [currentTest, setCurrentTest] = useState<string>('');
-  const [overallStatus, setOverallStatus] = useState<'PASS' | 'FAIL' | 'NEEDS IMPROVEMENT' | null>(
+  const [currentTest, setCurrentTest] = useState<string>(&apos;);
+  const [overallStatus, setOverallStatus] = useState<PASS' | 'FAIL' | 'NEEDS IMPROVEMENT' | null>(
     null
   );
   const [testLogs, setTestLogs] = useState<string[]>([]);
@@ -89,12 +89,12 @@ export default function AITestRunner() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'PASS':
+      case 'PASS:
         return <span>✅</span>;
-      case 'FAIL':
+      case FAIL&apos;:
         return <AlertCircle className='h-5 w-5 text-red-500' />;
-      case 'NEEDS IMPROVEMENT':
-        return <AlertCircle className='h-5 w-5 text-yellow-500' />;
+      case &apos;NEEDS IMPROVEMENT:
+        return <AlertCircle className=h-5 w-5 text-yellow-500' />;
       default:
         return <span>🕐</span>;
     }

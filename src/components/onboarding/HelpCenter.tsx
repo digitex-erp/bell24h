@@ -1,4 +1,4 @@
-'use client';
+import { HTMLInputElement } from "lucide-react";\n'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -145,7 +145,7 @@ const categories = [
 ];
 
 export default function HelpCenter({ isOpen, onClose }: HelpCenterProps) {
-  const [activeTab, setActiveTab] = useState<'faq' | 'videos' | 'contact'>('faq');
+  const [activeTab, setActiveTab] = useState<'faq' | 'videos' | 'contact'>(&apos;faq');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
@@ -240,10 +240,10 @@ export default function HelpCenter({ isOpen, onClose }: HelpCenterProps) {
               placeholder='Search for help topics...'
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
             />
             <svg
-              className='absolute left-3 top-3.5 w-5 h-5 text-gray-400'
+              className=absolute left-3 top-3.5 w-5 h-5 text-gray-400'
               fill='none'
               viewBox='0 0 24 24'
               stroke='currentColor'
@@ -337,9 +337,9 @@ export default function HelpCenter({ isOpen, onClose }: HelpCenterProps) {
                   <div key={item.id} className='border border-gray-200 rounded-lg'>
                     <button
                       onClick={() => handleFAQToggle(item.id)}
-                      className='w-full px-6 py-4 text-left hover:bg-gray-50 transition-colors'
+                      className='w-full px-6 py-4 text-left hover:bg-gray-50 transition-colors
                     >
-                      <div className='flex items-center justify-between'>
+                      <div className=flex items-center justify-between'>
                         <h3 className='text-lg font-medium text-gray-900'>{item.question}</h3>
                         <svg
                           className={`w-5 h-5 text-gray-400 transition-transform ${
@@ -379,8 +379,8 @@ export default function HelpCenter({ isOpen, onClose }: HelpCenterProps) {
             </div>
           )}
 
-          {activeTab === 'videos' && (
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          {activeTab === 'videos && (
+            <div className=grid grid-cols-1 md:grid-cols-2 gap-6'>
               {filteredVideos.map(video => (
                 <div key={video.id} className='border border-gray-200 rounded-lg overflow-hidden'>
                   <div className='aspect-video bg-gray-100 flex items-center justify-center'>
@@ -416,8 +416,8 @@ export default function HelpCenter({ isOpen, onClose }: HelpCenterProps) {
             </div>
           )}
 
-          {activeTab === 'contact' && (
-            <div className='max-w-2xl mx-auto'>
+          {activeTab === 'contact && (
+            <div className=max-w-2xl mx-auto'>
               <div className='mb-6'>
                 <h3 className='text-lg font-semibold text-gray-900 mb-2'>Contact Support</h3>
                 <p className='text-gray-600'>
@@ -468,12 +468,12 @@ export default function HelpCenter({ isOpen, onClose }: HelpCenterProps) {
                     value={contactForm.message}
                     onChange={e => handleContactFormChange('message', e.target.value)}
                     className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                    placeholder='Describe your issue or question...'
+                    placeholder='Describe your issue or question...
                   />
                 </div>
 
                 <button
-                  type='submit'
+                  type=submit'
                   className='w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors'
                 >
                   Send Message

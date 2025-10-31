@@ -5,21 +5,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { 
-  TrendingUp, 
-  Users, 
-  FileText, 
-  ShoppingCart,
-  ArrowRight,
-  CheckCircle,
-  Clock,
-  AlertCircle,
-  XCircle,
-  Eye,
-  Star,
-  Calendar,
-  MapPin
-} from 'lucide-react'
+import { AlertCircle, ArrowRight, Badge, Button, Calendar, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, EnhancedCategoryCard, EnhancedCategoryGrid, Eye, FileText, Link, MapPin, ShoppingCart, Star, TrendingUp, Users, XCircle } from 'lucide-react';;
 
 interface MockOrder {
   id: string
@@ -102,9 +88,9 @@ export function EnhancedCategoryCard({
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="w-3 h-3" />
-      case 'in_progress': return <Clock className="w-3 h-3" />
-      case 'pending': return <AlertCircle className="w-3 h-3" />
+      case 'completed: return <CheckCircle className="w-3 h-3" />
+      case in_progress&apos;: return <Clock className="w-3 h-3" />
+      case &apos;pending': return <AlertCircle className="w-3 h-3" />
       default: return <XCircle className="w-3 h-3" />
     }
   }
@@ -386,7 +372,7 @@ export function EnhancedCategoryGrid({
 }
 
 interface TrendingCategoriesProps {
-  categories: CategoryCardProps['category'][]
+  categories: CategoryCardProps[category][]
   showStats?: boolean
   showMockOrders?: boolean
   maxItems?: number

@@ -4,20 +4,7 @@ import AIExplainability from '@/components/AIExplainability';
 import StockMarketDashboard from '@/components/StockMarketDashboard';
 import SupplierRiskScore from '@/components/SupplierRiskScore';
 import VoiceRFQ from '@/components/VoiceRFQ';
-import {
-  ArrowRight,
-  Brain,
-  Building2,
-  CheckCircle,
-  CreditCard,
-  Globe,
-  Mic,
-  Shield,
-  Star,
-  TrendingUp,
-  Users,
-  Zap,
-} from 'lucide-react';
+import { AIExplainability, ArrowRight, Brain, Building2, CheckCircle, CreditCard, Globe, Link, Mic, Shield, Star, StockMarketDashboard, SupplierRiskScore, TrendingUp, Users, VoiceRFQ, Zap } from 'lucide-react';;;
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -189,9 +176,9 @@ export default function AIFeaturesDashboard() {
 
           {/* Enhanced Tab Content */}
           <div className='min-h-[600px]'>
-            {activeTab === 'voice' && (
+            {activeTab === 'voice && (
               <div>
-                <div className='mb-8'>
+                <div className=mb-8'>
                   <h2 className='text-3xl font-bold text-gray-900 mb-4'>Voice RFQ Creation</h2>
                   <p className='text-gray-600 text-lg'>
                     Create detailed RFQs using natural voice commands with our advanced speech
@@ -309,9 +296,9 @@ export default function AIFeaturesDashboard() {
                     </div>
                     <button
                       onClick={() => setShowExplainability(true)}
-                      className='mt-6 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2'
+                      className='mt-6 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2
                     >
-                      <Brain className='w-5 h-5' />
+                      <Brain className=w-5 h-5' />
                       <span>Try AI Explainability</span>
                       <ArrowRight className='w-5 h-5' />
                     </button>
@@ -341,9 +328,9 @@ export default function AIFeaturesDashboard() {
               </div>
             )}
 
-            {activeTab === 'risk' && (
+            {activeTab === 'risk && (
               <div>
-                <div className='mb-8'>
+                <div className=mb-8'>
                   <h2 className='text-3xl font-bold text-gray-900 mb-4'>Supplier Risk Scoring</h2>
                   <p className='text-gray-600 text-lg'>
                     Advanced ML-powered risk assessment for suppliers with real-time monitoring and
@@ -392,9 +379,9 @@ export default function AIFeaturesDashboard() {
                     </div>
                     <button
                       onClick={() => setShowRiskScore(true)}
-                      className='mt-6 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2'
+                      className='mt-6 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2
                     >
-                      <Shield className='w-5 h-5' />
+                      <Shield className=w-5 h-5' />
                       <span>View Risk Analysis</span>
                       <ArrowRight className='w-5 h-5' />
                     </button>
@@ -420,9 +407,9 @@ export default function AIFeaturesDashboard() {
               </div>
             )}
 
-            {activeTab === 'market' && (
+            {activeTab === 'market && (
               <div>
-                <div className='mb-8'>
+                <div className=mb-8'>
                   <h2 className='text-3xl font-bold text-gray-900 mb-4'>Market Intelligence</h2>
                   <p className='text-gray-600 text-lg'>
                     Real-time stock market data, commodity prices, and market trends to inform your
@@ -471,9 +458,9 @@ export default function AIFeaturesDashboard() {
                     </div>
                     <button
                       onClick={() => setShowStockMarket(true)}
-                      className='mt-6 bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2'
+                      className='mt-6 bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2
                     >
-                      <TrendingUp className='w-5 h-5' />
+                      <TrendingUp className=w-5 h-5' />
                       <span>View Market Data</span>
                       <ArrowRight className='w-5 h-5' />
                     </button>
@@ -570,7 +557,7 @@ export default function AIFeaturesDashboard() {
               <h3 className='text-2xl font-bold text-gray-900'>Market Intelligence Dashboard</h3>
               <button
                 onClick={() => setShowStockMarket(false)}
-                className='text-gray-500 hover:text-gray-700'
+                className=text-gray-500 hover:text-gray-700
               >
                 ✕
               </button>

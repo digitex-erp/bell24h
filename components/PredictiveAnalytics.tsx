@@ -5,19 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Users, 
-  Package, 
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  BarChart3,
-  PieChart,
-  LineChart
-} from 'lucide-react';
+import { AlertTriangle, BarChart3, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, DollarSign, Doughnut, Line, LineChart, Package, Pie, PieChart, PredictiveInsights, RFQAnalytics, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SupplierAnalytics, Tabs, TabsContent, TabsList, TabsTrigger, TrendingDown, TrendingUp, Users } from 'lucide-react';;;
 import { Line, Bar, Pie, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -518,7 +506,7 @@ export const PredictiveAnalytics: React.FC = () => {
                     <div className="text-right">
                       <p className="font-medium">${stock.price.toFixed(2)}</p>
                       <p className={`text-sm ${stock.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent.toFixed(2)}%)
+                        {stock.change >= 0 ? '+' : }{stock.change.toFixed(2)} ({stock.changePercent.toFixed(2)}%)
                       </p>
                     </div>
                   </div>

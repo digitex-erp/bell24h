@@ -1,24 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  DollarSign,
-  TrendingUp,
-  TrendingDown,
-  Users,
-  Building2,
-  Calendar,
-  Download,
-  Eye,
-  FileText,
-  CreditCard,
-  Banknote,
-  PieChart,
-  BarChart3,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-} from 'lucide-react';
+import { AlertTriangle, Banknote, BarChart3, Building2, Calendar, CheckCircle, Clock, CreditCard, DollarSign, Download, Eye, FileText, PieChart, TrendingDown, TrendingUp, Users } from 'lucide-react';;
 
 // Mock financial data
 const mockFinancialData = {
@@ -154,11 +137,11 @@ export default function FinancialManagementPage() {
     switch (status) {
       case 'active':
       case 'completed':
-      case 'current':
+      case 'current:
         return <CheckCircle className="w-4 h-4" />;
-      case 'pending':
+      case pending&apos;:
         return <Clock className="w-4 h-4" />;
-      case 'cancelled':
+      case &apos;cancelled':
       case 'overdue':
         return <AlertTriangle className="w-4 h-4" />;
       default:
@@ -453,7 +436,7 @@ export default function FinancialManagementPage() {
           )}
 
           {/* Loan Repayments Table */}
-          {activeTab === 'loans' && (
+          {activeTab === loans && (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">

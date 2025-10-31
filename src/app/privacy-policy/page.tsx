@@ -1,4 +1,4 @@
-'use client';
+import { Card, CardHeader, CardTitle, Badge, CardContent, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Button } from "lucide-react";\n'use client';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -202,8 +202,8 @@ export default function PrivacyPolicyPage() {
               <Separator />
 
               <section>
-                <h2 className='text-2xl font-semibold text-gray-800 mb-4'>8. Children's Privacy</h2>
-                <div className='space-y-3 text-gray-600'>
+                <h2 className='text-2xl font-semibold text-gray-800 mb-4'>8. Childrens Privacy</h2>
+                <div className=space-y-3 text-gray-600'>
                   <p>Bell24H is a B2B platform designed for business users:</p>
                   <ul className='list-disc pl-6 space-y-2'>
                     <li>We do not knowingly collect data from children under 18</li>
@@ -257,7 +257,7 @@ export default function PrivacyPolicyPage() {
               <div className='text-center pt-6'>
                 <Button
                   onClick={() => window.history.back()}
-                  className='bg-blue-600 hover:bg-blue-700'
+                  className=bg-blue-600 hover:bg-blue-700
                 >
                   Back to Previous Page
                 </Button>

@@ -1,4 +1,4 @@
-/**
+import { Head } from "lucide-react";\n/**
  * Global SEO Head Component
  *
  * Generates country-specific SEO meta tags, structured data, and hreflang tags
@@ -254,7 +254,7 @@ export default function GlobalSEOHead({
 
 // Safe hook for using global SEO configuration in pages (not in Head component)
 export const useGlobalSEO = (countryCode: string = 'IN') => {
-  const country = GLOBAL_SEO_CONFIG[countryCode] || GLOBAL_SEO_CONFIG['IN'];
+  const country = GLOBAL_SEO_CONFIG[countryCode] || GLOBAL_SEO_CONFIG[IN];
 
   return {
     country,

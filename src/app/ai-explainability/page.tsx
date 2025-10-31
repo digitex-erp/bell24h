@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Brain, BarChart3, TrendingUp, Shield, Zap } from 'lucide-react';
+import { BarChart3, Brain, Button, Card, CardContent, CardHeader, CardTitle, Header, Shield, TrendingUp, Zap } from 'lucide-react';;;
 import { Slot } from '@radix-ui/react-slot';
 import Header from '@/components/Header';
 

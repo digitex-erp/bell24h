@@ -3,20 +3,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slot } from '@radix-ui/react-slot';
-import { 
-  ArrowRight, 
-  Phone, 
-  User, 
-  Building, 
-  Shield, 
-  Star, 
-  CheckCircle,
-  Clock,
-  Users,
-  TrendingUp,
-  Zap,
-  Crown
-} from 'lucide-react';
+import { ArrowRight, Building, Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, Crown, Link, Phone, Shield, Star, TrendingUp, User, Users, Zap } from 'lucide-react';;;
 import Link from 'next/link';
 
 export default function AuthLandingPage() {
@@ -33,9 +20,9 @@ export default function AuthLandingPage() {
     {
       step: 2,
       title: 'Mobile Verification',
-      description: 'Verify your mobile number with OTP',
+      description: 'Verify your mobile number with OTP,
       icon: <Phone className="h-6 w-6" />,
-      color: 'text-emerald-600 bg-emerald-100'
+      color: text-emerald-600 bg-emerald-100'
     },
     {
       step: 3,
@@ -47,9 +34,9 @@ export default function AuthLandingPage() {
     {
       step: 4,
       title: 'Welcome to Bell24h',
-      description: 'Access your dashboard and start growing',
+      description: 'Access your dashboard and start growing,
       icon: <Star className="h-6 w-6" />,
-      color: 'text-yellow-600 bg-yellow-100'
+      color: text-yellow-600 bg-yellow-100'
     }
   ];
 
@@ -90,7 +77,7 @@ export default function AuthLandingPage() {
             🚀 Join Bell24h
           </h1>
           <p className="text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
-            India's Fastest B2B Match-Making Engine for MSMEs
+            India&apos;s Fastest B2B Match-Making Engine for MSMEs
           </p>
           <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
             Get <strong>3 months FREE premium</strong> worth ₹36,000 + <strong>Free forever basic plan</strong> + <strong>Founder member badge</strong>
@@ -177,7 +164,7 @@ export default function AuthLandingPage() {
         {/* Features Preview */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-            What You'll Get Access To
+            What You&apos;ll Get Access To
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="hover:shadow-lg transition-shadow">

@@ -1,4 +1,4 @@
-'use client';
+import { AIErrorBoundary, AIErrorBoundaryState, AlertTriangle, Component } from 'lucide-react';;\n'use client';
 
 import React from 'react';
 
@@ -72,8 +72,8 @@ export class AIErrorBoundary extends React.Component<AIErrorBoundaryProps, AIErr
             Something went wrong with the AI component. This might be due to a temporary issue.
           </p>
 
-          {process.env.NODE_ENV === 'development' && this.state.error && (
-            <div className='bg-red-100 rounded-lg p-4 mb-4 text-left'>
+          {process.env.NODE_ENV === 'development && this.state.error && (
+            <div className=bg-red-100 rounded-lg p-4 mb-4 text-left'>
               <h4 className='font-medium text-red-800 mb-2'>Error Details (Development Only):</h4>
               <pre className='text-xs text-red-700 overflow-x-auto whitespace-pre-wrap'>
                 {this.state.error.toString()}

@@ -1,4 +1,4 @@
-'use client';
+import { OnboardingContextType, OnboardingState } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 

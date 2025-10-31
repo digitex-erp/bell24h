@@ -1,4 +1,4 @@
-'use client';
+import { AnalyticsContextType } from "lucide-react";\n'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
@@ -102,7 +102,7 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
 
   const trackUserAction = (action: string, category: string, label?: string) => {
     trackEvent({
-      event: 'user_action',
+      event: user_action,
       category,
       action,
       label,

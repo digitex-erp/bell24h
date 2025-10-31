@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { TrialStatus } from "lucide-react";\nimport React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface TrialStatus {
@@ -199,7 +199,7 @@ export default function TrialManagement({ userId, onUpgrade }: TrialManagementPr
             <div className='ml-3'>
               <h3 className='text-lg font-medium text-blue-900'>Upgrade to Continue</h3>
               <p className='text-blue-700'>
-                You've reached your trial limits. Upgrade to unlock unlimited access!
+                You&apos;ve reached your trial limits. Upgrade to unlock unlimited access!
               </p>
             </div>
           </div>

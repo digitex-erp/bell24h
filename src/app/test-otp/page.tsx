@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slot } from '@radix-ui/react-slot';
-import { CheckCircle, Phone, Shield } from 'lucide-react';
+import { Button, Card, CardContent, CardHeader, CardTitle, CheckCircle, Input, Phone, Shield } from 'lucide-react';;;
 
 export default function TestOTPPage() {
   const [phoneNumber, setPhoneNumber] = useState('');

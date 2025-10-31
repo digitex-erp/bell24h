@@ -1,4 +1,4 @@
-'use client';
+import { AnimatePresence, Info, Maximize, Product, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';;\n'use client';
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -93,7 +93,7 @@ export default function VirtualProductTours() {
         Width: '58-60 inches',
         Composition: '100% Organic Cotton',
         Weave: 'Plain/Twill',
-        Shrinkage: '<3%',
+        Shrinkage: <3%,
       },
       features: ['GOTS Certified', 'Pre-shrunk', 'Colorfast', 'Eco-friendly'],
       certifications: ['GOTS', 'OEKO-TEX', 'Organic India'],

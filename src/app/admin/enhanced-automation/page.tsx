@@ -1,4 +1,4 @@
-'use client';
+import { Header, EnhancedAutomationPanel } from "lucide-react";\n'use client';
 
 import React from 'react';
 import EnhancedAutomationPanel from '@/components/admin/enhanced-automation-panel';

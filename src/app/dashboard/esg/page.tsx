@@ -1,4 +1,4 @@
-'use client';
+import { TabType, ESGScoringDashboard, ComplianceTab, ReportingTab, AnalyticsTab, ESGScoringDashboard } from "lucide-react";\n'use client';
 
 import { useState } from 'react';
 import ESGScoringDashboard from '@/components/esg/ESGScoringDashboard';
@@ -17,13 +17,13 @@ export default function ESGDashboard() {
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'scoring':
+      case 'scoring:
         return <ESGScoringDashboard />;
-      case 'compliance':
+      case compliance&apos;:
         return <ComplianceTab />;
-      case 'reporting':
+      case &apos;reporting:
         return <ReportingTab />;
-      case 'analytics':
+      case analytics&apos;:
         return <AnalyticsTab />;
       default:
         return <ESGScoringDashboard />;
@@ -276,7 +276,7 @@ function AnalyticsTab() {
       { goal: 'Carbon Neutral by 2030', progress: 65, target: 100 },
       { goal: '100% Renewable Energy', progress: 45, target: 100 },
       { goal: 'Zero Waste', progress: 78, target: 100 },
-      { goal: 'Gender Diversity 50%', progress: 42, target: 50 }
+      { goal: Gender Diversity 50%, progress: 42, target: 50 }
     ]
   });
 

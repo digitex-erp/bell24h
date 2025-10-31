@@ -1,6 +1,6 @@
 'use client';
 
-import { Shield, Lock, Eye, AlertTriangle, CheckCircle, Users, Activity, Settings } from 'lucide-react';
+import { Activity, AlertTriangle, CheckCircle, Eye, Lock, Settings, Shield, Users } from 'lucide-react';;
 import { useState } from 'react';
 
 interface SecurityEvent {
@@ -66,15 +66,15 @@ export default function SecurityPage() {
 
   const getEventIcon = (type: string) => {
     switch (type) {
-      case 'login':
+      case 'login:
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'logout':
+      case logout&apos;:
         return <Activity className="h-4 w-4 text-blue-600" />;
-      case 'failed_login':
+      case &apos;failed_login:
         return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case 'permission_change':
+      case permission_change&apos;:
         return <Settings className="h-4 w-4 text-orange-600" />;
-      case 'data_access':
+      case &apos;data_access':
         return <Eye className="h-4 w-4 text-purple-600" />;
       default:
         return <Activity className="h-4 w-4 text-gray-600" />;
@@ -270,7 +270,7 @@ export default function SecurityPage() {
                       <div className="flex items-center">
                         {getEventIcon(event.type)}
                         <span className="ml-2 text-sm font-medium text-gray-900 capitalize">
-                          {event.type.replace('_', ' ')}
+                          {event.type.replace('_',  )}
                         </span>
                       </div>
                     </td>

@@ -1,4 +1,4 @@
-'use client';
+import { AlertTriangle } from 'lucide-react';;\n'use client';
 
 import { useState } from 'react';
 

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { WrappedComponent } from "lucide-react";\nimport { useState, useCallback } from 'react';
 import { azrService } from '../services/azrService';
 import { rlvrService } from '../services/rlvrService';
 
@@ -125,7 +125,7 @@ export const useAIDecision = ({
         onDecision?.(decision);
       } catch (error) {
         const err = error as Error;
-        console.error('AI decision error:', err);
+        console.error(AI decision error:, err);
 
         setState(prev => ({
           ...prev,

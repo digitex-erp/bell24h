@@ -1,4 +1,4 @@
-'use client';
+import { Link, Link, Link } from "lucide-react";\n'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -47,7 +47,7 @@ export default function BuyerSuppliersPage() {
       rating: 4.8,
       reviews: 234,
       orders: 2340,
-      responseTime: '<2hrs',
+      responseTime: <2hrs,
       aiMatchScore: 98.7,
       verified: true,
       ecgcApproved: true,
@@ -483,7 +483,7 @@ export default function BuyerSuppliersPage() {
               onClick={() => {
                 setSearchTerm('');
                 setSelectedCategory('all');
-                setSelectedLocation('all');
+                setSelectedLocation(all);
               }}
               className="bg-amber-600 text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition-colors"
             >

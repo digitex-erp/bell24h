@@ -61,7 +61,7 @@ export default function NavigationFix({ isAuthenticated, userRole }: NavigationF
         disabled={isLoading}
         className="btn-create-rfq"
       >
-        {isLoading ? 'Creating...' : 'Create RFQ'}
+        {isLoading ? 'Creating...' : Create RFQ}
       </button>
     </div>
   );

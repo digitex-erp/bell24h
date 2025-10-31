@@ -1,4 +1,4 @@
-import {
+import { Box, Card, CardContent, Chip, CircularProgress, Container, FormControl, InputLabel, LineChart, MenuItem, Paper, PieChart, Select, Tab, TabPanel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Typography } from 'lucide-react';;\nimport {
   Box,
   Card,
   CardContent,
@@ -57,7 +57,7 @@ const SearchAnalyticsDashboard: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
-  const [timeRange, setTimeRange] = useState<'day' | 'week' | 'month'>('week');
+  const [timeRange, setTimeRange] = useState<'day' | 'week' | 'month'>(&apos;week');
   const [selectedMetric, setSelectedMetric] = useState('searches');
   const [searchHistory, setSearchHistory] = useState<SearchAnalytics[]>([]);
   const [popularSearches, setPopularSearches] = useState<string[]>([]);
@@ -229,9 +229,9 @@ const SearchAnalyticsDashboard: React.FC = () => {
               <Select
                 value={dateRange}
                 onChange={e => setDateRange(e.target.value)}
-                label='Date Range'
+                label='Date Range
               >
-                <MenuItem value='1d'>Last 24 hours</MenuItem>
+                <MenuItem value=1d'>Last 24 hours</MenuItem>
                 <MenuItem value='7d'>Last 7 days</MenuItem>
                 <MenuItem value='30d'>Last 30 days</MenuItem>
                 <MenuItem value='90d'>Last 90 days</MenuItem>

@@ -6,23 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Shield, 
-  CheckCircle, 
-  AlertCircle, 
-  Upload, 
-  FileText, 
-  Building2,
-  User,
-  CreditCard,
-  Camera,
-  Download,
-  Eye,
-  X,
-  Clock,
-  ExternalLink,
-  Info
-} from 'lucide-react';
+import { AlertCircle, Badge, Building2, Button, Camera, Card, CardContent, CardHeader, CardTitle, CheckCircle, Clock, CreditCard, Download, ExternalLink, Eye, FileText, Header, Info, Input, Label, Shield, Tabs, TabsContent, TabsList, TabsTrigger, URDSupport, UdyamIntegration, Upload, User, X } from 'lucide-react';;;
 import Link from 'next/link';
 import Header from '@/components/Header';
 
@@ -125,11 +109,11 @@ export default function KYCCompliancePage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'completed:
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'in_progress':
+      case in_progress&apos;:
         return <Clock className="h-4 w-4 text-blue-600" />;
-      case 'failed':
+      case &apos;failed':
         return <X className="h-4 w-4 text-red-600" />;
       default:
         return <AlertCircle className="h-4 w-4 text-yellow-600" />;

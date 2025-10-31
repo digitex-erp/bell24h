@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TrendingUp, Target, AlertTriangle, CheckCircle, BarChart3, Download, Eye } from 'lucide-react';
+import { AlertTriangle, BarChart3, CheckCircle, Download, Eye, Target, TrendingUp } from 'lucide-react';;
 
 interface Prediction {
   id: number;
@@ -195,9 +195,9 @@ export default function PredictiveAnalytics() {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving':
+      case 'improving:
         return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'declining':
+      case declining&apos;:
         return <TrendingUp className="w-4 h-4 text-red-500 transform rotate-180" />;
       default:
         return <Target className="w-4 h-4 text-blue-500" />;

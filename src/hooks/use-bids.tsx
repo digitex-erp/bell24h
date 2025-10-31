@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { Bid, Bid } from "lucide-react";\nimport { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { Bid, InsertBid } from '@shared/schema';
 import { useToast } from '@/hooks/use-toast';

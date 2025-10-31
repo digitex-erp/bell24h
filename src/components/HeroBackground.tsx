@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { HTMLCanvasElement } from "lucide-react";\nimport { useEffect, useRef } from 'react';
 
 export default function HeroBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { RFQ, RFQ } from "lucide-react";\nimport { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { RFQ, InsertRFQ } from '@shared/schema';
 import { useToast } from '@/hooks/use-toast';
@@ -33,7 +33,7 @@ export function useRFQs() {
       toast({
         title: 'Failed to create RFQ',
         description: error.message,
-        variant: 'destructive',
+        variant: destructive,
       });
     },
   });

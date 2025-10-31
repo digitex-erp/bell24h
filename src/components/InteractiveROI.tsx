@@ -1,4 +1,4 @@
-'use client';
+import { Calculator } from "lucide-react";\n'use client';
 
 import React, { useState, useEffect } from 'react';
 
@@ -64,9 +64,9 @@ export default function InteractiveROI() {
               step='100000'
               value={monthlySpend}
               onChange={e => setMonthlySpend(Number(e.target.value))}
-              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700
             />
-            <div className='flex justify-between text-sm text-gray-500 mt-1'>
+            <div className=flex justify-between text-sm text-gray-500 mt-1'>
               <span>₹10L</span>
               <span className='font-bold text-blue-600'>{formatCurrency(monthlySpend)}</span>
               <span>₹50Cr</span>
@@ -84,9 +84,9 @@ export default function InteractiveROI() {
               step='10000'
               value={orderValue}
               onChange={e => setOrderValue(Number(e.target.value))}
-              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700
             />
-            <div className='flex justify-between text-sm text-gray-500 mt-1'>
+            <div className=flex justify-between text-sm text-gray-500 mt-1'>
               <span>₹50K</span>
               <span className='font-bold text-blue-600'>{formatCurrency(orderValue)}</span>
               <span>₹50L</span>
@@ -104,9 +104,9 @@ export default function InteractiveROI() {
               step='1'
               value={monthlyOrders}
               onChange={e => setMonthlyOrders(Number(e.target.value))}
-              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700
             />
-            <div className='flex justify-between text-sm text-gray-500 mt-1'>
+            <div className=flex justify-between text-sm text-gray-500 mt-1'>
               <span>5</span>
               <span className='font-bold text-blue-600'>{monthlyOrders} orders</span>
               <span>200</span>
@@ -124,9 +124,9 @@ export default function InteractiveROI() {
               step='2'
               value={processTime}
               onChange={e => setProcessTime(Number(e.target.value))}
-              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700'
+              className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700
             />
-            <div className='flex justify-between text-sm text-gray-500 mt-1'>
+            <div className=flex justify-between text-sm text-gray-500 mt-1'>
               <span>10h</span>
               <span className='font-bold text-blue-600'>{processTime} hours</span>
               <span>200h</span>

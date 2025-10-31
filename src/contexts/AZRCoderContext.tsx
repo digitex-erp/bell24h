@@ -1,4 +1,4 @@
-'use client';
+import { AZRCodeAnalysis, AZRCodeCompletion, AZRTestGeneration, CodeSnippet, AZRCoderContextType, AZRCoderProviderProps, Error, CodeSnippet, CodeSnippet } from "lucide-react";\n'use client';
 
 import React, {
   createContext,
@@ -284,7 +284,7 @@ export const AZRCoderProvider: React.FC<AZRCoderProviderProps> = ({ children }) 
   );
 
   const generateDocumentation = useCallback(
-    async (code: string, format: 'jsdoc' | 'tsdoc' | 'markdown' = 'jsdoc', options: any = {}) => {
+    async (code: string, format: 'jsdoc' | 'tsdoc' | 'markdown' = jsdoc, options: any = {}) => {
       setIsAnalyzing(true);
       try {
         const result = await azrCoderService.generateDocumentation(code, format, options);

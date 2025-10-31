@@ -1,4 +1,4 @@
-'use client';
+import { Card, CardHeader, CardTitle, Badge, CardContent, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Separator, Button } from "lucide-react";\n'use client';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -44,7 +44,7 @@ export default function TermsOfServicePage() {
                 </h2>
                 <div className='space-y-3 text-gray-600'>
                   <p>
-                    By accessing and using Bell24H's B2B marketplace platform, you agree to be bound
+                    By accessing and using Bell24H&apos;s B2B marketplace platform, you agree to be bound
                     by these Terms of Service. If you do not agree to these terms, please do not use
                     our services.
                   </p>
@@ -239,8 +239,8 @@ export default function TermsOfServicePage() {
                   10. Limitation of Liability
                 </h2>
                 <div className='space-y-3 text-gray-600'>
-                  <p>Bell24H's liability is limited to:</p>
-                  <ul className='list-disc pl-6 space-y-2'>
+                  <p>Bell24Hs liability is limited to:</p>
+                  <ul className=list-disc pl-6 space-y-2'>
                     <li>Direct damages up to the transaction amount</li>
                     <li>Escrow protection for verified transactions</li>
                     <li>Platform security and data protection</li>
@@ -311,7 +311,7 @@ export default function TermsOfServicePage() {
               <div className='text-center pt-6'>
                 <Button
                   onClick={() => window.history.back()}
-                  className='bg-green-600 hover:bg-green-700'
+                  className=bg-green-600 hover:bg-green-700
                 >
                   Back to Previous Page
                 </Button>

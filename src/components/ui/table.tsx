@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { HTMLTableElement, HTMLTableSectionElement, HTMLTableSectionElement, HTMLTableSectionElement, HTMLTableRowElement, HTMLTableCellElement, HTMLTableCellElement, HTMLTableCaptionElement } from "lucide-react";\nimport * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -9,7 +9,7 @@ const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableE
     </div>
   )
 );
-Table.displayName = 'Table';
+Table.displayName = &apos;Table';
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
@@ -17,7 +17,7 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead ref={ref} className={cn('[&_tr]:border-b', className)} {...props} />
 ));
-TableHeader.displayName = 'TableHeader';
+TableHeader.displayName = &apos;TableHeader';
 
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
@@ -25,7 +25,7 @@ const TableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody ref={ref} className={cn('[&_tr:last-child]:border-0', className)} {...props} />
 ));
-TableBody.displayName = 'TableBody';
+TableBody.displayName = &apos;TableBody';
 
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
@@ -37,7 +37,7 @@ const TableFooter = React.forwardRef<
     {...props}
   />
 ));
-TableFooter.displayName = 'TableFooter';
+TableFooter.displayName = &apos;TableFooter';
 
 const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(
   ({ className, ...props }, ref) => (
@@ -51,7 +51,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
     />
   )
 );
-TableRow.displayName = 'TableRow';
+TableRow.displayName = &apos;TableRow';
 
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
@@ -66,7 +66,7 @@ const TableHead = React.forwardRef<
     {...props}
   />
 ));
-TableHead.displayName = 'TableHead';
+TableHead.displayName = &apos;TableHead';
 
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
@@ -78,7 +78,7 @@ const TableCell = React.forwardRef<
     {...props}
   />
 ));
-TableCell.displayName = 'TableCell';
+TableCell.displayName = TableCell;
 
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,

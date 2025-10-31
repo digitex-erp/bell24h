@@ -1,4 +1,4 @@
-'use client';
+import { Award, CommodityData, Link, PortfolioMetrics } from 'lucide-react';;\n'use client';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -42,7 +42,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
   const [selectedCommodity, setSelectedCommodity] = useState<CommodityData | null>(null);
   const [orders, setOrders] = useState<TradeOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [activeFilter, setActiveFilter] = useState<string>(&apos;all');
   const [portfolio, setPortfolio] = useState<PortfolioMetrics>({
     totalValue: 2450000,
     todayChange: 15750,
@@ -200,7 +200,7 @@ const EnterpriseTradingDashboard: React.FC = () => {
                     </h1>
                     <p className='text-gray-600 flex items-center space-x-4'>
                       <span>Real-time B2B trading platform</span>
-                      <span className='text-gray-400'>•</span>
+                      <span className='text-gray-400'>ï¿½</span>
                       <span className={marketStatus.color}>Market {marketStatus.status}</span>
                     </p>
                   </div>

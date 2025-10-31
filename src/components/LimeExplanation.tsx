@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Lightbulb, Info, CheckCircle, XCircle, AlertTriangle, Target, Zap } from 'lucide-react';
+import { Lightbulb, Info, CheckCircle, XCircle, AlertTriangle, Target, Zap, LimeExplanationProps } from "lucide-react";;
 
 interface LimeExplanation {
   feature: string;
@@ -37,8 +37,8 @@ export const LimeExplanation: React.FC<LimeExplanationProps> = ({
   });
 
   const getWeightColor = (weight: number) => {
-    if (weight > 0.1) return 'text-green-600 bg-green-100';
-    if (weight < -0.1) return 'text-red-600 bg-red-100';
+    if (weight > 0.1) return &apos;text-green-600 bg-green-100;
+    if (weight < -0.1) return text-red-600 bg-red-100';
     return 'text-gray-600 bg-gray-100';
   };
 
@@ -50,10 +50,10 @@ export const LimeExplanation: React.FC<LimeExplanationProps> = ({
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case 'financial': return <Target className="w-4 h-4" />;
-      case 'compliance': return <Zap className="w-4 h-4" />;
-      case 'performance': return <Target className="w-4 h-4" />;
-      case 'reliability': return <CheckCircle className="w-4 h-4" />;
+      case 'financial: return <Target className="w-4 h-4" />;
+      case compliance&apos;: return <Zap className="w-4 h-4" />;
+      case &apos;performance: return <Target className="w-4 h-4" />;
+      case reliability&apos;: return <CheckCircle className="w-4 h-4" />;
       default: return <Info className="w-4 h-4" />;
     }
   };
@@ -122,7 +122,7 @@ export const LimeExplanation: React.FC<LimeExplanationProps> = ({
                   <span className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full ${getWeightColor(explanation.weight)}`}>
                     {getWeightIcon(explanation.weight)}
                     <span className="ml-1">
-                      {explanation.weight > 0 ? 'Supports' : explanation.weight < 0 ? 'Opposes' : 'Neutral'}
+                      {explanation.weight > 0 ? &apos;Supports : explanation.weight < 0 ? Opposes' : 'Neutral'}
                     </span>
                   </span>
                   <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700 flex items-center">
@@ -141,7 +141,7 @@ export const LimeExplanation: React.FC<LimeExplanationProps> = ({
               
               <div className="ml-4 text-right">
                 <div className="text-sm font-medium text-gray-900" data-testid="feature-weight">
-                  {explanation.weight > 0 ? '+' : ''}{explanation.weight.toFixed(3)}
+                  {explanation.weight > 0 ? '+' : }{explanation.weight.toFixed(3)}
                 </div>
                 <div className="text-xs text-gray-500">Weight</div>
               </div>

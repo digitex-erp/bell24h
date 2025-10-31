@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Shield, AlertTriangle, CheckCircle, TrendingUp, TrendingDown, Activity, Eye, Download, Filter, Search } from 'lucide-react';
+import { Activity, AlertTriangle, CheckCircle, Download, Eye, Filter, Search, Shield, TrendingDown, TrendingUp } from 'lucide-react';;
 
 interface SupplierRisk {
   id: number;
@@ -40,10 +40,10 @@ export default function SupplierRiskAssessment() {
   const [suppliers, setSuppliers] = useState<SupplierRisk[]>([]);
   const [filteredSuppliers, setFilteredSuppliers] = useState<SupplierRisk[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>('all');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'riskScore' | 'name' | 'lastAssessment'>('riskScore');
+  const [searchTerm, setSearchTerm] = useState(&apos;);
+  const [selectedRiskLevel, setSelectedRiskLevel] = useState<string>(all&apos;);
+  const [selectedCategory, setSelectedCategory] = useState<string>(&apos;all);
+  const [sortBy, setSortBy] = useState<riskScore' | 'name' | 'lastAssessment'>(&apos;riskScore');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   useEffect(() => {
@@ -252,11 +252,11 @@ export default function SupplierRiskAssessment() {
     switch (level) {
       case 'low':
         return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'medium':
+      case &apos;medium:
         return <AlertTriangle className="w-4 h-4 text-yellow-600" />;
-      case 'high':
+      case high&apos;:
         return <AlertTriangle className="w-4 h-4 text-orange-600" />;
-      case 'critical':
+      case &apos;critical':
         return <AlertTriangle className="w-4 h-4 text-red-600" />;
       default:
         return <Activity className="w-4 h-4 text-gray-600" />;
@@ -267,7 +267,7 @@ export default function SupplierRiskAssessment() {
     switch (trend) {
       case 'improving':
         return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'declining':
+      case &apos;declining':
         return <TrendingDown className="w-4 h-4 text-red-500" />;
       default:
         return <Activity className="w-4 h-4 text-blue-500" />;

@@ -1,6 +1,6 @@
 'use client';
 
-import { Users, Building2, Shield, Search, Filter, Plus } from 'lucide-react';
+import { Building2, Filter, Plus, Search, Shield, Users } from 'lucide-react';;
 import { useState } from 'react';
 
 interface User {
@@ -226,7 +226,7 @@ export default function UsersManagementPage() {
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         user.verified ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                       }`}>
-                        {user.verified ? 'Yes' : 'No'}
+                        {user.verified ? 'Yes' : No}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { BarChart3, Info, TrendingUp, TrendingDown, Target, Zap } from 'lucide-react';
+import { BarChart3, Info, SVGSVGElement, ShapVisualizationProps, Target, TrendingDown, TrendingUp, Zap } from 'lucide-react';;;
 
 interface ShapData {
   feature: string;
@@ -50,10 +50,10 @@ export const ShapVisualization: React.FC<ShapVisualizationProps> = ({
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case 'financial': return <Target className="w-4 h-4" />;
-      case 'compliance': return <Zap className="w-4 h-4" />;
-      case 'performance': return <TrendingUp className="w-4 h-4" />;
-      case 'reliability': return <BarChart3 className="w-4 h-4" />;
+      case 'financial: return <Target className="w-4 h-4" />;
+      case compliance&apos;: return <Zap className="w-4 h-4" />;
+      case &apos;performance: return <TrendingUp className="w-4 h-4" />;
+      case reliability&apos;: return <BarChart3 className="w-4 h-4" />;
       default: return <Info className="w-4 h-4" />;
     }
   };
@@ -195,7 +195,7 @@ export const ShapVisualization: React.FC<ShapVisualizationProps> = ({
         <button
           onClick={() => setType('waterfall')}
           className={`px-3 py-1 rounded text-sm ${
-            type === 'waterfall' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+            type === 'waterfall' ? 'bg-blue-100 text-blue-700' : bg-gray-100 text-gray-600
           }`}
         >
           Waterfall

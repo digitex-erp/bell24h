@@ -1,4 +1,4 @@
-'use client';
+import { Button, LanguageIcon } from "lucide-react";\n'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';

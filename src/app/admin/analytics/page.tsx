@@ -1,28 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  BarChart3,
-  TrendingUp,
-  TrendingDown,
-  Users,
-  DollarSign,
-  FileText,
-  Activity,
-  Calendar,
-  Download,
-  RefreshCw,
-  Eye,
-  Filter,
-  ArrowUpRight,
-  ArrowDownRight,
-  PieChart,
-  LineChart,
-  BarChart,
-  Zap,
-  Shield,
-  Clock,
-} from 'lucide-react';
+import { Activity, ArrowDownRight, ArrowUpRight, BarChart, BarChart3, Calendar, Clock, DollarSign, Download, Eye, FileText, Filter, LineChart, PieChart, RefreshCw, Shield, TrendingDown, TrendingUp, Users, Zap } from 'lucide-react';;
 
 // Mock analytics data
 const mockAnalyticsData = {

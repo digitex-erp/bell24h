@@ -1,30 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-  FileText,
-  DollarSign,
-  TrendingUp,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  Building2,
-  Calendar,
-  Download,
-  Upload,
-  Eye,
-  Star,
-  Award,
-  Zap,
-  Shield,
-  CreditCard,
-  Banknote,
-  History,
-  Settings,
-  Plus,
-  Filter,
-  Search,
-} from 'lucide-react';
+import { AlertCircle, Award, Banknote, BenefitsSection, Building2, Calendar, CheckCircle, Clock, CreditCard, DollarSign, Download, EligibilityCriteria, Eye, FileText, Filter, History, Icon, InvoiceCard, Plus, Search, Settings, Shield, Star, TrendingUp, Upload, UserDashboardLayout, Zap } from 'lucide-react';;;
 import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
 
 // Mock KredX data
@@ -485,7 +462,7 @@ export default function InvoiceDiscountingPage() {
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                     filter === status
                       ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      : bg-gray-200 text-gray-700 hover:bg-gray-300
                   }`}
                 >
                   {status.charAt(0).toUpperCase() + status.slice(1)}

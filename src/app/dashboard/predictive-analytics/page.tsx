@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { TrendingUp, BarChart3, PieChart, Activity, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Activity, AlertTriangle, BarChart3, CheckCircle, Clock, Icon, PieChart, PredictionCard, RiskAlert, TrendingUp } from 'lucide-react';;;
 
 export default function PredictiveAnalyticsPage() {
   const [selectedPeriod, setSelectedPeriod] = useState('30d');

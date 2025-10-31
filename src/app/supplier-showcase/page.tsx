@@ -1,49 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import {
-  Search,
-  Filter,
-  Grid,
-  List,
-  Star,
-  MapPin,
-  Phone,
-  Mail,
-  Globe,
-  Shield,
-  Award,
-  TrendingUp,
-  Package,
-  Users,
-  Calendar,
-  Download,
-  Share2,
-  MessageCircle,
-  Heart,
-  Eye,
-  ShoppingCart,
-  CheckCircle,
-  Clock,
-  Building2,
-  Factory,
-  Truck,
-  CreditCard,
-  FileText,
-  BarChart3,
-  Zap,
-  ArrowRight,
-  ChevronDown,
-  X,
-  Plus,
-  Edit,
-  Trash2,
-  Upload,
-  Image as ImageIcon,
-  Video,
-  Mic,
-  Camera,
-} from 'lucide-react';
+import { ArrowRight, Award, BarChart3, Building2, Calendar, Camera, CheckCircle, ChevronDown, Clock, CreditCard, Download, Edit, Eye, Factory, FileText, Filter, Globe, Grid, Heart, Image as ImageIcon, List, Mail, MapPin, MessageCircle, Mic, Package, Phone, Plus, Search, Share2, Shield, ShoppingCart, Star, Trash2, TrendingUp, Truck, Upload, Users, Video, X, Zap } from 'lucide-react';;
 
 // Enhanced interfaces for comprehensive supplier showcase
 interface Supplier {
@@ -426,8 +384,8 @@ export default function SupplierShowcasePage() {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedType, setSelectedType] = useState('');
   const [priceRange, setPriceRange] = useState([0, 1000000]);
-  const [sortBy, setSortBy] = useState('rating');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState('rating);
+  const [viewMode, setViewMode] = useState<grid' | 'list'>(&apos;grid');
   const [showFilters, setShowFilters] = useState(false);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [products, setProducts] = useState<Product[]>([]);

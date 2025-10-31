@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { RotateCcw, Clock, Shield, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Card, CardContent, CardHeader, CardTitle, Clock, Header, RotateCcw, Shield } from 'lucide-react';;;
 import Header from '@/components/Header';
 
 export default function CancellationRefundPolicyPage() {

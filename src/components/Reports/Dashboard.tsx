@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, Users, DollarSign, Activity, Eye, Download, FileText, Building2, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Activity, BarChart3, Building2, CheckCircle, Clock, CostSavings, DollarSign, Download, Eye, FileText, RFQMetrics, ResponseTimeAnalysis, SupplierPerformance, TrendingUp, Users, XCircle } from 'lucide-react';;;
 
 interface RFQMetrics {
   total: number;
@@ -426,7 +426,7 @@ export default function ReportsAnalytics() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className={`text-sm font-medium ${
                       category.successRate >= 90 ? 'text-green-600' : 
-                      category.successRate >= 80 ? 'text-yellow-600' : 'text-red-600'
+                      category.successRate >= 80 ? 'text-yellow-600' : text-red-600
                     }`}>
                       {formatPercentage(category.successRate)}
                     </div>

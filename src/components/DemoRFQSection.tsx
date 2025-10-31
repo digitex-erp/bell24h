@@ -1,4 +1,4 @@
-'use client';
+import { AlertCircle, Link, MessageSquare } from 'lucide-react';;\n'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -38,9 +38,9 @@ export default function DemoRFQSection({
 
   const getRFQTypeIcon = (type: string) => {
     switch (type) {
-      case 'voice':
+      case 'voice:
         return <span>🎤</span>;
-      case 'video':
+      case video&apos;:
         return <span>🎥</span>;
       default:
         return <MessageSquare className='w-4 h-4 text-gray-500' />;
@@ -202,8 +202,8 @@ export default function DemoRFQSection({
             </div>
 
             {/* Voice/Video Indicator */}
-            {rfq.rfqType !== 'standard' && (
-              <div className='mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg'>
+            {rfq.rfqType !== 'standard && (
+              <div className=mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg'>
                 <div className='flex items-center gap-2 text-sm'>
                   {rfq.rfqType === 'voice' ? (
                     <>

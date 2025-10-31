@@ -5,26 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Bot, 
-  TrendingUp, 
-  Users, 
-  DollarSign, 
-  Activity, 
-  Zap,
-  Target,
-  MessageSquare,
-  Mail,
-  Smartphone,
-  BarChart3,
-  Settings,
-  Play,
-  Pause,
-  RefreshCw,
-  CheckCircle,
-  AlertCircle,
-  Clock
-} from 'lucide-react';
+import { Activity, AlertCircle, Badge, BarChart3, Bot, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, CheckCircle, Clock, DollarSign, Mail, MessageSquare, Pause, Play, RefreshCw, Settings, Smartphone, Tabs, TabsContent, TabsList, TabsTrigger, Target, TrendingUp, Users, Zap } from 'lucide-react';;;
 
 export default function AutonomousSystemPage() {
   const [systemStatus, setSystemStatus] = useState('ACTIVE');
@@ -208,7 +189,7 @@ export default function AutonomousSystemPage() {
                 >
                   {systemStatus === 'ACTIVE' ? (
                     <><CheckCircle className="h-4 w-4 mr-1" /> ACTIVE</>
-                  ) : systemStatus === 'PAUSED' ? (
+                  ) : systemStatus === &apos;PAUSED' ? (
                     <><Pause className="h-4 w-4 mr-1" /> PAUSED</>
                   ) : (
                     <><AlertCircle className="h-4 w-4 mr-1" /> ERROR</>
@@ -435,7 +416,7 @@ export default function AutonomousSystemPage() {
                   Early User Benefits
                 </CardTitle>
                 <CardDescription>
-                  Founder's Club benefits and claim management
+                  Founder&apos;s Club benefits and claim management
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">

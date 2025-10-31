@@ -59,17 +59,17 @@ export default function TrafficAnalyticsPage() {
               Traffic Analytics
             </h1>
             <p className='text-gray-600'>
-              Real-time insights into your platform's traffic and user behavior
+              Real-time insights into your platforms traffic and user behavior
             </p>
           </div>
 
-          <div className='flex items-center gap-4'>
+          <div className=flex items-center gap-4'>
             <select
               value={timeframe}
               onChange={e => setTimeframe(e.target.value)}
-              className='bg-white border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+              className='bg-white border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
             >
-              <option value='1h'>Last Hour</option>
+              <option value=1h'>Last Hour</option>
               <option value='24h'>Last 24 Hours</option>
               <option value='7d'>Last 7 Days</option>
               <option value='30d'>Last 30 Days</option>
@@ -268,7 +268,7 @@ export default function TrafficAnalyticsPage() {
                 <div>
                   <h3 className='text-lg font-semibold mb-2'>Real-time Monitoring</h3>
                   <p className='text-blue-100'>
-                    Live traffic analytics powered by Bell24H's advanced tracking system
+                    Live traffic analytics powered by Bell24H&apos;s advanced tracking system
                   </p>
                 </div>
                 <div className='text-right'>

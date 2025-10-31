@@ -1,29 +1,6 @@
 'use client';
 
-import {
-  BarChart3,
-  Brain,
-  FileBarChart,
-  FileText,
-  HelpCircle,
-  Home,
-  MessageCircle,
-  Mic,
-  Settings,
-  Shield,
-  Square,
-  Star,
-  TrendingUp,
-  Truck,
-  Video,
-  Wallet,
-  Users,
-  Bell,
-  ChevronDown,
-  PlusCircle,
-  LogOut,
-  CreditCard,
-} from 'lucide-react';
+import { BarChart3, Bell, Brain, ChevronDown, CreditCard, FileBarChart, FileText, HelpCircle, Home, Icon, LeftSidebarMenu, Link, LogOut, MessageCircle, Mic, PlusCircle, Settings, Shield, Square, Star, TopNavigationBar, TrendingUp, Truck, Users, Video, Wallet } from 'lucide-react';;;
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -81,7 +58,7 @@ const TopNavigationBar = ({ user }) => (
           <div className="bg-gray-200 rounded-full h-8 w-8 flex items-center justify-center">
             <span className="text-sm font-medium">👤</span>
           </div>
-          <span className="text-sm font-medium">{user?.name || 'User'}</span>
+          <span className="text-sm font-medium">{user?.name || User}</span>
           <ChevronDown size={16} />
         </button>
         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-200 ease-out pointer-events-none group-hover:pointer-events-auto">

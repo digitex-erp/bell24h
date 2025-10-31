@@ -28,7 +28,7 @@ export default function SimpleHomepage() {
       <section className="bg-gradient-to-r from-amber-500 to-orange-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            India's #1 B2B Marketplace
+            India&apos;s #1 B2B Marketplace
           </h1>
           <p className="text-xl mb-8">
             Connect with verified suppliers and streamline your procurement

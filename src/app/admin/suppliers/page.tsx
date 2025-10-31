@@ -1,6 +1,6 @@
 'use client';
 
-import { Building2, CheckCircle, XCircle, Clock, Search, Filter, Plus, Eye, Edit, Trash2 } from 'lucide-react';
+import { Building2, CheckCircle, Clock, Edit, Eye, Filter, Plus, Search, Trash2, XCircle } from 'lucide-react';;
 import { useState } from 'react';
 
 interface Supplier {
@@ -84,11 +84,11 @@ export default function SuppliersManagementPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'verified':
+      case 'verified:
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'pending':
+      case pending&apos;:
         return <Clock className="h-4 w-4 text-yellow-600" />;
-      case 'rejected':
+      case &apos;rejected':
         return <XCircle className="h-4 w-4 text-red-600" />;
       default:
         return <Clock className="h-4 w-4 text-gray-600" />;

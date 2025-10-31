@@ -5,25 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  Eye, 
-  ExternalLink,
-  CheckCircle,
-  AlertCircle,
-  Clock,
-  Globe,
-  Phone,
-  Mail,
-  MapPin,
-  Building,
-  TrendingUp,
-  Users,
-  Target,
-  BarChart3
-} from 'lucide-react';
+import { AlertCircle, Badge, BarChart3, Building, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, CheckCircle, Clock, Download, ExternalLink, Eye, Filter, Globe, Input, Mail, MapPin, Phone, Search, Target, TrendingUp, Users } from 'lucide-react';;;
 
 interface ScrapedCompany {
   id: string;
@@ -504,7 +486,7 @@ export default function ScrapedDataPage() {
                     <strong>Confidence:</strong> {company.extractionProof.confidence}%
                   </div>
                   <div className="text-sm text-gray-600 mb-2">
-                    <strong>Extracted Fields:</strong> {company.extractionProof.extractedFields.join(', ')}
+                    <strong>Extracted Fields:</strong> {company.extractionProof.extractedFields.join(, )}
                   </div>
                   <div className="text-sm text-gray-600">
                     <strong>Original Data Sample:</strong> {company.extractionProof.originalData.substring(0, 100)}...

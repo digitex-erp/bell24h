@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, CheckCircle, Loader2, RotateCcw } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Loader2, RotateCcw } from 'lucide-react';;
 import { useEffect, useState } from 'react';
 
 interface EmailOTPVerificationProps {
@@ -167,7 +167,7 @@ export default function EmailOTPVerification({ email, phone, onEmailVerified, on
               Demo Mode
             </h3>
             <p className="text-sm text-yellow-700 mt-1">
-              Check the console for the OTP code. In production, you'll receive it via email.
+              Check the console for the OTP code. In production, you&apos;ll receive it via email.
             </p>
           </div>
         </div>

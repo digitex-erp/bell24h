@@ -1,6 +1,6 @@
 'use client';
 
-import { Info, Send } from 'lucide-react';
+import { HTMLInputElement, Info, LoadingSpinner, Send, Suspense, VideoRFQData } from 'lucide-react';;;
 import { useRouter } from 'next/navigation';
 import React, { Suspense, lazy, useState } from 'react';
 
@@ -27,7 +27,7 @@ const LoadingSpinner = () => (
 export default function VideoRFQPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [videoPreview, setVideoPreview] = useState<string>('');
+  const [videoPreview, setVideoPreview] = useState<string>(&apos;');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -82,11 +82,11 @@ export default function VideoRFQPage() {
     'Construction',
     'Healthcare',
     'Food & Beverage',
-    'Other',
+    'Other,
   ];
 
   return (
-    <div className='min-h-screen bg-orange-50'>
+    <div className=min-h-screen bg-orange-50'>
       {/* Simplified Header - Reduced CSS complexity */}
       <div className='bg-white shadow-sm border-b'>
         <div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -301,9 +301,9 @@ export default function VideoRFQPage() {
                   <select
                     value={formData.category}
                     onChange={e => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors'
+                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors
                   >
-                    <option value=''>Select a category</option>
+                    <option value='>Select a category</option>
                     {categories.map(cat => (
                       <option key={cat} value={cat}>
                         {cat}
@@ -321,11 +321,11 @@ export default function VideoRFQPage() {
                     onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
                     placeholder='Additional text description to complement your video...'
                     rows={4}
-                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors'
+                    className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors
                   />
                 </div>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div className=grid grid-cols-1 md:grid-cols-2 gap-6'>
                   <div>
                     <label className='block text-sm font-medium text-gray-700 mb-2'>
                       Budget Range

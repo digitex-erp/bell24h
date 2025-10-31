@@ -2,7 +2,7 @@
 
 import { downloadRFQReport } from '@/lib/napkin-pdf';
 import { formatTrafficPrice } from '@/lib/traffic-pricing';
-import { Eye, Grid, List, MessageSquare, Package, Search, TrendingUp } from 'lucide-react';
+import { Eye, FilterOptions, Grid, List, MessageSquare, Package, Product, Search, TrendingUp } from 'lucide-react';;;
 import { useEffect, useState } from 'react';
 
 interface Product {
@@ -41,7 +41,7 @@ interface FilterOptions {
 export default function ProductShowcasePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(&apos;grid');
   const [filters, setFilters] = useState<FilterOptions>({
     category: '',
     priceRange: [0, 1000000],
@@ -265,9 +265,9 @@ export default function ProductShowcasePage() {
               <select
                 value={filters.category}
                 onChange={e => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                className='px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                className='px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
               >
-                <option value=''>All Categories</option>
+                <option value='>All Categories</option>
                 <option value='steel'>Steel</option>
                 <option value='aluminum'>Aluminum</option>
                 <option value='copper'>Copper</option>
@@ -278,9 +278,9 @@ export default function ProductShowcasePage() {
               <select
                 value={filters.trafficTier}
                 onChange={e => setFilters(prev => ({ ...prev, trafficTier: e.target.value }))}
-                className='px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                className='px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
               >
-                <option value=''>All Tiers</option>
+                <option value='>All Tiers</option>
                 <option value='PLATINUM'>Platinum</option>
                 <option value='GOLD'>Gold</option>
                 <option value='SILVER'>Silver</option>
@@ -290,9 +290,9 @@ export default function ProductShowcasePage() {
               <select
                 value={filters.sortBy}
                 onChange={e => setFilters(prev => ({ ...prev, sortBy: e.target.value }))}
-                className='px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                className='px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
               >
-                <option value='newest'>Newest</option>
+                <option value=newest'>Newest</option>
                 <option value='price-low'>Price: Low to High</option>
                 <option value='price-high'>Price: High to Low</option>
                 <option value='popularity'>Most Popular</option>

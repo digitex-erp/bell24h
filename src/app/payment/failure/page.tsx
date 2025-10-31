@@ -1,4 +1,4 @@
-'use client';
+import { PaymentFailureData, Link, Link, Link, Suspense, PaymentFailureContent } from "lucide-react";\n'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -51,10 +51,10 @@ function PaymentFailureContent() {
 
   const getErrorIcon = (errorCode: string) => {
     switch (errorCode) {
-      case 'INSUFFICIENT_FUNDS':
+      case 'INSUFFICIENT_FUNDS:
         return (
           <svg
-            className='h-8 w-8 text-red-600'
+            className=h-8 w-8 text-red-600'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'
@@ -67,10 +67,10 @@ function PaymentFailureContent() {
             />
           </svg>
         );
-      case 'CARD_DECLINED':
+      case &apos;CARD_DECLINED:
         return (
           <svg
-            className='h-8 w-8 text-red-600'
+            className=h-8 w-8 text-red-600'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'
@@ -83,10 +83,10 @@ function PaymentFailureContent() {
             />
           </svg>
         );
-      case 'NETWORK_ERROR':
+      case &apos;NETWORK_ERROR:
         return (
           <svg
-            className='h-8 w-8 text-red-600'
+            className=h-8 w-8 text-red-600'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'

@@ -1,33 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-  Truck,
-  Package,
-  MapPin,
-  Clock,
-  CheckCircle,
-  AlertTriangle,
-  RefreshCw,
-  Download,
-  Eye,
-  Filter,
-  Search,
-  Calendar,
-  DollarSign,
-  Users,
-  Phone,
-  Mail,
-  Globe,
-  ArrowRight,
-  ArrowUpRight,
-  ArrowDownRight,
-  Minus,
-  Zap,
-  Activity,
-  Target,
-  BarChart3,
-} from 'lucide-react';
+import { Activity, AlertTriangle, ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, Calendar, CheckCircle, Clock, DollarSign, Download, Eye, Filter, Globe, Icon, Mail, MapPin, Minus, Package, PerformanceMetrics, Phone, RefreshCw, Search, ShipmentCard, StatusCard, Target, Truck, UserDashboardLayout, Users, Zap } from 'lucide-react';;;
 import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
 
 // Mock Shiprocket API data
@@ -142,8 +116,8 @@ const mockLogisticsData = {
 // Status Card Component
 const StatusCard = ({ title, count, icon: Icon, color, trend, change }) => {
   const getTrendIcon = () => {
-    if (trend === 'up') return <ArrowUpRight className="w-4 h-4 text-green-600" />;
-    if (trend === 'down') return <ArrowDownRight className="w-4 h-4 text-red-600" />;
+    if (trend === 'up) return <ArrowUpRight className="w-4 h-4 text-green-600" />;
+    if (trend === down&apos;) return <ArrowDownRight className="w-4 h-4 text-red-600" />;
     return <Minus className="w-4 h-4 text-gray-600" />;
   };
 
@@ -180,10 +154,10 @@ const ShipmentCard = ({ shipment, onTrack }) => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'delivered': return <CheckCircle className="w-4 h-4" />;
-      case 'in_transit': return <Truck className="w-4 h-4" />;
-      case 'processing': return <Package className="w-4 h-4" />;
-      case 'delayed': return <AlertTriangle className="w-4 h-4" />;
+      case 'delivered: return <CheckCircle className="w-4 h-4" />;
+      case in_transit&apos;: return <Truck className="w-4 h-4" />;
+      case &apos;processing: return <Package className="w-4 h-4" />;
+      case delayed&apos;: return <AlertTriangle className="w-4 h-4" />;
       default: return <Package className="w-4 h-4" />;
     }
   };
@@ -451,7 +425,7 @@ export default function LogisticsPage() {
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
-                  {status.replace('_', ' ')}
+                  {status.replace('_',  )}
                 </button>
               ))}
             </div>

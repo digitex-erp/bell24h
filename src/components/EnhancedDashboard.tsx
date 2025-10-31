@@ -1,4 +1,4 @@
-import { Brain } from "lucide-react";
+import { Brain } from 'lucide-react';;
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -137,16 +137,16 @@ export default function EnhancedDashboard() {
             <div>
               <h1 className='text-3xl font-bold text-gray-900 dark:text-white'>Dashboard</h1>
               <p className='text-gray-600 dark:text-gray-400'>
-                Welcome back! Here's what's happening with your business.
+                Welcome back! Here&apos;s what's happening with your business.
               </p>
             </div>
             <div className='flex items-center space-x-3'>
               <select
                 value={timeRange}
                 onChange={e => setTimeRange(e.target.value)}
-                className='px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                className='px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
               >
-                <option value='7d'>Last 7 days</option>
+                <option value=7d'>Last 7 days</option>
                 <option value='30d'>Last 30 days</option>
                 <option value='90d'>Last 3 months</option>
                 <option value='12m'>Last 12 months</option>

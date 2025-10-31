@@ -4,7 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { TrendingUp, Users, FileText, ArrowRight } from 'lucide-react'
+import { ArrowRight, Badge, Card, CardContent, CardHeader, CardTitle, CategoryCard, CategoryGrid, FileText, Link, TrendingUp, Users } from 'lucide-react';;
 
 interface CategoryCardProps {
   category: {
@@ -161,7 +161,7 @@ export function CategoryGrid({
 }
 
 interface TrendingCategoriesProps {
-  categories: CategoryCardProps['category'][]
+  categories: CategoryCardProps[category][]
   title?: string
   subtitle?: string
 }

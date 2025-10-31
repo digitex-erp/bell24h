@@ -2,7 +2,7 @@
 
 import { generateRFQReport } from '@/lib/napkin-pdf';
 import { calculateTrafficPricing, getPricingDisplay } from '@/lib/traffic-pricing';
-import { Brain, CheckCircle, FileText, Mic, Star, TrendingUp, Users } from 'lucide-react';
+import { Brain, CheckCircle, FileText, HTMLInputElement, Mic, PageHeader, RFQCreationContent, RFQForm, Star, Suspense, TrendingUp, Users } from 'lucide-react';;;
 import { useRouter, useSearchParams } from 'next/navigation';
 import PageHeader from '@/components/common/PageHeader';
 import React, { useEffect, useState, Suspense } from 'react';
@@ -326,10 +326,10 @@ function RFQCreationContent() {
                       <select
                         value={form.priority}
                         onChange={e => handleFormChange('priority', e.target.value)}
-                        className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                        className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                         required
                       >
-                        <option value='LOW'>Low</option>
+                        <option value=LOW'>Low</option>
                         <option value='MEDIUM'>Medium</option>
                         <option value='HIGH'>High</option>
                         <option value='URGENT'>Urgent</option>
@@ -371,10 +371,10 @@ function RFQCreationContent() {
                     <select
                       value={form.category}
                       onChange={e => handleFormChange('category', e.target.value)}
-                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                       required
                     >
-                      <option value=''>Select category</option>
+                      <option value='>Select category</option>
                       <option value='steel'>Steel</option>
                       <option value='aluminum'>Aluminum</option>
                       <option value='copper'>Copper</option>
@@ -418,9 +418,9 @@ function RFQCreationContent() {
                     <select
                       value={form.unit}
                       onChange={e => handleFormChange('unit', e.target.value)}
-                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                     >
-                      <option value='pieces'>Pieces</option>
+                      <option value=pieces'>Pieces</option>
                       <option value='kg'>Kilograms</option>
                       <option value='tons'>Tons</option>
                       <option value='meters'>Meters</option>

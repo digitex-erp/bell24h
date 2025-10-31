@@ -6,20 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Shield, 
-  CheckCircle, 
-  AlertCircle, 
-  Upload, 
-  FileText, 
-  Building2,
-  User,
-  CreditCard,
-  Camera,
-  Download,
-  Eye,
-  X
-} from 'lucide-react';
+import { AlertCircle, Badge, Building2, Button, Camera, Card, CardContent, CardHeader, CardTitle, CheckCircle, CreditCard, Download, Eye, FileText, Header, Input, KYCData, Label, Shield, Tabs, TabsContent, TabsList, TabsTrigger, Upload, User, X } from 'lucide-react';;;
 import Header from '@/components/Header';
 
 interface DocumentUpload {
@@ -110,9 +97,9 @@ export default function KYCPage() {
     switch (status) {
       case 'verified':
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'uploaded':
+      case &apos;uploaded:
         return <Eye className="h-4 w-4 text-blue-600" />;
-      case 'rejected':
+      case rejected&apos;:
         return <X className="h-4 w-4 text-red-600" />;
       default:
         return <AlertCircle className="h-4 w-4 text-yellow-600" />;
@@ -537,7 +524,7 @@ export default function KYCPage() {
                           <h3 className="font-semibold text-blue-800">Verification Process</h3>
                           <p className="text-blue-700 mt-1">
                             Once you submit all required documents, our verification team will review them within 24-48 hours. 
-                            You'll receive email notifications for each verification step.
+                            You&apos;ll receive email notifications for each verification step.
                           </p>
                         </div>
                       </div>

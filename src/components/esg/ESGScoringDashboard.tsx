@@ -1,4 +1,4 @@
-'use client';
+import { Bar, BarChart, CartesianGrid, Cell, ESGData, ESGScore, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'lucide-react';;\n'use client';
 
 import { useState } from 'react';
 import {
@@ -196,9 +196,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('environmental', 'carbonFootprint', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>
+                <span className=text-sm text-gray-600'>
                   {esgData.environmental.carbonFootprint}%
                 </span>
               </div>
@@ -214,9 +214,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('environmental', 'energyEfficiency', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>
+                <span className=text-sm text-gray-600'>
                   {esgData.environmental.energyEfficiency}%
                 </span>
               </div>
@@ -232,9 +232,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('environmental', 'wasteManagement', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>
+                <span className=text-sm text-gray-600'>
                   {esgData.environmental.wasteManagement}%
                 </span>
               </div>
@@ -254,9 +254,9 @@ export default function ESGScoringDashboard() {
                       parseInt(e.target.value)
                     )
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>
+                <span className=text-sm text-gray-600'>
                   {esgData.environmental.waterConservation}%
                 </span>
               </div>
@@ -272,9 +272,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('environmental', 'renewableEnergy', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>
+                <span className=text-sm text-gray-600'>
                   {esgData.environmental.renewableEnergy}%
                 </span>
               </div>
@@ -295,9 +295,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('social', 'laborRights', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.social.laborRights}%</span>
+                <span className=text-sm text-gray-600'>{esgData.social.laborRights}%</span>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -311,9 +311,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('social', 'communityEngagement', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.social.communityEngagement}%</span>
+                <span className=text-sm text-gray-600'>{esgData.social.communityEngagement}%</span>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -327,9 +327,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('social', 'diversityInclusion', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.social.diversityInclusion}%</span>
+                <span className=text-sm text-gray-600'>{esgData.social.diversityInclusion}%</span>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -343,9 +343,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('social', 'healthSafety', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.social.healthSafety}%</span>
+                <span className=text-sm text-gray-600'>{esgData.social.healthSafety}%</span>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -359,9 +359,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('social', 'supplyChainEthics', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.social.supplyChainEthics}%</span>
+                <span className=text-sm text-gray-600'>{esgData.social.supplyChainEthics}%</span>
               </div>
             </div>
           </div>
@@ -382,9 +382,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('governance', 'boardDiversity', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.governance.boardDiversity}%</span>
+                <span className=text-sm text-gray-600'>{esgData.governance.boardDiversity}%</span>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>Transparency</label>
@@ -396,9 +396,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('governance', 'transparency', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.governance.transparency}%</span>
+                <span className=text-sm text-gray-600'>{esgData.governance.transparency}%</span>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -412,9 +412,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('governance', 'antiCorruption', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.governance.antiCorruption}%</span>
+                <span className=text-sm text-gray-600'>{esgData.governance.antiCorruption}%</span>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -428,9 +428,9 @@ export default function ESGScoringDashboard() {
                   onChange={e =>
                     handleInputChange('governance', 'riskManagement', parseInt(e.target.value))
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>{esgData.governance.riskManagement}%</span>
+                <span className=text-sm text-gray-600'>{esgData.governance.riskManagement}%</span>
               </div>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-1'>
@@ -448,9 +448,9 @@ export default function ESGScoringDashboard() {
                       parseInt(e.target.value)
                     )
                   }
-                  className='w-full'
+                  className='w-full
                 />
-                <span className='text-sm text-gray-600'>
+                <span className=text-sm text-gray-600'>
                   {esgData.governance.stakeholderEngagement}%
                 </span>
               </div>

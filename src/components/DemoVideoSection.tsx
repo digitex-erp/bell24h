@@ -1,4 +1,4 @@
-'use client';
+import { Brain, DemoVideo, HTMLVideoElement, Maximize, RotateCcw, Smartphone, VideoPlayer, VideoPlayerProps } from 'lucide-react';;\n'use client';
 
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
@@ -79,8 +79,8 @@ const demoVideos: DemoVideo[] = [
     thumbnail: '/demo-thumbnails/mobile-app.jpg',
     videoUrl: '/demo-videos/mobile-demo.mp4',
     category: 'mobile',
-    features: ['Touch Interface', 'Offline Mode', 'Push Notifications', 'Native Performance'],
-    icon: <Smartphone className='h-5 w-5' />,
+    features: ['Touch Interface', 'Offline Mode', 'Push Notifications', 'Native Performance],
+    icon: <Smartphone className=h-5 w-5' />,
   },
 ];
 

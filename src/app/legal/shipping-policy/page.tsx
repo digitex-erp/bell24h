@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Truck, MapPin, Clock, Shield } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, Clock, Header, MapPin, Shield, Truck } from 'lucide-react';;;
 import Header from '@/components/Header';
 
 export default function ShippingPolicyPage() {

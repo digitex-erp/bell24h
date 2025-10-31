@@ -156,7 +156,7 @@ export default function SuccessMetrics() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Trusted by India's Leading Businesses
+            Trusted by India&apos;s Leading Businesses
           </h2>
           <p className="text-xl text-gray-600">
             Join thousands of companies already transforming their B2B operations
