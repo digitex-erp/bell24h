@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '../contexts/AuthContext'
-// ErrorBoundary removed - using built-in error handling
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,10 +17,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        {/* Razorpay Script for Payment Integration */}
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-      </head>
       <body className={inter.className}>
         <AuthProvider>
           {children}
