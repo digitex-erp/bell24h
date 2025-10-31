@@ -3,4 +3,3 @@ export function useToast() {
     toast: () => {},
   };
 }
-
