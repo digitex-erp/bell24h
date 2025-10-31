@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Brain, AlertTriangle, AlertCircle, CheckCircle } from 'lucide-react';
+import { Brain, AlertTriangle, AlertCircle, CheckCircle } from "lucide-react";
 import MinimalLayout from '@/components/layouts/MinimalLayout';
 
 // **REMOVE ALL COLORFUL CARDS - IMPLEMENT MINIMALIST DESIGN**
