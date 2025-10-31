@@ -18,4 +18,7 @@ const nextConfig = {
   },
 }
 
+// Cache buster to force fresh builds
+const CACHE_BUSTER = Date.now()
+
 module.exports = nextConfig
