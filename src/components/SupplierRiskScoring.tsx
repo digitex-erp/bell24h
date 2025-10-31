@@ -1,3 +1,4 @@
+import { ThumbsUp, ThumbsDown, AlertCircle, Building, Target } from "lucide-react";
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
