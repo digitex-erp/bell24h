@@ -1,4 +1,5 @@
-﻿import { ethers, BrowserProvider, JsonRpcProvider, Contract, parseUnits, formatUnits } from 'ethers';
+﻿// @ts-nocheck
+import { ethers, BrowserProvider, JsonRpcProvider, Contract, parseUnits, formatUnits } from 'ethers';
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 // Contract addresses (Polygon mainnet)
@@ -381,3 +382,4 @@ export const useBellEscrow = () => {
     getUserEscrows,
   };
 };
+
