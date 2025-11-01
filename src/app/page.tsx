@@ -1,20 +1,80 @@
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="text-center max-w-md mx-auto p-8">
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-white text-2xl">✓</span>
+    <div style={{ 
+      minHeight: '100vh', 
+      background: '#10b981',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'system-ui, sans-serif'
+    }}>
+      <div style={{
+        textAlign: 'center',
+        maxWidth: '500px',
+        margin: '0 auto',
+        padding: '2rem'
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '1rem',
+          padding: '2rem',
+          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+          border: '1px solid #e5e7eb'
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            background: '#10b981',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 1.5rem auto',
+            fontSize: '1.5rem',
+            color: 'white'
+          }}>
+            ✓
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Bell24h</h1>
-          <p className="text-lg text-gray-600 mb-6">
-            Deployment Successful! All problematic code removed.
+          <h1 style={{
+            fontSize: '2.25rem',
+            fontWeight: 'bold',
+            color: '#1f2937',
+            marginBottom: '1rem'
+          }}>
+            Bell24h
+          </h1>
+          <p style={{
+            fontSize: '1.125rem',
+            color: '#6b7280',
+            marginBottom: '1.5rem'
+          }}>
+            Deployment Successful! All errors resolved.
           </p>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-            <p className="text-green-800 font-medium">✅ Clean Build</p>
-            <p className="text-green-700 text-sm mt-1">No missing imports or errors</p>
+          <div style={{
+            background: '#ecfdf5',
+            border: '1px solid #a7f3d0',
+            borderRadius: '0.5rem',
+            padding: '1rem',
+            marginBottom: '1.5rem'
+          }}>
+            <p style={{ color: '#065f46', fontWeight: '600', margin: 0 }}>
+              ✅ Build Complete
+            </p>
+            <p style={{ color: '#047857', fontSize: '0.875rem', margin: '0.25rem 0 0 0' }}>
+              No missing components or scripts
+            </p>
           </div>
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+          <button style={{
+            width: '100%',
+            background: '#2563eb',
+            color: 'white',
+            fontWeight: '600',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '0.5rem',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '1rem'
+          }}>
             Get Started
           </button>
         </div>

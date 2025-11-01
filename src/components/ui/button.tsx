@@ -1,6 +1,13 @@
 export function Button({ children, ...props }: any) {
   return (
-    <button {...props} className="px-4 py-2 bg-blue-500 text-white rounded">
+    <button {...props} style={{
+      padding: '0.5rem 1rem',
+      backgroundColor: '#3b82f6',
+      color: 'white',
+      borderRadius: '0.375rem',
+      border: 'none',
+      cursor: 'pointer'
+    }}>
       {children}
     </button>
   );
