@@ -436,7 +436,7 @@ export class SecurityErrorHandler {
     type: SecurityAlert['type'],
     severity: SecurityAlert['severity']
   ): string[] {
-    const actions = [];
+    const actions: any[] = [];
 
     switch (type) {
       case 'security_breach':
@@ -616,3 +616,4 @@ export class SecurityErrorHandler {
 
 // Global error handler instance
 export const globalErrorHandler = new SecurityErrorHandler();
+

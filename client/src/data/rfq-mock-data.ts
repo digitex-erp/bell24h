@@ -77,7 +77,7 @@ export const SUPPLIER_TYPES = [
 
 // Generate mock RFQ data
 export function generateMockRFQs(count: number = 1200) {
-  const rfqs = [];
+  const rfqs: any[] = [];
   
   for (let i = 1; i <= count; i++) {
     const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
@@ -165,7 +165,7 @@ export function getRFQStatistics() {
 
 // Generate supplier mock data
 export function generateMockSuppliers(count: number = 500) {
-  const suppliers = [];
+  const suppliers: any[] = [];
   
   for (let i = 1; i <= count; i++) {
     const category = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
@@ -197,3 +197,4 @@ export function generateMockSuppliers(count: number = 500) {
   
   return suppliers;
 }
+

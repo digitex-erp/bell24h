@@ -914,7 +914,7 @@ class RiskScoringEngine {
    * Recommendation generators
    */
   private generateFinancialHealthRecommendations(score: number, factors: RiskFactor[]): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 60) {
       recommendations.push('Require financial guarantees or letters of credit');
@@ -931,7 +931,7 @@ class RiskScoringEngine {
   }
 
   private generateDeliveryRecommendations(score: number, factors: RiskFactor[]): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 70) {
       recommendations.push('Establish backup suppliers for critical items');
@@ -943,7 +943,7 @@ class RiskScoringEngine {
   }
 
   private generateQualityRecommendations(score: number, factors: RiskFactor[]): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 75) {
       recommendations.push('Implement incoming quality inspection');
@@ -955,7 +955,7 @@ class RiskScoringEngine {
   }
 
   private generateMarketExposureRecommendations(score: number, factors: RiskFactor[]): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 65) {
       recommendations.push('Consider price hedging strategies');
@@ -967,7 +967,7 @@ class RiskScoringEngine {
   }
 
   private generateComplianceRecommendations(score: number, factors: RiskFactor[]): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 70) {
       recommendations.push('Conduct compliance audits');
@@ -979,7 +979,7 @@ class RiskScoringEngine {
   }
 
   private generateGeopoliticalRecommendations(score: number, factors: RiskFactor[]): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 60) {
       recommendations.push('Diversify suppliers across different regions');
@@ -991,7 +991,7 @@ class RiskScoringEngine {
   }
 
   private generateConcentrationRecommendations(score: number): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 70) {
       recommendations.push('Reduce supplier concentration in high-risk areas');
@@ -1003,7 +1003,7 @@ class RiskScoringEngine {
   }
 
   private generateCorrelationRecommendations(score: number): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 60) {
       recommendations.push('Select suppliers from different industries/sectors');
@@ -1015,7 +1015,7 @@ class RiskScoringEngine {
   }
 
   private generateLiquidityRecommendations(score: number): string[] {
-    const recommendations = [];
+    const recommendations: any[] = [];
 
     if (score < 65) {
       recommendations.push('Prioritize suppliers with strong financial positions');
@@ -1285,3 +1285,4 @@ class RiskScoringEngine {
 }
 
 export default new RiskScoringEngine();
+

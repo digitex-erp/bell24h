@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
 // Validate campaign data
 async function validateCampaignData(campaignType: string, targetCompanies: any[], messageData: any) {
-  const errors = [];
+  const errors: any[] = [];
   
   if (!campaignType) errors.push('Campaign type is required');
   if (!targetCompanies || targetCompanies.length === 0) errors.push('Target companies are required');
@@ -72,7 +72,7 @@ async function executeMarketingCampaign(campaignType: string, targetCompanies: a
 
   const campaignId = `campaign_${Date.now()}_${campaignType.toLowerCase()}`;
   let messagesSent = 0;
-  const results = [];
+  const results: any[] = [];
 
   for (const company of targetCompanies) {
     try {
@@ -340,3 +340,4 @@ export async function GET(request: NextRequest) {
     }
   });
 }
+
