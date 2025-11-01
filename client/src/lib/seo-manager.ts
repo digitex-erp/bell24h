@@ -62,7 +62,7 @@ export class GlobalSEOManager {
   }) {
     const { type, data = {} } = pageData;
 
-    const schemas = [];
+    const schemas: any[] = [];
 
     // Base organization schema
     schemas.push(this.generateOrganizationSchema());
@@ -337,3 +337,4 @@ export class GlobalSEOManager {
     };
   }
 }
+

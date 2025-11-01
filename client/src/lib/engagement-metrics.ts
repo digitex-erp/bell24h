@@ -262,7 +262,7 @@ export const trackUserJourney = async (userId: string): Promise<UserJourney> => 
     if (!user) throw new Error('User not found');
 
     // Calculate onboarding steps completed
-    const onboardingSteps = [];
+    const onboardingSteps: any[] = [];
     if (user.profileCompleted) onboardingSteps.push('profile');
     if (user.kycVerified) onboardingSteps.push('kyc');
     if (user.firstProductUploaded) onboardingSteps.push('product_upload');
@@ -302,7 +302,7 @@ export const trackUserJourney = async (userId: string): Promise<UserJourney> => 
     }, 0);
 
     // Determine features used
-    const featuresUsed = [];
+    const featuresUsed: any[] = [];
     if (user.rfqs.length > 0) featuresUsed.push('rfq_creation');
     if (user.products.length > 0) featuresUsed.push('product_upload');
     if (user.trafficAnalytics.length > 0) featuresUsed.push('traffic_analytics');
@@ -369,7 +369,7 @@ const calculateEngagementScore = (metrics: EngagementMetrics): number => {
 };
 
 const generateInsights = (metrics: EngagementMetrics) => {
-  const insights = [];
+  const insights: any[] = [];
   
   if (metrics.registrationToOnboarding < 50) {
     insights.push('Low onboarding completion rate - consider simplifying the process');
@@ -413,7 +413,7 @@ const predictRetention = (metrics: EngagementMetrics) => {
 };
 
 const generateRecommendations = (metrics: EngagementMetrics, insights: string[]) => {
-  const recommendations = [];
+  const recommendations: any[] = [];
   
   if (metrics.registrationToOnboarding < 50) {
     recommendations.push('Implement progressive onboarding with clear progress indicators');
@@ -475,3 +475,4 @@ export const trackRealTimeEngagement = async () => {
   
   return realTimeMetrics;
 }; 
+

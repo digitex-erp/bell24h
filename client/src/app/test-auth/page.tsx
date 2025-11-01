@@ -22,7 +22,7 @@ export default function TestAuthPage() {
       }
     ];
 
-    const results = [];
+    const results: any[] = [];
     
     for (const test of tests) {
       try {
@@ -118,3 +118,4 @@ export default function TestAuthPage() {
     </div>
   );
 }
+

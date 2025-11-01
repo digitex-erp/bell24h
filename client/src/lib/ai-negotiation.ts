@@ -170,7 +170,7 @@ const calculateAverageResponseTime = (responses: any[]) => {
 };
 
 const generateNegotiationStrategy = (data: any) => {
-  const suggestions = [];
+  const suggestions: any[] = [];
   
   // Price-based suggestions
   if (data.totalBudget > 1000000) {
@@ -290,7 +290,7 @@ export const generateNegotiationReport = async (rfqId: string) => {
 };
 
 const generateNextSteps = (analysis: RFQAnalysis) => {
-  const steps = [];
+  const steps: any[] = [];
   
   if (analysis.successProbability > 0.8) {
     steps.push('Proceed with current strategy - high success probability');
@@ -305,3 +305,4 @@ const generateNextSteps = (analysis: RFQAnalysis) => {
   
   return steps;
 }; 
+
