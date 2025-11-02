@@ -182,33 +182,20 @@ export async function GET(request: NextRequest) {
 
     // Filter by user's RFQs if requested
     if (myRFQs) {
-      where.buyerId = 'mock-user-id' // TODO: Get from JWT token
+      where.createdBy = 'mock-user-id' // TODO: Get from JWT token
     }
 
-    // Get RFQs with pagination
+    // Get RFQs with pagination (matching prisma/schema.prisma structure)
     const [rfqs, total] = await Promise.all([
       prisma.rFQ.findMany({
         where,
         include: {
-          buyer: {
+          user: {
             select: {
               id: true,
               name: true,
               email: true,
-              company: {
-                select: {
-                  id: true,
-                  name: true,
-                  //// Field doesn't exist in Company model
-                },
-              },
-            },
-          },
-          company: {
-            select: {
-              id: true,
-              name: true,
-              //// Field doesn't exist in Company model
+              company: true,
             },
           },
           quotes: {
@@ -221,17 +208,12 @@ export async function GET(request: NextRequest) {
                 select: {
                   id: true,
                   name: true,
-                  company: {
-                    select: {
-                      id: true,
-                      name: true,
-                      //// Field doesn't exist in Company model
-                    },
-                  },
+                  email: true,
                 },
               },
             },
             orderBy: { createdAt: 'desc' },
+            take: 10, // Limit quotes per RFQ
           },
           _count: {
             select: {
@@ -299,46 +281,43 @@ export async function POST(request: NextRequest) {
       transcript: voiceData?.transcript || validatedData.transcript,
     }
 
-    // Create RFQ
+    // Create RFQ (matching prisma/schema.prisma structure)
     const rfq = await prisma.rFQ.create({
       data: {
         title: finalData.title,
-        description: finalData.description,
+        description: finalData.description || null,
         category: finalData.category,
-        subcategory: finalData.subcategory,
-        quantity: finalData.quantity,
-        unit: finalData.unit,
-        specifications: finalData.specifications || {},
-        budget: finalData.budget,
-        currency: finalData.currency,
-        deadline: finalData.deadline ? new Date(finalData.deadline) : null,
-        urgency: finalData.urgency,
-        status: 'OPEN',
-        buyerId: 'mock-user-id', // TODO: Get from JWT token
-        companyId: 'mock-company-id', // TODO: Get from JWT token
-        audioFile: validatedData.audioFile,
-        videoFile: validatedData.videoFile,
-        transcript: finalData.transcript,
+        quantity: String(finalData.quantity), // Schema expects String
+        unit: finalData.unit || 'pieces',
+        minBudget: finalData.budget ? Number(finalData.budget) * 0.9 : null, // Estimate min
+        maxBudget: finalData.budget ? Number(finalData.budget) * 1.1 : null, // Estimate max
+        timeline: finalData.deadline ? `Deadline: ${new Date(finalData.deadline).toLocaleDateString()}` : 'Not specified',
+        requirements: JSON.stringify(finalData.specifications || {}),
+        urgency: finalData.urgency || 'NORMAL',
+        status: 'ACTIVE', // Schema uses ACTIVE not OPEN
+        location: null,
+        tags: finalData.category ? [finalData.category] : [],
+        isPublic: true,
+        expiresAt: finalData.deadline ? new Date(finalData.deadline) : null,
+        priority: finalData.urgency === 'URGENT' ? 1 : finalData.urgency === 'HIGH' ? 2 : 3,
+        createdBy: 'mock-user-id', // TODO: Get from JWT token
       },
       include: {
-        buyer: {
+        user: {
           select: {
             id: true,
             name: true,
             email: true,
-            company: {
-              select: {
-                id: true,
-                name: true,
-                //// Field doesn't exist in Company model
-              },
-            },
           },
         },
-        company: {
+        quotes: {
           select: {
             id: true,
-            name: true,},
+            price: true,
+            status: true,
+            createdAt: true,
+          },
+          take: 5, // Limit to recent quotes
         },
         _count: {
           select: {
@@ -348,20 +327,13 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Log RFQ creation
-    await prisma.auditLog.create({
-      data: {
-        userId: 'mock-user-id', // TODO: Get from JWT token
-        action: 'RFQ_CREATED',
-        details: {
-          rfqId: rfq.id,
-          title: rfq.title,
-          category: rfq.category,
-          urgency: rfq.urgency,
-          hasVoice: !!rfq.audioFile || !!rfq.videoFile,
-          timestamp: new Date().toISOString(),
-        },
-      },
+    // Log RFQ creation (using console.log since AuditLog not in current schema)
+    console.log('RFQ created:', {
+      rfqId: rfq.id,
+      title: rfq.title,
+      category: rfq.category,
+      urgency: rfq.urgency,
+      timestamp: new Date().toISOString(),
     })
 
     // TODO: Send notifications to relevant suppliers

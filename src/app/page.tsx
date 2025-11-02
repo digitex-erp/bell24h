@@ -1,84 +1,39 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+
 export default function Home() {
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      background: '#10b981',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'system-ui, sans-serif'
-    }}>
-      <div style={{
-        textAlign: 'center',
-        maxWidth: '500px',
-        margin: '0 auto',
-        padding: '2rem'
-      }}>
-        <div style={{
-          background: 'white',
-          borderRadius: '1rem',
-          padding: '2rem',
-          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-          border: '1px solid #e5e7eb'
-        }}>
-          <div style={{
-            width: '64px',
-            height: '64px',
-            background: '#10b981',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto 1.5rem auto',
-            fontSize: '1.5rem',
-            color: 'white'
-          }}>
-            ✓
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-white text-2xl">✓</span>
           </div>
-          <h1 style={{
-            fontSize: '2.25rem',
-            fontWeight: 'bold',
-            color: '#1f2937',
-            marginBottom: '1rem'
-          }}>
-            Bell24h
-          </h1>
-          <p style={{
-            fontSize: '1.125rem',
-            color: '#6b7280',
-            marginBottom: '1.5rem'
-          }}>
+          <CardTitle className="text-3xl">Bell24h</CardTitle>
+          <CardDescription className="text-lg">
             Deployment Successful! All errors resolved.
-          </p>
-          <div style={{
-            background: '#ecfdf5',
-            border: '1px solid #a7f3d0',
-            borderRadius: '0.5rem',
-            padding: '1rem',
-            marginBottom: '1.5rem'
-          }}>
-            <p style={{ color: '#065f46', fontWeight: '600', margin: 0 }}>
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p className="text-green-800 font-semibold">
               ✅ Build Complete
             </p>
-            <p style={{ color: '#047857', fontSize: '0.875rem', margin: '0.25rem 0 0 0' }}>
+            <p className="text-green-700 text-sm mt-1">
               No missing components or scripts
             </p>
           </div>
-          <button style={{
-            width: '100%',
-            background: '#2563eb',
-            color: 'white',
-            fontWeight: '600',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '0.5rem',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '1rem'
-          }}>
-            Get Started
-          </button>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button asChild className="flex-1">
+              <Link href="/auth/register">Get Started</Link>
+            </Button>
+            <Button variant="outline" asChild className="flex-1">
+              <Link href="/rfq">Create RFQ</Link>
+            </Button>
         </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
-  );
+  )
 }
