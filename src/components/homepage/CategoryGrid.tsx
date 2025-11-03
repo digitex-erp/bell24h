@@ -1,109 +1,62 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
-import { ChevronRight, Search } from 'lucide-react';
+import { ChevronRight, Search, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import { ALL_50_CATEGORIES, type Category } from '@/data/all-50-categories';
-import { getMockRFQsByCategory } from '@/data/mockRFQs';
+import { ALL_50_CATEGORIES } from '@/data/all-50-categories';
 
 export default function CategoryGrid() {
   const [expanded, setExpanded] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-
-  // Filter categories by search
-  const filteredCategories = ALL_50_CATEGORIES.filter(cat =>
+  const displayedCategories = expanded ? ALL_50_CATEGORIES : ALL_50_CATEGORIES.slice(0, 12);
+  const filteredCategories = displayedCategories.filter(cat =>
     cat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cat.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    cat.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const displayCategories = expanded ? filteredCategories : filteredCategories.slice(0, 12);
-
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 sticky top-24">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Browse by Category</h3>
-        <span className="text-xs text-gray-500 dark:text-gray-400">
-          {ALL_50_CATEGORIES.length} total
-        </span>
-      </div>
-
-      {/* Search */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search categories..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      {/* Categories List */}
-      <div className="space-y-1 max-h-[600px] overflow-y-auto">
-        {displayCategories.map((category) => {
-          const rfqCount = getMockRFQsByCategory(category.id).length;
-          return (
-            <Link
-              key={category.id}
-              href={`/categories/${category.slug}`}
-              className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors group"
-            >
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <span className="text-2xl flex-shrink-0">{category.icon || '📦'}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm text-gray-900 dark:text-white truncate">
-                    {category.name}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {rfqCount} RFQs • {category.supplierCount?.toLocaleString() || 0} suppliers
-                  </p>
-                </div>
+    <section className="py-20 md:py-28 bg-white">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-bold mb-6">
+            <TrendingUp className="w-4 h-4" />
+            Browse Categories
+          </div>
+          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">Find What You Need</h2>
+          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">Explore 50+ categories with thousands of verified suppliers</p>
+        </div>
+        <div className="max-w-2xl mx-auto mb-16">
+          <div className="relative">
+            <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400" />
+            <input type="text" placeholder="Search categories..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-16 pr-6 py-5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none text-lg" />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+          {filteredCategories.map((category) => (
+            <Link key={category.id} href={`/categories/${category.slug}`} className="group bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-100 hover:border-blue-500">
+              <div className="text-6xl mb-6 transform group-hover:scale-125 transition-transform duration-300">{category.icon}</div>
+              <h3 className="font-bold text-xl text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">{category.name}</h3>
+              <p className="text-gray-600 mb-6 line-clamp-2">{category.description}</p>
+              <div className="flex items-center justify-between pt-4 border-t-2 border-gray-100">
+                <div className="text-sm text-gray-600"><span className="font-bold text-blue-600">{category.rfqCount || '100+'}</span> RFQs</div>
+                <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-2 transition-all" />
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex-shrink-0" />
             </Link>
-          );
-        })}
-      </div>
-
-      {/* Expand/Collapse */}
-      {filteredCategories.length > 12 && (
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="w-full mt-4 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium py-2"
-        >
-          {expanded ? `Show Less` : `View All ${filteredCategories.length} Categories`}
-        </button>
-      )}
-
-      {/* Filters */}
-      <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-        <h4 className="font-medium text-sm mb-3 text-gray-900 dark:text-white">Filter RFQs</h4>
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input 
-              type="checkbox" 
-              className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500" 
-            />
-            <span className="text-sm text-gray-700 dark:text-gray-300">Voice RFQ Only</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input 
-              type="checkbox" 
-              className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500" 
-            />
-            <span className="text-sm text-gray-700 dark:text-gray-300">Video RFQ Only</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input 
-              type="checkbox" 
-              className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500" 
-            />
-            <span className="text-sm text-gray-700 dark:text-gray-300">Verified Only</span>
-          </label>
+          ))}
+        </div>
+        {!searchTerm && filteredCategories.length > 0 && (
+          <div className="text-center">
+            <button onClick={() => setExpanded(!expanded)} className="inline-flex items-center gap-3 px-10 py-5 bg-blue-600 text-white rounded-xl font-bold shadow-xl hover:bg-blue-700 hover:shadow-2xl transform hover:scale-105 transition-all text-lg">
+              {expanded ? 'Show Less' : `View All ${ALL_50_CATEGORIES.length} Categories`}
+              <ChevronRight className={`w-6 h-6 transition-transform ${expanded ? 'rotate-90' : ''}`} />
+            </button>
+          </div>
+        )}
+        <div className="mt-24 bg-blue-600 rounded-2xl p-12 md:p-16 text-center">
+          <h3 className="text-3xl md:text-5xl font-black text-white mb-6">Can't Find Your Category?</h3>
+          <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto">Post your RFQ anyway! Our AI will match you with the right suppliers.</p>
+          <div className="inline-flex items-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-xl font-bold shadow-2xl">Post RFQ Now</div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
-
