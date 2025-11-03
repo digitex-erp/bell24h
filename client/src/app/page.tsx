@@ -1,17 +1,92 @@
-export default function Home() {
+import HeroRFQDemo from '@/components/homepage/HeroRFQDemo';
+import TrustIndicators from '@/components/homepage/TrustIndicators';
+import CategoryGrid from '@/components/homepage/CategoryGrid';
+import LiveRFQFeed from '@/components/homepage/LiveRFQFeed';
+import RFQTypeShowcase from '@/components/homepage/RFQTypeShowcase';
+import AIFeaturesSection from '@/components/homepage/AIFeaturesSection';
+import HowItWorks from '@/components/homepage/HowItWorks';
+import FinalCTA from '@/components/homepage/FinalCTA';
+
+export default function HomePage() {
   return (
-    <main style={{minHeight: "100vh",display: "flex",alignItems: "center",justifyContent: "center",fontFamily: "system-ui,sans-serif"}}>
-      <div style={{textAlign: "center",background: "#fff",borderRadius: "1rem",padding: "2rem",boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)",border: "1px solid #e5e7eb"}}>
-        <div style={{width: "64px",height: "64px",background: "#10b981",borderRadius: "50%",display: "flex",alignItems: "center",justifyContent: "center",margin: "0 auto 1.5rem auto",fontSize: "1.5rem",color: "white"}}>
-          ?
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+      {/* Hero Section - Interactive RFQ Demo */}
+      <HeroRFQDemo />
+
+      {/* Trust Indicators - Stats Bar */}
+      <TrustIndicators />
+
+      {/* Main Content - 3 Column Layout */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Sidebar - Categories */}
+          <aside className="lg:col-span-3">
+            <div className="sticky top-24">
+              <CategoryGrid />
+            </div>
+          </aside>
+
+          {/* Main Feed - Live RFQs */}
+          <main className="lg:col-span-6">
+            <LiveRFQFeed />
+          </main>
+
+          {/* Right Sidebar - Stats & Featured */}
+          <aside className="lg:col-span-3">
+            <div className="sticky top-24 space-y-6">
+              {/* Quick Stats */}
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6">
+                <h3 className="font-semibold text-lg mb-4">Platform Stats</h3>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-2xl font-bold text-blue-600">10,000+</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Verified Suppliers</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-green-600">₹500Cr+</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Transaction Value</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-purple-600">2,500+</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Demo RFQs Available</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Featured Categories */}
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6">
+                <h3 className="font-semibold text-lg mb-4">Trending This Week</h3>
+                <div className="space-y-2">
+                  <a href="/categories/steel" className="block p-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                    <p className="font-medium">Steel & Metal</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">50+ active RFQs</p>
+                  </a>
+                  <a href="/categories/electronics" className="block p-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                    <p className="font-medium">Electronics</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">35+ active RFQs</p>
+                  </a>
+                  <a href="/categories/textiles" className="block p-3 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                    <p className="font-medium">Textiles</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">28+ active RFQs</p>
+                  </a>
+                </div>
+              </div>
         </div>
-        <h1 style={{fontSize: "2.25rem",fontWeight: "bold",color: "#1f2937",marginBottom: "1rem"}}>Bell24h</h1>
-        <p style={{fontSize: "1.125rem",color: "#6b7280",marginBottom: "1.5rem"}}>Deployment Successful! All errors resolved.</p>
-        <div style={{background: "#ecfdf5",border: "1px solid #a7f3d0",borderRadius: "0.5rem",padding: "1rem",marginBottom: "1.5rem"}}>
-          <p style={{color: "#065f46",fontWeight: "600",margin: 0}}>? Build Complete</p>
-          <p style={{color: "#047857",fontSize: "0.875rem",margin: "0.25rem 0 0 0"}}>No missing components or scripts</p>
+          </aside>
         </div>
       </div>
-    </main>
-  )
+
+      {/* RFQ Type Showcase */}
+      <RFQTypeShowcase />
+
+      {/* AI Features Section */}
+      <AIFeaturesSection />
+
+      {/* How It Works */}
+      <HowItWorks />
+
+      {/* Final CTA */}
+      <FinalCTA />
+    </div>
+  );
 }

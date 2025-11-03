@@ -1,5 +1,4 @@
-﻿// @ts-nocheck
-import { ethers, BrowserProvider, JsonRpcProvider, Contract, parseUnits, formatUnits } from 'ethers';
+﻿import { ethers, BrowserProvider, JsonRpcProvider, Contract, parseUnits, formatUnits } from 'ethers';
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 // Contract addresses (Polygon mainnet)
@@ -139,7 +138,7 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
 
     try {
       // Request account access
-      await window.ethereum?.request?.({ method: 'eth_requestAccounts' });
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
       
       // Get signer and account
       const signer = await provider.getSigner();
@@ -180,7 +179,7 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
 
     try {
-      await window.ethereum?.request?.({
+      await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: `0x${POLYGON_CONFIG.chainId.toString(16)}` }],
       });
@@ -188,7 +187,7 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       // If network doesn't exist, add it
       if (switchError.code === 4902) {
         try {
-          await window.ethereum?.request?.({
+          await window.ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [POLYGON_CONFIG],
           });
@@ -225,12 +224,12 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
         window.location.reload(); // Reload to update contracts
       };
 
-      window.ethereum?.on?.('accountsChanged', handleAccountsChanged);
-      window.ethereum?.on?.('chainChanged', handleChainChanged);
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      window.ethereum.on('chainChanged', handleChainChanged);
 
       return () => {
-        window.ethereum?.removeListener?.('accountsChanged', handleAccountsChanged);
-        window.ethereum?.removeListener?.('chainChanged', handleChainChanged);
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+        window.ethereum.removeListener('chainChanged', handleChainChanged);
       };
     }
     return undefined;
@@ -382,4 +381,3 @@ export const useBellEscrow = () => {
     getUserEscrows,
   };
 };
-
