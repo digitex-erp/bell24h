@@ -1,62 +1,79 @@
-export type Category = {
-  id: string;
+export interface Category {
+  id: number;
   name: string;
-  description: string;
   slug: string;
-  icon: string; // use emoji to avoid extra imports
-  rfqCount?: string;
-};
+  icon: string;
+  description: string;
+  rfqCount?: number;
+  subcategories?: string[];
+}
 
 export const ALL_50_CATEGORIES: Category[] = [
-  { id: 'steel', name: 'Steel & Metals', description: 'Industrial steel, alloys, and fabrication', slug: 'steel-metals', icon: '🛠️', rfqCount: '500+' },
-  { id: 'chem', name: 'Chemicals', description: 'Industrial and specialty chemicals', slug: 'chemicals', icon: '⚗️', rfqCount: '300+' },
-  { id: 'auto', name: 'Automotive Parts', description: 'OEM and aftermarket components', slug: 'automotive-parts', icon: '🚗', rfqCount: '220+' },
-  { id: 'mach', name: 'Machinery', description: 'Industrial machines and spares', slug: 'machinery', icon: '🏭', rfqCount: '400+' },
-  { id: 'text', name: 'Textiles', description: 'Fabrics, yarns and garments', slug: 'textiles', icon: '🧵', rfqCount: '380+' },
-  { id: 'elec', name: 'Electronics', description: 'Components, PCBs, and assemblies', slug: 'electronics', icon: '🔌', rfqCount: '450+' },
-  { id: 'pack', name: 'Packaging', description: 'Cartons, labels and materials', slug: 'packaging', icon: '��', rfqCount: '260+' },
-  { id: 'food', name: 'Food Ingredients', description: 'Bulk food and additives', slug: 'food-ingredients', icon: '🍞', rfqCount: '180+' },
-  { id: 'cons', name: 'Construction', description: 'Cement, sand, aggregates', slug: 'construction', icon: '🏗️', rfqCount: '320+' },
-  { id: 'med', name: 'Medical Supplies', description: 'Devices and disposables', slug: 'medical-supplies', icon: '🩺', rfqCount: '140+' },
-  // Fill to 50 by repeating representative categories for demo UI only
-  { id: 'cat11', name: 'Industrial Tools', description: 'Hand and power tools', slug: 'industrial-tools', icon: '🔧' },
-  { id: 'cat12', name: 'Electricals', description: 'Cables and switchgear', slug: 'electricals', icon: '💡' },
-  { id: 'cat13', name: 'Furnishings', description: 'Office and commercial', slug: 'furnishings', icon: '🪑' },
-  { id: 'cat14', name: 'Solar', description: 'Panels and inverters', slug: 'solar', icon: '☀️' },
-  { id: 'cat15', name: 'Batteries', description: 'Lead-acid and Li-ion', slug: 'batteries', icon: '🔋' },
-  { id: 'cat16', name: 'Safety', description: 'PPE and signage', slug: 'safety', icon: '🦺' },
-  { id: 'cat17', name: 'Paints', description: 'Industrial coatings', slug: 'paints', icon: '🎨' },
-  { id: 'cat18', name: 'Piping', description: 'Pipes, valves, fittings', slug: 'piping', icon: '🚰' },
-  { id: 'cat19', name: 'Rubber & Plastics', description: 'Raw materials and parts', slug: 'rubber-plastics', icon: '⚙️' },
-  { id: 'cat20', name: 'IT Hardware', description: 'Servers and peripherals', slug: 'it-hardware', icon: '🖥️' },
-  { id: 'cat21', name: 'Security', description: 'CCTV and access control', slug: 'security', icon: '🛡️' },
-  { id: 'cat22', name: 'Cleaning', description: 'Industrial cleaning agents', slug: 'cleaning', icon: '🧼' },
-  { id: 'cat23', name: 'HVAC', description: 'Cooling and air systems', slug: 'hvac', icon: '❄️' },
-  { id: 'cat24', name: 'Abrasives', description: 'Grinding and cutting', slug: 'abrasives', icon: '🪚' },
-  { id: 'cat25', name: 'Bearings', description: 'Industrial bearings', slug: 'bearings', icon: '🧭' },
-  { id: 'cat26', name: 'Conveyors', description: 'Belts and rollers', slug: 'conveyors', icon: '📦' },
-  { id: 'cat27', name: 'Fasteners', description: 'Nuts and bolts', slug: 'fasteners', icon: '🔩' },
-  { id: 'cat28', name: 'Lubricants', description: 'Grease and oils', slug: 'lubricants', icon: '🛢️' },
-  { id: 'cat29', name: 'Adhesives', description: 'Industrial adhesives', slug: 'adhesives', icon: '🧴' },
-  { id: 'cat30', name: 'Paper & Stationery', description: 'Office supplies', slug: 'paper-stationery', icon: '📄' },
-  { id: 'cat31', name: 'Furniture', description: 'Office furniture', slug: 'furniture', icon: '🪑' },
-  { id: 'cat32', name: 'Textile Machinery', description: 'Machines and parts', slug: 'textile-machinery', icon: '🧶' },
-  { id: 'cat33', name: 'Agriculture', description: 'Inputs and machinery', slug: 'agriculture', icon: '🌾' },
-  { id: 'cat34', name: 'Mining', description: 'Equipment and supplies', slug: 'mining', icon: '⛏️' },
-  { id: 'cat35', name: 'Marine', description: 'Marine equipment', slug: 'marine', icon: '⚓' },
-  { id: 'cat36', name: 'Aviation', description: 'GSE and parts', slug: 'aviation', icon: '✈️' },
-  { id: 'cat37', name: 'Railways', description: 'Signalling and parts', slug: 'railways', icon: '🚆' },
-  { id: 'cat38', name: 'Defense', description: 'Supplies and parts', slug: 'defense', icon: '🪖' },
-  { id: 'cat39', name: 'Education', description: 'Lab and classroom', slug: 'education', icon: '🏫' },
-  { id: 'cat40', name: 'Healthcare', description: 'Consumables', slug: 'healthcare', icon: '💊' },
-  { id: 'cat41', name: 'Printing', description: 'Printers and inks', slug: 'printing', icon: '🖨️' },
-  { id: 'cat42', name: 'Logistics', description: 'Warehousing and freight', slug: 'logistics', icon: '🚚' },
-  { id: 'cat43', name: 'E-waste', description: 'Recycling services', slug: 'e-waste', icon: '♻️' },
-  { id: 'cat44', name: 'Consulting', description: 'Procurement services', slug: 'consulting', icon: '📊' },
-  { id: 'cat45', name: 'Legal', description: 'Contracts and compliance', slug: 'legal', icon: '⚖️' },
-  { id: 'cat46', name: 'Finance', description: 'Vendor financing', slug: 'finance', icon: '💳' },
-  { id: 'cat47', name: 'HR & Staffing', description: 'Manpower services', slug: 'hr-staffing', icon: '🧑‍💼' },
-  { id: 'cat48', name: 'Catering', description: 'Food services', slug: 'catering', icon: '🍽️' },
-  { id: 'cat49', name: 'Events', description: 'Event supplies', slug: 'events', icon: '🎪' },
-  { id: 'cat50', name: 'Miscellaneous', description: 'Other categories', slug: 'misc', icon: '✨' },
+  { id: 1, name: 'Agriculture & Food Products', slug: 'agriculture-food', icon: '🌾', description: 'Farm produce, food items, agricultural equipment', rfqCount: 234 },
+  { id: 2, name: 'Apparel & Clothing', slug: 'apparel-clothing', icon: '👕', description: 'Garments, textiles, fashion accessories', rfqCount: 189 },
+  { id: 3, name: 'Automotive & Vehicles', slug: 'automotive', icon: '🚗', description: 'Cars, bikes, parts, accessories', rfqCount: 567 },
+  { id: 4, name: 'Building & Construction', slug: 'construction', icon: '🏗️', description: 'Construction materials, tools, equipment', rfqCount: 423 },
+  { id: 5, name: 'Chemicals & Pharmaceuticals', slug: 'chemicals-pharma', icon: '⚗️', description: 'Industrial chemicals, medicines, lab equipment', rfqCount: 312 },
+  { id: 6, name: 'Electronics & Electricals', slug: 'electronics', icon: '⚡', description: 'Electronic components, electrical equipment', rfqCount: 678 },
+  { id: 7, name: 'Furniture & Home Decor', slug: 'furniture', icon: '🛋️', description: 'Furniture, home furnishings, decor items', rfqCount: 156 },
+  { id: 8, name: 'Industrial Machinery', slug: 'machinery', icon: '⚙️', description: 'Manufacturing equipment, industrial tools', rfqCount: 445 },
+  { id: 9, name: 'IT & Software', slug: 'it-software', icon: '💻', description: 'Software, IT services, tech solutions', rfqCount: 523 },
+  { id: 10, name: 'Packaging & Printing', slug: 'packaging', icon: '📦', description: 'Packaging materials, printing services', rfqCount: 289 },
+  { id: 11, name: 'Plastics & Polymers', slug: 'plastics', icon: '🔷', description: 'Plastic products, polymer materials', rfqCount: 198 },
+  { id: 12, name: 'Steel & Metals', slug: 'steel-metals', icon: '🔩', description: 'Steel products, metal components', rfqCount: 534 },
+  { id: 13, name: 'Textiles & Fabrics', slug: 'textiles', icon: '🧵', description: 'Fabrics, textile materials, threads', rfqCount: 267 },
+  { id: 14, name: 'Healthcare & Medical', slug: 'healthcare', icon: '🏥', description: 'Medical equipment, healthcare supplies', rfqCount: 389 },
+  { id: 15, name: 'Sports & Fitness', slug: 'sports-fitness', icon: '⚽', description: 'Sports equipment, fitness gear', rfqCount: 145 },
+  { id: 16, name: 'Office Supplies', slug: 'office-supplies', icon: '📎', description: 'Stationery, office equipment, supplies', rfqCount: 223 },
+  { id: 17, name: 'Toys & Games', slug: 'toys-games', icon: '🎮', description: 'Toys, games, entertainment products', rfqCount: 178 },
+  { id: 18, name: 'Beauty & Personal Care', slug: 'beauty-personal-care', icon: '💄', description: 'Cosmetics, personal care products', rfqCount: 234 },
+  { id: 19, name: 'Jewelry & Accessories', slug: 'jewelry', icon: '💎', description: 'Jewelry, fashion accessories', rfqCount: 167 },
+  { id: 20, name: 'Books & Stationery', slug: 'books-stationery', icon: '📚', description: 'Books, educational materials, stationery', rfqCount: 198 },
+  { id: 21, name: 'Baby & Kids Products', slug: 'baby-kids', icon: '👶', description: 'Baby products, kids items, toys', rfqCount: 212 },
+  { id: 22, name: 'Pet Supplies', slug: 'pet-supplies', icon: '🐕', description: 'Pet food, pet care products', rfqCount: 134 },
+  { id: 23, name: 'Home Appliances', slug: 'home-appliances', icon: '��', description: 'Kitchen appliances, home electronics', rfqCount: 345 },
+  { id: 24, name: 'Lighting & Electrical', slug: 'lighting', icon: '💡', description: 'Lights, electrical fixtures, bulbs', rfqCount: 289 },
+  { id: 25, name: 'Security & Surveillance', slug: 'security', icon: '🔒', description: 'Security systems, CCTV, alarms', rfqCount: 267 },
+  { id: 26, name: 'Solar & Renewable Energy', slug: 'solar-energy', icon: '☀️', description: 'Solar panels, renewable energy products', rfqCount: 312 },
+  { id: 27, name: 'Tools & Hardware', slug: 'tools-hardware', icon: '🔨', description: 'Hand tools, power tools, hardware', rfqCount: 423 },
+  { id: 28, name: 'Pipes & Plumbing', slug: 'plumbing', icon: '🚰', description: 'Pipes, plumbing fixtures, fittings', rfqCount: 298 },
+  { id: 29, name: 'Paints & Coatings', slug: 'paints-coatings', icon: '🎨', description: 'Paints, coatings, surface treatments', rfqCount: 234 },
+  { id: 30, name: 'Glass & Ceramics', slug: 'glass-ceramics', icon: '��', description: 'Glass products, ceramic items', rfqCount: 189 },
+  { id: 31, name: 'Rubber Products', slug: 'rubber', icon: '⚫', description: 'Rubber components, elastomers', rfqCount: 167 },
+  { id: 32, name: 'Leather Products', slug: 'leather', icon: '👜', description: 'Leather goods, accessories', rfqCount: 145 },
+  { id: 33, name: 'Paper & Pulp', slug: 'paper-pulp', icon: '📄', description: 'Paper products, pulp materials', rfqCount: 198 },
+  { id: 34, name: 'Food Processing Equipment', slug: 'food-processing', icon: '🍲', description: 'Food processing machinery, equipment', rfqCount: 267 },
+  { id: 35, name: 'Bakery & Confectionery', slug: 'bakery', icon: '🍰', description: 'Bakery items, confectionery products', rfqCount: 178 },
+  { id: 36, name: 'Beverages & Drinks', slug: 'beverages', icon: '🥤', description: 'Drinks, beverages, liquid products', rfqCount: 223 },
+  { id: 37, name: 'Organic Products', slug: 'organic', icon: '🌱', description: 'Organic food, natural products', rfqCount: 289 },
+  { id: 38, name: 'Spices & Herbs', slug: 'spices-herbs', icon: '🌶️', description: 'Spices, herbs, seasonings', rfqCount: 156 },
+  { id: 39, name: 'Seafood & Aquaculture', slug: 'seafood', icon: '🐟', description: 'Seafood products, aquaculture', rfqCount: 134 },
+  { id: 40, name: 'Dairy Products', slug: 'dairy', icon: '🥛', description: 'Milk, cheese, dairy items', rfqCount: 212 },
+  { id: 41, name: 'Meat & Poultry', slug: 'meat-poultry', icon: '🍖', description: 'Meat products, poultry items', rfqCount: 198 },
+  { id: 42, name: 'Fruits & Vegetables', slug: 'fruits-vegetables', icon: '🍎', description: 'Fresh fruits, vegetables', rfqCount: 267 },
+  { id: 43, name: 'Grains & Cereals', slug: 'grains-cereals', icon: '🌾', description: 'Grains, cereals, pulses', rfqCount: 234 },
+  { id: 44, name: 'Oil & Lubricants', slug: 'oil-lubricants', icon: '🛢️', description: 'Industrial oils, lubricants', rfqCount: 312 },
+  { id: 45, name: 'Fertilizers & Pesticides', slug: 'fertilizers', icon: '🧪', description: 'Agricultural chemicals, fertilizers', rfqCount: 223 },
+  { id: 46, name: 'Seeds & Plants', slug: 'seeds-plants', icon: '🌱', description: 'Seeds, plants, saplings', rfqCount: 189 },
+  { id: 47, name: 'Garden & Landscaping', slug: 'garden-landscaping', icon: '🌳', description: 'Garden tools, landscaping supplies', rfqCount: 167 },
+  { id: 48, name: 'Waste Management', slug: 'waste-management', icon: '♻️', description: 'Waste disposal, recycling services', rfqCount: 145 },
+  { id: 49, name: 'Logistics & Transportation', slug: 'logistics', icon: '🚛', description: 'Transport services, logistics', rfqCount: 423 },
+  { id: 50, name: 'Event & Exhibition', slug: 'event-exhibition', icon: '🎪', description: 'Event supplies, exhibition materials', rfqCount: 178 },
 ];
+
+export function getCategoryBySlug(slug: string): Category | undefined {
+  return ALL_50_CATEGORIES.find((cat) => cat.slug === slug);
+}
+
+export function getCategoryById(id: number): Category | undefined {
+  return ALL_50_CATEGORIES.find((cat) => cat.id === id);
+}
+
+export function searchCategories(query: string): Category[] {
+  const lowerQuery = query.toLowerCase();
+  return ALL_50_CATEGORIES.filter(
+    (cat) =>
+      cat.name.toLowerCase().includes(lowerQuery) ||
+      cat.description.toLowerCase().includes(lowerQuery)
+  );
+}

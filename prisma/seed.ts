@@ -1,96 +1,90 @@
-// Database seed script for Bell24h
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
+import { ALL_50_CATEGORIES } from '../src/data/all-50-categories'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function main() {
-  console.log('🌱 Seeding database...');
-  
-  // Create sample users
-  const users = await Promise.all([
-    prisma.user.upsert({
-      where: { email: 'admin@bell24h.com' },
-      update: {},
-      create: {
-        email: 'admin@bell24h.com',
-        name: 'Admin User',
-        role: 'ADMIN',
-        isActive: true,
-        isVerified: true,
-        company: 'Bell24h',
-        phone: '+91-9876543210'
-      }
-    }),
-    prisma.user.upsert({
-      where: { email: 'supplier@example.com' },
-      update: {},
-      create: {
-        email: 'supplier@example.com',
-        name: 'Sample Supplier',
-        role: 'SUPPLIER',
-        isActive: true,
-        isVerified: true,
-        company: 'Sample Steel Co',
-        phone: '+91-9876543211'
-      }
-    }),
-    prisma.user.upsert({
-      where: { email: 'buyer@example.com' },
-      update: {},
-      create: {
-        email: 'buyer@example.com',
-        name: 'Sample Buyer',
-        role: 'BUYER',
-        isActive: true,
-        isVerified: true,
-        company: 'Sample Construction Co',
-        phone: '+91-9876543212'
-      }
-    })
-  ]);
-  
-  console.log('✅ Created users:', users.length);
-  
-  // Create sample RFQs
-  const rfqs = await Promise.all([
-    prisma.rfq.create({
+  console.log('🌱 Seeding database...')
+
+  // Clean small demo tables (safe for dev/demo only)
+  await prisma.message.deleteMany().catch(() => {})
+  await prisma.quote.deleteMany().catch(() => {})
+  await prisma.rfq.deleteMany().catch(() => {})
+  await prisma.category.deleteMany().catch(() => {})
+  await prisma.user.deleteMany().catch(() => {})
+
+  // Create demo users
+  const buyer = await prisma.user.create({
+    data: {
+      email: 'buyer@bell24h.com',
+      name: 'Demo Buyer',
+      phone: '+91 9876543210',
+      company: 'ABC Industries',
+      role: 'buyer',
+    },
+  })
+  const supplier = await prisma.user.create({
+    data: {
+      email: 'supplier@bell24h.com',
+      name: 'Demo Supplier',
+      phone: '+91 9876543211',
+      company: 'XYZ Suppliers',
+      role: 'supplier',
+    },
+  })
+
+  // Seed categories
+  for (const cat of ALL_50_CATEGORIES) {
+    await prisma.category.create({
       data: {
-        title: 'Steel Pipes for Construction',
-        description: 'Need 1000 steel pipes for construction project',
-        category: 'steel',
-        quantity: '1000 pieces',
-        budget: '500000',
-        deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        urgency: 'NORMAL',
-        status: 'OPEN',
-        buyerId: users[2].id
-      }
-    }),
-    prisma.rfq.create({
-      data: {
-        title: 'Cotton Fabric for Textile',
-        description: 'Need premium cotton fabric for textile manufacturing',
-        category: 'textiles',
-        quantity: '500 meters',
-        budget: '100000',
-        deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-        urgency: 'LOW',
-        status: 'OPEN',
-        buyerId: users[2].id
-      }
+        name: cat.name,
+        slug: cat.slug,
+        icon: cat.icon,
+        description: cat.description,
+        rfqCount: typeof cat.rfqCount === 'number' ? cat.rfqCount : 0,
+      },
     })
-  ]);
-  
-  console.log('✅ Created RFQs:', rfqs.length);
-  
-  console.log('🎉 Database seeding completed!');
+  }
+
+  // Create two demo RFQs
+  const electronics = await prisma.category.findUnique({ where: { slug: 'electronics' } })
+  const construction = await prisma.category.findUnique({ where: { slug: 'construction' } })
+
+  if (electronics) {
+    await prisma.rfq.create({
+      data: {
+        userId: buyer.id,
+        categoryId: electronics.id,
+        title: 'Need 500 LED Bulbs for Office',
+        description: '9W warm white, BIS certified. Delivery in Mumbai.',
+        type: 'text',
+        status: 'active',
+        location: 'Mumbai, MH',
+        quantity: '500 units',
+      },
+    })
+  }
+  if (construction) {
+    await prisma.rfq.create({
+      data: {
+        userId: buyer.id,
+        categoryId: construction.id,
+        title: 'Steel Rods Required - 1000kg',
+        description: 'Grade 60 rods, urgent requirement for site.',
+        type: 'voice',
+        status: 'active',
+        location: 'Delhi, IN',
+        quantity: '1000 kg',
+      },
+    })
+  }
+
+  console.log('✅ Seed complete')
 }
 
-main()
-  .catch((e) => {
-    console.error('❌ Seeding failed:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+}).finally(async () => {
+  await prisma.$disconnect()
+})
