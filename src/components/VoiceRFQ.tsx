@@ -1,3 +1,3 @@
 export default function VoiceRFQ() {
-  return <div>Voice RFQ</div>
+  return <div>VoiceRFQ Placeholder</div>
 }

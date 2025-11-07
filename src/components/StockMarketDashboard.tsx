@@ -1,3 +1,3 @@
 export default function StockMarketDashboard() {
-  return <div>Stock Market Dashboard</div>
+  return <div>StockMarketDashboard Placeholder</div>
 }
