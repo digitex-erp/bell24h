@@ -134,7 +134,7 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
 
     if (typeof window === 'undefined' || !window.ethereum) {
-      setError('Web3 provider not available');
+      setError('MetaMask not detected. Please install MetaMask.');
       return;
     }
 
@@ -142,26 +142,43 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
     setError(null);
 
     try {
-      // Request account access
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      
-      // Get signer and account
-      const signer = await provider.getSigner();
-      const account = await signer.getAddress();
-      const network = await provider.getNetwork();
+      // Safely check if MetaMask (or any injected provider) exists
+      if (typeof window !== 'undefined' && window.ethereum) {
+        // Request account access
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        
+        // Get signer and account
+        const signer = await provider.getSigner();
+        const account = await signer.getAddress();
+        const network = await provider.getNetwork();
 
-      setSigner(signer);
-      setAccount(account);
-      setChainId(Number(network.chainId));
-      setIsConnected(true);
+        setSigner(signer);
+        setAccount(account);
+        setChainId(Number(network.chainId));
+        setIsConnected(true);
+        
+        // Store connection state
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem('walletConnected', 'true');
+        }
 
-      // Switch to Polygon if not already
-      if (Number(network.chainId) !== POLYGON_CONFIG.chainId) {
-        await switchNetwork();
+        // Switch to Polygon if not already
+        if (Number(network.chainId) !== POLYGON_CONFIG.chainId) {
+          await switchNetwork();
+        }
+      } else {
+        throw new Error('MetaMask not detected. Please install MetaMask.');
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to connect wallet');
-      console.error('Connection error:', err);
+      console.error('Wallet connection failed:', err);
+      if (err.code === 4001) {
+        setError('You rejected the connection request.');
+      } else if (err.message?.includes('MetaMask not detected')) {
+        setError('Please install MetaMask to use BELL token staking!');
+      } else {
+        setError(err.message || 'Failed to connect wallet');
+      }
+      setIsConnected(false);
     } finally {
       setIsConnecting(false);
     }
