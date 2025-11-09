@@ -252,13 +252,13 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       window.ethereum.on('chainChanged', handleChainChanged);
 
       return () => {
-        if (window.ethereum) {
+        if (window.ethereum?.removeListener) {
           window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
           window.ethereum.removeListener('chainChanged', handleChainChanged);
         }
       };
     }
-    return undefined;
+    return () => {};
   }, []);
 
   const value: Web3ContextType = {
