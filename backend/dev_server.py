@@ -72,6 +72,14 @@ async def health():
 if ai_endpoints and hasattr(ai_endpoints, 'router'):
     app.include_router(ai_endpoints.router, prefix="/api/v1/ai")
 
+# Include admin routes
+try:
+    from app.api.admin import ab_test, tasks
+    app.include_router(ab_test.router)
+    app.include_router(tasks.router)
+except Exception as e:
+    print(f"Warning: Could not load admin routes: {e}")
+
 
 @app.post('/api/v1/ai/explain-match/{supplier_id}')
 async def explain_match_demo(supplier_id: int, features: Optional[Dict[str, Any]] = Body(None)):
