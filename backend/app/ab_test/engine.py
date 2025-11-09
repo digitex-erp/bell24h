@@ -1,24 +1,22 @@
 """
 A/B Testing Engine with Auto-Switch to Winner
-Monitors conversion rates and automatically switches to winning variant every 2 hours
+Uses Prisma via REST API (no Supabase needed)
 """
 import os
 import time
+import requests
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
-from supabase import create_client, Client
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize Supabase
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# API base URL (Next.js API routes that use Prisma)
+API_BASE_URL = os.getenv("NEXT_PUBLIC_API_URL", os.getenv("API_URL", "http://localhost:3000"))
 
 class ABTestEngine:
-    """A/B Testing Engine for invite messages"""
+    """A/B Testing Engine for invite messages using Prisma via API"""
     
     def __init__(self):
         self.variants = {
@@ -35,23 +33,25 @@ class ABTestEngine:
         self.min_samples = 100  # Minimum samples before switching
         
     def get_conversion_stats(self, hours: int = 2) -> Dict[str, float]:
-        """Get conversion rates for each variant in last N hours"""
+        """Get conversion rates for each variant in last N hours via API"""
         try:
-            cutoff_time = datetime.utcnow() - timedelta(hours=hours)
+            response = requests.get(
+                f"{API_BASE_URL}/api/admin/ab-test/stats",
+                params={"hours": hours},
+                timeout=10
+            )
+            response.raise_for_status()
+            data = response.json()
             
-            # Fetch A/B test results from Supabase
-            response = supabase.table("invites_ab_test").select(
-                "variant, conversion_rate, total_sent, total_converted"
-            ).gte("created_at", cutoff_time.isoformat()).execute()
-            
+            # Transform API response to expected format
             stats = {}
-            for row in response.data:
-                variant = row.get("variant")
+            for variant_data in data.get("stats", []):
+                variant = variant_data.get("variant")
                 if variant:
                     stats[variant] = {
-                        "conversion_rate": float(row.get("conversion_rate", 0)),
-                        "total_sent": int(row.get("total_sent", 0)),
-                        "total_converted": int(row.get("total_converted", 0))
+                        "conversion_rate": float(variant_data.get("conversion_rate", 0)),
+                        "total_sent": int(variant_data.get("total_sent", 0)),
+                        "total_converted": int(variant_data.get("total_converted", 0))
                     }
             
             return stats
@@ -80,33 +80,37 @@ class ABTestEngine:
         return winner
     
     def get_current_active_variant(self) -> Optional[str]:
-        """Get current active variant from database"""
+        """Get current active variant from database via API"""
         try:
-            response = supabase.table("ab_test_config").select("active_variant").eq("id", "invite_message").execute()
-            if response.data:
-                return response.data[0].get("active_variant")
-            return None
+            response = requests.get(
+                f"{API_BASE_URL}/api/admin/ab-test/stats",
+                timeout=10
+            )
+            response.raise_for_status()
+            data = response.json()
+            return data.get("active_variant")
         except Exception as e:
             logger.error(f"Error getting active variant: {e}")
             return None
     
     def update_active_variant(self, variant: str):
-        """Update active variant in database and n8n workflow"""
+        """Update active variant in database and n8n workflow via API"""
         try:
-            # Update Supabase config
-            supabase.table("ab_test_config").update({
-                "active_variant": variant,
-                "updated_at": datetime.utcnow().isoformat()
-            }).eq("id", "invite_message").execute()
+            # Update via API (which uses Prisma)
+            response = requests.post(
+                f"{API_BASE_URL}/api/admin/ab-test/update-variant",
+                json={"variant": variant},
+                timeout=10
+            )
+            response.raise_for_status()
             
             # Trigger n8n webhook to update workflow
-            import requests
             n8n_webhook_url = os.getenv("N8N_WEBHOOK_AB_UPDATE")
             if n8n_webhook_url:
                 requests.post(n8n_webhook_url, json={
                     "variant": variant,
                     "message": self.variants[variant]["message"]
-                })
+                }, timeout=5)
             
             logger.info(f"✅ Active variant updated to: {variant} ({self.variants[variant]['name']})")
         except Exception as e:
@@ -127,11 +131,10 @@ class ABTestEngine:
                     
                     if winner:
                         # Get current active variant
-                        current = supabase.table("ab_test_config").select("active_variant").eq("id", "invite_message").execute()
-                        current_variant = current.data[0].get("active_variant") if current.data else None
+                        current = self.get_current_active_variant()
                         
                         # Switch if winner is different
-                        if winner != current_variant:
+                        if winner != current:
                             logger.info(f"🔄 Switching to winner: {winner} (conversion: {stats[winner]['conversion_rate']:.2%})")
                             self.update_active_variant(winner)
                         else:
@@ -151,4 +154,3 @@ class ABTestEngine:
 if __name__ == "__main__":
     engine = ABTestEngine()
     engine.run_monitoring_loop()
-

@@ -1,20 +1,19 @@
 """
 Enhancement Task Queue and Migration System
-Tracks pending enhancements and migrates them to task list
+Uses Prisma via REST API (no Supabase needed)
 """
 import os
+import requests
 from datetime import datetime
 from typing import Dict, List, Optional
 from enum import Enum
-from supabase import create_client, Client
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# API base URL (Next.js API routes that use Prisma)
+API_BASE_URL = os.getenv("NEXT_PUBLIC_API_URL", os.getenv("API_URL", "http://localhost:3000"))
 
 class TaskStatus(Enum):
     PENDING = "pending"
@@ -29,7 +28,7 @@ class TaskPriority(Enum):
     LOW = "low"
 
 class EnhancementQueue:
-    """Enhancement task queue management"""
+    """Enhancement task queue management using Prisma via API"""
     
     def __init__(self):
         self.priority_weights = {
@@ -41,19 +40,22 @@ class EnhancementQueue:
     
     def add_enhancement(self, title: str, description: str, priority: TaskPriority,
                        category: str, estimated_hours: Optional[int] = None) -> str:
-        """Add enhancement to queue"""
+        """Add enhancement to queue via API"""
         try:
-            response = supabase.table("enhancement_tasks").insert({
-                "title": title,
-                "description": description,
-                "priority": priority.value,
-                "category": category,
-                "status": TaskStatus.PENDING.value,
-                "estimated_hours": estimated_hours,
-                "created_at": datetime.utcnow().isoformat()
-            }).execute()
-            
-            task_id = response.data[0].get("id") if response.data else None
+            response = requests.post(
+                f"{API_BASE_URL}/api/admin/tasks/add",
+                json={
+                    "title": title,
+                    "description": description,
+                    "priority": priority.value,
+                    "category": category,
+                    "estimated_hours": estimated_hours
+                },
+                timeout=10
+            )
+            response.raise_for_status()
+            data = response.json()
+            task_id = data.get("id")
             
             logger.info(f"📋 Enhancement added: {title} (Priority: {priority.value})")
             return task_id
@@ -62,62 +64,69 @@ class EnhancementQueue:
             return None
     
     def get_pending_tasks(self, limit: int = 50) -> List[Dict]:
-        """Get all pending enhancement tasks"""
+        """Get all pending enhancement tasks via API"""
         try:
-            response = supabase.table("enhancement_tasks").select(
-                "id, title, description, priority, category, status, estimated_hours, created_at"
-            ).eq("status", TaskStatus.PENDING.value).order("priority", desc=True).limit(limit).execute()
-            
-            return response.data if response.data else []
+            response = requests.get(
+                f"{API_BASE_URL}/api/admin/tasks/pending",
+                params={"limit": limit},
+                timeout=10
+            )
+            response.raise_for_status()
+            return response.json().get("tasks", [])
         except Exception as e:
             logger.error(f"Error getting pending tasks: {e}")
             return []
     
     def get_tasks_by_category(self, category: str) -> List[Dict]:
-        """Get tasks by category"""
+        """Get tasks by category via API"""
         try:
-            response = supabase.table("enhancement_tasks").select(
-                "id, title, description, priority, category, status"
-            ).eq("category", category).eq("status", TaskStatus.PENDING.value).execute()
-            
-            return response.data if response.data else []
+            response = requests.get(
+                f"{API_BASE_URL}/api/admin/tasks",
+                params={"category": category, "status": TaskStatus.PENDING.value},
+                timeout=10
+            )
+            response.raise_for_status()
+            return response.json().get("tasks", [])
         except Exception as e:
             logger.error(f"Error getting tasks by category: {e}")
             return []
     
     def mark_in_progress(self, task_id: str, assigned_to: str):
-        """Mark task as in progress"""
+        """Mark task as in progress via API"""
         try:
-            supabase.table("enhancement_tasks").update({
-                "status": TaskStatus.IN_PROGRESS.value,
-                "assigned_to": assigned_to,
-                "started_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat()
-            }).eq("id", task_id).execute()
-            
+            response = requests.patch(
+                f"{API_BASE_URL}/api/admin/tasks/{task_id}/status",
+                json={"status": TaskStatus.IN_PROGRESS.value, "assigned_to": assigned_to},
+                timeout=10
+            )
+            response.raise_for_status()
             logger.info(f"🔧 Task {task_id} marked as in progress")
         except Exception as e:
             logger.error(f"Error updating task: {e}")
     
     def mark_completed(self, task_id: str, completion_notes: Optional[str] = None):
-        """Mark task as completed"""
+        """Mark task as completed via API"""
         try:
-            supabase.table("enhancement_tasks").update({
-                "status": TaskStatus.COMPLETED.value,
-                "completion_notes": completion_notes,
-                "completed_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat()
-            }).eq("id", task_id).execute()
-            
+            response = requests.patch(
+                f"{API_BASE_URL}/api/admin/tasks/{task_id}/status",
+                json={"status": TaskStatus.COMPLETED.value, "completion_notes": completion_notes},
+                timeout=10
+            )
+            response.raise_for_status()
             logger.info(f"✅ Task {task_id} marked as completed")
         except Exception as e:
             logger.error(f"Error updating task: {e}")
     
     def get_pending_count(self) -> int:
-        """Get count of pending tasks"""
+        """Get count of pending tasks via API"""
         try:
-            response = supabase.table("enhancement_tasks").select("id", count="exact").eq("status", TaskStatus.PENDING.value).execute()
-            return response.count if hasattr(response, "count") else 0
+            response = requests.get(
+                f"{API_BASE_URL}/api/admin/tasks/pending-count",
+                timeout=10
+            )
+            response.raise_for_status()
+            data = response.json()
+            return data.get("count", 0)
         except Exception as e:
             logger.error(f"Error getting pending count: {e}")
             return 0
@@ -203,4 +212,3 @@ if __name__ == "__main__":
     print(f"\n🔍 Top {len(pending_tasks)} pending tasks:")
     for task in pending_tasks:
         print(f"  - {task['title']} (Priority: {task['priority']}, Category: {task['category']})")
-

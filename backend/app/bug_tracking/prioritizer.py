@@ -1,20 +1,19 @@
 """
 Bug Tracking and Hotfix Prioritization System
-Tracks user-reported bugs and prioritizes hotfixes based on impact
+Uses Prisma via REST API (no Supabase needed)
 """
 import os
+import requests
 from datetime import datetime
 from typing import Dict, List, Optional
 from enum import Enum
-from supabase import create_client, Client
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# API base URL (Next.js API routes that use Prisma)
+API_BASE_URL = os.getenv("NEXT_PUBLIC_API_URL", os.getenv("API_URL", "http://localhost:3000"))
 
 class BugSeverity(Enum):
     CRITICAL = "critical"  # Blocks core functionality
@@ -31,7 +30,7 @@ class BugStatus(Enum):
     CLOSED = "closed"
 
 class BugPrioritizer:
-    """Bug tracking and prioritization system"""
+    """Bug tracking and prioritization system using Prisma via API"""
     
     def __init__(self):
         self.severity_weights = {
@@ -49,7 +48,7 @@ class BugPrioritizer:
     
     def report_bug(self, title: str, description: str, severity: BugSeverity, 
                    user_impact: str, reported_by: Optional[str] = None) -> str:
-        """Report a new bug"""
+        """Report a new bug via API"""
         try:
             # Calculate priority score
             priority_score = (
@@ -57,19 +56,22 @@ class BugPrioritizer:
                 self.user_impact_weights.get(user_impact, 1)
             )
             
-            # Insert into database
-            response = supabase.table("bugs").insert({
-                "title": title,
-                "description": description,
-                "severity": severity.value,
-                "user_impact": user_impact,
-                "priority_score": priority_score,
-                "status": BugStatus.REPORTED.value,
-                "reported_by": reported_by,
-                "reported_at": datetime.utcnow().isoformat()
-            }).execute()
-            
-            bug_id = response.data[0].get("id") if response.data else None
+            # Insert via API (which uses Prisma)
+            response = requests.post(
+                f"{API_BASE_URL}/api/admin/bugs/report",
+                json={
+                    "title": title,
+                    "description": description,
+                    "severity": severity.value,
+                    "user_impact": user_impact,
+                    "priority_score": priority_score,
+                    "reported_by": reported_by
+                },
+                timeout=10
+            )
+            response.raise_for_status()
+            data = response.json()
+            bug_id = data.get("id")
             
             logger.info(f"🐛 Bug reported: {title} (Priority: {priority_score}, Severity: {severity.value})")
             
@@ -83,40 +85,41 @@ class BugPrioritizer:
             return None
     
     def get_priority_bugs(self, limit: int = 10) -> List[Dict]:
-        """Get highest priority bugs for hotfix"""
+        """Get highest priority bugs for hotfix via API"""
         try:
-            response = supabase.table("bugs").select(
-                "id, title, description, severity, user_impact, priority_score, status, reported_at"
-            ).eq("status", BugStatus.REPORTED.value).order("priority_score", desc=True).limit(limit).execute()
-            
-            return response.data if response.data else []
+            response = requests.get(
+                f"{API_BASE_URL}/api/admin/bugs/priority",
+                params={"limit": limit},
+                timeout=10
+            )
+            response.raise_for_status()
+            return response.json().get("bugs", [])
         except Exception as e:
             logger.error(f"Error getting priority bugs: {e}")
             return []
     
     def mark_in_progress(self, bug_id: str, assigned_to: str):
-        """Mark bug as in progress"""
+        """Mark bug as in progress via API"""
         try:
-            supabase.table("bugs").update({
-                "status": BugStatus.IN_PROGRESS.value,
-                "assigned_to": assigned_to,
-                "updated_at": datetime.utcnow().isoformat()
-            }).eq("id", bug_id).execute()
-            
+            response = requests.patch(
+                f"{API_BASE_URL}/api/admin/bugs/{bug_id}/status",
+                json={"status": BugStatus.IN_PROGRESS.value, "assigned_to": assigned_to},
+                timeout=10
+            )
+            response.raise_for_status()
             logger.info(f"🔧 Bug {bug_id} marked as in progress")
         except Exception as e:
             logger.error(f"Error updating bug: {e}")
     
     def mark_fixed(self, bug_id: str, fix_description: str):
-        """Mark bug as fixed"""
+        """Mark bug as fixed via API"""
         try:
-            supabase.table("bugs").update({
-                "status": BugStatus.FIXED.value,
-                "fix_description": fix_description,
-                "fixed_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat()
-            }).eq("id", bug_id).execute()
-            
+            response = requests.patch(
+                f"{API_BASE_URL}/api/admin/bugs/{bug_id}/status",
+                json={"status": BugStatus.FIXED.value, "fix_description": fix_description},
+                timeout=10
+            )
+            response.raise_for_status()
             logger.info(f"✅ Bug {bug_id} marked as fixed")
         except Exception as e:
             logger.error(f"Error updating bug: {e}")
@@ -124,7 +127,6 @@ class BugPrioritizer:
     def send_critical_alert(self, bug_id: str, title: str):
         """Send alert for critical bugs"""
         try:
-            import requests
             telegram_bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
             telegram_chat_id = os.getenv("TELEGRAM_CHAT_ID")
             
@@ -132,34 +134,23 @@ class BugPrioritizer:
                 message = f"🚨 CRITICAL BUG REPORTED\n\nID: {bug_id}\nTitle: {title}\n\nImmediate action required!"
                 requests.post(
                     f"https://api.telegram.org/bot{telegram_bot_token}/sendMessage",
-                    json={"chat_id": telegram_chat_id, "text": message}
+                    json={"chat_id": telegram_chat_id, "text": message},
+                    timeout=5
                 )
         except Exception as e:
             logger.error(f"Error sending alert: {e}")
     
     def auto_triage(self):
-        """Automatically triage reported bugs"""
+        """Automatically triage reported bugs via API"""
         try:
-            # Get all reported bugs
-            response = supabase.table("bugs").select(
-                "id, title, severity, user_impact, priority_score"
-            ).eq("status", BugStatus.REPORTED.value).execute()
-            
-            for bug in response.data:
-                # Auto-triage based on keywords
-                title_lower = bug.get("title", "").lower()
-                description_lower = bug.get("description", "").lower()
-                
-                # Check for critical keywords
-                if any(keyword in title_lower or keyword in description_lower 
-                       for keyword in ["wallet", "payment", "claim", "credit", "airdrop", "leaderboard"]):
-                    # Mark as triaged and high priority
-                    supabase.table("bugs").update({
-                        "status": BugStatus.TRIAGED.value,
-                        "updated_at": datetime.utcnow().isoformat()
-                    }).eq("id", bug.get("id")).execute()
-                    
-                    logger.info(f"✅ Auto-triaged bug: {bug.get('title')}")
+            response = requests.post(
+                f"{API_BASE_URL}/api/admin/bugs/auto-triage",
+                timeout=30
+            )
+            response.raise_for_status()
+            data = response.json()
+            triaged_count = data.get("triaged_count", 0)
+            logger.info(f"✅ Auto-triaged {triaged_count} bugs")
         except Exception as e:
             logger.error(f"Error auto-triaging: {e}")
 
@@ -205,4 +196,3 @@ if __name__ == "__main__":
     print(f"🐛 Top {len(priority_bugs)} priority bugs:")
     for bug in priority_bugs:
         print(f"  - {bug['title']} (Priority: {bug['priority_score']}, Severity: {bug['severity']})")
-

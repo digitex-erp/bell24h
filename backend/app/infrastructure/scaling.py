@@ -1,20 +1,18 @@
 """
 Infrastructure Scaling Automation
-Automatically scales n8n, SMS, and WhatsApp capacity based on demand
+Uses Prisma via REST API (no Supabase needed)
 """
 import os
 import logging
+import requests
 from datetime import datetime
 from typing import Dict
-from supabase import create_client, Client
-import requests
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# API base URL (Next.js API routes that use Prisma)
+API_BASE_URL = os.getenv("NEXT_PUBLIC_API_URL", os.getenv("API_URL", "http://localhost:3000"))
 
 class InfrastructureScaler:
     """Automated infrastructure scaling based on demand"""
@@ -35,23 +33,21 @@ class InfrastructureScaler:
         self.scale_threshold = 0.8  # Scale up when 80% capacity used
         
     def get_current_usage(self) -> Dict[str, float]:
-        """Get current infrastructure usage"""
+        """Get current infrastructure usage via API"""
         try:
-            # Get today's invite count
-            today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+            response = requests.get(
+                f"{API_BASE_URL}/api/admin/infrastructure/usage",
+                timeout=10
+            )
+            response.raise_for_status()
+            data = response.json()
             
-            response = supabase.table("invites_sent").select("count").gte("sent_at", today_start.isoformat()).execute()
-            today_count = len(response.data) if response.data else 0
-            
-            # Calculate usage percentages
-            usage = {
-                "sms_usage": min(today_count / self.current_capacity["sms_per_day"], 1.0),
-                "whatsapp_usage": min(today_count / self.current_capacity["whatsapp_per_day"], 1.0),
-                "total_usage": min(today_count / self.current_capacity["total_invites_per_day"], 1.0),
-                "today_count": today_count
+            return {
+                "sms_usage": data.get("sms_usage", 0),
+                "whatsapp_usage": data.get("whatsapp_usage", 0),
+                "total_usage": data.get("total_usage", 0),
+                "today_count": data.get("today_count", 0)
             }
-            
-            return usage
         except Exception as e:
             logger.error(f"Error getting usage: {e}")
             return {"sms_usage": 0, "whatsapp_usage": 0, "total_usage": 0, "today_count": 0}
@@ -84,6 +80,18 @@ class InfrastructureScaler:
     def scale_up(self, target_capacity: int):
         """Scale up infrastructure to target capacity"""
         try:
+            # Update via API (which uses Prisma)
+            response = requests.post(
+                f"{API_BASE_URL}/api/admin/infrastructure/scale",
+                json={
+                    "sms_per_day": target_capacity // 2,
+                    "whatsapp_per_day": target_capacity // 2,
+                    "total_invites_per_day": target_capacity
+                },
+                timeout=10
+            )
+            response.raise_for_status()
+            
             # Update n8n workflow batch size
             n8n_webhook = os.getenv("N8N_WEBHOOK_SCALE")
             if n8n_webhook:
@@ -91,15 +99,7 @@ class InfrastructureScaler:
                     "batch_size": min(target_capacity // 100, self.max_capacity["n8n_batch_size"]),
                     "sms_per_day": target_capacity // 2,
                     "whatsapp_per_day": target_capacity // 2
-                })
-            
-            # Update capacity in database
-            supabase.table("infrastructure_config").update({
-                "sms_per_day": target_capacity // 2,
-                "whatsapp_per_day": target_capacity // 2,
-                "total_invites_per_day": target_capacity,
-                "updated_at": datetime.utcnow().isoformat()
-            }).eq("id", "invite_capacity").execute()
+                }, timeout=5)
             
             # Update local capacity
             self.current_capacity["total_invites_per_day"] = target_capacity
@@ -128,7 +128,8 @@ class InfrastructureScaler:
             if telegram_bot_token and telegram_chat_id:
                 requests.post(
                     f"https://api.telegram.org/bot{telegram_bot_token}/sendMessage",
-                    json={"chat_id": telegram_chat_id, "text": message}
+                    json={"chat_id": telegram_chat_id, "text": message},
+                    timeout=5
                 )
         except Exception as e:
             logger.error(f"Error sending alert: {e}")
@@ -157,4 +158,3 @@ class InfrastructureScaler:
 if __name__ == "__main__":
     scaler = InfrastructureScaler()
     scaler.auto_scale()
-
