@@ -234,31 +234,35 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
 
   // Listen for account changes
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.ethereum) {
-      const handleAccountsChanged = (accounts: string[]) => {
-        if (accounts.length === 0) {
-          disconnect();
-        } else {
-          setAccount(accounts[0]);
-        }
-      };
-
-      const handleChainChanged = (chainId: string) => {
-        setChainId(parseInt(chainId, 16));
-        window.location.reload(); // Reload to update contracts
-      };
-
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
-      window.ethereum.on('chainChanged', handleChainChanged);
-
-      return () => {
-        if (window.ethereum?.removeListener) {
-          window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-          window.ethereum.removeListener('chainChanged', handleChainChanged);
-        }
-      };
+    if (typeof window === 'undefined' || !window.ethereum) {
+      return () => {};
     }
-    return () => {};
+
+    // Store reference to ensure type safety
+    const ethereum = window.ethereum;
+
+    const handleAccountsChanged = (accounts: string[]) => {
+      if (accounts.length === 0) {
+        disconnect();
+      } else {
+        setAccount(accounts[0]);
+      }
+    };
+
+    const handleChainChanged = (chainId: string) => {
+      setChainId(parseInt(chainId, 16));
+      window.location.reload(); // Reload to update contracts
+    };
+
+    ethereum.on('accountsChanged', handleAccountsChanged);
+    ethereum.on('chainChanged', handleChainChanged);
+
+    return () => {
+      if (ethereum.removeListener) {
+        ethereum.removeListener('accountsChanged', handleAccountsChanged);
+        ethereum.removeListener('chainChanged', handleChainChanged);
+      }
+    };
   }, []);
 
   const value: Web3ContextType = {
