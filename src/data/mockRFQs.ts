@@ -8,6 +8,14 @@ export type MockRFQ = {
   quotesCount: number;
   postedAt: Date;
   quantity?: string;
+  budget?: string;
+  quoteCount?: number;
+  views?: number;
+  requirements?: string[];
+  tags?: string[];
+  audioUrl?: string;
+  videoUrl?: string;
+  thumbnailUrl?: string;
 };
 
 export const ALL_MOCK_RFQS: MockRFQ[] = [
@@ -74,3 +82,40 @@ export const ALL_MOCK_RFQS: MockRFQ[] = [
     postedAt: new Date(Date.now() - 1000 * 60 * 60 * 12),
   },
 ];
+
+// Helper function to get RFQ statistics
+export function getMockRFQStats() {
+  const total = ALL_MOCK_RFQS.length;
+  const voiceRFQs = ALL_MOCK_RFQS.filter(rfq => rfq.type === 'voice').length;
+  const videoRFQs = ALL_MOCK_RFQS.filter(rfq => rfq.type === 'video').length;
+  const textRFQs = ALL_MOCK_RFQS.filter(rfq => rfq.type === 'text').length;
+  
+  return {
+    total,
+    voiceRFQs,
+    videoRFQs,
+    textRFQs,
+  };
+}
+
+// Helper function to get RFQs by category
+export function getMockRFQsByCategory(category: string): MockRFQ[] {
+  return ALL_MOCK_RFQS.filter(rfq => rfq.category === category);
+}
+
+// Helper function to get recent RFQs
+export function getRecentRFQs(limit: number = 10): MockRFQ[] {
+  return ALL_MOCK_RFQS
+    .sort((a, b) => b.postedAt.getTime() - a.postedAt.getTime())
+    .slice(0, limit);
+}
+
+// Helper function to get RFQ by ID
+export function getMockRFQById(id: string): MockRFQ | undefined {
+  return ALL_MOCK_RFQS.find(rfq => rfq.id === id);
+}
+
+// Helper function to get RFQs by type
+export function getMockRFQsByType(type: 'voice' | 'video' | 'text'): MockRFQ[] {
+  return ALL_MOCK_RFQS.filter(rfq => rfq.type === type);
+}

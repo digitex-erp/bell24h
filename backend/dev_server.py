@@ -1,17 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.core.config import settings
-from sqlalchemy import create_engine, text
+from typing import Dict, Any, Optional
+import json
+import os
 
 # Import the ai endpoints router
 try:
     from app.api.endpoints import ai as ai_endpoints
 except Exception:
     ai_endpoints = None
-import json
-import os
 
 # Lightweight local explainer for dev: reads backend/data/suppliers.json and returns
 # a simplified explanations list matching the demo page and Cypress expectations.
@@ -61,47 +60,62 @@ if os.path.isdir(public_dir):
 
 @app.get("/api/health")
 async def health():
-    return {"status": "healthy", "version": "dev"}
+    import os
+    environment = os.getenv("ENVIRONMENT", "dev")
+    return {
+        "status": "healthy",
+        "version": environment,
+        "service": "bell24h-backend",
+        "model_loaded": hasattr(app, 'model_loaded') and app.model_loaded
+    }
 
 if ai_endpoints and hasattr(ai_endpoints, 'router'):
     app.include_router(ai_endpoints.router, prefix="/api/v1/ai")
 
 
 @app.post('/api/v1/ai/explain-match/{supplier_id}')
-async def explain_match_demo(supplier_id: int):
-    """Lightweight unauthenticated explain endpoint for local dev/demo.
-
-    This bypasses database/auth dependencies used in the full router so the
-    static demo page and Cypress can call it directly.
+async def explain_match_demo(supplier_id: int, features: Optional[Dict[str, Any]] = Body(None)):
+    """Enhanced explain endpoint that uses real AI service with SHAP visualizations.
+    
+    This endpoint uses the real AI service if available, otherwise falls back to lightweight demo.
+    Accepts features in request body for real-time SHAP explanations.
     """
-    # If a DATABASE_URL is configured, attempt a minimal DB read here (avoid
-    # importing app.services.ai_services to prevent optional heavy deps at import).
-    db_url = getattr(settings, 'DATABASE_URL', None)
-    if db_url:
-        try:
-            engine = create_engine(db_url)
-            with engine.connect() as conn:
-                stmt = text("SELECT feature_0, feature_1, feature_2, feature_3 FROM suppliers WHERE id = :id")
-                res = conn.execute(stmt, {"id": supplier_id})
-                row = res.fetchone()
-                if row:
-                    vals = [float(row[0]), float(row[1]), float(row[2]), float(row[3])]
-                    feature_names = ['price', 'delivery', 'quality', 'compliance']
-                    explanations = [
-                        { 'feature': name, 'importance': float(val), 'contribution': 'positive' if val >= 0 else 'negative' }
-                        for name, val in zip(feature_names, vals)
-                    ]
-                    # return a consistent envelope expected by the demo page
-                    return {"explanations": explanations}
-        except Exception:
-            # On any DB error, fall back to JSON path below
-            pass
-
+    # Try to use real AI service first
     try:
-        explanations = _local_explain_from_json(supplier_id)
-        return {"explanations": explanations}
+        from app.services.ai_services import ai_service
+        
+        # Use provided features or defaults
+        if features is None:
+            features = {
+                "price": 125000,
+                "lead_time": 7,
+                "supplier_rating": 4.8,
+                "distance_km": 89,
+                "past_on_time_rate": 0.97,
+                "rfq_length": 100,
+                "buyer_tier": 2,
+                "quantity": 300,
+                "urgency_score": 0.8,
+                "region": 1,
+                "past_success_rate": 0.95,
+                "negotiations_count": 3,
+                "previous_orders": 28,
+                "multimodal_rfq": 1,
+                "transcript_length": 325,
+                "industry_type": 1,
+                "quoted_suppliers": 9,
+            }
+        
+        # Generate SHAP explanations with visualizations
+        result = ai_service.explain_rfq(features)
+        return result
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        # Fallback to lightweight demo if AI service fails
+        try:
+            explanations = _local_explain_from_json(supplier_id)
+            return {"explanations": explanations, "model_used": False}
+        except Exception as e2:
+            return {"success": False, "error": str(e2), "model_used": False}
 
 if __name__ == '__main__':
     uvicorn.run(app, host='0.0.0.0', port=8000, reload=True)

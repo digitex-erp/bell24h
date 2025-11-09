@@ -109,35 +109,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* For Responding to RFQs (Selling) */}
+          {/* Legal (Razorpay-compliant) */}
           <div>
-            <h3 className="text-white font-semibold text-lg mb-4">Respond to RFQs</h3>
+            <h3 className="text-white font-semibold text-lg mb-4">Legal</h3>
             <ul className="space-y-2">
-              <li>
-                <Link href="/rfq" className="hover:text-blue-400 transition-colors">
-                  Browse RFQs
-                </Link>
-              </li>
-              <li>
-                <Link href="/products/add" className="hover:text-blue-400 transition-colors">
-                  Add Products
-                </Link>
-              </li>
-              <li>
-                <Link href="/quotes/my-quotes" className="hover:text-blue-400 transition-colors">
-                  My Quotes
-                </Link>
-              </li>
-              <li>
-                <Link href="/orders/received" className="hover:text-blue-400 transition-colors">
-                  Orders Received
-                </Link>
-              </li>
-              <li>
-                <Link href="/help/responding" className="hover:text-blue-400 transition-colors">
-                  Help Center
-                </Link>
-              </li>
+              <li><Link href="/legal/terms" className="hover:text-blue-400 transition-colors">Terms & Conditions</Link></li>
+              <li><Link href="/legal/privacy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/legal/refund" className="hover:text-blue-400 transition-colors">Refund & Cancellation</Link></li>
+              <li><Link href="/legal/shipping" className="hover:text-blue-400 transition-colors">Shipping & Delivery</Link></li>
+              <li><Link href="/contact" className="hover:text-blue-400 transition-colors">Contact Support</Link></li>
             </ul>
           </div>
         </div>

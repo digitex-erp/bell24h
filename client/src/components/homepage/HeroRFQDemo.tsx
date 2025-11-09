@@ -50,82 +50,78 @@ export default function HeroRFQDemo() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}></div>
-      </div>
+    <section className="relative min-h-screen flex items-center justify-center bg-[#0a1128]">
+      {/* Background Grid Pattern */}
+      <div className="absolute inset-0 bg-grid-white/5"></div>
 
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">AI-Powered RFQ System</span>
+        <div className="text-center mb-12 relative z-10 pb-32">
+          <div className="inline-flex items-center gap-2 bg-gray-900/80 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-cyan-500/20">
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm font-medium text-cyan-400">AI-Powered RFQ System</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Post RFQs in Seconds
+          <h1 className="text-6xl md:text-7xl font-black mb-6 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
+            Ready to Transform Your Procurement?
           </h1>
-          <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
-            Choose how you want to create your RFQ - Text, Voice, or Video
+          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
+            Join thousands of businesses using Bell24H for faster, smarter B2B transactions
           </p>
         </div>
 
         {/* Type Selector Tabs */}
-        <div className="flex justify-center gap-4 mb-8">
+        <div className="flex flex-wrap gap-4 justify-center mb-8">
           <button
             onClick={() => setActiveType('text')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-8 py-5 rounded-2xl font-bold text-lg transition-all ${
               activeType === 'text'
-                ? 'bg-white text-blue-600 shadow-lg scale-105'
-                : 'bg-white/10 backdrop-blur-sm hover:bg-white/20'
+                ? 'bg-white text-[#0a1128] shadow-2xl scale-105'
+                : 'bg-gray-800/50 border-2 border-gray-600 text-white hover:bg-gray-800 backdrop-blur'
             }`}
           >
             <FileText className="w-5 h-5" />
-            <span>Text RFQ</span>
+            <span>Try Text RFQ</span>
           </button>
           <button
             onClick={() => setActiveType('voice')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-8 py-5 rounded-2xl font-bold text-lg transition-all ${
               activeType === 'voice'
-                ? 'bg-white text-purple-600 shadow-lg scale-105'
-                : 'bg-white/10 backdrop-blur-sm hover:bg-white/20'
+                ? 'bg-cyan-500/20 border-2 border-cyan-500 text-cyan-400 shadow-2xl scale-105'
+                : 'bg-gray-800/50 border-2 border-gray-600 text-white hover:bg-cyan-500/10 backdrop-blur'
             }`}
           >
             <Mic className="w-5 h-5" />
-            <span>Voice RFQ</span>
+            <span>Try Voice RFQ</span>
           </button>
           <button
             onClick={() => setActiveType('video')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`flex items-center gap-2 px-8 py-5 rounded-2xl font-bold text-lg transition-all ${
               activeType === 'video'
-                ? 'bg-white text-pink-600 shadow-lg scale-105'
-                : 'bg-white/10 backdrop-blur-sm hover:bg-white/20'
+                ? 'bg-cyan-500/20 border-2 border-cyan-500 text-cyan-400 shadow-2xl scale-105'
+                : 'bg-gray-800/50 border-2 border-gray-600 text-white hover:bg-cyan-500/10 backdrop-blur'
             }`}
           >
             <Video className="w-5 h-5" />
-            <span>Video RFQ</span>
+            <span>Try Video RFQ</span>
           </button>
         </div>
 
         {/* Demo Content */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
-            <h3 className="text-2xl font-bold mb-2">{demoContent[activeType].title}</h3>
-            <p className="text-blue-100 mb-6">{demoContent[activeType].description}</p>
+          <div className="bg-gray-900/80 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/10">
+            <h3 className="text-2xl font-bold mb-2 text-white">{demoContent[activeType].title}</h3>
+            <p className="text-gray-300 mb-6">{demoContent[activeType].description}</p>
 
             {/* Text Demo */}
             {activeType === 'text' && (
-              <div className="bg-white/10 rounded-lg p-6 space-y-4">
+              <div className="bg-gray-800/50 rounded-lg p-6 space-y-4 border border-white/10">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-blue-200 mb-1">Product</p>
-                    <p className="font-medium">{demoContent.text.example.product}</p>
+                    <p className="text-sm text-gray-400 mb-1">Product</p>
+                    <p className="font-medium text-white">{demoContent.text.example.product}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-blue-200 mb-1">Quantity</p>
+                    <p className="text-sm text-gray-400 mb-1">Quantity</p>
                     <p className="font-medium">{demoContent.text.example.quantity}</p>
                   </div>
                   <div className="col-span-2">
@@ -200,15 +196,15 @@ export default function HeroRFQDemo() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4 mt-6">
-              <Link 
+              <Link
                 href={`/rfq/create?type=${activeType}`}
-                className="px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 inline-flex items-center gap-2 transition-colors"
+                className="px-8 py-5 bg-white text-[#0a1128] rounded-2xl font-bold text-lg hover:scale-105 transition shadow-2xl inline-flex items-center gap-2"
               >
                 Try {activeType.charAt(0).toUpperCase() + activeType.slice(1)} RFQ
               </Link>
               <Link 
                 href="/rfq/demo/all"
-                className="px-6 py-3 border-2 border-white text-white rounded-lg font-medium hover:bg-white/10 inline-flex items-center gap-2 transition-colors"
+                className="px-8 py-5 bg-cyan-500/20 border-2 border-cyan-500 text-cyan-400 rounded-2xl font-bold text-lg hover:bg-cyan-500/30 transition backdrop-blur inline-flex items-center gap-2"
               >
                 View All Demos
               </Link>
@@ -218,22 +214,34 @@ export default function HeroRFQDemo() {
 
         {/* Stats */}
         <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-          <div className="text-center">
-            <p className="text-3xl font-bold mb-1">~800</p>
-            <p className="text-sm text-blue-200">Text RFQs</p>
+          <div className="text-center bg-gray-900/50 rounded-lg p-4 border border-cyan-500/20">
+            <p className="text-3xl font-bold mb-1 text-cyan-400">~800</p>
+            <p className="text-sm text-gray-400">Text RFQs</p>
           </div>
-          <div className="text-center">
-            <p className="text-3xl font-bold mb-1">~300</p>
-            <p className="text-sm text-blue-200">Voice RFQs</p>
+          <div className="text-center bg-gray-900/50 rounded-lg p-4 border border-cyan-500/20">
+            <p className="text-3xl font-bold mb-1 text-cyan-400">~300</p>
+            <p className="text-sm text-gray-400">Voice RFQs</p>
           </div>
-          <div className="text-center">
-            <p className="text-3xl font-bold mb-1">~150</p>
-            <p className="text-sm text-blue-200">Video RFQs</p>
+          <div className="text-center bg-gray-900/50 rounded-lg p-4 border border-cyan-500/20">
+            <p className="text-3xl font-bold mb-1 text-cyan-400">~150</p>
+            <p className="text-sm text-gray-400">Video RFQs</p>
           </div>
-          <div className="text-center">
-            <p className="text-3xl font-bold mb-1">12+</p>
-            <p className="text-sm text-blue-200">Languages</p>
+          <div className="text-center bg-gray-900/50 rounded-lg p-4 border border-cyan-500/20">
+            <p className="text-3xl font-bold mb-1 text-cyan-400">12+</p>
+            <p className="text-sm text-gray-400">Languages</p>
           </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="mt-12 text-center">
+          <p className="text-lg text-gray-400 mb-4">
+            <Link href="/auth/login-otp" className="text-cyan-400 hover:text-cyan-300 underline font-semibold">
+              or Sign up for free →
+            </Link>
+          </p>
+          <p className="text-sm text-gray-500">
+            No credit card required • Free to start • Cancel anytime
+          </p>
         </div>
       </div>
     </section>

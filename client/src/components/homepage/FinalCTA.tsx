@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function FinalCTA() {
   return (
-    <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 py-20">
+    <section className="bg-[#0a1128] border-t border-white/10 py-20">
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
           Ready to Transform Your Procurement?

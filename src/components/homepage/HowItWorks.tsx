@@ -1,7 +1,6 @@
 'use client';
 
 import { FileText, Users, CheckCircle, ArrowRight, Mic, Video } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 export default function HowItWorks() {
@@ -113,12 +112,7 @@ export default function HowItWorks() {
               })}
             </div>
 
-            <Button className="w-full mt-8" asChild>
-              <Link href="/rfq/create">
-                Create Your First RFQ
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </Button>
+            <Link href="/rfq/create" className="w-full block mt-8 bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg text-center hover:bg-blue-700 transition">Post an RFQ</Link>
           </div>
 
           {/* For Suppliers */}
@@ -160,12 +154,7 @@ export default function HowItWorks() {
               })}
             </div>
 
-            <Button className="w-full mt-8 bg-green-600 hover:bg-green-700" asChild>
-              <Link href="/suppliers">
-                Become a Supplier
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </Button>
+            <Link href="/rfq" className="w-full block mt-8 bg-green-600 text-white font-semibold px-6 py-3 rounded-lg text-center hover:bg-green-700 transition">Browse RFQs</Link>
           </div>
         </div>
       </div>

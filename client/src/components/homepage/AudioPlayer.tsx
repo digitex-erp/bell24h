@@ -93,7 +93,7 @@ export default function AudioPlayer({ audioUrl }: AudioPlayerProps) {
       </div>
 
       {/* Waveform Visualization (Optional) */}
-      <div className="mt-3 flex items-center justify-center gap-1 h-12">
+      <div className="mt-3 flex items-center justify-center gap-1 h-12" suppressHydrationWarning>
         {[...Array(40)].map((_, i) => (
           <div
             key={i}
@@ -102,6 +102,7 @@ export default function AudioPlayer({ audioUrl }: AudioPlayerProps) {
               height: `${20 + Math.random() * 40}%`,
               opacity: currentTime > (i / 40) * duration ? 1 : 0.3,
             }}
+            suppressHydrationWarning
           />
         ))}
       </div>

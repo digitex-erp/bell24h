@@ -8,7 +8,7 @@ export default function AIFeaturesSection() {
       icon: Mic,
       title: 'Voice Recognition',
       description: 'Supports 12+ Indian languages with real-time transcription',
-      color: 'purple',
+      color: 'cyan',
     },
     {
       icon: Brain,
@@ -32,7 +32,7 @@ export default function AIFeaturesSection() {
       icon: Globe,
       title: 'Multi-Language',
       description: 'Communicate in Hindi, English, Tamil, Telugu, and more',
-      color: 'pink',
+      color: 'cyan',
     },
     {
       icon: Sparkles,
@@ -43,22 +43,21 @@ export default function AIFeaturesSection() {
   ];
 
   const colorClasses = {
-    purple: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+    cyan: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300',
     blue: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
     green: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
     orange: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
-    pink: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
     indigo: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
   };
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-900">
+    <section className="py-16 bg-[#0a1128]">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             AI-Powered Features
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Leverage cutting-edge AI technology to streamline your B2B procurement process
           </p>
         </div>

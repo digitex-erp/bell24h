@@ -1,7 +1,6 @@
 'use client';
 
 import { FileText, Mic, Video, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getMockRFQStats } from '@/data/mockRFQs';
 
@@ -94,24 +93,19 @@ export default function RFQTypeShowcase() {
 
                 {/* Actions */}
                 <div className="space-y-3">
-                  <Button
-                    className={`w-full ${type.buttonColor} text-white`}
-                    asChild
+                  <Link
+                    href={type.link}
+                    className={`w-full py-4 px-6 rounded-lg flex flex-col items-center gap-2 font-semibold transition-colors text-center ${type.buttonColor} text-white`}
                   >
-                    <Link href={type.link}>
-                      Try {type.title}
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full border-gray-300 dark:border-gray-600"
-                    asChild
+                    Try {type.title}
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Link>
+                  <Link
+                    href={type.demoLink}
+                    className="w-full py-4 px-6 rounded-lg flex flex-col items-center gap-2 font-semibold transition-colors text-center bg-white text-blue-700 hover:bg-blue-100 border border-gray-300 dark:border-gray-600"
                   >
-                    <Link href={type.demoLink}>
-                      View {type.count.toLocaleString()}+ Demos
-                    </Link>
-                  </Button>
+                    View {type.count.toLocaleString()}+ Demos
+                  </Link>
                 </div>
               </div>
             );

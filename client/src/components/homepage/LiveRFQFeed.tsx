@@ -34,8 +34,8 @@ export default function LiveRFQFeed() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Live RFQs</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <h2 className="text-2xl font-bold text-white">Live RFQs</h2>
+          <p className="text-sm text-gray-400 mt-1">
             All Types • Real-time updates
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function LiveRFQFeed() {
             onClick={() => setFilter('voice')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === 'voice' 
-                ? 'bg-purple-600 text-white shadow-md' 
+                ? 'bg-cyan-600 text-white shadow-md' 
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
             }`}
           >
@@ -76,7 +76,7 @@ export default function LiveRFQFeed() {
             onClick={() => setFilter('video')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === 'video' 
-                ? 'bg-pink-600 text-white shadow-md' 
+                ? 'bg-cyan-600 text-white shadow-md' 
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
             }`}
           >
@@ -91,18 +91,18 @@ export default function LiveRFQFeed() {
         {filteredRFQs.map((rfq) => (
           <div 
             key={rfq.id} 
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-700"
+            className="bg-gray-900/80 backdrop-blur border border-white/10 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
           >
             {/* Type Badge */}
             <div className="flex items-center gap-2 mb-3">
               {rfq.rfqType === 'voice' && (
-                <span className="flex items-center gap-1 px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium">
+                <span className="flex items-center gap-1 px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm font-medium">
                   <Mic className="w-4 h-4" />
                   Voice RFQ
                 </span>
               )}
               {rfq.rfqType === 'video' && (
-                <span className="flex items-center gap-1 px-3 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 rounded-full text-sm font-medium">
+                <span className="flex items-center gap-1 px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm font-medium">
                   <Video className="w-4 h-4" />
                   Video RFQ
                 </span>
@@ -135,7 +135,7 @@ export default function LiveRFQFeed() {
                   </p>
                 )}
                 {rfq.aiAnalysis && (
-                  <div className="mt-2 p-2 bg-purple-50 dark:bg-purple-900/20 rounded text-xs">
+                  <div className="mt-2 p-2 bg-cyan-50 dark:bg-cyan-900/20 rounded text-xs">
                     <span className="font-medium">AI Analysis:</span> {rfq.aiAnalysis}
                   </div>
                 )}
@@ -151,7 +151,7 @@ export default function LiveRFQFeed() {
                   </p>
                 )}
                 {rfq.aiAnalysis && (
-                  <div className="mt-2 p-2 bg-pink-50 dark:bg-pink-900/20 rounded text-xs">
+                  <div className="mt-2 p-2 bg-cyan-50 dark:bg-cyan-900/20 rounded text-xs">
                     <span className="font-medium">AI Analysis:</span> {rfq.aiAnalysis}
                   </div>
                 )}

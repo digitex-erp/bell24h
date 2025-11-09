@@ -22,8 +22,8 @@ export default function TrustIndicators() {
       icon: TrendingUp,
       value: '2,500+',
       label: 'Demo RFQs Available',
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
+      color: 'text-cyan-600',
+      bgColor: 'bg-cyan-50',
     },
     {
       icon: Zap,
@@ -35,7 +35,7 @@ export default function TrustIndicators() {
   ];
 
   return (
-    <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+    <section className="bg-[#0a1128] border-b border-white/10">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, index) => {

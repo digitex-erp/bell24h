@@ -25,10 +25,10 @@ export default function RFQTypeShowcase() {
       title: 'Voice RFQ',
       description: 'Just speak in any language - our AI understands 12 Indian languages',
       count: stats.voiceRFQs,
-      color: 'purple',
-      bgGradient: 'from-purple-50 to-purple-100',
-      textColor: 'text-purple-700',
-      buttonColor: 'bg-purple-600 hover:bg-purple-700',
+      color: 'cyan',
+      bgGradient: 'from-cyan-50 to-cyan-100',
+      textColor: 'text-cyan-700',
+      buttonColor: 'bg-cyan-600 hover:bg-cyan-700',
       link: '/rfq/create?type=voice',
       demoLink: '/rfq/demo/voice',
     },
@@ -37,23 +37,23 @@ export default function RFQTypeShowcase() {
       title: 'Video RFQ',
       description: 'Record or upload a video showing the product you need',
       count: stats.videoRFQs,
-      color: 'pink',
-      bgGradient: 'from-pink-50 to-pink-100',
-      textColor: 'text-pink-700',
-      buttonColor: 'bg-pink-600 hover:bg-pink-700',
+      color: 'cyan',
+      bgGradient: 'from-cyan-50 to-cyan-100',
+      textColor: 'text-cyan-700',
+      buttonColor: 'bg-cyan-600 hover:bg-cyan-700',
       link: '/rfq/create?type=video',
       demoLink: '/rfq/demo/video',
     },
   ];
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-900">
+    <section className="py-16 bg-[#0a1128]">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             How Bell24h Accepts RFQs
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Choose the method that works best for you. Our AI handles all three formats seamlessly.
           </p>
         </div>
@@ -64,7 +64,7 @@ export default function RFQTypeShowcase() {
             return (
               <div
                 key={index}
-                className={`bg-gradient-to-br ${type.bgGradient} dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-600`}
+                className="bg-gray-900/80 backdrop-blur border border-white/10 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow"
               >
                 {/* Icon */}
                 <div className="flex justify-center mb-6">

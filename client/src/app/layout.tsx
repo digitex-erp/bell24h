@@ -1,13 +1,15 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { AuthProvider } from '../contexts/AuthContext'
+import { AuthProvider } from '@/contexts/AuthContext'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Bell24H - AI-Powered B2B Marketplace',
-  description: 'India\'s premier B2B marketplace connecting suppliers and buyers with AI-powered matching and analytics.',
+  title: "Bell24H - India's #1 Voice & Video RFQ Marketplace",
+  description: 'Post RFQs via voice, video, or text. Get bids in 24 hours.',
 }
 
 export default function RootLayout({
@@ -16,10 +18,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
         <AuthProvider>
-          {children}
+          <Header />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
         </AuthProvider>
       </body>
     </html>

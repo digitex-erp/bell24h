@@ -1,4 +1,4 @@
-import { AuthContextType, User } from 'lucide-react';;\n'use client';
+'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -113,7 +113,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Redirect to home
       router.push('/');
     } catch (error) {
-      console.error(Sign out error:, error);
+      console.error('Sign out error:', error);
     } finally {
       setLoading(false);
     }
