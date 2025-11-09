@@ -1,6 +1,18 @@
 ﻿import { ethers, BrowserProvider, JsonRpcProvider, Contract, parseUnits, formatUnits } from 'ethers';
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
+// At the top of the file
+interface EthereumProvider {
+  on?: (event: string, handler: (...args: any[]) => void) => void;
+  removeListener?: (event: string, handler: (...args: any[]) => void) => void;
+  // Add other methods you use (e.g., request, isMetaMask, etc.)
+}
+declare global {
+  interface Window {
+    ethereum?: EthereumProvider;
+  }
+}
+
 // Contract addresses (Polygon mainnet)
 const CONTRACT_ADDRESSES = {
   bellToken: '0x1234567890123456789012345678901234567890', // Deployed BellToken address
@@ -234,35 +246,38 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
 
   // Listen for account changes
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.ethereum) {
-      return () => {};
-    }
-
-    // Store reference to ensure type safety
-    const ethereum = window.ethereum;
-
     const handleAccountsChanged = (accounts: string[]) => {
       if (accounts.length === 0) {
-        disconnect();
+        setAccount(null);
+        setIsConnected(false);
+        localStorage.removeItem('walletConnected');
       } else {
         setAccount(accounts[0]);
       }
     };
-
-    const handleChainChanged = (chainId: string) => {
-      setChainId(parseInt(chainId, 16));
-      window.location.reload(); // Reload to update contracts
+    const handleChainChanged = () => {
+      window.location.reload();
     };
 
-    ethereum.on('accountsChanged', handleAccountsChanged);
-    ethereum.on('chainChanged', handleChainChanged);
+    if (typeof window !== 'undefined' && window.ethereum) {
+      const { on, removeListener } = window.ethereum;
 
-    return () => {
-      if (ethereum.removeListener) {
-        ethereum.removeListener('accountsChanged', handleAccountsChanged);
-        ethereum.removeListener('chainChanged', handleChainChanged);
+      if (typeof on === 'function') {
+        on('accountsChanged', handleAccountsChanged);
+        on('chainChanged', handleChainChanged);
       }
-    };
+
+      if (localStorage.getItem('walletConnected')) {
+        connect();
+      }
+
+      return () => {
+        if (typeof removeListener === 'function') {
+          removeListener('accountsChanged', handleAccountsChanged);
+          removeListener('chainChanged', handleChainChanged);
+        }
+      };
+    }
   }, []);
 
   const value: Web3ContextType = {

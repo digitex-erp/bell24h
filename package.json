@@ -31,6 +31,11 @@
     "deploy": "npm run build && npm run start",
     "test:db": "node test-neon-connection-simple.js",
     "build:safe": "npm run db:generate && npm run build",
+    "pages:build": "npx next-on-pages build",
+    "pages:deploy": "wrangler pages deploy .vercel/output/static",
+    "cf:dev": "wrangler pages dev",
+    "cf:build": "next-on-pages build",
+    "cf:preview": "wrangler pages deploy .vercel/output/static --branch=preview",
     "deploy:production": "vercel --prod --yes",
     "deploy:preview": "vercel --yes",
     "cypress:open": "cypress open",
@@ -105,6 +110,8 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "latest",
+    "wrangler": "latest",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
