@@ -3,23 +3,78 @@
 /.pnp
 .pnp.js
 
-# Next.js build output
-.next
-.out
+# testing
+/coverage
 
-# Vercel
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+.env.development
+.env.production
+
+# vercel
 .vercel
 
-# Cloudflare
+# cloudflare
 .wrangler
+.wrangler-state
+.dev.vars
 
-# API keys and sensitive files
-.env
-.env.*.local
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
-# Supabase (no longer used)
+# supabase (no longer used)
 supabase/
 
-# Other
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Logs
+logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Build outputs
+dist/
+.vercel/output/
+.next/
+out/
