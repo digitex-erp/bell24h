@@ -133,6 +133,11 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       return;
     }
 
+    if (typeof window === 'undefined' || !window.ethereum) {
+      setError('Web3 provider not available');
+      return;
+    }
+
     setIsConnecting(true);
     setError(null);
 
@@ -173,7 +178,7 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
 
   // Switch to Polygon network
   const switchNetwork = async () => {
-    if (!window.ethereum) {
+    if (typeof window === 'undefined' || !window.ethereum) {
       setError('Web3 provider not available');
       return;
     }
@@ -187,10 +192,12 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       // If network doesn't exist, add it
       if (switchError.code === 4902) {
         try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [POLYGON_CONFIG],
-          });
+          if (typeof window !== 'undefined' && window.ethereum) {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [POLYGON_CONFIG],
+            });
+          }
         } catch (addError) {
           setError('Failed to add Polygon network');
           console.error('Add network error:', addError);
@@ -210,7 +217,7 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
 
   // Listen for account changes
   useEffect(() => {
-    if (window.ethereum) {
+    if (typeof window !== 'undefined' && window.ethereum) {
       const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length === 0) {
           disconnect();
@@ -228,8 +235,10 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       window.ethereum.on('chainChanged', handleChainChanged);
 
       return () => {
-        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-        window.ethereum.removeListener('chainChanged', handleChainChanged);
+        if (window.ethereum) {
+          window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+          window.ethereum.removeListener('chainChanged', handleChainChanged);
+        }
       };
     }
     return undefined;
