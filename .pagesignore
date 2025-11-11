@@ -1,0 +1,24 @@
+# Exclude large caches and local artifacts from Cloudflare Pages uploads
+
+# Next.js caches
+.next/cache/
+client/.next/cache/
+
+# Webpack caches that may appear at repo root or inside client
+cache/
+client/cache/
+
+# Cloudflare/Wrangler local state
+.wrangler/
+.dev.vars
+
+# Test artifacts
+coverage/
+cypress/videos/
+cypress/screenshots/
+
+# Common local artifacts
+node_modules/
+client/node_modules/
+
+
