@@ -1,6 +1,7 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  // Remove 'standalone' for Cloudflare Pages - use next-on-pages adapter instead
+  // output: 'standalone', // Commented out for Cloudflare Pages compatibility
   reactStrictMode: true,
   swcMinify: true,
   images: {
