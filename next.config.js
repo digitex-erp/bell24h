@@ -9,6 +9,8 @@ const nextConfig = {
   experimental: {
     turbo: {},
   },
+  // Required for Fly.io deployment
+  output: 'standalone',
 };
 
 module.exports = nextConfig;
