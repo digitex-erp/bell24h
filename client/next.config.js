@@ -1,7 +1,7 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Remove 'standalone' for Cloudflare Pages - use next-on-pages adapter instead
-  // output: 'standalone', // Commented out for Cloudflare Pages compatibility
+  // Use static export for Cloudflare Pages (avoids recursive build error)
+  output: 'export',
   reactStrictMode: true,
   swcMinify: true,
   images: {
