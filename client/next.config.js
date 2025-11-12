@@ -25,7 +25,12 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
   },
-  webpack: (config) => {
+  // Disable webpack cache for Cloudflare Pages (prevents 25MB limit error)
+  webpack: (config, { dev, isServer }) => {
+    // Disable cache in production builds for Cloudflare Pages
+    if (!dev) {
+      config.cache = false;
+    }
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
