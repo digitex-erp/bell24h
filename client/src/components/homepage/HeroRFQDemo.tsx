@@ -56,15 +56,15 @@ export default function HeroRFQDemo() {
 
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12 relative z-10 pb-32">
+        <div className="text-center mb-12 relative z-10">
           <div className="inline-flex items-center gap-2 bg-gray-900/80 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-cyan-500/20">
             <Sparkles className="w-4 h-4 text-cyan-400" />
             <span className="text-sm font-medium text-cyan-400">AI-Powered RFQ System</span>
           </div>
-          <h1 className="text-6xl md:text-7xl font-black mb-6 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 text-white leading-tight">
             Ready to Transform Your Procurement?
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
+          <p className="text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
             Join thousands of businesses using Bell24H for faster, smarter B2B transactions
           </p>
         </div>
