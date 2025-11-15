@@ -189,7 +189,7 @@ export default function OTPLoginPage() {
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
                     placeholder="Enter 10-digit mobile number"
-                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-400"
                     maxLength={10}
                     required
                   />
@@ -242,7 +242,7 @@ export default function OTPLoginPage() {
                           prevInput?.focus();
                         }
                       }}
-                      className="w-12 h-14 text-center text-2xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-12 h-14 text-center text-2xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-400"
                       maxLength={1}
                       required
                     />
