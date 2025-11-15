@@ -30,9 +30,18 @@ jobs:
             # Navigate to project directory
             cd ~/bell24h || (mkdir -p ~/bell24h && cd ~/bell24h)
             
+            # Clean up any local changes and untracked files
+            echo "Cleaning up local changes..."
+            git reset --hard HEAD || true
+            git clean -fd || true
+            
+            # Remove conflicting Dockerfile variants
+            rm -f Dockerfile.client Dockerfile.final Dockerfile.fixed Dockerfile.oracle Dockerfile.oracle-fixed || true
+            
             # Pull latest code
             if [ -d .git ]; then
-              git pull origin main || true
+              git fetch origin main || true
+              git reset --hard origin/main || true
             else
               git clone https://github.com/digitex-erp/bell24h . || true
             fi
