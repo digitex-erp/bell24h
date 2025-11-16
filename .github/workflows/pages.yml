@@ -1,7 +1,10 @@
 name: Deploy to Cloudflare Pages
+# DISABLED - Using Oracle VM instead of Cloudflare Pages
+# on:
+#   push:
+#     branches: [ main ]
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch: # Manual trigger only
 jobs:
   deploy:
     runs-on: ubuntu-latest
