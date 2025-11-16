@@ -16,8 +16,9 @@ ENV NODE_OPTIONS=--max_old_space_size=2048
 COPY --from=deps /app/node_modules ./node_modules
 COPY client/ ./
 COPY client/prisma ./prisma/
+ENV NPM_CONFIG_LEGACY_PEER_DEPS=true
 RUN npx prisma generate || true
-RUN npm run build
+RUN npm run build || (npm install --legacy-peer-deps && npm run build)
 RUN npm prune --omit=dev --legacy-peer-deps || npm prune --omit=dev --force || true
 
 FROM node:20-bullseye-slim AS runner
@@ -30,7 +31,9 @@ RUN useradd -m appuser
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
+# Optimize: Only copy production node_modules (faster, smaller)
+# Use --chown for better performance
+COPY --from=builder --chown=appuser:appuser /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 
 EXPOSE 3000
