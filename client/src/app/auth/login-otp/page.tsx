@@ -149,6 +149,38 @@ export default function OTPLoginPage() {
     }, 1000);
   };
 
+  // Handle demo login (temporary bypass for testing without MSG91)
+  const handleDemoLogin = async () => {
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/demo-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Store demo token in localStorage
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('authToken', data.token);
+          localStorage.setItem('demoMode', 'true'); // Mark as demo mode
+        }
+        
+        // Redirect to dashboard
+        router.push('/dashboard');
+      } else {
+        setError(data.message || 'Demo login failed');
+      }
+    } catch (err) {
+      setError('Something went wrong with demo login.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0a1128] flex items-center justify-center p-4">
       <div className="max-w-md w-full">
@@ -220,6 +252,34 @@ export default function OTPLoginPage() {
                   </span>
                 )}
               </button>
+
+              {/* TEMPORARY DEMO LOGIN - For testing without MSG91 */}
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-xs text-gray-500 text-center mb-3">
+                  ⚠️ MSG91 Pending? Use Demo Login for Testing
+                </p>
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  disabled={loading}
+                  className="w-full bg-amber-500 hover:bg-amber-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Logging in...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-5 h-5" />
+                      Demo Login (Temporary)
+                    </>
+                  )}
+                </button>
+                <p className="text-xs text-gray-400 text-center mt-2">
+                  This bypasses MSG91 OTP for testing purposes
+                </p>
+              </div>
             </form>
           )}
 
