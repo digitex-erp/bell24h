@@ -2,38 +2,142 @@
 
 import { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Crown, Lock, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import UserDashboardLayout from "@/components/dashboard/UserDashboardLayout";
 
 export default function AIInsightsPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isPremium, setIsPremium] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<'free' | 'pro' | 'enterprise'>('free');
 
   useEffect(() => {
-    fetch("/api/v1/ai/explain", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        price: 125000,
-        lead_time: 7,
-        supplier_rating: 4.8,
-        distance_km: 89,
-        past_on_time_rate: 0.97
-      })
-    })
-      .then(r => r.json())
-      .then(d => {
-        setData(d);
-        setLoading(false);
-      })
-      .catch((e) => {
-        setError(e.message || "Failed to load");
-        setLoading(false);
-      });
-  }, []);
+    // Check subscription status
+    const checkSubscription = async () => {
+      try {
+        const response = await fetch('/api/subscription/status');
+        if (response.ok) {
+          const subData = await response.json();
+          setSubscriptionStatus(subData.plan || 'free');
+          setIsPremium(subData.plan === 'pro' || subData.plan === 'enterprise');
+        }
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+      }
+    };
 
-  if (loading) return <div className="p-10 text-2xl text-white">Loading AI Insights...</div>;
-  if (error) return <div className="p-10 text-red-400">Error: {error}</div>;
-  if (!data) return <div className="p-10 text-red-400">Failed to load</div>;
+    checkSubscription();
+
+    // Fetch AI insights (only if premium or show limited version)
+    if (isPremium) {
+      fetch("/api/v1/ai/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          price: 125000,
+          lead_time: 7,
+          supplier_rating: 4.8,
+          distance_km: 89,
+          past_on_time_rate: 0.97
+        })
+      })
+        .then(r => r.json())
+        .then(d => {
+          setData(d);
+          setLoading(false);
+        })
+        .catch((e) => {
+          setError(e.message || "Failed to load");
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, [isPremium]);
+
+  // Premium gate for SHAP/LIME explainability
+  if (!isPremium) {
+    return (
+      <UserDashboardLayout>
+        <div className="w-full max-w-4xl mx-auto">
+          <div className="bg-gradient-to-br from-purple-900 to-blue-900 rounded-2xl p-12 text-center text-white">
+            <div className="mb-6">
+              <Lock className="w-16 h-16 mx-auto mb-4 text-yellow-400" />
+              <h1 className="text-4xl font-bold mb-4">Premium Feature</h1>
+              <p className="text-xl text-gray-300 mb-6">
+                SHAP/LIME AI Explainability is available for Pro and Enterprise subscribers
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-8 mb-6">
+              <h2 className="text-2xl font-semibold mb-4">What You Get with Pro:</h2>
+              <ul className="space-y-3 text-left max-w-md mx-auto">
+                <li className="flex items-center gap-2">
+                  <Crown className="w-5 h-5 text-yellow-400" />
+                  <span>Advanced SHAP/LIME explainability</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Crown className="w-5 h-5 text-yellow-400" />
+                  <span>Interactive force plots</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Crown className="w-5 h-5 text-yellow-400" />
+                  <span>Waterfall prediction breakdowns</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Crown className="w-5 h-5 text-yellow-400" />
+                  <span>Feature importance analysis</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Crown className="w-5 h-5 text-yellow-400" />
+                  <span>Unlimited AI insights</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/subscription"
+                className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-lg hover:from-yellow-300 hover:to-orange-400 transition-all"
+              >
+                <Crown className="w-5 h-5" />
+                Upgrade to Pro
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/dashboard/ai-features"
+                className="px-8 py-4 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-all"
+              >
+                View Other AI Features
+              </Link>
+            </div>
+
+            <p className="text-sm text-gray-400 mt-6">
+              Early Adopter Offer: Free Pro tier for 6 months (First 100 suppliers)
+            </p>
+          </div>
+        </div>
+      </UserDashboardLayout>
+    );
+  }
+
+  if (loading) return (
+    <UserDashboardLayout>
+      <div className="p-10 text-2xl text-white text-center">Loading AI Insights...</div>
+    </UserDashboardLayout>
+  );
+  if (error) return (
+    <UserDashboardLayout>
+      <div className="p-10 text-red-400 text-center">Error: {error}</div>
+    </UserDashboardLayout>
+  );
+  if (!data) return (
+    <UserDashboardLayout>
+      <div className="p-10 text-red-400 text-center">Failed to load</div>
+    </UserDashboardLayout>
+  );
 
   const chartData = Object.entries(data.feature_importance || {})
     .map(([k, v]: [string, number]) => ({
@@ -44,7 +148,21 @@ export default function AIInsightsPage() {
     .sort((a, b) => b.value - a.value);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8">
+    <UserDashboardLayout>
+      <div className="w-full">
+        {/* Premium Badge */}
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Crown className="w-6 h-6 text-yellow-400" />
+              <span className="text-sm font-semibold text-yellow-400 bg-yellow-400/20 px-3 py-1 rounded-full">
+                Premium Feature
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="min-h-screen bg-gray-950 text-white p-8 rounded-xl">
       <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">
         AI Supplier Match Insights
       </h1>
@@ -120,6 +238,8 @@ export default function AIInsightsPage() {
           {data.model_used ? "LIVE ML MODEL" : "FALLBACK MODE"}
         </span>
       </div>
-    </div>
+        </div>
+      </div>
+    </UserDashboardLayout>
   );
 }

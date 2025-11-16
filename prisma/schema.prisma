@@ -97,3 +97,23 @@ model Webhook {
 
   @@map("webhooks")
 }
+
+model Subscription {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  planId        String    @map("plan_id") // free | pro | enterprise
+  billingCycle  String    @map("billing_cycle") // monthly | yearly
+  amount        Decimal   @db.Decimal(10,2)
+  status        String    @default("PENDING") // PENDING | ACTIVE | CANCELLED | EXPIRED
+  razorpayOrderId String? @map("razorpay_order_id")
+  razorpayPaymentId String? @map("razorpay_payment_id")
+  startDate     DateTime  @map("start_date")
+  endDate        DateTime  @map("end_date")
+  isEarlyAdopter Boolean  @default(false) @map("is_early_adopter")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([status])
+  @@map("subscriptions")
+}
