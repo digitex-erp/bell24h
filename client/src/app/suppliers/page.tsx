@@ -1,39 +1,38 @@
 export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import { Suspense } from 'react';
 
-export default async function SuppliersPage() {
+async function SuppliersList() {
   // Fetch unclaimed suppliers
-  const suppliers = await prisma.scrapedCompany.findMany({
-    where: {
-      claimStatus: 'UNCLAIMED',
-    },
-    select: {
-      id: true,
-      name: true,
-      category: true,
-      city: true,
-      state: true,
-      trustScore: true,
-    },
-    take: 50,
-    orderBy: {
-      trustScore: 'desc',
-    },
-  });
+  let suppliers = [];
+  try {
+    suppliers = await prisma.scrapedCompany.findMany({
+      where: {
+        claimStatus: 'UNCLAIMED',
+      },
+      select: {
+        id: true,
+        name: true,
+        category: true,
+        city: true,
+        state: true,
+        trustScore: true,
+      },
+      take: 50,
+      orderBy: {
+        trustScore: 'desc',
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching suppliers:', error);
+    // Return empty array on error
+    suppliers = [];
+  }
 
   return (
-    <div className="min-h-screen bg-[#0a1128] text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-5xl font-black mb-4 text-cyan-400">
-            Featured Suppliers
-          </h1>
-          <p className="text-xl text-gray-300">
-            Discover {suppliers.length}+ verified suppliers ready to work with you
-          </p>
-        </div>
-
+    <>
+      {suppliers.length > 0 ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {suppliers.map((supplier) => (
             <Link
@@ -79,14 +78,39 @@ export default async function SuppliersPage() {
             </Link>
           ))}
         </div>
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-gray-400 text-lg">
+            No suppliers found. Check back later!
+          </p>
+        </div>
+      )}
+    </>
+  );
+}
 
-        {suppliers.length === 0 && (
+export default async function SuppliersPage() {
+
+  return (
+    <div className="min-h-screen bg-[#0a1128] text-white p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-5xl font-black mb-4 text-cyan-400">
+            Featured Suppliers
+          </h1>
+          <p className="text-xl text-gray-300">
+            Discover verified suppliers ready to work with you
+          </p>
+        </div>
+
+        <Suspense fallback={
           <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">
-              No suppliers found. Check back later!
-            </p>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
+            <p className="text-gray-400 text-lg mt-4">Loading suppliers...</p>
           </div>
-        )}
+        }>
+          <SuppliersList />
+        </Suspense>
 
         <div className="mt-12 text-center">
           <p className="text-gray-400">
