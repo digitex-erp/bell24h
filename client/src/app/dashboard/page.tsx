@@ -27,7 +27,8 @@ import {
   Lightbulb,
   Activity,
 } from 'lucide-react';
-// Remove UserDashboardLayout import - we'll use the main layout from layout.tsx
+import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
+import Link from 'next/link';
 
 // Mock data for live dashboard
 const mockLiveData = {
@@ -230,7 +231,8 @@ export default function UserDashboard() {
   const user = mockLiveData.user;
 
   return (
-    <div className="w-full">
+    <UserDashboardLayout user={user}>
+      <div className="w-full">
       {/* Welcome Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -337,33 +339,34 @@ export default function UserDashboard() {
         </div>
       </div>
 
-      {/* Quick Actions */}
+      {/* Quick Actions - Now Functional with Links! */}
       <div className="flex flex-wrap gap-4">
-        <button className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <Link href="/rfq/create" className="flex items-center px-6 py-3 bg-[#0070f3] text-white rounded-lg hover:bg-[#0051cc] transition-colors">
           <FileText className="w-5 h-5 mr-2" />
           Create New RFQ
-        </button>
-        <button className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+        </Link>
+        <Link href="/dashboard/ai-features" className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
           <Brain className="w-5 h-5 mr-2" />
           View AI Matches
-        </button>
-        <button className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+        </Link>
+        <Link href="/dashboard/negotiations" className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
           <MessageCircle className="w-5 h-5 mr-2" />
           Manage Negotiations
-        </button>
-        <button className="flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+        </Link>
+        <Link href="/dashboard/video-rfq" className="flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
           <Video className="w-5 h-5 mr-2" />
           Upload Video RFQ
-        </button>
-            <button className="flex items-center px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
-              <Wallet className="w-5 h-5 mr-2" />
-              Manage Wallet
-            </button>
-            <button className="flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-              <CreditCard className="w-5 h-5 mr-2" />
-              Invoice Discounting
-            </button>
+        </Link>
+        <Link href="/wallet" className="flex items-center px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
+          <Wallet className="w-5 h-5 mr-2" />
+          Manage Wallet
+        </Link>
+        <Link href="/dashboard/invoice-discounting" className="flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+          <CreditCard className="w-5 h-5 mr-2" />
+          Invoice Discounting
+        </Link>
       </div>
-    </div>
+      </div>
+    </UserDashboardLayout>
   );
 }
