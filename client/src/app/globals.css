@@ -42,3 +42,13 @@ html, body {
 .stats-grid > div {
   @apply bg-gray-900/90 border border-cyan-500/20;
 }
+
+/* Sitewide selection color for brand experience */
+::selection {
+  background: #0070f3;
+  color: #fff;
+}
+::-moz-selection {
+  background: #0070f3;
+  color: #fff;
+}
