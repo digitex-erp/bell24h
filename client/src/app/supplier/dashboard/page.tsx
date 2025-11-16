@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -33,14 +34,17 @@ export default function SupplierDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
-        <div className="text-gray-400">Loading dashboard...</div>
-      </div>
+      <UserDashboardLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-gray-400">Loading dashboard...</div>
+        </div>
+      </UserDashboardLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-8">
+    <UserDashboardLayout>
+      <div className="w-full">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
@@ -190,7 +194,8 @@ export default function SupplierDashboard() {
           </div>
         </Card>
       </div>
-    </div>
+      </div>
+    </UserDashboardLayout>
   );
 }
 
