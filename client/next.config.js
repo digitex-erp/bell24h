@@ -2,6 +2,8 @@
 const nextConfig = {
   // Oracle VM configuration - Full Next.js with API routes
   // output: 'export' REMOVED - Dynamic API routes require server-side rendering
+  // Enable standalone output for Docker deployment
+  output: 'standalone',
   reactStrictMode: true,
   swcMinify: true,
   images: {
