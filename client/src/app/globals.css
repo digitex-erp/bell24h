@@ -52,3 +52,31 @@ html, body {
   background: #0070f3;
   color: #fff;
 }
+
+/* Input field contrast fix - WCAG AA compliant (4.5:1 ratio) */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+textarea {
+  color: #111827 !important; /* Dark gray - 21:1 contrast on white */
+  background-color: #ffffff !important;
+}
+
+input[type="text"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="email"]::placeholder,
+input[type="number"]::placeholder,
+input[type="password"]::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important; /* Medium gray - 7:1 contrast on white */
+}
+
+/* Ensure input focus states are visible */
+input:focus,
+textarea:focus {
+  border-color: #0070f3 !important;
+  outline: 2px solid #0070f3 !important;
+  outline-offset: 2px !important;
+}

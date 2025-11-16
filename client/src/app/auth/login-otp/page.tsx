@@ -150,15 +150,15 @@ export default function OTPLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#0a1128] flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 text-white">
-            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-              <span className="text-2xl font-bold">B</span>
+            <div className="w-12 h-12 bg-[#0070f3] rounded-xl flex items-center justify-center">
+              <span className="text-2xl font-bold text-white">B</span>
             </div>
-            <span className="text-3xl font-bold">Bell24h</span>
+            <span className="text-3xl font-bold text-white">Bell24h</span>
           </Link>
         </div>
 
@@ -166,10 +166,10 @@ export default function OTPLoginPage() {
         <div className="bg-white rounded-2xl shadow-2xl p-8">
           {/* Header */}
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold mb-2">
+            <h1 className="text-2xl font-bold mb-2 text-gray-900">
               {step === 'mobile' ? 'Login to Bell24h' : 'Verify OTP'}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-700">
               {step === 'mobile' 
                 ? 'Enter your mobile number to receive OTP'
                 : `OTP sent to +91 ${mobile}`
@@ -181,15 +181,16 @@ export default function OTPLoginPage() {
           {step === 'mobile' && (
             <form onSubmit={handleSendOTP} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Mobile Number</label>
+                <label className="block text-sm font-semibold mb-2 text-gray-900">Mobile Number</label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 z-10" />
                   <input
                     type="tel"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
                     placeholder="Enter 10-digit mobile number"
-                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-400"
+                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070f3] focus:border-[#0070f3] text-gray-900 placeholder-gray-500 text-base font-medium"
+                    style={{ color: '#111827' }}
                     maxLength={10}
                     required
                   />
@@ -205,7 +206,7 @@ export default function OTPLoginPage() {
               <button
                 type="submit"
                 disabled={loading || mobile.length !== 10}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors"
+                className="w-full bg-[#0070f3] hover:bg-[#0051cc] disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -242,7 +243,8 @@ export default function OTPLoginPage() {
                           prevInput?.focus();
                         }
                       }}
-                      className="w-12 h-14 text-center text-2xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-400"
+                      className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070f3] focus:border-[#0070f3] text-gray-900 placeholder-gray-400"
+                      style={{ color: '#111827' }}
                       maxLength={1}
                       required
                     />
@@ -259,7 +261,7 @@ export default function OTPLoginPage() {
               <button
                 type="submit"
                 disabled={loading || otp.join('').length !== 6}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors"
+                className="w-full bg-[#0070f3] hover:bg-[#0051cc] disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 rounded-lg font-semibold transition-colors"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -285,7 +287,7 @@ export default function OTPLoginPage() {
                     type="button"
                     onClick={handleResendOTP}
                     disabled={loading}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    className="text-sm text-[#0070f3] hover:text-[#0051cc] font-semibold"
                   >
                     Resend OTP
                   </button>
@@ -311,12 +313,12 @@ export default function OTPLoginPage() {
           {/* Features */}
           <div className="mt-8 pt-6 border-t grid grid-cols-2 gap-4 text-center">
             <div>
-              <Shield className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-              <p className="text-xs text-gray-600">100% Secure</p>
+              <Shield className="w-6 h-6 text-[#0070f3] mx-auto mb-2" />
+              <p className="text-xs text-gray-700 font-medium">100% Secure</p>
             </div>
             <div>
-              <Zap className="w-6 h-6 text-green-600 mx-auto mb-2" />
-              <p className="text-xs text-gray-600">Instant Login</p>
+              <Zap className="w-6 h-6 text-[#10b981] mx-auto mb-2" />
+              <p className="text-xs text-gray-700 font-medium">Instant Login</p>
             </div>
           </div>
         </div>

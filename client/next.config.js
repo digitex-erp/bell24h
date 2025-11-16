@@ -1,11 +1,12 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Use static export for Cloudflare Pages (avoids recursive build error)
-  output: 'export',
+  // Oracle VM configuration - Full Next.js with API routes
+  // output: 'export' REMOVED - Dynamic API routes require server-side rendering
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['bell24h.com', 'n8n.bell24h.com'],
+    domains: ['bell24h.com', 'n8n.bell24h.com', 'www.bell24h.com'],
+    unoptimized: false, // Enable image optimization on Oracle VM
   },
   async redirects() {
     return [
@@ -18,7 +19,7 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-    dirs: [], // Disable ESLint for all directories
+    dirs: [],
   },
   typescript: {
     ignoreBuildErrors: true,
@@ -26,11 +27,16 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
   },
-  // Disable webpack cache for Cloudflare Pages (prevents 25MB limit error)
+  // Enable webpack cache for Oracle VM (no 25MB limit here)
   webpack: (config, { dev, isServer }) => {
-    // Disable cache in production builds for Cloudflare Pages
+    // Keep cache enabled for faster rebuilds on Oracle VM
     if (!dev) {
-      config.cache = false;
+      config.cache = {
+        type: 'filesystem',
+        buildDependencies: {
+          config: [__filename],
+        },
+      };
     }
     config.resolve.fallback = {
       ...config.resolve.fallback,
