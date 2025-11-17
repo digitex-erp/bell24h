@@ -35,21 +35,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem('auth_token');
+        const demoMode = localStorage.getItem('demoMode');
+        
         if (token) {
+          // If demo mode, set user directly
+          if (demoMode === 'true' || token.startsWith('demo_auth_token_')) {
+            setUser({
+              id: 'demo-user-1',
+              name: 'Demo User',
+              mobile: '9999999999',
+              email: 'demo@bell24h.com',
+              isBuyer: true,
+              isSupplier: true,
+            });
+            setIsLoading(false);
+            return;
+          }
+
           // Verify token with backend
-          const response = await fetch('/api/auth/verify', {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData.user);
-          } else {
+          try {
+            const response = await fetch('/api/auth/verify', {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            
+            if (response.ok) {
+              const userData = await response.json();
+              if (userData.success && userData.user) {
+                setUser(userData.user);
+              } else {
+                localStorage.removeItem('auth_token');
+              }
+            } else {
+              localStorage.removeItem('auth_token');
+            }
+          } catch (fetchError) {
+            // If verify API fails, don't crash - just clear token
+            console.warn('Auth verify API not available:', fetchError);
             localStorage.removeItem('auth_token');
           }
         }
       } catch (error) {
         console.error('Auth check failed:', error);
+        // Don't crash on auth check failure
       } finally {
         setIsLoading(false);
       }
