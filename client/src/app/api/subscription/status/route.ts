@@ -6,6 +6,10 @@ import { prisma } from '@/lib/prisma';
  * Item 24: Pro Tier Subscription System
  */
 
+// Force dynamic rendering - this API uses request.url which requires dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

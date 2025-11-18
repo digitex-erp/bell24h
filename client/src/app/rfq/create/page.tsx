@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function CreateRFQPage() {
+// Separate component that uses useSearchParams (must be wrapped in Suspense)
+function RFQCreateForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rfqType = searchParams?.get('type') || 'text'; // text, voice, video
@@ -201,6 +202,21 @@ export default function CreateRFQPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense wrapper (required for useSearchParams)
+export default function CreateRFQPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#0a1128] flex items-center justify-center">
+          <div className="text-cyan-400">Loading form...</div>
+        </div>
+      }
+    >
+      <RFQCreateForm />
+    </Suspense>
   );
 }
 
