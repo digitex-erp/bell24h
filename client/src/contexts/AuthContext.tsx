@@ -33,6 +33,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Check for existing session on mount
   useEffect(() => {
     const checkAuth = async () => {
+      // Only run on client side
+      if (typeof window === 'undefined') {
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const token = localStorage.getItem('auth_token');
         const demoMode = localStorage.getItem('demoMode');
@@ -63,15 +69,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               if (userData.success && userData.user) {
                 setUser(userData.user);
               } else {
-                localStorage.removeItem('auth_token');
+                if (typeof window !== 'undefined') {
+                  localStorage.removeItem('auth_token');
+                }
               }
             } else {
-              localStorage.removeItem('auth_token');
+              if (typeof window !== 'undefined') {
+                localStorage.removeItem('auth_token');
+              }
             }
           } catch (fetchError) {
             // If verify API fails, don't crash - just clear token
             console.warn('Auth verify API not available:', fetchError);
-            localStorage.removeItem('auth_token');
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem('auth_token');
+            }
           }
         }
       } catch (error) {
@@ -112,8 +124,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json();
       
       if (data.success && data.token) {
-        // Store token
-        localStorage.setItem('auth_token', data.token);
+        // Store token (only on client side)
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('auth_token', data.token);
+        }
         
         // Set user data
         setUser({
@@ -153,7 +167,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    localStorage.removeItem('auth_token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('demoMode');
+    }
     setUser(null);
     router.push('/');
   };
