@@ -1,37 +1,49 @@
 #!/bin/bash
-# Run this in a NEW terminal window while build is running
 
-echo "🔍 Checking Docker Build Progress..."
-echo "===================================="
+echo "=========================================="
+echo "🔍 CHECKING DOCKER BUILD PROGRESS"
+echo "=========================================="
+echo ""
 
 # Check if Docker build process is running
+echo "1️⃣ CHECKING DOCKER PROCESSES..."
+echo "----------------------------------------"
+ps aux | grep -E "docker.*build|docker.*daemon" | grep -v grep || echo "No active build processes found"
 echo ""
-echo "1️⃣ Active Docker processes:"
-ps aux | grep "docker build" | grep -v grep || echo "⚠️  No active docker build found"
 
+# Check Docker daemon activity
+echo "2️⃣ CHECKING DOCKER DAEMON STATUS..."
+echo "----------------------------------------"
+sudo systemctl status docker --no-pager | head -10
 echo ""
-echo "2️⃣ Docker build statistics:"
-docker stats --no-stream 2>/dev/null || echo "No containers running yet"
 
+# Check disk I/O (if build is copying files, there should be disk activity)
+echo "3️⃣ CHECKING DISK I/O (wait 2 seconds)..."
+echo "----------------------------------------"
+iostat -x 1 2 2>/dev/null | tail -5 || echo "iostat not available - install with: sudo apt install sysstat"
 echo ""
-echo "3️⃣ System resources:"
-echo "CPU Usage:"
-top -bn1 | grep "Cpu(s)" | head -1
-echo ""
-echo "Memory Usage:"
-free -h | head -2
 
+# Check Docker build cache
+echo "4️⃣ CHECKING DOCKER BUILD CACHE..."
+echo "----------------------------------------"
+docker system df
 echo ""
-echo "4️⃣ Check if build is actually progressing (watch disk activity):"
-echo "   Run in separate terminal: watch -n 2 'du -sh ~/bell24h 2>/dev/null || echo Checking...'"
-echo "   If the size is increasing, build is progressing!"
 
+# Check if there are any error logs
+echo "5️⃣ CHECKING DOCKER LOGS FOR ERRORS..."
+echo "----------------------------------------"
+sudo journalctl -u docker --since "5 minutes ago" --no-pager | tail -10 || echo "No recent Docker errors"
 echo ""
-echo "===================================="
-echo "💡 Tips:"
-echo "   - Step 27 (COPY node_modules) can take 5-15 minutes"
-echo "   - This is NORMAL - node_modules can be 500MB+"
-echo "   - If CPU is at 100%, it's working hard"
-echo "   - If disk space is increasing, it's copying files"
-echo "===================================="
 
+echo "=========================================="
+echo "✅ DIAGNOSTIC COMPLETE"
+echo "=========================================="
+echo ""
+echo "📋 INTERPRETATION:"
+echo "  - If you see 'docker build' in processes → Build is running"
+echo "  - If disk I/O shows activity → Files are being copied"
+echo "  - If no errors in logs → Build is healthy"
+echo ""
+echo "💡 TIP: The COPY . . step can take 2-5 minutes with 905MB context"
+echo "   This is NORMAL - be patient!"
+echo ""

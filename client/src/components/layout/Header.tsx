@@ -1,13 +1,55 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { Menu, X, Search, Bell, User } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect } from 'react';
+import { Menu, X, Search, Bell } from 'lucide-react';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Only check auth on client side after mount
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== 'undefined') {
+      try {
+        // Check for auth token
+        const token = localStorage.getItem('auth_token') || localStorage.getItem('authToken');
+        const demoMode = localStorage.getItem('demoMode');
+        
+        if (token) {
+          setIsAuthenticated(true);
+          if (demoMode === 'true' || token.startsWith('demo_auth_token_')) {
+            setUser({
+              name: 'Demo User',
+              email: 'demo@bell24h.com',
+            });
+          } else {
+            setUser({
+              name: 'User',
+            });
+          }
+        }
+      } catch (error) {
+        // Silently fail - user is not authenticated
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    }
+  }, []);
+
+  const logout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('demoMode');
+      setIsAuthenticated(false);
+      setUser(null);
+      window.location.href = '/';
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-2xl bg-[#0a1128]/95 border-b border-white/10">
@@ -50,7 +92,7 @@ export default function Header() {
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
 
-            {isAuthenticated ? (
+            {mounted && isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 <span className="text-gray-300 text-sm">{user?.name || 'User'}</span>
                 <button
@@ -116,7 +158,7 @@ export default function Header() {
                 Suppliers
               </Link>
               <div className="flex flex-col space-y-2 mt-4 px-2">
-                {isAuthenticated ? (
+                {mounted && isAuthenticated ? (
                   <>
                     <span className="text-gray-300 text-sm py-2">{user?.name || 'User'}</span>
                     <button
@@ -146,4 +188,3 @@ export default function Header() {
     </header>
   );
 }
-
