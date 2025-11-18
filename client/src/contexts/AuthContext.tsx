@@ -40,7 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const token = localStorage.getItem('auth_token');
+        const token =
+          localStorage.getItem('auth_token') || localStorage.getItem('authToken');
         const demoMode = localStorage.getItem('demoMode');
         
         if (token) {
@@ -71,11 +72,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               } else {
                 if (typeof window !== 'undefined') {
                   localStorage.removeItem('auth_token');
+                  localStorage.removeItem('authToken');
                 }
               }
             } else {
               if (typeof window !== 'undefined') {
                 localStorage.removeItem('auth_token');
+                localStorage.removeItem('authToken');
               }
             }
           } catch (fetchError) {
@@ -83,6 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             console.warn('Auth verify API not available:', fetchError);
             if (typeof window !== 'undefined') {
               localStorage.removeItem('auth_token');
+              localStorage.removeItem('authToken');
             }
           }
         }
@@ -127,6 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Store token (only on client side)
         if (typeof window !== 'undefined') {
           localStorage.setItem('auth_token', data.token);
+          localStorage.setItem('authToken', data.token);
         }
         
         // Set user data
@@ -169,6 +174,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('authToken');
       localStorage.removeItem('demoMode');
     }
     setUser(null);

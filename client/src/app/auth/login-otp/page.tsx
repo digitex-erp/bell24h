@@ -165,6 +165,7 @@ export default function OTPLoginPage() {
       if (data.success) {
         // Store demo token in localStorage
         if (typeof window !== 'undefined') {
+          localStorage.setItem('auth_token', data.token);
           localStorage.setItem('authToken', data.token);
           localStorage.setItem('demoMode', 'true'); // Mark as demo mode
         }
