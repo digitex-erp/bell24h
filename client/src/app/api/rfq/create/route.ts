@@ -1,74 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
-    
-    // Extract form fields
-    const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
-    const budget = formData.get('budget') as string;
-    const deadline = formData.get('deadline') as string;
-    const category = formData.get('category') as string;
-    const requirements = formData.get('requirements') as string;
-    const video = formData.get('video') as File;
+    const body = await request.json();
+    const title = (body?.title ?? '').trim();
+    const description = (body?.description ?? '').trim();
+    const quantityRaw = (body?.quantity ?? '').toString();
+    const deadlineRaw = (body?.deadline ?? '').toString();
+    const category = (body?.category ?? '').trim();
+    const budgetRaw = (body?.budget ?? '').toString();
+    const type = (body?.type ?? 'text').toString();
+    const location = (body?.location ?? '').trim();
 
-    // Validate required fields
-    if (!title || !description || !budget || !deadline || !category) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+    if (!title || !description || !quantityRaw || !deadlineRaw) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // TODO: In production, upload video to cloud storage (AWS S3, Cloudinary, etc.)
-    let videoUrl = '';
-    if (video) {
-      // For now, we'll simulate video upload
-      // In production, implement actual file upload logic
-      videoUrl = `/uploads/rfq-videos/${Date.now()}-${video.name}`;
-      
-      // TODO: Process video for transcription and analysis
-      // await processVideoForAnalysis(video);
-    }
+    const quantity = parseInt(quantityRaw, 10);
+    const deadline = new Date(deadlineRaw);
+    const budgetNumber = budgetRaw ? Number(String(budgetRaw).replace(/[^0-9.]/g, '')) : undefined;
 
-    // TODO: Save to database using Prisma
-    const rfqData = {
-      id: Date.now(), // Temporary ID
-      title,
-      description,
-      budget: parseFloat(budget),
-      deadline: new Date(deadline),
-      category,
-      requirements: requirements || '',
-      videoUrl,
-      status: 'open',
-      createdAt: new Date(),
-      createdBy: 1, // TODO: Get from authenticated user
-    };
-
-    // TODO: Replace with actual database save
-    // const savedRFQ = await prisma.rFQ.create({ data: rfqData });
-    
-    // TODO: Trigger AI matching process
-    // await triggerAIMatching(rfqData);
-
-    // TODO: Send notifications to relevant suppliers
-    // await notifySuppliers(rfqData);
-
-    return NextResponse.json({
-      success: true,
-      message: 'RFQ created successfully',
-      rfq: rfqData,
-      rfqId: rfqData.id
+    const demoEmail = 'demo-buyer@bell24h.com';
+    const demoUser = await prisma.user.upsert({
+      where: { email: demoEmail },
+      update: {},
+      create: { email: demoEmail, role: 'BUYER', name: 'Demo Buyer', phone: '9999999999', isActive: true },
     });
 
+    const created = await prisma.rFQ.create({
+      data: {
+        title,
+        description,
+        category: category || 'General',
+        quantity,
+        currency: 'INR',
+        deadline,
+        buyerId: demoUser.id,
+        audioFile: type === 'voice' ? '' : null,
+        videoFile: type === 'video' ? '' : null,
+        transcript: null,
+        specifications: location ? { location } : undefined,
+        budget: budgetNumber !== undefined ? new Prisma.Decimal(budgetNumber) : undefined,
+      },
+    });
+
+    return NextResponse.json({ success: true, message: 'RFQ created successfully', rfqId: created.id });
   } catch (error) {
-    console.error('Error creating RFQ:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 

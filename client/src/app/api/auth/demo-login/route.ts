@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 /**
  * TEMPORARY DEMO LOGIN - For testing without MSG91
@@ -11,17 +12,16 @@ import type { NextRequest } from 'next/server';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Create demo auth response
+    const demoEmail = 'demo-user@bell24h.com';
+    const user = await prisma.user.upsert({
+      where: { email: demoEmail },
+      update: { isActive: true },
+      create: { email: demoEmail, name: 'Demo User', phone: '9999999999', role: 'BUYER', isActive: true },
+    });
     const response = NextResponse.json({
       success: true,
       message: 'Demo login successful',
-      user: {
-        id: 'demo_user_123',
-        name: 'Demo User',
-        mobile: '9999999999',
-        role: 'buyer',
-        company: 'Demo Company',
-      },
+      user: { id: user.id, name: user.name ?? 'Demo User', mobile: user.phone ?? '9999999999', role: 'buyer', company: 'Demo Company' },
       token: 'demo_token_temporary_bypass',
       demo: true,
     });

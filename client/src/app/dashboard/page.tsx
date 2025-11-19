@@ -192,6 +192,7 @@ const RFQActivityChart = ({ rfqActivity }) => {
 export default function UserDashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
+  const [stats, setStats] = useState<{ rfqCount: number; supplierCount: number; activeUserCount: number } | null>(null);
 
   // Update time every second for live feel
   useEffect(() => {
@@ -199,6 +200,17 @@ export default function UserDashboard() {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        if (data?.success) setStats({ rfqCount: data.rfqCount, supplierCount: data.supplierCount, activeUserCount: data.activeUserCount });
+      } catch {}
+    };
+    loadStats();
   }, []);
 
   const formatCurrency = (amount: number) => {
@@ -257,22 +269,22 @@ export default function UserDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <KPICard 
           title="Total RFQs" 
-          value={mockLiveData.kpis.totalRFQs} 
-          subValue="12 active, 12 closed"
-          trend="+12% from last month"
+          value={stats ? stats.rfqCount : mockLiveData.kpis.totalRFQs} 
+          subValue=""
+          trend=""
           icon={FileText}
         />
         <KPICard 
-          title="Active Matches" 
-          value={mockLiveData.kpis.activeMatches} 
-          subValue="AI-powered recommendations"
-          icon={Brain}
+          title="Suppliers" 
+          value={stats ? stats.supplierCount : mockLiveData.kpis.activeMatches} 
+          subValue=""
+          icon={Users}
         />
         <KPICard 
-          title="Monthly Revenue" 
-          value={formatCurrency(mockLiveData.kpis.monthlyTransactions)} 
-          trend="+8% from last month"
-          icon={DollarSign}
+          title="Active Users" 
+          value={stats ? stats.activeUserCount : 0} 
+          subValue=""
+          icon={Activity}
         />
         <KPICard 
           title="Wallet Balance" 
