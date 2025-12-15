@@ -33,7 +33,7 @@ import {
   MapPin,
   Receipt,
   MessageSquare,
-  Grid3x3,
+  Grid,
   UserCircle,
 } from 'lucide-react';
 
@@ -123,7 +123,7 @@ export default function Sidebar() {
     {
       title: 'Products',
       items: [
-        { icon: Grid3x3, label: 'Product Showcase', href: '/supplier/products/showcase' },
+        { icon: Grid, label: 'Product Showcase', href: '/supplier/products/showcase' },
         { icon: Package, label: 'Manage Products', href: '/supplier/products/manage' },
         { icon: BarChart3, label: 'Product Analytics', href: '/supplier/products/analytics' },
       ],

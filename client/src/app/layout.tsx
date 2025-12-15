@@ -1,12 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { RoleProvider } from '@/contexts/RoleContext'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: "Bell24H - India's #1 Voice & Video RFQ Marketplace",
@@ -20,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>
+      <body>
         <AuthProvider>
           <RoleProvider>
             <Header />

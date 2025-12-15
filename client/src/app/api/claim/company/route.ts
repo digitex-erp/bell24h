@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 // MSG91 OTP service (you'll need to implement this)
 async function sendOTP(phone: string, code: string): Promise<boolean> {
   try {
