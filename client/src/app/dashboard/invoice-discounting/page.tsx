@@ -347,7 +347,11 @@ const EligibilityCriteria = ({ criteria }) => (
 export default function InvoiceDiscountingPage() {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+<<<<<<< HEAD
   const [selectedInvoice, setSelectedInvoice] = useState(null);
+=======
+  const [selectedInvoice, setSelectedInvoice] = useState<any>(null);
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 
   const filteredInvoices = mockKredXData.invoices.filter((invoice) => {
     const matchesFilter = filter === 'all' || invoice.status === filter;

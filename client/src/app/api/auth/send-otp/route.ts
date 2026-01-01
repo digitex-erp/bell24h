@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+<<<<<<< HEAD
 // Mobile OTP Authentication API
 // Sends OTP to mobile number using MSG91
 export async function POST(request: NextRequest) {
@@ -156,4 +157,14 @@ export async function GET(request: NextRequest) {
       ]
     }
   });
+=======
+export async function POST(req: NextRequest) {
+  const { mobile } = await req.json();
+  // TODO: Integrate with MSG91 API if keys are present.
+  // For now, always return success.
+  if (!mobile || mobile.length < 10) {
+    return NextResponse.json({ success: false, message: 'Invalid mobile number.' }, { status: 400 });
+  }
+  return NextResponse.json({ success: true });
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 }

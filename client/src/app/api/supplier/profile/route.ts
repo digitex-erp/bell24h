@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+<<<<<<< HEAD
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -168,10 +169,34 @@ export async function POST(request: NextRequest) {
     if (!name || !category || !phone || !email || !userId) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
+=======
+import { prisma } from '@/lib/prisma';
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const {
+      companyId,
+      companyName,
+      email,
+      phone,
+      city,
+      state,
+      category,
+      description,
+    } = body;
+
+    // TODO: Get supplier ID from session/auth
+    // For now, using companyId from body
+    if (!companyId) {
+      return NextResponse.json(
+        { error: 'Company ID required' },
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
         { status: 400 }
       );
     }
 
+<<<<<<< HEAD
     // Generate slug from name
     const slug = name.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -215,7 +240,36 @@ export async function POST(request: NextRequest) {
         error: 'Failed to create supplier profile',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
+=======
+    // Update company profile
+    const updated = await prisma.scrapedCompany.update({
+      where: { id: companyId },
+      data: {
+        name: companyName,
+        email,
+        phone,
+        city,
+        state,
+        category,
+        // Add description field if it exists in schema
+        // description,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      company: updated,
+    });
+  } catch (error: any) {
+    console.error('Error updating profile:', error);
+    return NextResponse.json(
+      { error: 'Failed to update profile', details: error.message },
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
       { status: 500 }
     );
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d

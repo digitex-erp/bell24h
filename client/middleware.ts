@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+<<<<<<< HEAD
   
   console.log(`🔍 Middleware: ${request.method} ${pathname}`);
   
@@ -41,10 +42,30 @@ export function middleware(request: NextRequest) {
   }
   
   // Allow all other routes
+=======
+
+  const protectedPaths = ['/dashboard', '/admin'];
+  const isProtected = protectedPaths.some(path => pathname.startsWith(path));
+
+  const token = request.cookies.get('auth_token')?.value;
+  const session = request.cookies.get('session_id')?.value;
+
+  if (isProtected && !token && !session) {
+    console.log("No auth, redirecting to login");
+    const loginUrl = new URL('/auth/login-otp', request.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  if (pathname === '/auth/login-otp' && (token || session)) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   return NextResponse.next();
 }
 
 export const config = {
+<<<<<<< HEAD
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
@@ -55,4 +76,7 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico|public/).*)',
   ],
+=======
+  matcher: ['/dashboard/:path*', '/admin/:path*', '/auth/login-otp']
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 };

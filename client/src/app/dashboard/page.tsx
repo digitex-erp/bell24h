@@ -27,7 +27,12 @@ import {
   Lightbulb,
   Activity,
 } from 'lucide-react';
+<<<<<<< HEAD
 // Remove UserDashboardLayout import - we'll use the main layout from layout.tsx
+=======
+import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
+import Link from 'next/link';
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 
 // Mock data for live dashboard
 const mockLiveData = {
@@ -98,7 +103,16 @@ const AISummaryPanel = ({ insights }) => (
         <Lightbulb className="w-5 h-5 mr-2 text-blue-600" />
         Today's AI Insights
       </h3>
+<<<<<<< HEAD
       <span className="text-sm text-gray-500">Updated 2 minutes ago</span>
+=======
+      <a 
+        href="/dashboard/ai-insights"
+        className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+      >
+        View Details →
+      </a>
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     </div>
     
     <div className="space-y-4">
@@ -186,6 +200,10 @@ const RFQActivityChart = ({ rfqActivity }) => {
 export default function UserDashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
+<<<<<<< HEAD
+=======
+  const [stats, setStats] = useState<{ rfqCount: number; supplierCount: number; activeUserCount: number } | null>(null);
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 
   // Update time every second for live feel
   useEffect(() => {
@@ -195,6 +213,20 @@ export default function UserDashboard() {
     return () => clearInterval(timer);
   }, []);
 
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        if (data?.success) setStats({ rfqCount: data.rfqCount, supplierCount: data.supplierCount, activeUserCount: data.activeUserCount });
+      } catch {}
+    };
+    loadStats();
+  }, []);
+
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -225,7 +257,12 @@ export default function UserDashboard() {
   const user = mockLiveData.user;
 
   return (
+<<<<<<< HEAD
     <div className="w-full">
+=======
+    <UserDashboardLayout user={user}>
+      <div className="w-full">
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
       {/* Welcome Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -250,6 +287,7 @@ export default function UserDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <KPICard 
           title="Total RFQs" 
+<<<<<<< HEAD
           value={mockLiveData.kpis.totalRFQs} 
           subValue="12 active, 12 closed"
           trend="+12% from last month"
@@ -266,6 +304,24 @@ export default function UserDashboard() {
           value={formatCurrency(mockLiveData.kpis.monthlyTransactions)} 
           trend="+8% from last month"
           icon={DollarSign}
+=======
+          value={stats ? stats.rfqCount : mockLiveData.kpis.totalRFQs} 
+          subValue=""
+          trend=""
+          icon={FileText}
+        />
+        <KPICard 
+          title="Suppliers" 
+          value={stats ? stats.supplierCount : mockLiveData.kpis.activeMatches} 
+          subValue=""
+          icon={Users}
+        />
+        <KPICard 
+          title="Active Users" 
+          value={stats ? stats.activeUserCount : 0} 
+          subValue=""
+          icon={Activity}
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
         />
         <KPICard 
           title="Wallet Balance" 
@@ -332,6 +388,7 @@ export default function UserDashboard() {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Quick Actions */}
       <div className="flex flex-wrap gap-4">
         <button className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
@@ -360,5 +417,36 @@ export default function UserDashboard() {
             </button>
       </div>
     </div>
+=======
+      {/* Quick Actions - Now Functional with Links! */}
+      <div className="flex flex-wrap gap-4">
+        <Link href="/rfq/create" className="flex items-center px-6 py-3 bg-[#0070f3] text-white rounded-lg hover:bg-[#0051cc] transition-colors">
+          <FileText className="w-5 h-5 mr-2" />
+          Create New RFQ
+        </Link>
+        <Link href="/dashboard/ai-features" className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+          <Brain className="w-5 h-5 mr-2" />
+          View AI Matches
+        </Link>
+        <Link href="/dashboard/negotiations" className="flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+          <MessageCircle className="w-5 h-5 mr-2" />
+          Manage Negotiations
+        </Link>
+        <Link href="/dashboard/video-rfq" className="flex items-center px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+          <Video className="w-5 h-5 mr-2" />
+          Upload Video RFQ
+        </Link>
+        <Link href="/wallet" className="flex items-center px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
+          <Wallet className="w-5 h-5 mr-2" />
+          Manage Wallet
+        </Link>
+        <Link href="/dashboard/invoice-discounting" className="flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+          <CreditCard className="w-5 h-5 mr-2" />
+          Invoice Discounting
+        </Link>
+      </div>
+      </div>
+    </UserDashboardLayout>
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   );
 }

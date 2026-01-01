@@ -555,7 +555,11 @@ export class EnterpriseRiskEngine {
    * Generate recommendations based on risk analysis
    */
   private generateRecommendations(overallScore: number, factors: RiskFactor[]): string[] {
+<<<<<<< HEAD
     const recommendations = [];
+=======
+    const recommendations: any[] = [];
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 
     if (overallScore < 0.5) {
       recommendations.push('Consider alternative suppliers with better risk profiles');
@@ -587,7 +591,11 @@ export class EnterpriseRiskEngine {
    * Generate risk trends
    */
   private generateRiskTrends(supplierId: string): { period: string; score: number; date: Date }[] {
+<<<<<<< HEAD
     const trends = [];
+=======
+    const trends: any[] = [];
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     for (let i = 12; i >= 0; i--) {
       trends.push({
         period: `${i} months ago`,
@@ -790,3 +798,7 @@ export class EnterpriseRiskEngine {
 
 // Export singleton instance
 export const enterpriseRiskEngine = new EnterpriseRiskEngine();
+<<<<<<< HEAD
+=======
+
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d

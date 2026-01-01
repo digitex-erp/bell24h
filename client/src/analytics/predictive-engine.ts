@@ -437,7 +437,11 @@ export class PredictiveAnalyticsEngine {
   }
 
   private generateRFQRecommendations(probability: number, features: number[]): string[] {
+<<<<<<< HEAD
     const recommendations = [];
+=======
+    const recommendations: string[] = [];
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 
     if (probability < 0.5) {
       recommendations.push('Consider increasing budget by 15-20%');
@@ -457,7 +461,11 @@ export class PredictiveAnalyticsEngine {
   }
 
   private generateSupplierRecommendations(reliability: number, riskFactors: any[]): string[] {
+<<<<<<< HEAD
     const recommendations = [];
+=======
+    const recommendations: string[] = [];
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 
     if (reliability < 0.6) {
       recommendations.push('Implement enhanced monitoring protocols');

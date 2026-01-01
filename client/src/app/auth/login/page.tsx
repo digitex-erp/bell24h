@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -488,3 +489,11 @@ export default function LoginPage() {
     </div>
   );
 }
+=======
+import { redirect } from 'next/navigation';
+
+export default function LoginRedirect() {
+  redirect('/auth/login-otp');
+}
+
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d

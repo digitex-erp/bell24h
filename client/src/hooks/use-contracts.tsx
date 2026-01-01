@@ -17,7 +17,11 @@ export function useContracts() {
   });
 
   // Get single contract by ID
+<<<<<<< HEAD
   const getContract = (id: number) => {
+=======
+  const useGetContract = (id: number) => {
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     return useQuery<Contract>({
       queryKey: [`/api/contracts/${id}`],
     });
@@ -92,7 +96,11 @@ export function useContracts() {
     isLoadingContracts,
     contractsError,
     refetchContracts,
+<<<<<<< HEAD
     getContract,
+=======
+    getContract: useGetContract,
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     createContractMutation,
     updateContractStatusMutation,
   };

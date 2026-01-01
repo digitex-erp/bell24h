@@ -1,6 +1,24 @@
+<<<<<<< HEAD
 import { ethers, BrowserProvider, JsonRpcProvider, Contract, parseUnits, formatUnits } from 'ethers';
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
+=======
+﻿import { ethers, BrowserProvider, JsonRpcProvider, Contract, parseUnits, formatUnits } from 'ethers';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+
+// At the top of the file
+interface EthereumProvider {
+  on?: (event: string, handler: (...args: any[]) => void) => void;
+  removeListener?: (event: string, handler: (...args: any[]) => void) => void;
+  // Add other methods you use (e.g., request, isMetaMask, etc.)
+}
+declare global {
+  interface Window {
+    ethereum?: EthereumProvider;
+  }
+}
+
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 // Contract addresses (Polygon mainnet)
 const CONTRACT_ADDRESSES = {
   bellToken: '0x1234567890123456789012345678901234567890', // Deployed BellToken address
@@ -133,10 +151,19 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       return;
     }
 
+<<<<<<< HEAD
+=======
+    if (typeof window === 'undefined' || !window.ethereum) {
+      setError('MetaMask not detected. Please install MetaMask.');
+      return;
+    }
+
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     setIsConnecting(true);
     setError(null);
 
     try {
+<<<<<<< HEAD
       // Request account access
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       
@@ -157,6 +184,45 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
     } catch (err: any) {
       setError(err.message || 'Failed to connect wallet');
       console.error('Connection error:', err);
+=======
+      // Safely check if MetaMask (or any injected provider) exists
+      if (typeof window !== 'undefined' && window.ethereum) {
+        // Request account access
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        
+        // Get signer and account
+        const signer = await provider.getSigner();
+        const account = await signer.getAddress();
+        const network = await provider.getNetwork();
+
+        setSigner(signer);
+        setAccount(account);
+        setChainId(Number(network.chainId));
+        setIsConnected(true);
+        
+        // Store connection state
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem('walletConnected', 'true');
+        }
+
+        // Switch to Polygon if not already
+        if (Number(network.chainId) !== POLYGON_CONFIG.chainId) {
+          await switchNetwork();
+        }
+      } else {
+        throw new Error('MetaMask not detected. Please install MetaMask.');
+      }
+    } catch (err: any) {
+      console.error('Wallet connection failed:', err);
+      if (err.code === 4001) {
+        setError('You rejected the connection request.');
+      } else if (err.message?.includes('MetaMask not detected')) {
+        setError('Please install MetaMask to use BELL token staking!');
+      } else {
+        setError(err.message || 'Failed to connect wallet');
+      }
+      setIsConnected(false);
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     } finally {
       setIsConnecting(false);
     }
@@ -173,7 +239,11 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
 
   // Switch to Polygon network
   const switchNetwork = async () => {
+<<<<<<< HEAD
     if (!window.ethereum) {
+=======
+    if (typeof window === 'undefined' || !window.ethereum) {
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
       setError('Web3 provider not available');
       return;
     }
@@ -187,10 +257,19 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       // If network doesn't exist, add it
       if (switchError.code === 4902) {
         try {
+<<<<<<< HEAD
           await window.ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [POLYGON_CONFIG],
           });
+=======
+          if (typeof window !== 'undefined' && window.ethereum) {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [POLYGON_CONFIG],
+            });
+          }
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
         } catch (addError) {
           setError('Failed to add Polygon network');
           console.error('Add network error:', addError);
@@ -210,6 +289,7 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
 
   // Listen for account changes
   useEffect(() => {
+<<<<<<< HEAD
     if (window.ethereum) {
       const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length === 0) {
@@ -233,6 +313,40 @@ export const Web3Provider = ({ children }: Web3ProviderProps) => {
       };
     }
     return undefined;
+=======
+    const handleAccountsChanged = (accounts: string[]) => {
+      if (accounts.length === 0) {
+        setAccount(null);
+        setIsConnected(false);
+        localStorage.removeItem('walletConnected');
+      } else {
+        setAccount(accounts[0]);
+      }
+    };
+    const handleChainChanged = () => {
+      window.location.reload();
+    };
+
+    if (typeof window !== 'undefined' && window.ethereum) {
+      const { on, removeListener } = window.ethereum;
+
+      if (typeof on === 'function') {
+        on('accountsChanged', handleAccountsChanged);
+        on('chainChanged', handleChainChanged);
+      }
+
+      if (localStorage.getItem('walletConnected')) {
+        connect();
+      }
+
+      return () => {
+        if (typeof removeListener === 'function') {
+          removeListener('accountsChanged', handleAccountsChanged);
+          removeListener('chainChanged', handleChainChanged);
+        }
+      };
+    }
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   }, []);
 
   const value: Web3ContextType = {

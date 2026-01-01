@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+<<<<<<< HEAD
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,6 +70,58 @@ export async function POST(request: NextRequest) {
       { error: 'Internal server error' },
       { status: 500 }
     );
+=======
+import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const title = (body?.title ?? '').trim();
+    const description = (body?.description ?? '').trim();
+    const quantityRaw = (body?.quantity ?? '').toString();
+    const deadlineRaw = (body?.deadline ?? '').toString();
+    const category = (body?.category ?? '').trim();
+    const budgetRaw = (body?.budget ?? '').toString();
+    const type = (body?.type ?? 'text').toString();
+    const location = (body?.location ?? '').trim();
+
+    if (!title || !description || !quantityRaw || !deadlineRaw) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const quantity = parseInt(quantityRaw, 10);
+    const deadline = new Date(deadlineRaw);
+    const budgetNumber = budgetRaw ? Number(String(budgetRaw).replace(/[^0-9.]/g, '')) : undefined;
+
+    const demoEmail = 'demo-buyer@bell24h.com';
+    const demoUser = await prisma.user.upsert({
+      where: { email: demoEmail },
+      update: {},
+      create: { email: demoEmail, role: 'BUYER', name: 'Demo Buyer', phone: '9999999999', isActive: true },
+    });
+
+    const created = await prisma.rFQ.create({
+      data: {
+        title,
+        description,
+        category: category || 'General',
+        quantity,
+        currency: 'INR',
+        deadline,
+        buyerId: demoUser.id,
+        audioFile: type === 'voice' ? '' : null,
+        videoFile: type === 'video' ? '' : null,
+        transcript: null,
+        specifications: location ? { location } : undefined,
+        budget: budgetNumber !== undefined ? new Prisma.Decimal(budgetNumber) : undefined,
+      },
+    });
+
+    return NextResponse.json({ success: true, message: 'RFQ created successfully', rfqId: created.id });
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   }
 }
 

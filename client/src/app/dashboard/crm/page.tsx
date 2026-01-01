@@ -134,7 +134,11 @@ export default function CRMDashboard() {
   const [interactions, setInteractions] = useState(mockCRMData.interactions);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+<<<<<<< HEAD
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+=======
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   const [showAddCustomer, setShowAddCustomer] = useState(false);
 
   const formatCurrency = (amount: number) => {

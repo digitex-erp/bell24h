@@ -167,7 +167,11 @@ const mockN8NData = {
 export default function AdminN8NDashboard() {
   const [workflows, setWorkflows] = useState(mockN8NData.workflows);
   const [executions, setExecutions] = useState(mockN8NData.executions);
+<<<<<<< HEAD
   const [selectedWorkflow, setSelectedWorkflow] = useState(null);
+=======
+  const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   const [showCreateWorkflow, setShowCreateWorkflow] = useState(false);
   const [showApiKeys, setShowApiKeys] = useState(false);
   const [apiKeys, setApiKeys] = useState({

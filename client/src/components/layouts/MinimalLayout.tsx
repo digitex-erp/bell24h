@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+<<<<<<< HEAD
 import MinimalSidebar from '../MinimalSidebar';
 import MinimalHeader from '../MinimalHeader';
 
@@ -26,3 +27,14 @@ export default function MinimalLayout({ children, className = '' }: MinimalLayou
     </div>
   );
 }
+=======
+
+interface MinimalLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function MinimalLayout({ children }: MinimalLayoutProps) {
+  return <div className="min-h-screen bg-gray-50">{children}</div>;
+}
+
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d

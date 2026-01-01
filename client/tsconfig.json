@@ -1,9 +1,20 @@
 {
   "compilerOptions": {
+<<<<<<< HEAD
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+=======
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -18,11 +29,18 @@
       }
     ],
     "paths": {
+<<<<<<< HEAD
       "@/*": ["./src/*"]
+=======
+      "@/*": [
+        "./src/*"
+      ]
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     },
     "target": "ES2017",
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
+<<<<<<< HEAD
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -30,6 +48,22 @@
     "noUnusedParameters": false
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+=======
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strictNullChecks": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "types/**/*.d.ts"
+  ],
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   "exclude": [
     "node_modules",
     "src/mocks/**/*",

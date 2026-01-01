@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+<<<<<<< HEAD
+=======
+import { User, Building, Bell, Shield, Cookie, Globe, Settings as SettingsIcon, MessageSquare, Smartphone, Key, Info, AlertCircle } from 'lucide-react';
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 import { CookiePreferencesManager } from '@/components/gdpr/CookieConsentBanner';
 import DataDeletionManager from '@/components/gdpr/DataDeletionManager';
 

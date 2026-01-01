@@ -13,6 +13,10 @@ import { toast } from 'sonner';
 
 interface VoiceRFQProps {
   onRFQCreated?: (rfqData: any) => void;
+<<<<<<< HEAD
+=======
+  userId?: string;
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 }
 
 interface RFQData {
@@ -26,7 +30,11 @@ interface RFQData {
   milestoneAmounts: string[];
 }
 
+<<<<<<< HEAD
 export const VoiceRFQ: React.FC<VoiceRFQProps> = ({ onRFQCreated }) => {
+=======
+export const VoiceRFQ: React.FC<VoiceRFQProps> = ({ onRFQCreated, userId }) => {
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   const { isConnected, connect } = useWeb3();
   const { createEscrow } = useBellEscrow();
   

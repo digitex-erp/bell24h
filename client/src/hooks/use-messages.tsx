@@ -7,7 +7,11 @@ export function useMessages() {
   const { toast } = useToast();
 
   // Get messages (optionally filtered by user ID, RFQ ID, or bid ID)
+<<<<<<< HEAD
   const getMessages = (otherUserId?: number, rfqId?: number, bidId?: number) => {
+=======
+  const useGetMessages = (otherUserId?: number, rfqId?: number, bidId?: number) => {
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     let queryString = '';
     if (otherUserId) queryString += `user_id=${otherUserId}&`;
     if (rfqId) queryString += `rfq_id=${rfqId}&`;
@@ -84,7 +88,11 @@ export function useMessages() {
   });
 
   return {
+<<<<<<< HEAD
     getMessages,
+=======
+    getMessages: useGetMessages,
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     sendMessageMutation,
     markAsReadMutation,
   };

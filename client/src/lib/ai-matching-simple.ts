@@ -23,7 +23,11 @@ interface SupplierMatch {
  */
 export async function matchSuppliersToRFQ(rfqId: string): Promise<SupplierMatch[]> {
   try {
+<<<<<<< HEAD
     const rfq = await prisma.rfq.findUnique({
+=======
+    const rfq = await prisma.rFQ.findUnique({
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
       where: { id: rfqId },
       include: {
         buyer: { include: { company: true } },

@@ -36,16 +36,21 @@ export class AdminAuthService {
     {
       id: 1,
 <<<<<<< HEAD
+<<<<<<< HEAD
       phoneNumber: '+919004962871', // Your mobile number for testing
       email: 'digitex.studio@gmail.com',
 =======
       email: 'superadmin@bell24h.com',
 >>>>>>> 504c5ee690291e877954561480a78ee33260c24a
+=======
+      email: 'superadmin@bell24h.com',
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
       password: 'Bell24H@SuperAdmin2025!',
       role: this.ADMIN_ROLES.SUPER_ADMIN,
       name: 'Super Administrator',
       lastLogin: null,
       isActive: true,
+<<<<<<< HEAD
 <<<<<<< HEAD
       twoFactorEnabled: false, // Disabled for testing
       loginMethod: 'mobile_otp' // Use OTP for production
@@ -55,12 +60,17 @@ export class AdminAuthService {
       phoneNumber: '+919004962871', // Your mobile number for testing
       email: 'digitex.studio@gmail.com',
 =======
+=======
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
       twoFactorEnabled: true,
     },
     {
       id: 2,
       email: 'admin@bell24h.com',
+<<<<<<< HEAD
 >>>>>>> 504c5ee690291e877954561480a78ee33260c24a
+=======
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
       password: 'Bell24H@Admin2025!',
       role: this.ADMIN_ROLES.PLATFORM_ADMIN,
       name: 'Platform Administrator',
@@ -68,9 +78,12 @@ export class AdminAuthService {
       isActive: true,
       twoFactorEnabled: false,
 <<<<<<< HEAD
+<<<<<<< HEAD
       loginMethod: 'password' // Use password for development
 =======
 >>>>>>> 504c5ee690291e877954561480a78ee33260c24a
+=======
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     },
     {
       id: 3,

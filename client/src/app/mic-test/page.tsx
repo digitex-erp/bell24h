@@ -2,6 +2,10 @@
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
+<<<<<<< HEAD
+=======
+import { AlertCircle } from 'lucide-react';
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 
 export default function MicrophoneTestPage() {
   const [permissionState, setPermissionState] = useState<

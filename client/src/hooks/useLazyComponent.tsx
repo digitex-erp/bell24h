@@ -16,9 +16,15 @@ export function useLazyComponent<T extends ComponentType<any>>(
 
     const loadComponent = async () => {
       try {
+<<<<<<< HEAD
         const module = await importFn();
         if (isMounted) {
           const LazyComponent = lazy(() => Promise.resolve(module));
+=======
+        const moduleData = await importFn();
+        if (isMounted) {
+          const LazyComponent = lazy(() => Promise.resolve(moduleData));
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
           setComponent(LazyComponent);
         }
       } catch (error) {

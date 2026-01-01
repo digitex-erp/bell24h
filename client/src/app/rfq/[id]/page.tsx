@@ -2,6 +2,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+<<<<<<< HEAD
+=======
+import { IndianRupee, MessageCircle, Building } from 'lucide-react';
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 import {
   demoRFQs,
   demoSuppliers,

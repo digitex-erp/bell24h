@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+<<<<<<< HEAD
 // Mobile OTP Verification API
 // Verifies OTP and creates user session
 export async function POST(request: NextRequest) {
@@ -132,5 +133,21 @@ export async function GET(request: NextRequest) {
         'Role-based access'
       ]
     }
+=======
+export async function POST(req: NextRequest) {
+  const { mobile, otp } = await req.json();
+  if (!mobile || !otp) {
+    return NextResponse.json({ success: false, message: 'Mobile & OTP required' }, { status: 400 });
+  }
+  // TODO: Integrate with MSG91 for real verification
+  return NextResponse.json({
+    success: true,
+    token: 'demo-jwt',
+    user: {
+      mobile,
+      name: 'Demo User',
+      role: 'buyer',
+    },
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   });
 }

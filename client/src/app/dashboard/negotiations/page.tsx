@@ -27,6 +27,10 @@ import {
   Zap,
   Shield,
   Award,
+<<<<<<< HEAD
+=======
+  XCircle,
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
 } from 'lucide-react';
 import UserDashboardLayout from '@/components/dashboard/UserDashboardLayout';
 
@@ -385,7 +389,11 @@ const ChatInterface = ({ negotiation, isOpen, onClose }) => {
 };
 
 export default function NegotiationsPage() {
+<<<<<<< HEAD
   const [selectedNegotiation, setSelectedNegotiation] = useState(null);
+=======
+  const [selectedNegotiation, setSelectedNegotiation] = useState<any>(null);
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');

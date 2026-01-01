@@ -7,7 +7,11 @@ export function useBids() {
   const { toast } = useToast();
 
   // Get all bids (optionally filtered by RFQ ID or supplier ID)
+<<<<<<< HEAD
   const getBids = (rfqId?: number, supplierId?: number) => {
+=======
+  const useGetBids = (rfqId?: number, supplierId?: number) => {
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     let queryString = '';
     if (rfqId) queryString += `rfq_id=${rfqId}&`;
     if (supplierId) queryString += `supplier_id=${supplierId}&`;
@@ -20,7 +24,11 @@ export function useBids() {
   };
 
   // Get single bid by ID
+<<<<<<< HEAD
   const getBid = (id: number) => {
+=======
+  const useGetBid = (id: number) => {
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     return useQuery<Bid>({
       queryKey: [`/api/bids/${id}`],
     });
@@ -117,8 +125,13 @@ export function useBids() {
   });
 
   return {
+<<<<<<< HEAD
     getBids,
     getBid,
+=======
+    getBids: useGetBids,
+    getBid: useGetBid,
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     createBidMutation,
     updateBidMutation,
     updateBidStatusMutation,

@@ -2,7 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true, // Re-enable for production performance
+<<<<<<< HEAD
   output: 'export',
+=======
+  // output: 'export', // REMOVED - enables dynamic routes and API endpoints
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
   trailingSlash: true,
   distDir: 'dist',
 
@@ -55,7 +59,11 @@ const nextConfig = {
 
   // Image optimization
   images: {
+<<<<<<< HEAD
     unoptimized: true, // Required for static export
+=======
+    unoptimized: false, // Enable image optimization for dynamic routes
+>>>>>>> b7b4b9c6cd126094e89116e18b3dbb247f1e8e4d
     domains: ['bell24h.com', 'www.bell24h.com', 'localhost'],
     formats: ['image/webp', 'image/avif'],
   },
