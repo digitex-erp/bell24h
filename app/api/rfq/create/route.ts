@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { insforge, db, handleInsForgeError } from '@/lib/insforge';
 
-// Enhanced RFQ creation with live database integration
+/**
+ * ✅ PRODUCTION-READY RFQ Creation API
+ * Connected to InsForge PostgreSQL database
+ * Replaces demo mode with real database operations
+ */
 export async function POST(request: NextRequest) {
   try {
     const rfqData = await request.json();
 
+    // Validation
     if (!rfqData || !rfqData.title || !rfqData.category) {
       return NextResponse.json(
         { success: false, error: 'Title and category are required' },
@@ -12,59 +18,104 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate unique RFQ ID
-    const rfqId = generateRFQId();
-    
-    // Enhanced RFQ data with live features
-    const enhancedRFQ = {
-      id: rfqId,
+    // Get authenticated user from session
+    const { data: { user }, error: authError } = await insforge.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Please login first' },
+        { status: 401 }
+      );
+    }
+
+    // Calculate expiry date
+    const timeline = rfqData.timeline || '2 weeks';
+    const closesAt = calculateExpiryDate(timeline);
+
+    // Prepare RFQ data for database
+    const rfqInsertData = {
+      user_id: user.id,
       title: rfqData.title,
-      category: rfqData.category,
-      description: rfqData.description || '',
-      quantity: rfqData.quantity || '1',
-      unit: rfqData.unit || 'units',
-      minBudget: rfqData.minBudget || '0',
-      maxBudget: rfqData.maxBudget || '0',
-      timeline: rfqData.timeline || '2 weeks',
-      requirements: rfqData.requirements || '',
-      urgency: rfqData.urgency || 'normal',
-      status: 'active',
-      createdBy: 'user-123', // In real app, get from session
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      views: 0,
-      quotes: 0,
-      suppliers: [],
-      tags: extractTags(rfqData.title, rfqData.description),
-      location: 'India', // Default location
-      isPublic: true,
-      expiresAt: calculateExpiryDate(rfqData.timeline),
-      priority: calculatePriority(rfqData.urgency, rfqData.timeline),
-      estimatedValue: calculateEstimatedValue(rfqData.minBudget, rfqData.maxBudget),
-      matchingSuppliers: await findMatchingSuppliers(rfqData.category, rfqData.tags || [])
+      description: rfqData.description || null,
+      category_id: rfqData.category_id || null,
+      category_path: rfqData.category || '', // Fallback to string category
+
+      // Multi-modal support
+      type: rfqData.type || 'text',
+      audio_url: rfqData.audio_url || null,
+      video_url: rfqData.video_url || null,
+      image_urls: rfqData.image_urls || null,
+      transcription: rfqData.transcription || null,
+      extracted_data: rfqData.extracted_data || null,
+
+      // Requirements
+      quantity: parseInt(rfqData.quantity) || null,
+      unit: rfqData.unit || null,
+      required_by_date: rfqData.required_by_date || null,
+      delivery_location: rfqData.delivery_location || null,
+
+      // Specifications
+      specifications: rfqData.specifications || null,
+      attachments: rfqData.attachments || null,
+
+      // Status
+      status: 'open',
+      visibility: rfqData.visibility || 'public',
+      invited_supplier_ids: rfqData.invited_supplier_ids || null,
+
+      // Budget
+      budget_min: parseFloat(rfqData.minBudget) || null,
+      budget_max: parseFloat(rfqData.maxBudget) || null,
+      currency: 'INR',
+      payment_terms: rfqData.payment_terms || null,
+
+      // Timestamps
+      published_at: new Date().toISOString(),
+      closes_at: closesAt
     };
 
-    // In a real implementation, save to database
-    console.log('Creating RFQ:', enhancedRFQ);
+    // 🔥 SAVE TO DATABASE (REAL OPERATION)
+    const { data: rfq, error: insertError } = await db.rfqs()
+      .insert(rfqInsertData)
+      .select()
+      .single();
 
-    // Simulate supplier matching
-    const matchedSuppliers = await matchSuppliers(enhancedRFQ);
-    enhancedRFQ.suppliers = matchedSuppliers;
+    if (insertError) {
+      console.error('Database insert error:', insertError);
+      const errorResponse = handleInsForgeError(insertError);
+      return NextResponse.json(
+        { success: false, error: errorResponse.error },
+        { status: errorResponse.code }
+      );
+    }
 
-    // Send notifications to matched suppliers
-    await notifySuppliers(enhancedRFQ, matchedSuppliers);
+    // Find and notify matching suppliers (async background task)
+    const matchedSuppliers = await findAndNotifySuppliers(rfq);
+
+    // Create notification for user
+    await db.notifications().insert({
+      user_id: user.id,
+      type: 'rfq_created',
+      title: 'RFQ Created Successfully',
+      message: `Your RFQ "${rfq.title}" has been published and ${matchedSuppliers.length} suppliers have been notified.`,
+      related_entity_type: 'rfq',
+      related_entity_id: rfq.id,
+      action_url: `/rfq/${rfq.id}`,
+      action_label: 'View RFQ'
+    });
 
     return NextResponse.json({
       success: true,
-      rfq: enhancedRFQ,
-      message: 'RFQ created successfully',
+      rfq: rfq,
+      message: 'RFQ created and saved to database successfully',
       matchedSuppliers: matchedSuppliers.length,
       timestamp: new Date().toISOString()
     });
-  } catch (error) {
+
+  } catch (error: any) {
     console.error('Error creating RFQ:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create RFQ' },
+      { success: false, error: error.message || 'Failed to create RFQ' },
       { status: 500 }
     );
   }
@@ -135,46 +186,51 @@ function calculateEstimatedValue(minBudget: string, maxBudget: string): number {
   return 0; // Unknown value
 }
 
-async function findMatchingSuppliers(category: string, tags: string[]): Promise<string[]> {
-  // Mock supplier matching based on category and tags
-  const supplierDatabase = {
-    'manufacturing': ['supplier-1', 'supplier-2', 'supplier-6'],
-    'textiles': ['supplier-2', 'supplier-7'],
-    'electronics': ['supplier-3', 'supplier-8'],
-    'construction': ['supplier-4', 'supplier-1'],
-    'chemicals': ['supplier-5'],
-    'machinery': ['supplier-6', 'supplier-1'],
-    'packaging': ['supplier-7'],
-    'automotive': ['supplier-8']
-  };
-  
-  return supplierDatabase[category as keyof typeof supplierDatabase] || [];
-}
+/**
+ * 🔥 REAL SUPPLIER MATCHING (Database Query)
+ * Finds suppliers that match the RFQ category
+ */
+async function findAndNotifySuppliers(rfq: any): Promise<any[]> {
+  try {
+    // Query suppliers table for matching categories
+    const { data: suppliers, error } = await db.suppliers()
+      .select('*')
+      .contains('categories', [rfq.category_id])
+      .eq('is_active', true)
+      .eq('verified', true)
+      .order('rating', { ascending: false })
+      .limit(20);
 
-async function matchSuppliers(rfq: any): Promise<any[]> {
-  // Enhanced supplier matching algorithm
-  const suppliers = await findMatchingSuppliers(rfq.category, rfq.tags);
-  
-  return suppliers.map((supplierId, index) => ({
-    id: supplierId,
-    name: `Supplier ${supplierId.split('-')[1]}`,
-    company: `Company ${supplierId.split('-')[1]}`,
-    rating: 4.0 + (Math.random() * 1.0),
-    responseTime: `${Math.floor(Math.random() * 24)} hours`,
-    matchScore: 85 + (Math.random() * 15),
-    location: 'Mumbai, Maharashtra',
-    verified: true,
-    specialties: rfq.tags.slice(0, 3),
-    lastActive: '2 hours ago'
-  }));
-}
+    if (error) {
+      console.error('Error finding suppliers:', error);
+      return [];
+    }
 
-async function notifySuppliers(rfq: any, suppliers: any[]): Promise<void> {
-  // Simulate sending notifications to suppliers
-  console.log(`Notifying ${suppliers.length} suppliers about RFQ ${rfq.id}`);
-  
-  // In real implementation, send emails/SMS/push notifications
-  suppliers.forEach(supplier => {
-    console.log(`Notification sent to ${supplier.name} (${supplier.company})`);
-  });
+    if (!suppliers || suppliers.length === 0) {
+      return [];
+    }
+
+    // Create notifications for each matched supplier
+    const notifications = suppliers.map(supplier => ({
+      user_id: supplier.user_id,
+      type: 'new_rfq_match',
+      title: 'New RFQ Match Found',
+      message: `A new RFQ "${rfq.title}" matches your business categories`,
+      related_entity_type: 'rfq',
+      related_entity_id: rfq.id,
+      action_url: `/rfq/${rfq.id}`,
+      action_label: 'View RFQ & Quote'
+    }));
+
+    // Batch insert notifications
+    await db.notifications().insert(notifications);
+
+    console.log(`✅ Notified ${suppliers.length} suppliers about RFQ ${rfq.id}`);
+
+    return suppliers;
+
+  } catch (error) {
+    console.error('Error in findAndNotifySuppliers:', error);
+    return [];
+  }
 }

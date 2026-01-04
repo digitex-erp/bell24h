@@ -46,14 +46,19 @@ export default function DashboardPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
-    totalRFQs: 45,
-    activeRFQs: 8,
-    totalSuppliers: 127,
-    totalProducts: 89,
-    totalSpent: 2850000,
-    totalEarned: 4200000,
-    successRate: 94.5,
-    trustScore: 87
+    totalRFQs: 0,
+    activeRFQs: 0,
+    totalSuppliers: 0,
+    totalProducts: 0,
+    totalSpent: 0,
+    totalEarned: 0,
+    successRate: 0,
+    trustScore: 0,
+    // Additional stats from API
+    totalQuotes: 0,
+    pendingQuotes: 0,
+    completedTransactions: 0,
+    unreadNotifications: 0
   });
 
   const [liveFeatures] = useState<LiveFeature[]>([
@@ -157,10 +162,50 @@ export default function DashboardPage() {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      // Mock data loading - in real app, this would fetch from APIs
-      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // 🔥 FETCH REAL DATA FROM API (Replaces mock data)
+      const response = await fetch('/api/dashboard/stats', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // Include auth token if using JWT
+          ...(localStorage.getItem('authToken') && {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          })
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.stats) {
+        // ✅ UPDATE STATE WITH REAL DATABASE DATA
+        setStats({
+          totalRFQs: data.stats.totalRFQs || 0,
+          activeRFQs: data.stats.activeRFQs || 0,
+          totalSuppliers: data.stats.totalSuppliers || 0,
+          totalProducts: 0, // TODO: Add products endpoint
+          totalSpent: data.stats.totalSpent || 0,
+          totalEarned: data.stats.totalEarned || 0,
+          successRate: data.stats.rfqSuccessRate || 0,
+          trustScore: 85, // TODO: Calculate trust score
+          totalQuotes: data.stats.totalQuotes || 0,
+          pendingQuotes: data.stats.pendingQuotes || 0,
+          completedTransactions: data.stats.completedTransactions || 0,
+          unreadNotifications: data.stats.unreadNotifications || 0
+        });
+
+        console.log('✅ Dashboard data loaded from database:', data.stats);
+      } else {
+        console.error('API returned error:', data.error);
+      }
+
     } catch (error) {
       console.error('Error loading dashboard data:', error);
+      // Keep default values (zeros) on error
     } finally {
       setLoading(false);
     }
