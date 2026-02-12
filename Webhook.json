@@ -1,0 +1,12 @@
+{
+  "parameters": {
+    "httpMethod": "POST",
+    "path": "flowgent-orchestrator",
+    "responseMode": "onReceived",
+    "options": {}
+  },
+  "name": "MCP Webhook",
+  "type": "n8n-nodes-base.webhook",
+  "typeVersion": 1,
+  "position": [200, 300]
+}

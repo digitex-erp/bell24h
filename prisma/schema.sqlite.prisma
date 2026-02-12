@@ -1,0 +1,140 @@
+// This is a SQLite-compatible version of the schema for local development
+// Copy this to schema.prisma when working locally
+// Copy the original back when deploying to production
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String?
+  phone      String?
+  companyName String?
+  type       String   @default("BUYER") // BUYER | SUPPLIER | ADMIN
+  city       String?
+  state      String?
+  gstNumber  String?
+  panNumber  String?
+  verified   Boolean  @default(false)
+  rating     Float    @default(0)
+  completedOrders Int @default(0)
+  password   String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  
+  rfqs       Rfq[]
+  quotes     Quote[]  @relation("SupplierQuotes")
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  payments   Payment[]
+
+  @@map("users")
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  icon        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  rfqs        Rfq[]
+
+  @@map("categories")
+}
+
+model Rfq {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String
+  quantity        Int
+  unit            String
+  targetPrice     Float?
+  deadline        DateTime
+  status          String   @default("ACTIVE") // ACTIVE | CLOSED | EXPIRED
+  deliveryLocation String?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  buyerId         Int
+  categoryId      Int?
+  
+  buyer           User     @relation(fields: [buyerId], references: [id])
+  category        Category? @relation(fields: [categoryId], references: [id])
+  quotes          Quote[]
+  messages        Message[]
+  payments        Payment[]
+
+  @@map("rfqs")
+}
+
+model Quote {
+  id           Int      @id @default(autoincrement())
+  unitPrice    Float
+  totalPrice   Float
+  quantity     Int
+  deliveryTime Int      // days
+  paymentTerms String
+  status       String   @default("PENDING") // PENDING | ACCEPTED | REJECTED
+  notes        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  
+  rfqId        Int
+  supplierId   Int
+  
+  rfq          Rfq      @relation(fields: [rfqId], references: [id])
+  supplier     User     @relation("SupplierQuotes", fields: [supplierId], references: [id])
+
+  @@map("quotes")
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  content    String
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  
+  senderId   Int
+  receiverId Int
+  rfqId      Int
+  
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  rfq        Rfq      @relation(fields: [rfqId], references: [id])
+
+  @@map("messages")
+}
+
+model Payment {
+  id              Int      @id @default(autoincrement())
+  amount          Float
+  currency        String   @default("INR")
+  status          String   @default("PENDING") // PENDING | COMPLETED | FAILED | REFUNDED
+  razorpayOrderId String   @unique
+  razorpayPaymentId String?
+  razorpaySignature String?
+  escrowStatus    String   @default("PENDING") // PENDING | RELEASED | REFUNDED
+  escrowReleaseDate DateTime?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  buyerId         Int
+  supplierId      Int
+  rfqId           Int
+  
+  buyer           User     @relation(fields: [buyerId], references: [id])
+  supplier        User     @relation(fields: [supplierId], references: [id])
+  rfq             Rfq      @relation(fields: [rfqId], references: [id])
+
+  @@map("payments")
+}

@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -12,12 +12,27 @@ model User {
   email      String   @unique
   name       String?
   phone      String?
-  company    String?
-  role       String   @default("buyer") // buyer | supplier | admin
+  companyName String?
+  type       String   @default("BUYER") // BUYER | SUPPLIER | ADMIN
+  city       String?
+  state      String?
+  gstNumber  String?
+  panNumber  String?
+  verified   Boolean  @default(false)
+  rating     Float    @default(0)
+  completedOrders Int @default(0)
+  password   String?
   createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  
   rfqs       Rfq[]
   quotes     Quote[]  @relation("SupplierQuotes")
-  messages   Message[] @relation("UserMessages")
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  buyerPayments   Payment[] @relation("BuyerPayments")
+  supplierPayments Payment[] @relation("SupplierPayments")
+  reviewsWritten  Review[] @relation("Reviewer")
+  reviewsReceived Review[] @relation("Reviewee")
 
   @@map("users")
 }
@@ -27,93 +42,126 @@ model Category {
   name        String
   slug        String   @unique
   icon        String
-  description String
-  rfqCount    Int      @default(0) @map("rfq_count")
+  description String?
   createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
   rfqs        Rfq[]
 
   @@map("categories")
 }
 
 model Rfq {
-  id          Int      @id @default(autoincrement())
-  userId      Int      @map("user_id")
-  categoryId  Int      @map("category_id")
-  title       String
-  description String
-  type        String // voice | video | text
-  status      String @default("active")
-  location    String
-  quantity    String?
-  quotesCount Int     @default(0) @map("quotes_count")
-  createdAt   DateTime @default(now()) @map("created_at")
-
-  user        User     @relation(fields: [userId], references: [id])
-  category    Category @relation(fields: [categoryId], references: [id])
-  quotes      Quote[]
-  messages    Message[]
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String
+  quantity        Int
+  unit            String
+  targetPrice     Float?
+  deadline        DateTime
+  status          String   @default("ACTIVE") // ACTIVE | CLOSED | EXPIRED
+  deliveryLocation String?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  buyerId         Int
+  categoryId      Int?
+  
+  buyer           User     @relation(fields: [buyerId], references: [id])
+  category        Category? @relation(fields: [categoryId], references: [id])
+  quotes          Quote[]
+  messages        Message[]
+  payments        Payment[]
+  reviews         Review[]
 
   @@map("rfqs")
 }
 
 model Quote {
-  id          Int      @id @default(autoincrement())
-  rfqId       Int      @map("rfq_id")
-  supplierId  Int      @map("supplier_id")
-  price       Decimal? @db.Decimal(10,2)
-  description String?
-  deliveryTime String? @map("delivery_time")
-  status      String   @default("pending")
-  createdAt   DateTime @default(now()) @map("created_at")
-
-  rfq         Rfq      @relation(fields: [rfqId], references: [id])
-  supplier    User     @relation("SupplierQuotes", fields: [supplierId], references: [id])
+  id           Int      @id @default(autoincrement())
+  unitPrice    Float
+  totalPrice   Float
+  quantity     Int
+  deliveryTime Int      // days
+  paymentTerms String
+  status       String   @default("PENDING") // PENDING | ACCEPTED | REJECTED
+  notes        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  
+  rfqId        Int
+  supplierId   Int
+  
+  rfq          Rfq      @relation(fields: [rfqId], references: [id])
+  supplier     User     @relation("SupplierQuotes", fields: [supplierId], references: [id])
 
   @@map("quotes")
 }
 
 model Message {
   id         Int      @id @default(autoincrement())
-  rfqId      Int      @map("rfq_id")
-  senderId   Int      @map("sender_id")
-  receiverId Int      @map("receiver_id")
-  message    String
+  content    String
   createdAt  DateTime @default(now()) @map("created_at")
-
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  
+  senderId   Int
+  receiverId Int
+  rfqId      Int
+  
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
   rfq        Rfq      @relation(fields: [rfqId], references: [id])
-  sender     User     @relation("UserMessages", fields: [senderId], references: [id])
 
   @@map("messages")
 }
 
-model Webhook {
-  id          Int      @id @default(autoincrement())
-  eventType   String   @map("event_type") // e.g., rfq.created, quote.submitted
-  payload     Json
-  status      String   @default("pending")
-  retryCount  Int      @default(0) @map("retry_count")
-  createdAt   DateTime @default(now()) @map("created_at")
-  sentAt      DateTime?
+model Payment {
+  id              Int      @id @default(autoincrement())
+  amount          Float
+  currency        String   @default("INR")
+  status          String   @default("PENDING") // PENDING | COMPLETED | FAILED | REFUNDED
+  razorpayOrderId String   @unique
+  razorpayPaymentId String?
+  razorpaySignature String?
+  escrowStatus    String   @default("PENDING") // PENDING | RELEASED | REFUNDED
+  escrowReleaseDate DateTime?
+  amountPaid      Float?
+  method          String?
+  fee             Float?
+  tax             Float?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  buyerId         Int
+  supplierId      Int
+  rfqId           Int
+  
+  buyer           User     @relation("BuyerPayments", fields: [buyerId], references: [id])
+  supplier        User     @relation("SupplierPayments", fields: [supplierId], references: [id])
+  rfq             Rfq      @relation(fields: [rfqId], references: [id])
+  reviews         Review[]
 
-  @@map("webhooks")
+  @@map("payments")
 }
 
-model Subscription {
-  id            String    @id @default(uuid())
-  userId        String    @map("user_id")
-  planId        String    @map("plan_id") // free | pro | enterprise
-  billingCycle  String    @map("billing_cycle") // monthly | yearly
-  amount        Decimal   @db.Decimal(10,2)
-  status        String    @default("PENDING") // PENDING | ACTIVE | CANCELLED | EXPIRED
-  razorpayOrderId String? @map("razorpay_order_id")
-  razorpayPaymentId String? @map("razorpay_payment_id")
-  startDate     DateTime  @map("start_date")
-  endDate        DateTime  @map("end_date")
-  isEarlyAdopter Boolean  @default(false) @map("is_early_adopter")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+model Review {
+  id          Int      @id @default(autoincrement())
+  rating      Int      // 1-5 stars
+  comment     String?
+  title       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  reviewerId  Int      // The user who wrote the review
+  revieweeId  Int      // The user being reviewed
+  paymentId   Int      // The payment this review is for
+  rfqId       Int      // The RFQ this review is for
+  
+  reviewer    User     @relation("Reviewer", fields: [reviewerId], references: [id])
+  reviewee    User     @relation("Reviewee", fields: [revieweeId], references: [id])
+  payment     Payment  @relation(fields: [paymentId], references: [id])
+  rfq         Rfq      @relation(fields: [rfqId], references: [id])
 
-  @@index([userId])
-  @@index([status])
-  @@map("subscriptions")
+  @@unique([reviewerId, paymentId]) // One review per payment
+  @@map("reviews")
 }

@@ -19,8 +19,8 @@ async function main() {
       email: 'buyer@bell24h.com',
       name: 'Demo Buyer',
       phone: '+91 9876543210',
-      company: 'ABC Industries',
-      role: 'buyer',
+      companyName: 'ABC Industries',
+      type: 'BUYER',
     },
   })
   const supplier = await prisma.user.create({
@@ -28,8 +28,8 @@ async function main() {
       email: 'supplier@bell24h.com',
       name: 'Demo Supplier',
       phone: '+91 9876543211',
-      company: 'XYZ Suppliers',
-      role: 'supplier',
+      companyName: 'XYZ Suppliers',
+      type: 'SUPPLIER',
     },
   })
 
@@ -41,7 +41,6 @@ async function main() {
         slug: cat.slug,
         icon: cat.icon,
         description: cat.description,
-        rfqCount: typeof cat.rfqCount === 'number' ? cat.rfqCount : 0,
       },
     })
   }
@@ -53,28 +52,32 @@ async function main() {
   if (electronics) {
     await prisma.rfq.create({
       data: {
-        userId: buyer.id,
+        buyerId: buyer.id,
         categoryId: electronics.id,
         title: 'Need 500 LED Bulbs for Office',
         description: '9W warm white, BIS certified. Delivery in Mumbai.',
-        type: 'text',
-        status: 'active',
-        location: 'Mumbai, MH',
-        quantity: '500 units',
+        quantity: 500,
+        unit: 'units',
+        status: 'ACTIVE',
+        deliveryLocation: 'Mumbai, MH',
+        targetPrice: 25000,
+        deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       },
     })
   }
   if (construction) {
     await prisma.rfq.create({
       data: {
-        userId: buyer.id,
+        buyerId: buyer.id,
         categoryId: construction.id,
         title: 'Steel Rods Required - 1000kg',
         description: 'Grade 60 rods, urgent requirement for site.',
-        type: 'voice',
-        status: 'active',
-        location: 'Delhi, IN',
-        quantity: '1000 kg',
+        quantity: 1000,
+        unit: 'kg',
+        status: 'ACTIVE',
+        deliveryLocation: 'Delhi, IN',
+        targetPrice: 50000,
+        deadline: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
       },
     })
   }

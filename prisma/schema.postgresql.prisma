@@ -1,0 +1,159 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String?
+  phone      String?
+  company    String?
+  role       String   @default("buyer") // buyer | supplier | admin
+  createdAt  DateTime @default(now()) @map("created_at")
+  rfqs       Rfq[]
+  quotes     Quote[]  @relation("SupplierQuotes")
+  messages   Message[] @relation("UserMessages")
+  payments   Payment[]
+
+  @@map("users")
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  icon        String
+  description String
+  rfqCount    Int      @default(0) @map("rfq_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  rfqs        Rfq[]
+
+  @@map("categories")
+}
+
+model Rfq {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  categoryId  Int      @map("category_id")
+  title       String
+  description String
+  type        String // voice | video | text
+  status      String @default("active")
+  location    String
+  quantity    String?
+  quotesCount Int     @default(0) @map("quotes_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user        User     @relation(fields: [userId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
+  quotes      Quote[]
+  messages    Message[]
+  payments    Payment[]
+
+  @@map("rfqs")
+}
+
+model Quote {
+  id          Int      @id @default(autoincrement())
+  rfqId       Int      @map("rfq_id")
+  supplierId  Int      @map("supplier_id")
+  price       Decimal? @db.Decimal(10,2)
+  description String?
+  deliveryTime String? @map("delivery_time")
+  status      String   @default("pending")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  rfq         Rfq      @relation(fields: [rfqId], references: [id])
+  supplier    User     @relation("SupplierQuotes", fields: [supplierId], references: [id])
+
+  @@map("quotes")
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  rfqId      Int      @map("rfq_id")
+  senderId   Int      @map("sender_id")
+  receiverId Int      @map("receiver_id")
+  message    String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  rfq        Rfq      @relation(fields: [rfqId], references: [id])
+  sender     User     @relation("UserMessages", fields: [senderId], references: [id])
+
+  @@map("messages")
+}
+
+model Webhook {
+  id          Int      @id @default(autoincrement())
+  eventType   String   @map("event_type") // e.g., rfq.created, quote.submitted
+  payload     Json
+  status      String   @default("pending")
+  retryCount  Int      @default(0) @map("retry_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  sentAt      DateTime?
+
+  @@map("webhooks")
+}
+
+model Subscription {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  planId        String    @map("plan_id") // free | pro | enterprise
+  billingCycle  String    @map("billing_cycle") // monthly | yearly
+  amount        Decimal   @db.Decimal(10,2)
+  status        String    @default("PENDING") // PENDING | ACTIVE | CANCELLED | EXPIRED
+  razorpayOrderId String? @map("razorpay_order_id")
+  razorpayPaymentId String? @map("razorpay_payment_id")
+  startDate     DateTime  @map("start_date")
+  endDate        DateTime  @map("end_date")
+  isEarlyAdopter Boolean  @default(false) @map("is_early_adopter")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([status])
+  @@map("subscriptions")
+}
+
+model Payment {
+  id                  String    @id @default(cuid())
+  orderId             String    @unique @map("order_id")
+  razorpayOrderId     String    @unique @map("razorpay_order_id")
+  razorpayPaymentId   String?   @unique @map("razorpay_payment_id")
+  amount              Int       // Amount in paise (smallest currency unit)
+  currency            String    @default("INR")
+  status              String    @default("pending") // pending, completed, failed, refunded, captured
+  paymentMethod       String?   @map("payment_method")
+  gatewayFee          Int?      @map("gateway_fee") // Fee in paise
+  netAmount           Int?      @map("net_amount") // Net amount in paise
+  failureReason       String?   @map("failure_reason")
+  refundAmount        Int?      @map("refund_amount") // Refund amount in paise
+  refundReason        String?   @map("refund_reason")
+  escrowEnabled       Boolean   @default(true) @map("escrow_enabled")
+  escrowReleasedAt    DateTime? @map("escrow_released_at")
+  completedAt         DateTime? @map("completed_at")
+  capturedAt          DateTime? @map("captured_at")
+  failedAt            DateTime? @map("failed_at")
+  refundedAt          DateTime? @map("refunded_at")
+  notes               Json?
+  metadata            Json?
+  userId              Int       @map("user_id")
+  rfqId               Int?      @map("rfq_id")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  user                User      @relation(fields: [userId], references: [id])
+  rfq                 Rfq?      @relation(fields: [rfqId], references: [id])
+
+  @@index([userId])
+  @@index([rfqId])
+  @@index([status])
+  @@index([orderId])
+  @@index([razorpayOrderId])
+  @@map("payments")
+}

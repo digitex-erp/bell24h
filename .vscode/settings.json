@@ -83,5 +83,6 @@
   "mcpTimeout": 10000,
   "terminal.integrated.automationProfile.linux": {
     
-  }
+  },
+  "prisma.pinToPrisma6": true
 }
